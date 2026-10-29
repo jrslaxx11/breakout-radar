@@ -1,4 +1,22 @@
 {
+"0001.HK": {
+"country": "Hong Kong",
+"industry": "Conglomerates",
+"name": "CK Hutchison Holdings Limited",
+"sector": "Industrials"
+},
+"0002.HK": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"0005.HK": {
+"country": "United Kingdom",
+"industry": "Banks - Diversified",
+"name": "HSBC Holdings plc",
+"sector": "Financial Services"
+},
 "000500.KS": {
 "country": "South Korea",
 "industry": "Communication Equipment",
@@ -35,11 +53,29 @@
 "name": "Swire Pacific Limited",
 "sector": "Industrials"
 },
+"003490.KS": {
+"country": "South Korea",
+"industry": "Airlines",
+"name": "Korean Airlines Co.,Ltd.",
+"sector": "Industrials"
+},
+"003550.KS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "005830.KS": {
 "country": "South Korea",
 "industry": "Insurance - Property & Casualty",
 "name": "DB Insurance Co., Ltd.",
 "sector": "Financial Services"
+},
+"005930.KS": {
+"country": "South Korea",
+"industry": "Consumer Electronics",
+"name": "Samsung Electronics Co., Ltd.",
+"sector": "Technology"
 },
 "005935.KS": {
 "country": "South Korea",
@@ -83,6 +119,12 @@
 "name": "Taihan Fiber Optics Co., Ltd",
 "sector": "Technology"
 },
+"010950.KS": {
+"country": "South Korea",
+"industry": "Oil & Gas Refining & Marketing",
+"name": "S-Oil Corporation",
+"sector": "Energy"
+},
 "011200.KS": {
 "country": "South Korea",
 "industry": "Marine Shipping",
@@ -118,6 +160,12 @@
 "industry": "Furnishings, Fixtures & Appliances",
 "name": "COWAY Co., Ltd.",
 "sector": "Consumer Cyclical"
+},
+"024110.KS": {
+"country": "South Korea",
+"industry": "Banks - Regional",
+"name": "Industrial Bank of Korea",
+"sector": "Financial Services"
 },
 "028050.KS": {
 "country": "South Korea",
@@ -155,6 +203,12 @@
 "name": "PSK HOLDINGS Inc.",
 "sector": ""
 },
+"032830.KS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "033780.KS": {
 "country": "South Korea",
 "industry": "Tobacco",
@@ -179,6 +233,12 @@
 "name": "JUSUNG ENGINEERING Co.,Ltd.",
 "sector": ""
 },
+"0388.HK": {
+"country": "Hong Kong",
+"industry": "Financial Data & Stock Exchanges",
+"name": "Hong Kong Exchanges and Clearing Limited",
+"sector": "Financial Services"
+},
 "039030.KQ": {
 "country": "South Korea",
 "industry": "Semiconductor Equipment & Materials",
@@ -191,10 +251,28 @@
 "name": "Sungho Electronics Corp.",
 "sector": ""
 },
+"058610.KQ": {
+"country": "",
+"industry": "",
+"name": "SPG Co., Ltd.",
+"sector": ""
+},
 "064400.KS": {
 "country": "South Korea",
 "industry": "Information Technology Services",
 "name": "LG CNS Co., Ltd.",
+"sector": "Technology"
+},
+"064760.KQ": {
+"country": "",
+"industry": "",
+"name": "Tokai Carbon Korea Co., Ltd.",
+"sector": ""
+},
+"066570.KS": {
+"country": "South Korea",
+"industry": "Consumer Electronics",
+"name": "LG Electronics Inc.",
 "sector": "Technology"
 },
 "0669.HK": {
@@ -203,11 +281,29 @@
 "name": "Techtronic Industries Company Limited",
 "sector": "Industrials"
 },
+"067310.KQ": {
+"country": "",
+"industry": "",
+"name": "HANA Micron Inc.",
+"sector": ""
+},
 "068270.KS": {
 "country": "South Korea",
 "industry": "Biotechnology",
 "name": "Celltrion, Inc.",
 "sector": "Healthcare"
+},
+"078600.KQ": {
+"country": "",
+"industry": "",
+"name": "Daejoo Electronic Materials Co., Ltd.",
+"sector": ""
+},
+"078930.KS": {
+"country": "South Korea",
+"industry": "Conglomerates",
+"name": "GS Holdings Corp.",
+"sector": "Industrials"
 },
 "080220.KQ": {
 "country": "",
@@ -215,11 +311,53 @@
 "name": "Jeju Semiconductor Corp.",
 "sector": ""
 },
+"084370.KQ": {
+"country": "",
+"industry": "",
+"name": "Eugene Technology Co.,Ltd.",
+"sector": ""
+},
+"086280.KS": {
+"country": "South Korea",
+"industry": "Integrated Freight & Logistics",
+"name": "Hyundai Glovis Co., Ltd.",
+"sector": "Industrials"
+},
+"086790.KS": {
+"country": "South Korea",
+"industry": "Banks - Regional",
+"name": "Hana Financial Group Inc.",
+"sector": "Financial Services"
+},
+"090430.KS": {
+"country": "South Korea",
+"industry": "Household & Personal Products",
+"name": "Amorepacific Corporation",
+"sector": "Consumer Defensive"
+},
+"095340.KQ": {
+"country": "",
+"industry": "",
+"name": "ISC Co., Ltd.",
+"sector": ""
+},
+"095610.KQ": {
+"country": "",
+"industry": "",
+"name": "TES Co., Ltd",
+"sector": ""
+},
 "096530.KQ": {
 "country": "South Korea",
 "industry": "Biotechnology",
 "name": "Seegene, Inc.",
 "sector": "Healthcare"
+},
+"096770.KS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "098460.KQ": {
 "country": "South Korea",
@@ -233,11 +371,23 @@
 "name": "CK Infrastructure Holdings Limited",
 "sector": "Utilities"
 },
+"105560.KS": {
+"country": "South Korea",
+"industry": "Banks - Regional",
+"name": "KB Financial Group Inc.",
+"sector": "Financial Services"
+},
 "108490.KQ": {
 "country": "South Korea",
 "industry": "Computer Hardware",
 "name": "ROBOTIS Co., Ltd.",
 "sector": "Technology"
+},
+"1113.HK": {
+"country": "Hong Kong",
+"industry": "Real Estate - Development",
+"name": "CK Asset Holdings Limited",
+"sector": "Real Estate"
 },
 "1303.TW": {
 "country": "Taiwan",
@@ -275,17 +425,35 @@
 "name": "TRIAL Holdings, Inc.",
 "sector": "Consumer Defensive"
 },
+"1515.T": {
+"country": "Japan",
+"industry": "Copper",
+"name": "Nittetsu Mining Co., Ltd.",
+"sector": "Basic Materials"
+},
 "1560.TW": {
 "country": "Taiwan",
 "industry": "Tools & Accessories",
 "name": "Kinik Company",
 "sector": "Industrials"
 },
+"1605.T": {
+"country": "Japan",
+"industry": "Oil & Gas E&P",
+"name": "Inpex Corporation",
+"sector": "Energy"
+},
 "161890.KS": {
 "country": "South Korea",
 "industry": "Household & Personal Products",
 "name": "Kolmar Korea Co., Ltd.",
 "sector": "Consumer Defensive"
+},
+"1801.HK": {
+"country": "China",
+"industry": "Biotechnology",
+"name": "Innovent Biologics, Inc.",
+"sector": "Healthcare"
 },
 "180640.KS": {
 "country": "South Korea",
@@ -299,11 +467,41 @@
 "name": "Cosmax, Inc.",
 "sector": "Consumer Defensive"
 },
+"1961.T": {
+"country": "Japan",
+"industry": "Engineering & Construction",
+"name": "Sanki Engineering Co., Ltd.",
+"sector": "Industrials"
+},
+"2049.TW": {
+"country": "Taiwan",
+"industry": "Tools & Accessories",
+"name": "Hiwin Technologies Corporation",
+"sector": "Industrials"
+},
 "2059.TW": {
 "country": "Taiwan",
 "industry": "Furnishings, Fixtures & Appliances",
 "name": "King Slide Works Co., Ltd.",
 "sector": "Consumer Cyclical"
+},
+"207940.KS": {
+"country": "South Korea",
+"industry": "Biotechnology",
+"name": "Samsung Biologics Co.,Ltd.",
+"sector": "Healthcare"
+},
+"2099.HK": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"2162.HK": {
+"country": "China",
+"industry": "Biotechnology",
+"name": "Keymed Biosciences Inc.",
+"sector": "Healthcare"
 },
 "2175.T": {
 "country": "Japan",
@@ -322,6 +520,12 @@
 "industry": "Biotechnology",
 "name": "WuXi Biologics (Cayman) Inc.",
 "sector": "Healthcare"
+},
+"229640.KS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "2327.TW": {
 "country": "Taiwan",
@@ -347,6 +551,12 @@
 "name": "WuXi AppTec Co., Ltd.",
 "sector": "Healthcare"
 },
+"2379.TW": {
+"country": "Taiwan",
+"industry": "Semiconductors",
+"name": "Realtek Semiconductor Corp.",
+"sector": "Technology"
+},
 "2388.HK": {
 "country": "Hong Kong",
 "industry": "Banks - Regional",
@@ -370,6 +580,12 @@
 "industry": "Real Estate Services",
 "name": "KE Holdings Inc.",
 "sector": "Real Estate"
+},
+"2451.TW": {
+"country": "Taiwan",
+"industry": "Computer Hardware",
+"name": "Transcend Information, Inc.",
+"sector": "Technology"
 },
 "2454.TW": {
 "country": "Taiwan",
@@ -401,6 +617,12 @@
 "name": "Walsin Technology Corporation",
 "sector": "Technology"
 },
+"2493.TW": {
+"country": "Taiwan",
+"industry": "Semiconductor Equipment & Materials",
+"name": "Ampoc Far-East Co., Ltd.",
+"sector": "Technology"
+},
 "2531.T": {
 "country": "Japan",
 "industry": "Beverages - Brewers",
@@ -413,11 +635,29 @@
 "name": "Marketingforce Management Ltd",
 "sector": "Technology"
 },
+"2579.T": {
+"country": "Japan",
+"industry": "Beverages - Non-Alcoholic",
+"name": "Coca-Cola Bottlers Japan Holdings Inc.",
+"sector": "Consumer Defensive"
+},
+"2588.HK": {
+"country": "Singapore",
+"industry": "Rental & Leasing Services",
+"name": "BOC Aviation Limited",
+"sector": "Industrials"
+},
 "2603.TW": {
 "country": "Taiwan",
 "industry": "Marine Shipping",
 "name": "Evergreen Marine Corporation (Taiwan) Ltd.",
 "sector": "Industrials"
+},
+"271560.KS": {
+"country": "South Korea",
+"industry": "Confectioners",
+"name": "ORION Corp.",
+"sector": "Consumer Defensive"
 },
 "2737.T": {
 "country": "Japan",
@@ -443,6 +683,12 @@
 "name": "Standard Chartered PLC",
 "sector": "Financial Services"
 },
+"290650.KQ": {
+"country": "South Korea",
+"industry": "Medical Devices",
+"name": "L&C BIO Co.,LTD",
+"sector": "Healthcare"
+},
 "3006.TW": {
 "country": "Taiwan",
 "industry": "Semiconductors",
@@ -455,10 +701,28 @@
 "name": "Largan Precision Co., Ltd.",
 "sector": "Technology"
 },
+"3017.TW": {
+"country": "Taiwan",
+"industry": "Electronic Components",
+"name": "Asia Vital Components Co., Ltd.",
+"sector": "Technology"
+},
 "3026.TW": {
 "country": "Taiwan",
 "industry": "Electronic Components",
 "name": "Holy Stone Enterprise Co.,Ltd.",
+"sector": "Technology"
+},
+"3037.TW": {
+"country": "Taiwan",
+"industry": "Electronic Components",
+"name": "Unimicron Technology Corp.",
+"sector": "Technology"
+},
+"3042.TW": {
+"country": "Taiwan",
+"industry": "Electronic Components",
+"name": "TXC Corporation",
 "sector": "Technology"
 },
 "3044.TW": {
@@ -479,6 +743,12 @@
 "name": "The Monogatari Corporation",
 "sector": "Consumer Cyclical"
 },
+"3105.T": {
+"country": "Japan",
+"industry": "Conglomerates",
+"name": "Nisshinbo Holdings Inc.",
+"sector": "Industrials"
+},
 "3105.TWO": {
 "country": "Taiwan",
 "industry": "Semiconductors",
@@ -490,6 +760,12 @@
 "industry": "Electronics & Computer Distribution",
 "name": "Macnica Holdings, Inc.",
 "sector": "Technology"
+},
+"316140.KS": {
+"country": "South Korea",
+"industry": "Banks - Regional",
+"name": "Woori Financial Group Inc.",
+"sector": "Financial Services"
 },
 "3167.TW": {
 "country": "Taiwan",
@@ -515,11 +791,23 @@
 "name": "Next Generation Technology Group Inc.",
 "sector": "Financial Services"
 },
+"3231.TW": {
+"country": "Taiwan",
+"industry": "Computer Hardware",
+"name": "Wistron Corporation",
+"sector": "Technology"
+},
 "323280.KQ": {
 "country": "South Korea",
 "industry": "Specialty Industrial Machinery",
 "name": "Taesung Co.,Ltd.",
 "sector": "Industrials"
+},
+"3264.TWO": {
+"country": "Taiwan",
+"industry": "Semiconductors",
+"name": "Ardentec Corporation",
+"sector": "Technology"
 },
 "3374.TWO": {
 "country": "Taiwan",
@@ -539,6 +827,12 @@
 "name": "Global Unichip Corp.",
 "sector": "Technology"
 },
+"3450.TW": {
+"country": "Taiwan",
+"industry": "Semiconductor Equipment & Materials",
+"name": "Elite Advanced Laser Corporation",
+"sector": "Technology"
+},
 "3532.TW": {
 "country": "Taiwan",
 "industry": "Semiconductor Equipment & Materials",
@@ -551,11 +845,47 @@
 "name": "DAEDUCK ELECTRONICS Co., Ltd.",
 "sector": "Technology"
 },
+"3563.T": {
+"country": "Japan",
+"industry": "Restaurants",
+"name": "Food & Life Companies Ltd.",
+"sector": "Consumer Cyclical"
+},
+"357780.KQ": {
+"country": "South Korea",
+"industry": "Chemicals",
+"name": "Soulbrain Co., Ltd.",
+"sector": "Basic Materials"
+},
 "3653.TW": {
 "country": "Taiwan",
 "industry": "Electronic Components",
 "name": "Jentech Precision Industrial Co., Ltd",
 "sector": "Technology"
+},
+"3680.TWO": {
+"country": "Taiwan",
+"industry": "Semiconductors",
+"name": "Gudeng Precision Industrial Co., Ltd.",
+"sector": "Technology"
+},
+"3711.TW": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"3774.T": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"3941.T": {
+"country": "Japan",
+"industry": "Packaging & Containers",
+"name": "Rengo Co., Ltd.",
+"sector": "Consumer Cyclical"
 },
 "3968.HK": {
 "country": "China",
@@ -568,6 +898,18 @@
 "industry": "Software - Application",
 "name": "Money Forward, Inc.",
 "sector": "Technology"
+},
+"4004.T": {
+"country": "Japan",
+"industry": "Chemicals",
+"name": "Resonac Holdings Corporation",
+"sector": "Basic Materials"
+},
+"4021.T": {
+"country": "Japan",
+"industry": "Chemicals",
+"name": "Nissan Chemical Corporation",
+"sector": "Basic Materials"
 },
 "402340.KS": {
 "country": "South Korea",
@@ -586,6 +928,12 @@
 "industry": "Electronic Components",
 "name": "Ibiden Co.,Ltd.",
 "sector": "Technology"
+},
+"4099.T": {
+"country": "Japan",
+"industry": "Specialty Chemicals",
+"name": "Shikoku Kasei Holdings Corporation",
+"sector": "Basic Materials"
 },
 "4203.T": {
 "country": "Japan",
@@ -611,11 +959,41 @@
 "name": "Takeda Pharmaceutical Company Limited",
 "sector": "Healthcare"
 },
+"4503.T": {
+"country": "Japan",
+"industry": "Drug Manufacturers - General",
+"name": "Astellas Pharma Inc.",
+"sector": "Healthcare"
+},
+"4507.T": {
+"country": "Japan",
+"industry": "Drug Manufacturers - Specialty & Generic",
+"name": "Shionogi & Co., Ltd.",
+"sector": "Healthcare"
+},
+"4523.T": {
+"country": "Japan",
+"industry": "Drug Manufacturers - Specialty & Generic",
+"name": "Eisai Co., Ltd.",
+"sector": "Healthcare"
+},
 "456A.T": {
 "country": "Japan",
 "industry": "Apparel Manufacturing",
 "name": "HUMAN MADE Inc.",
 "sector": "Consumer Cyclical"
+},
+"457190.KS": {
+"country": "",
+"industry": "",
+"name": "ISU Specialty Chemical Co., Ltd.",
+"sector": ""
+},
+"4578.T": {
+"country": "Japan",
+"industry": "Drug Manufacturers - General",
+"name": "Otsuka Holdings Co., Ltd.",
+"sector": "Healthcare"
 },
 "4588.T": {
 "country": "Japan",
@@ -641,17 +1019,59 @@
 "name": "Zhen Ding Technology Holding Limited",
 "sector": "Technology"
 },
+"5020.T": {
+"country": "Japan",
+"industry": "Oil & Gas Refining & Marketing",
+"name": "ENEOS Holdings, Inc.",
+"sector": "Energy"
+},
+"5274.TWO": {
+"country": "Taiwan",
+"industry": "Semiconductors",
+"name": "ASPEED Technology Inc.",
+"sector": "Technology"
+},
 "5301.T": {
 "country": "Japan",
 "industry": "Specialty Chemicals",
 "name": "Tokai Carbon Co., Ltd.",
 "sector": "Basic Materials"
 },
+"5393.T": {
+"country": "Japan",
+"industry": "Conglomerates",
+"name": "Nichias Corporation",
+"sector": "Industrials"
+},
+"5434.TW": {
+"country": "Taiwan",
+"industry": "Electronics & Computer Distribution",
+"name": "Topco Scientific Co.,Ltd.",
+"sector": "Technology"
+},
+"5483.TWO": {
+"country": "Taiwan",
+"industry": "Semiconductor Equipment & Materials",
+"name": "Sino-American Silicon Products Inc.",
+"sector": "Technology"
+},
+"5832.T": {
+"country": "Japan",
+"industry": "Banks - Regional",
+"name": "Chugin Financial Group,Inc.",
+"sector": "Financial Services"
+},
 "6098.T": {
 "country": "Japan",
 "industry": "Internet Content & Information",
 "name": "Recruit Holdings Co., Ltd.",
 "sector": "Communication Services"
+},
+"6136.T": {
+"country": "Japan",
+"industry": "Tools & Accessories",
+"name": "OSG Corporation",
+"sector": "Industrials"
 },
 "6147.TWO": {
 "country": "Taiwan",
@@ -670,6 +1090,18 @@
 "industry": "Electronic Components",
 "name": "Prosperity Dielectrics Co., Ltd.",
 "sector": "Technology"
+},
+"6178.T": {
+"country": "Japan",
+"industry": "Banks - Regional",
+"name": "Japan Post Holdings Co., Ltd.",
+"sector": "Financial Services"
+},
+"6187.TWO": {
+"country": "Taiwan",
+"industry": "Specialty Industrial Machinery",
+"name": "All Ring Tech Co., Ltd.",
+"sector": "Industrials"
 },
 "6196.TW": {
 "country": "Taiwan",
@@ -695,11 +1127,41 @@
 "name": "Systex Corporation",
 "sector": "Technology"
 },
+"6239.TW": {
+"country": "Taiwan",
+"industry": "Semiconductors",
+"name": "Powertech Technology Inc.",
+"sector": "Technology"
+},
+"6257.TW": {
+"country": "Taiwan",
+"industry": "Semiconductors",
+"name": "Sigurd Microelectronics Corporation",
+"sector": "Technology"
+},
+"6271.TW": {
+"country": "Taiwan",
+"industry": "Semiconductor Equipment & Materials",
+"name": "Tong Hsing Electronic Industries, Ltd.",
+"sector": "Technology"
+},
+"6274.TWO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "6278.TW": {
 "country": "Taiwan",
 "industry": "Electronic Components",
 "name": "Taiwan Surface Mounting Technology Corp.",
 "sector": "Technology"
+},
+"6324.T": {
+"country": "Japan",
+"industry": "Specialty Industrial Machinery",
+"name": "Harmonic Drive Systems Inc.",
+"sector": "Industrials"
 },
 "6415.TW": {
 "country": "Cayman Islands",
@@ -719,10 +1181,22 @@
 "name": "Brother Industries, Ltd.",
 "sector": "Industrials"
 },
+"6490.T": {
+"country": "Japan",
+"industry": "Specialty Industrial Machinery",
+"name": "PILLAR Corporation",
+"sector": "Industrials"
+},
 "6526.TW": {
 "country": "Taiwan",
 "industry": "Semiconductors",
 "name": "Airoha Technology Corp.",
+"sector": "Technology"
+},
+"6531.TW": {
+"country": "Taiwan",
+"industry": "Semiconductors",
+"name": "AP Memory Technology Corporation",
 "sector": "Technology"
 },
 "6532.T": {
@@ -755,11 +1229,23 @@
 "name": "Seiko Epson Corporation",
 "sector": "Technology"
 },
+"6752.T": {
+"country": "Japan",
+"industry": "Consumer Electronics",
+"name": "Panasonic Holdings Corporation",
+"sector": "Technology"
+},
 "6805.TW": {
 "country": "Taiwan",
 "industry": "Electronic Components",
 "name": "Fositek Corp.",
 "sector": "Technology"
+},
+"6821.HK": {
+"country": "China",
+"industry": "Biotechnology",
+"name": "Asymchem Laboratories (Tianjin) Co., Ltd.",
+"sector": "Healthcare"
 },
 "6834.T": {
 "country": "Japan",
@@ -773,17 +1259,95 @@
 "name": "Advantest Corporation",
 "sector": "Technology"
 },
+"6890.T": {
+"country": "Japan",
+"industry": "Semiconductor Equipment & Materials",
+"name": "Ferrotec Corporation",
+"sector": "Technology"
+},
 "6952.T": {
 "country": "Japan",
 "industry": "Consumer Electronics",
 "name": "Casio Computer Co.,Ltd.",
 "sector": "Technology"
 },
+"6960.T": {
+"country": "Japan",
+"industry": "Medical Devices",
+"name": "Fukuda Denshi Co., Ltd.",
+"sector": "Healthcare"
+},
+"6971.T": {
+"country": "Japan",
+"industry": "Conglomerates",
+"name": "Kyocera Corporation",
+"sector": "Industrials"
+},
+"6976.T": {
+"country": "Japan",
+"industry": "Electronic Components",
+"name": "Taiyo Yuden Co., Ltd.",
+"sector": "Technology"
+},
+"6981.T": {
+"country": "Japan",
+"industry": "Electronic Components",
+"name": "Murata Manufacturing Co., Ltd.",
+"sector": "Technology"
+},
+"6990.HK": {
+"country": "China",
+"industry": "Biotechnology",
+"name": "Sichuan Kelun-Biotech Biopharmaceutical Co., Ltd.",
+"sector": "Healthcare"
+},
+"7167.T": {
+"country": "Japan",
+"industry": "Banks - Regional",
+"name": "Mebuki Financial Group,Inc.",
+"sector": "Financial Services"
+},
+"7180.T": {
+"country": "Japan",
+"industry": "Banks - Regional",
+"name": "Kyushu Financial Group, Inc.",
+"sector": "Financial Services"
+},
+"7182.T": {
+"country": "Japan",
+"industry": "Banks - Regional",
+"name": "JAPAN POST BANK Co., Ltd.",
+"sector": "Financial Services"
+},
+"7189.T": {
+"country": "Japan",
+"industry": "Banks - Regional",
+"name": "Nishi-Nippon Financial Holdings, Inc.",
+"sector": "Financial Services"
+},
 "7272.T": {
 "country": "Japan",
 "industry": "Auto Manufacturers",
 "name": "Yamaha Motor Co., Ltd.",
 "sector": "Consumer Cyclical"
+},
+"7327.T": {
+"country": "Japan",
+"industry": "Banks - Regional",
+"name": "Daishi Hokuetsu Financial Group, Inc.",
+"sector": "Financial Services"
+},
+"7380.T": {
+"country": "Japan",
+"industry": "Banks - Regional",
+"name": "Juroku Financial Group,Inc.",
+"sector": "Financial Services"
+},
+"7389.T": {
+"country": "Japan",
+"industry": "Banks - Regional",
+"name": "Aichi Financial Group, Inc.",
+"sector": "Financial Services"
 },
 "7453.T": {
 "country": "Japan",
@@ -815,6 +1379,18 @@
 "name": "ASRock Rack Incorporation",
 "sector": "Technology"
 },
+"7747.T": {
+"country": "Japan",
+"industry": "Medical Instruments & Supplies",
+"name": "Asahi Intecc Co., Ltd.",
+"sector": "Healthcare"
+},
+"7762.T": {
+"country": "Japan",
+"industry": "Footwear & Accessories",
+"name": "Citizen Watch Co., Ltd.",
+"sector": "Consumer Cyclical"
+},
 "7806.T": {
 "country": "Japan",
 "industry": "Household & Personal Products",
@@ -826,6 +1402,24 @@
 "industry": "Electronic Components",
 "name": "Furuya Metal Co., Ltd.",
 "sector": "Technology"
+},
+"8015.T": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"8020.T": {
+"country": "Japan",
+"industry": "Conglomerates",
+"name": "Kanematsu Corporation",
+"sector": "Industrials"
+},
+"8021.TW": {
+"country": "Taiwan",
+"industry": "Tools & Accessories",
+"name": "Topoint Technology Co., Ltd.",
+"sector": "Industrials"
 },
 "8022.T": {
 "country": "Japan",
@@ -851,16 +1445,124 @@
 "name": "Seiko Group Corporation",
 "sector": "Consumer Cyclical"
 },
+"8053.T": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"8299.TWO": {
+"country": "Taiwan",
+"industry": "Semiconductors",
+"name": "Phison Electronics Corp.",
+"sector": "Technology"
+},
+"8306.T": {
+"country": "Japan",
+"industry": "Banks - Diversified",
+"name": "Mitsubishi UFJ Financial Group, Inc.",
+"sector": "Financial Services"
+},
+"8309.T": {
+"country": "Japan",
+"industry": "Banks - Regional",
+"name": "Sumitomo Mitsui Trust Group, Inc.",
+"sector": "Financial Services"
+},
+"8316.T": {
+"country": "Japan",
+"industry": "Banks - Diversified",
+"name": "Sumitomo Mitsui Financial Group, Inc.",
+"sector": "Financial Services"
+},
+"8331.T": {
+"country": "Japan",
+"industry": "Banks - Regional",
+"name": "The Chiba Bank, Ltd.",
+"sector": "Financial Services"
+},
+"8334.T": {
+"country": "Japan",
+"industry": "Banks - Regional",
+"name": "The Gunma Bank, Ltd.",
+"sector": "Financial Services"
+},
+"8341.T": {
+"country": "Japan",
+"industry": "Banks - Regional",
+"name": "The 77 Bank, Ltd.",
+"sector": "Financial Services"
+},
 "8346.T": {
 "country": "Japan",
 "industry": "Banks - Regional",
 "name": "The Toho Bank, Ltd.",
 "sector": "Financial Services"
 },
+"8354.T": {
+"country": "Japan",
+"industry": "Banks - Regional",
+"name": "Fukuoka Financial Group, Inc.",
+"sector": "Financial Services"
+},
+"8358.T": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"8358.TWO": {
+"country": "Taiwan",
+"industry": "Electronic Components",
+"name": "Co-Tech Development Corporation",
+"sector": "Technology"
+},
+"8359.T": {
+"country": "Japan",
+"industry": "Banks - Regional",
+"name": "Hachijuni Nagano Bank, Ltd.",
+"sector": "Financial Services"
+},
+"8360.T": {
+"country": "Japan",
+"industry": "Banks - Regional",
+"name": "The Yamanashi Chuo Bank,Ltd.",
+"sector": "Financial Services"
+},
+"8361.T": {
+"country": "Japan",
+"industry": "Banks - Regional",
+"name": "The Ogaki Kyoritsu Bank, Ltd.",
+"sector": "Financial Services"
+},
 "8362.T": {
 "country": "Japan",
 "industry": "Banks - Regional",
 "name": "The Fukui Bank, Ltd.",
+"sector": "Financial Services"
+},
+"8366.T": {
+"country": "Japan",
+"industry": "Banks - Regional",
+"name": "The Shiga Bank, Ltd.",
+"sector": "Financial Services"
+},
+"8368.T": {
+"country": "Japan",
+"industry": "Banks - Regional",
+"name": "The Hyakugo Bank, Ltd.",
+"sector": "Financial Services"
+},
+"8370.T": {
+"country": "Japan",
+"industry": "Banks - Regional",
+"name": "The Kiyo Bank, Ltd.",
+"sector": "Financial Services"
+},
+"8386.T": {
+"country": "Japan",
+"industry": "Banks - Regional",
+"name": "The Hyakujushi Bank, Ltd.",
 "sector": "Financial Services"
 },
 "8387.T": {
@@ -881,10 +1583,52 @@
 "name": "The Oita Bank, Ltd.",
 "sector": "Financial Services"
 },
+"8393.T": {
+"country": "Japan",
+"industry": "Banks - Regional",
+"name": "The Miyazaki Bank, Ltd.",
+"sector": "Financial Services"
+},
+"8411.T": {
+"country": "Japan",
+"industry": "Banks - Regional",
+"name": "Mizuho Financial Group, Inc.",
+"sector": "Financial Services"
+},
+"8418.T": {
+"country": "Japan",
+"industry": "Banks - Regional",
+"name": "Yamaguchi Financial Group, Inc.",
+"sector": "Financial Services"
+},
+"8524.T": {
+"country": "Japan",
+"industry": "Banks - Regional",
+"name": "North Pacific Bank,Ltd.",
+"sector": "Financial Services"
+},
+"8544.T": {
+"country": "Japan",
+"industry": "Banks - Regional",
+"name": "The Keiyo Bank, Ltd.",
+"sector": "Financial Services"
+},
+"8591.T": {
+"country": "Japan",
+"industry": "Financial Conglomerates",
+"name": "ORIX Corporation",
+"sector": "Financial Services"
+},
 "8725.T": {
 "country": "Japan",
 "industry": "Insurance - Property & Casualty",
 "name": "MS&AD Insurance Group Holdings, Inc.",
+"sector": "Financial Services"
+},
+"8750.T": {
+"country": "Japan",
+"industry": "Insurance - Life",
+"name": "Daiichi Life Group, Inc.",
 "sector": "Financial Services"
 },
 "8848.T": {
@@ -929,6 +1673,24 @@
 "name": "Shikoku Electric Power Company, Incorporated",
 "sector": "Utilities"
 },
+"9962.T": {
+"country": "Japan",
+"industry": "Tools & Accessories",
+"name": "MISUMI Group Inc.",
+"sector": "Industrials"
+},
+"9987.HK": {
+"country": "China",
+"industry": "Restaurants",
+"name": "Yum China Holdings, Inc.",
+"sector": "Consumer Cyclical"
+},
+"AALB.AS": {
+"country": "Netherlands",
+"industry": "Specialty Industrial Machinery",
+"name": "Aalberts N.V.",
+"sector": "Industrials"
+},
 "ABCL": {
 "country": "Canada",
 "industry": "Biotechnology",
@@ -947,11 +1709,47 @@
 "name": "Absci Corporation",
 "sector": "Healthcare"
 },
+"AC.PA": {
+"country": "France",
+"industry": "Lodging",
+"name": "Accor SA",
+"sector": "Consumer Cyclical"
+},
+"ACO-X.TO": {
+"country": "Canada",
+"industry": "Utilities - Diversified",
+"name": "ATCO Ltd.",
+"sector": "Utilities"
+},
 "ACUTAAS.NS": {
 "country": "India",
 "industry": "Specialty Chemicals",
 "name": "Acutaas Chemicals Limited",
 "sector": "Basic Materials"
+},
+"ACX.MC": {
+"country": "Spain",
+"industry": "Steel",
+"name": "Acerinox, S.A.",
+"sector": "Basic Materials"
+},
+"ADEN.SW": {
+"country": "Switzerland",
+"industry": "Staffing & Employment Services",
+"name": "Adecco Group AG",
+"sector": "Industrials"
+},
+"ADP.PA": {
+"country": "France",
+"industry": "Airports & Air Services",
+"name": "Aeroports de Paris SA",
+"sector": "Industrials"
+},
+"ADS.DE": {
+"country": "Germany",
+"industry": "Footwear & Accessories",
+"name": "adidas AG",
+"sector": "Consumer Cyclical"
 },
 "AEGISLOG.NS": {
 "country": "India",
@@ -959,11 +1757,89 @@
 "name": "Aegis Logistics Limited",
 "sector": "Energy"
 },
+"AENA.MC": {
+"country": "Spain",
+"industry": "Airports & Air Services",
+"name": "Aena S.M.E., S.A.",
+"sector": "Industrials"
+},
 "AETHER.NS": {
 "country": "India",
 "industry": "Specialty Chemicals",
 "name": "Aether Industries Limited",
 "sector": "Basic Materials"
+},
+"AGL.AX": {
+"country": "Australia",
+"industry": "Utilities - Independent Power Producers",
+"name": "AGL Energy Limited",
+"sector": "Utilities"
+},
+"AI.PA": {
+"country": "France",
+"industry": "Specialty Chemicals",
+"name": "L'Air Liquide S.A.",
+"sector": "Basic Materials"
+},
+"AIR.PA": {
+"country": "Netherlands",
+"industry": "Aerospace & Defense",
+"name": "Airbus SE",
+"sector": "Industrials"
+},
+"AKRBP.OL": {
+"country": "Norway",
+"industry": "Oil & Gas E&P",
+"name": "Aker BP ASA",
+"sector": "Energy"
+},
+"AKZA.AS": {
+"country": "Netherlands",
+"industry": "Specialty Chemicals",
+"name": "Akzo Nobel N.V.",
+"sector": "Basic Materials"
+},
+"ALA.TO": {
+"country": "Canada",
+"industry": "Oil & Gas Midstream",
+"name": "AltaGas Ltd.",
+"sector": "Energy"
+},
+"ALAB": {
+"country": "United States",
+"industry": "Semiconductors",
+"name": "Astera Labs, Inc.",
+"sector": "Technology"
+},
+"ALC.SW": {
+"country": "Switzerland",
+"industry": "Medical Instruments & Supplies",
+"name": "Alcon Inc.",
+"sector": "Healthcare"
+},
+"ALD.AX": {
+"country": "Australia",
+"industry": "Oil & Gas Refining & Marketing",
+"name": "Ampol Limited",
+"sector": "Energy"
+},
+"ALFA.ST": {
+"country": "Sweden",
+"industry": "Specialty Industrial Machinery",
+"name": "Alfa Laval AB (publ)",
+"sector": "Industrials"
+},
+"ALIV-SDB.ST": {
+"country": "Sweden",
+"industry": "Auto Parts",
+"name": "Autoliv, Inc.",
+"sector": "Consumer Cyclical"
+},
+"ALK-B.CO": {
+"country": "Denmark",
+"industry": "Biotechnology",
+"name": "ALK-Abelló A/S",
+"sector": "Healthcare"
 },
 "ALL.AX": {
 "country": "Australia",
@@ -976,6 +1852,18 @@
 "industry": "Banks - Regional",
 "name": "AL Sydbank A/S",
 "sector": "Financial Services"
+},
+"ALV.DE": {
+"country": "Germany",
+"industry": "Insurance - Diversified",
+"name": "Allianz SE",
+"sector": "Financial Services"
+},
+"AM.PA": {
+"country": "France",
+"industry": "Aerospace & Defense",
+"name": "Dassault Aviation société anonyme",
+"sector": "Industrials"
 },
 "AMBU-B.CO": {
 "country": "Denmark",
@@ -1001,17 +1889,41 @@
 "name": "Amplifon S.p.A.",
 "sector": "Healthcare"
 },
+"AMS.MC": {
+"country": "Spain",
+"industry": "Information Technology Services",
+"name": "Amadeus IT Group, S.A.",
+"sector": "Technology"
+},
 "AMS.SW": {
 "country": "Austria",
 "industry": "Semiconductors",
 "name": "ams-OSRAM AG",
 "sector": "Technology"
 },
+"AMUN.PA": {
+"country": "France",
+"industry": "Asset Management",
+"name": "Amundi S.A.",
+"sector": "Financial Services"
+},
 "ANN.AX": {
 "country": "Australia",
 "industry": "Medical Instruments & Supplies",
 "name": "Ansell Limited",
 "sector": "Healthcare"
+},
+"ANZ.AX": {
+"country": "Australia",
+"industry": "Banks - Diversified",
+"name": "ANZ Group Holdings Limited",
+"sector": "Financial Services"
+},
+"APA.AX": {
+"country": "Australia",
+"industry": "Utilities - Regulated Gas",
+"name": "APA Group",
+"sector": "Utilities"
 },
 "APARINDS.NS": {
 "country": "India",
@@ -1025,11 +1937,41 @@
 "name": "Arcadis NV",
 "sector": "Industrials"
 },
+"ARE.TO": {
+"country": "Canada",
+"industry": "Engineering & Construction",
+"name": "Aecon Group Inc.",
+"sector": "Industrials"
+},
+"ARGX": {
+"country": "Netherlands",
+"industry": "Biotechnology",
+"name": "argenx SE",
+"sector": "Healthcare"
+},
 "ASC": {
 "country": "Bermuda",
 "industry": "Marine Shipping",
 "name": "Ardmore Shipping Corporation",
 "sector": "Industrials"
+},
+"ASML.AS": {
+"country": "Netherlands",
+"industry": "Semiconductor Equipment & Materials",
+"name": "ASML Holding N.V.",
+"sector": "Technology"
+},
+"ASND": {
+"country": "Denmark",
+"industry": "Biotechnology",
+"name": "Ascendis Pharma A/S",
+"sector": "Healthcare"
+},
+"ASRNL.AS": {
+"country": "Netherlands",
+"industry": "Insurance - Diversified",
+"name": "ASR Nederland N.V.",
+"sector": "Financial Services"
 },
 "ASX": {
 "country": "Taiwan",
@@ -1049,6 +1991,12 @@
 "name": "Alten S.A.",
 "sector": "Technology"
 },
+"ATH.TO": {
+"country": "Canada",
+"industry": "Oil & Gas E&P",
+"name": "Athabasca Oil Corporation",
+"sector": "Energy"
+},
 "ATHERENERG.NS": {
 "country": "India",
 "industry": "Auto Manufacturers",
@@ -1061,6 +2009,12 @@
 "name": "Aritzia Inc.",
 "sector": "Consumer Cyclical"
 },
+"AUGO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "AUROPHARMA.NS": {
 "country": "India",
 "industry": "Drug Manufacturers - Specialty & Generic",
@@ -1072,6 +2026,24 @@
 "industry": "Electronic Components",
 "name": "Avalon Technologies Limited",
 "sector": "Technology"
+},
+"AVIO.MI": {
+"country": "Italy",
+"industry": "Aerospace & Defense",
+"name": "Avio S.p.A.",
+"sector": "Industrials"
+},
+"AVOL.SW": {
+"country": "Switzerland",
+"industry": "Specialty Retail",
+"name": "Avolta AG",
+"sector": "Consumer Cyclical"
+},
+"AXFO.ST": {
+"country": "Sweden",
+"industry": "Grocery Stores",
+"name": "Axfood AB (publ)",
+"sector": "Consumer Defensive"
 },
 "AYA": {
 "country": "Canada",
@@ -1091,16 +2063,64 @@
 "name": "Azad Engineering Limited",
 "sector": "Industrials"
 },
+"AZN.L": {
+"country": "United Kingdom",
+"industry": "Drug Manufacturers - General",
+"name": "AstraZeneca PLC",
+"sector": "Healthcare"
+},
+"AZN.ST": {
+"country": "United Kingdom",
+"industry": "Drug Manufacturers - General",
+"name": "AstraZeneca PLC",
+"sector": "Healthcare"
+},
+"BA.L": {
+"country": "United Kingdom",
+"industry": "Aerospace & Defense",
+"name": "BAE Systems plc",
+"sector": "Industrials"
+},
+"BAER.SW": {
+"country": "Switzerland",
+"industry": "Asset Management",
+"name": "Julius Bär Gruppe AG",
+"sector": "Financial Services"
+},
+"BAMNB.AS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "BANB.SW": {
 "country": "Switzerland",
 "industry": "Biotechnology",
 "name": "Bachem Holding AG",
 "sector": "Healthcare"
 },
+"BARN.SW": {
+"country": "Switzerland",
+"industry": "Confectioners",
+"name": "Barry Callebaut AG",
+"sector": "Consumer Defensive"
+},
+"BAS.DE": {
+"country": "Germany",
+"industry": "Chemicals",
+"name": "BASF SE",
+"sector": "Basic Materials"
+},
 "BAVA.CO": {
 "country": "Denmark",
 "industry": "Biotechnology",
 "name": "Bavarian Nordic A/S",
+"sector": "Healthcare"
+},
+"BAYN.DE": {
+"country": "Germany",
+"industry": "Drug Manufacturers - General",
+"name": "Bayer Aktiengesellschaft",
 "sector": "Healthcare"
 },
 "BB": {
@@ -1127,11 +2147,41 @@
 "name": "Black Box Limited",
 "sector": "Technology"
 },
+"BBVA.MC": {
+"country": "Spain",
+"industry": "Banks - Diversified",
+"name": "Banco Bilbao Vizcaya Argentaria, S.A.",
+"sector": "Financial Services"
+},
+"BC.MI": {
+"country": "Italy",
+"industry": "Luxury Goods",
+"name": "Brunello Cucinelli S.p.A.",
+"sector": "Consumer Cyclical"
+},
+"BCVN.SW": {
+"country": "Switzerland",
+"industry": "Banks - Regional",
+"name": "Banque Cantonale Vaudoise",
+"sector": "Financial Services"
+},
 "BDT.TO": {
 "country": "Canada",
 "industry": "Engineering & Construction",
 "name": "Bird Construction Inc.",
 "sector": "Industrials"
+},
+"BEAN.SW": {
+"country": "Switzerland",
+"industry": "Building Products & Equipment",
+"name": "BELIMO Holding AG",
+"sector": "Industrials"
+},
+"BEI.DE": {
+"country": "Germany",
+"industry": "Household & Personal Products",
+"name": "Beiersdorf Aktiengesellschaft",
+"sector": "Consumer Defensive"
 },
 "BEIJ-B.ST": {
 "country": "Sweden",
@@ -1139,11 +2189,35 @@
 "name": "Beijer Ref AB (publ)",
 "sector": "Industrials"
 },
+"BGN.MI": {
+"country": "Italy",
+"industry": "Banks - Regional",
+"name": "Banca Generali S.p.A.",
+"sector": "Financial Services"
+},
 "BIM.PA": {
 "country": "France",
 "industry": "Diagnostics & Research",
 "name": "bioMérieux S.A.",
 "sector": "Healthcare"
+},
+"BMED.MI": {
+"country": "Italy",
+"industry": "Banks - Regional",
+"name": "Banca Mediolanum S.p.A.",
+"sector": "Financial Services"
+},
+"BMO.TO": {
+"country": "Canada",
+"industry": "Banks - Diversified",
+"name": "Bank of Montreal",
+"sector": "Financial Services"
+},
+"BMPS.MI": {
+"country": "Italy",
+"industry": "Banks - Regional",
+"name": "Banca Monte dei Paschi di Siena S.p.A.",
+"sector": "Financial Services"
 },
 "BNOR.OL": {
 "country": "Norway",
@@ -1157,11 +2231,23 @@
 "name": "The Bank of Nova Scotia",
 "sector": "Financial Services"
 },
+"BOL.ST": {
+"country": "Sweden",
+"industry": "Other Industrial Metals & Mining",
+"name": "Boliden AB (publ)",
+"sector": "Basic Materials"
+},
 "BONEX.ST": {
 "country": "Sweden",
 "industry": "Medical Instruments & Supplies",
 "name": "Bonesupport Holding AB (publ)",
 "sector": "Healthcare"
+},
+"BP.L": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "BRAV.ST": {
 "country": "Sweden",
@@ -1169,17 +2255,47 @@
 "name": "Bravida Holding AB (publ)",
 "sector": "Industrials"
 },
+"BRG.AX": {
+"country": "Australia",
+"industry": "Furnishings, Fixtures & Appliances",
+"name": "Breville Group Limited",
+"sector": "Consumer Cyclical"
+},
+"BTE": {
+"country": "Canada",
+"industry": "Oil & Gas E&P",
+"name": "Baytex Energy Corp.",
+"sector": "Energy"
+},
 "BTE.TO": {
 "country": "Canada",
 "industry": "Oil & Gas E&P",
 "name": "Baytex Energy Corp.",
 "sector": "Energy"
 },
+"BVI.PA": {
+"country": "France",
+"industry": "Consulting Services",
+"name": "Bureau Veritas SA",
+"sector": "Industrials"
+},
 "BWLPG.OL": {
 "country": "Singapore",
 "industry": "Oil & Gas Midstream",
 "name": "BW LPG Limited",
 "sector": "Energy"
+},
+"BXB.AX": {
+"country": "Australia",
+"industry": "Specialty Business Services",
+"name": "Brambles Limited",
+"sector": "Industrials"
+},
+"CAE.TO": {
+"country": "Canada",
+"industry": "Aerospace & Defense",
+"name": "CAE Inc.",
+"sector": "Industrials"
 },
 "CAMX.ST": {
 "country": "Sweden",
@@ -1199,6 +2315,18 @@
 "name": "Capital Tankers Corp.",
 "sector": "Industrials"
 },
+"CAST.ST": {
+"country": "Sweden",
+"industry": "Real Estate - Development",
+"name": "Castellum AB (publ)",
+"sector": "Real Estate"
+},
+"CBK.DE": {
+"country": "Germany",
+"industry": "Banks - Regional",
+"name": "Commerzbank AG",
+"sector": "Financial Services"
+},
 "CDA.AX": {
 "country": "Australia",
 "industry": "Scientific & Technical Instruments",
@@ -1217,6 +2345,12 @@
 "name": "CES Energy Solutions Corp.",
 "sector": "Energy"
 },
+"CG.TO": {
+"country": "Canada",
+"industry": "Gold",
+"name": "Centerra Gold Inc.",
+"sector": "Basic Materials"
+},
 "CGF.AX": {
 "country": "Australia",
 "industry": "Insurance - Life",
@@ -1229,11 +2363,23 @@
 "name": "Chennai Petroleum Corporation Limited",
 "sector": "Energy"
 },
+"CHG.L": {
+"country": "United Kingdom",
+"industry": "Aerospace & Defense",
+"name": "Chemring Group PLC",
+"sector": "Industrials"
+},
 "CHKP": {
 "country": "Israel",
 "industry": "Software - Infrastructure",
 "name": "Check Point Software Technologies Ltd.",
 "sector": "Technology"
+},
+"CJ.TO": {
+"country": "Canada",
+"industry": "Oil & Gas E&P",
+"name": "Cardinal Energy Ltd.",
+"sector": "Energy"
 },
 "CLMT": {
 "country": "United States",
@@ -1247,17 +2393,35 @@
 "name": "Clariant AG",
 "sector": "Basic Materials"
 },
+"CM.TO": {
+"country": "Canada",
+"industry": "Banks - Diversified",
+"name": "Canadian Imperial Bank of Commerce",
+"sector": "Financial Services"
+},
 "CMBTO.OL": {
 "country": "Belgium",
 "industry": "Oil & Gas Midstream",
 "name": "Cmb.Tech NV",
 "sector": "Energy"
 },
+"CMM.AX": {
+"country": "Australia",
+"industry": "Gold",
+"name": "Capricorn Metals Ltd",
+"sector": "Basic Materials"
+},
 "CNQ.TO": {
 "country": "Canada",
 "industry": "Oil & Gas E&P",
 "name": "Canadian Natural Resources Limited",
 "sector": "Energy"
+},
+"CNR.TO": {
+"country": "Canada",
+"industry": "Railroads",
+"name": "Canadian National Railway Company",
+"sector": "Industrials"
 },
 "COH.AX": {
 "country": "Australia",
@@ -1271,6 +2435,12 @@
 "name": "Coloplast A/S",
 "sector": "Healthcare"
 },
+"CON.DE": {
+"country": "Germany",
+"industry": "Auto Parts",
+"name": "Continental Aktiengesellschaft",
+"sector": "Consumer Cyclical"
+},
 "COTN.SW": {
 "country": "Switzerland",
 "industry": "Scientific & Technical Instruments",
@@ -1283,11 +2453,23 @@
 "name": "Aditya Infotech Limited",
 "sector": "Industrials"
 },
+"CPR.MI": {
+"country": "Italy",
+"industry": "Beverages - Wineries & Distilleries",
+"name": "Davide Campari-Milano N.V.",
+"sector": "Consumer Defensive"
+},
 "CRAFTSMAN.NS": {
 "country": "India",
 "industry": "Auto Parts",
 "name": "Craftsman Automation Limited",
 "sector": "Consumer Cyclical"
+},
+"CS.PA": {
+"country": "France",
+"industry": "Insurance - Diversified",
+"name": "AXA SA",
+"sector": "Financial Services"
 },
 "CSL.AX": {
 "country": "Australia",
@@ -1301,16 +2483,40 @@
 "name": "Constellation Software Inc.",
 "sector": "Technology"
 },
+"CVE.TO": {
+"country": "Canada",
+"industry": "Oil & Gas Integrated",
+"name": "Cenovus Energy Inc.",
+"sector": "Energy"
+},
 "DAC": {
 "country": "Greece",
 "industry": "Marine Shipping",
 "name": "Danaos Corporation",
 "sector": "Industrials"
 },
+"DANSKE.CO": {
+"country": "Denmark",
+"industry": "Banks - Regional",
+"name": "Danske Bank A/S",
+"sector": "Financial Services"
+},
+"DATAPATTNS.NS": {
+"country": "India",
+"industry": "Aerospace & Defense",
+"name": "Data Patterns (India) Limited",
+"sector": "Industrials"
+},
 "DB1.DE": {
 "country": "Germany",
 "industry": "Financial Data & Stock Exchanges",
 "name": "Deutsche Börse AG",
+"sector": "Financial Services"
+},
+"DBK.DE": {
+"country": "Germany",
+"industry": "Banks - Regional",
+"name": "Deutsche Bank Aktiengesellschaft",
 "sector": "Financial Services"
 },
 "DEMANT.CO": {
@@ -1330,6 +2536,12 @@
 "industry": "Internet Retail",
 "name": "Delivery Hero SE",
 "sector": "Consumer Cyclical"
+},
+"DHL.DE": {
+"country": "Germany",
+"industry": "Integrated Freight & Logistics",
+"name": "DHL AG",
+"sector": "Industrials"
 },
 "DHT": {
 "country": "Bermuda",
@@ -1373,6 +2585,12 @@
 "name": "Domino's Pizza Enterprises Limited",
 "sector": "Consumer Cyclical"
 },
+"DNB.OL": {
+"country": "Norway",
+"industry": "Banks - Regional",
+"name": "DNB Bank ASA",
+"sector": "Financial Services"
+},
 "DSFIR.AS": {
 "country": "Switzerland",
 "industry": "Specialty Chemicals",
@@ -1384,6 +2602,12 @@
 "industry": "Software - Application",
 "name": "The Descartes Systems Group Inc.",
 "sector": "Technology"
+},
+"DSV.TO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "DSY.PA": {
 "country": "France",
@@ -1403,11 +2627,35 @@
 "name": "Okeanis Eco Tankers Corp.",
 "sector": "Industrials"
 },
+"EFX.TO": {
+"country": "Canada",
+"industry": "Oil & Gas Equipment & Services",
+"name": "Enerflex Ltd.",
+"sector": "Energy"
+},
+"EIF.TO": {
+"country": "Canada",
+"industry": "Airlines",
+"name": "Exchange Income Corporation",
+"sector": "Industrials"
+},
 "EKTA-B.ST": {
 "country": "Sweden",
 "industry": "Medical Devices",
 "name": "Elekta AB (publ)",
 "sector": "Healthcare"
+},
+"EL.PA": {
+"country": "France",
+"industry": "Medical Instruments & Supplies",
+"name": "EssilorLuxottica Société anonyme",
+"sector": "Healthcare"
+},
+"ELE.MC": {
+"country": "Spain",
+"industry": "Utilities - Regulated Electric",
+"name": "Endesa, S.A.",
+"sector": "Utilities"
 },
 "EMSN.SW": {
 "country": "Switzerland",
@@ -1415,11 +2663,35 @@
 "name": "EMS-CHEMIE HOLDING AG",
 "sector": "Basic Materials"
 },
+"ENG.MC": {
+"country": "Spain",
+"industry": "Utilities - Regulated Gas",
+"name": "Enagás, S.A.",
+"sector": "Utilities"
+},
+"ENI.MI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "ENX.PA": {
 "country": "Netherlands",
 "industry": "Financial Data & Stock Exchanges",
 "name": "Euronext N.V.",
 "sector": "Financial Services"
+},
+"EOAN.DE": {
+"country": "Germany",
+"industry": "Utilities - Diversified",
+"name": "E.ON SE",
+"sector": "Utilities"
+},
+"EOS.AX": {
+"country": "Australia",
+"industry": "Aerospace & Defense",
+"name": "Electro Optic Systems Holdings Limited",
+"sector": "Industrials"
 },
 "EQNR.OL": {
 "country": "Norway",
@@ -1427,11 +2699,41 @@
 "name": "Equinor ASA",
 "sector": "Energy"
 },
+"EQT.ST": {
+"country": "Sweden",
+"industry": "Asset Management",
+"name": "EQT AB (publ)",
+"sector": "Financial Services"
+},
+"ERAS": {
+"country": "United States",
+"industry": "Biotechnology",
+"name": "Erasca, Inc.",
+"sector": "Healthcare"
+},
 "ERF.PA": {
 "country": "Luxembourg",
 "industry": "Diagnostics & Research",
 "name": "Eurofins Scientific SE",
 "sector": "Healthcare"
+},
+"ERIC-B.ST": {
+"country": "Sweden",
+"industry": "Communication Equipment",
+"name": "Telefonaktiebolaget LM Ericsson (publ)",
+"sector": "Technology"
+},
+"ERO.TO": {
+"country": "Canada",
+"industry": "Copper",
+"name": "Ero Copper Corp.",
+"sector": "Basic Materials"
+},
+"ESSITY-B.ST": {
+"country": "Sweden",
+"industry": "Household & Personal Products",
+"name": "Essity AB (publ)",
+"sector": "Consumer Defensive"
 },
 "ESTC": {
 "country": "Netherlands",
@@ -1451,6 +2753,24 @@
 "name": "Evolution AB (publ)",
 "sector": "Consumer Cyclical"
 },
+"EXO.AS": {
+"country": "Netherlands",
+"industry": "Asset Management",
+"name": "Exor N.V.",
+"sector": "Financial Services"
+},
+"FCT.MI": {
+"country": "Italy",
+"industry": "Aerospace & Defense",
+"name": "Fincantieri S.p.A.",
+"sector": "Industrials"
+},
+"FIG": {
+"country": "United States",
+"industry": "Software - Application",
+"name": "Figma, Inc.",
+"sector": "Technology"
+},
 "FIGS": {
 "country": "United States",
 "industry": "Apparel Manufacturing",
@@ -1463,10 +2783,34 @@
 "name": "FLSmidth & Co. A/S",
 "sector": "Industrials"
 },
+"FLT.AX": {
+"country": "Australia",
+"industry": "Travel Services",
+"name": "Flight Centre Travel Group Limited",
+"sector": "Consumer Cyclical"
+},
+"FME.DE": {
+"country": "Germany",
+"industry": "Medical Care Facilities",
+"name": "Fresenius Medical Care AG",
+"sector": "Healthcare"
+},
+"FORTUM.HE": {
+"country": "Finland",
+"industry": "Utilities - Renewable",
+"name": "Fortum Oyj",
+"sector": "Utilities"
+},
 "FPH.AX": {
 "country": "New Zealand",
 "industry": "Medical Instruments & Supplies",
 "name": "Fisher & Paykel Healthcare Corporation Limited",
+"sector": "Healthcare"
+},
+"FRE.DE": {
+"country": "Germany",
+"industry": "Medical Care Facilities",
+"name": "Fresenius SE & Co. KGaA",
 "sector": "Healthcare"
 },
 "FRO": {
@@ -1475,11 +2819,65 @@
 "name": "Frontline plc",
 "sector": "Energy"
 },
+"FSLY": {
+"country": "United States",
+"industry": "Software - Application",
+"name": "Fastly, Inc.",
+"sector": "Technology"
+},
+"FTT.TO": {
+"country": "Canada",
+"industry": "Industrial Distribution",
+"name": "Finning International Inc.",
+"sector": "Industrials"
+},
+"G.MI": {
+"country": "Italy",
+"industry": "Insurance - Diversified",
+"name": "Assicurazioni Generali S.p.A.",
+"sector": "Financial Services"
+},
 "G24.DE": {
 "country": "Germany",
 "industry": "Internet Content & Information",
 "name": "Scout24 SE",
 "sector": "Communication Services"
+},
+"GALD.SW": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"GALE.SW": {
+"country": "Switzerland",
+"industry": "Medical Distribution",
+"name": "Galenica AG",
+"sector": "Healthcare"
+},
+"GALP.LS": {
+"country": "Portugal",
+"industry": "Oil & Gas Integrated",
+"name": "Galp Energia, SGPS, S.A.",
+"sector": "Energy"
+},
+"GEBN.SW": {
+"country": "Switzerland",
+"industry": "Building Products & Equipment",
+"name": "Geberit AG",
+"sector": "Industrials"
+},
+"GEI.TO": {
+"country": "Canada",
+"industry": "Oil & Gas Midstream",
+"name": "Gibson Energy Inc.",
+"sector": "Energy"
+},
+"GET.PA": {
+"country": "France",
+"industry": "Railroads",
+"name": "Getlink SE",
+"sector": "Industrials"
 },
 "GETI-B.ST": {
 "country": "Sweden",
@@ -1523,6 +2921,12 @@
 "name": "GN Store Nord A/S",
 "sector": "Healthcare"
 },
+"GNK": {
+"country": "United States",
+"industry": "Marine Shipping",
+"name": "Genco Shipping & Trading Limited",
+"sector": "Industrials"
+},
 "GRF.MC": {
 "country": "Spain",
 "industry": "Drug Manufacturers - General",
@@ -1534,6 +2938,12 @@
 "industry": "Software - Infrastructure",
 "name": "GitLab Inc.",
 "sector": "Technology"
+},
+"GWO.TO": {
+"country": "Canada",
+"industry": "Insurance - Life",
+"name": "Great-West Lifeco Inc.",
+"sector": "Financial Services"
 },
 "GXI.DE": {
 "country": "Germany",
@@ -1553,17 +2963,41 @@
 "name": "Hafnia Limited",
 "sector": "Industrials"
 },
+"HAG.DE": {
+"country": "Germany",
+"industry": "Aerospace & Defense",
+"name": "Hensoldt AG",
+"sector": "Industrials"
+},
 "HAUTO.OL": {
 "country": "Norway",
 "industry": "Marine Shipping",
 "name": "Höegh Autoliners ASA",
 "sector": "Industrials"
 },
+"HBAN.SW": {
+"country": "Switzerland",
+"industry": "Insurance - Diversified",
+"name": "Helvetia Baloise Holding AG",
+"sector": "Financial Services"
+},
 "HCLTECH.NS": {
 "country": "India",
 "industry": "Information Technology Services",
 "name": "HCL Technologies Limited",
 "sector": "Technology"
+},
+"HEIA.AS": {
+"country": "Netherlands",
+"industry": "Beverages - Brewers",
+"name": "Heineken N.V.",
+"sector": "Consumer Defensive"
+},
+"HEIO.AS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "HEN3.DE": {
 "country": "Germany",
@@ -1583,17 +3017,77 @@
 "name": "H. Lundbeck A/S",
 "sector": "Healthcare"
 },
+"HM-B.ST": {
+"country": "Sweden",
+"industry": "Apparel Manufacturing",
+"name": "H & M Hennes & Mauritz AB (publ)",
+"sector": "Consumer Cyclical"
+},
 "HNGE": {
 "country": "United States",
 "industry": "Health Information Services",
 "name": "Hinge Health, Inc.",
 "sector": "Healthcare"
 },
+"HNR1.DE": {
+"country": "Germany",
+"industry": "Insurance - Reinsurance",
+"name": "Hannover Rück SE",
+"sector": "Financial Services"
+},
+"HOLN.SW": {
+"country": "Switzerland",
+"industry": "Building Materials",
+"name": "Holcim AG",
+"sector": "Basic Materials"
+},
+"HSHP": {
+"country": "Bermuda",
+"industry": "Marine Shipping",
+"name": "Himalaya Shipping Ltd.",
+"sector": "Industrials"
+},
+"HWX.TO": {
+"country": "Canada",
+"industry": "Oil & Gas E&P",
+"name": "Headwater Exploration Inc.",
+"sector": "Energy"
+},
+"IAG.AX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"IAG.MC": {
+"country": "United Kingdom",
+"industry": "Airlines",
+"name": "International Consolidated Airlines Group S.A.",
+"sector": "Industrials"
+},
+"IAG.TO": {
+"country": "Canada",
+"industry": "Insurance - Diversified",
+"name": "iA Financial Corporation Inc.",
+"sector": "Financial Services"
+},
+"IBE.MC": {
+"country": "Spain",
+"industry": "Utilities - Diversified",
+"name": "Iberdrola, S.A.",
+"sector": "Utilities"
+},
 "IBRX": {
 "country": "United States",
 "industry": "Biotechnology",
 "name": "ImmunityBio, Inc.",
 "sector": "Healthcare"
+},
+"ICICIBANK.NS": {
+"country": "India",
+"industry": "Banks - Regional",
+"name": "ICICI Bank Limited",
+"sector": "Financial Services"
 },
 "IDR.MC": {
 "country": "Spain",
@@ -1607,6 +3101,30 @@
 "name": "INFICON Holding AG",
 "sector": "Technology"
 },
+"IGM.TO": {
+"country": "Canada",
+"industry": "Asset Management",
+"name": "IGM Financial Inc.",
+"sector": "Financial Services"
+},
+"IMCD.AS": {
+"country": "Netherlands",
+"industry": "Specialty Chemicals",
+"name": "IMCD N.V.",
+"sector": "Basic Materials"
+},
+"IMG.TO": {
+"country": "Canada",
+"industry": "Gold",
+"name": "IAMGOLD Corporation",
+"sector": "Basic Materials"
+},
+"IMO.TO": {
+"country": "Canada",
+"industry": "Oil & Gas Integrated",
+"name": "Imperial Oil Limited",
+"sector": "Energy"
+},
 "IMOS": {
 "country": "Taiwan",
 "industry": "Semiconductors",
@@ -1618,6 +3136,36 @@
 "industry": "Industrial Distribution",
 "name": "Indutrade AB (publ)",
 "sector": "Industrials"
+},
+"INDU-C.ST": {
+"country": "Sweden",
+"industry": "Asset Management",
+"name": "AB Industrivärden (publ)",
+"sector": "Financial Services"
+},
+"INFY.NS": {
+"country": "India",
+"industry": "Information Technology Services",
+"name": "Infosys Limited",
+"sector": "Technology"
+},
+"INGA.AS": {
+"country": "Netherlands",
+"industry": "Banks - Diversified",
+"name": "ING Groep N.V.",
+"sector": "Financial Services"
+},
+"INVE-A.ST": {
+"country": "Sweden",
+"industry": "Asset Management",
+"name": "Investor AB (publ)",
+"sector": "Financial Services"
+},
+"INW.MI": {
+"country": "Italy",
+"industry": "Real Estate Services",
+"name": "Infrastrutture Wireless Italiane S.p.A.",
+"sector": "Real Estate"
 },
 "IOT": {
 "country": "United States",
@@ -1631,11 +3179,35 @@
 "name": "Iovance Biotherapeutics, Inc.",
 "sector": "Healthcare"
 },
+"IP.MI": {
+"country": "Italy",
+"industry": "Specialty Industrial Machinery",
+"name": "Interpump Group S.p.A.",
+"sector": "Industrials"
+},
 "IPCALAB.NS": {
 "country": "India",
 "industry": "Drug Manufacturers - Specialty & Generic",
 "name": "Ipca Laboratories Limited",
 "sector": "Healthcare"
+},
+"ISS.CO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"ITX.MC": {
+"country": "Spain",
+"industry": "Apparel Retail",
+"name": "Industria de Diseño Textil, S.A.",
+"sector": "Consumer Cyclical"
+},
+"IVG.MI": {
+"country": "Italy",
+"industry": "Farm & Heavy Construction Machinery",
+"name": "Iveco Group N.V.",
+"sector": "Industrials"
 },
 "JHX.AX": {
 "country": "Ireland",
@@ -1649,6 +3221,12 @@
 "name": "Jamieson Wellness Inc.",
 "sector": "Consumer Defensive"
 },
+"JYSK.CO": {
+"country": "Denmark",
+"industry": "Banks - Regional",
+"name": "Jyske Bank A/S",
+"sector": "Financial Services"
+},
 "KEL.TO": {
 "country": "Canada",
 "industry": "Oil & Gas E&P",
@@ -1660,6 +3238,18 @@
 "industry": "Grocery Stores",
 "name": "Kesko Oyj",
 "sector": "Consumer Defensive"
+},
+"KIRLOSENG.NS": {
+"country": "India",
+"industry": "Specialty Industrial Machinery",
+"name": "Kirloskar Oil Engines Limited",
+"sector": "Industrials"
+},
+"KNEBV.HE": {
+"country": "Finland",
+"industry": "Specialty Industrial Machinery",
+"name": "KONE Oyj",
+"sector": "Industrials"
 },
 "KNIN.SW": {
 "country": "Switzerland",
@@ -1673,11 +3263,29 @@
 "name": "Kiniksa Pharmaceuticals International, plc",
 "sector": "Healthcare"
 },
+"KNT.TO": {
+"country": "Canada",
+"industry": "Gold",
+"name": "K92 Mining Inc.",
+"sector": "Basic Materials"
+},
 "KOD": {
 "country": "United States",
 "industry": "Biotechnology",
 "name": "Kodiak Sciences Inc.",
 "sector": "Healthcare"
+},
+"KOG.OL": {
+"country": "Norway",
+"industry": "Aerospace & Defense",
+"name": "Kongsberg Gruppen ASA",
+"sector": "Industrials"
+},
+"KVYO": {
+"country": "United States",
+"industry": "Software - Application",
+"name": "Klaviyo, Inc.",
+"sector": "Technology"
 },
 "KXS.TO": {
 "country": "Canada",
@@ -1685,10 +3293,22 @@
 "name": "Kinaxis Inc.",
 "sector": "Technology"
 },
+"LATO-B.ST": {
+"country": "Sweden",
+"industry": "Conglomerates",
+"name": "Investment AB Latour (publ)",
+"sector": "Industrials"
+},
 "LAURUSLABS.NS": {
 "country": "India",
 "industry": "Drug Manufacturers - Specialty & Generic",
 "name": "Laurus Labs Limited",
+"sector": "Healthcare"
+},
+"LEGN": {
+"country": "United States",
+"industry": "Biotechnology",
+"name": "Legend Biotech Corporation",
 "sector": "Healthcare"
 },
 "LENSKART.NS": {
@@ -1715,11 +3335,53 @@
 "name": "Light & Wonder, Inc.",
 "sector": "Consumer Cyclical"
 },
+"LOG.MC": {
+"country": "Spain",
+"industry": "Integrated Freight & Logistics",
+"name": "Logista Integral, S.A.",
+"sector": "Industrials"
+},
+"LOGN.SW": {
+"country": "Switzerland",
+"industry": "Computer Hardware",
+"name": "Logitech International S.A.",
+"sector": "Technology"
+},
 "LONN.SW": {
 "country": "Switzerland",
 "industry": "Diagnostics & Research",
 "name": "Lonza Group AG",
 "sector": "Healthcare"
+},
+"LSEG.L": {
+"country": "United Kingdom",
+"industry": "Financial Data & Stock Exchanges",
+"name": "London Stock Exchange Group plc",
+"sector": "Financial Services"
+},
+"LSPD.TO": {
+"country": "Canada",
+"industry": "Software - Application",
+"name": "Lightspeed Commerce Inc.",
+"sector": "Technology"
+},
+"LTMC.MI": {
+"country": "Italy",
+"industry": "Gambling",
+"name": "Lottomatica Group S.p.A.",
+"sector": "Consumer Cyclical"
+},
+"LUG.ST": {
+"country": "Canada",
+"industry": "Gold",
+"name": "Lundin Gold Inc.",
+"sector": "Basic Materials"
+},
+"LUND-B.ST": {
+"country": "Sweden",
+"industry": "Conglomerates",
+"name": "L E Lundbergföretagen AB (publ)",
+"sector": "Industrials"
 },
 "MAERSK-A.CO": {
 "country": "Denmark",
@@ -1739,6 +3401,12 @@
 "name": "Veradermics, Incorporated",
 "sector": "Healthcare"
 },
+"MB.MI": {
+"country": "Italy",
+"industry": "Banks - Regional",
+"name": "Mediobanca Banca di Credito Finanziario S.p.A.",
+"sector": "Financial Services"
+},
 "MBX": {
 "country": "United States",
 "industry": "Biotechnology",
@@ -1750,6 +3418,18 @@
 "industry": "Software - Infrastructure",
 "name": "MongoDB, Inc.",
 "sector": "Technology"
+},
+"METSO.HE": {
+"country": "Finland",
+"industry": "Farm & Heavy Construction Machinery",
+"name": "Metso Oyj",
+"sector": "Industrials"
+},
+"MFC.TO": {
+"country": "Canada",
+"industry": "Insurance - Life",
+"name": "Manulife Financial Corporation",
+"sector": "Financial Services"
 },
 "MICC.AS": {
 "country": "Netherlands",
@@ -1769,11 +3449,23 @@
 "name": "monday.com Ltd.",
 "sector": "Technology"
 },
+"MOWI.OL": {
+"country": "Norway",
+"industry": "Farm Products",
+"name": "Mowi ASA",
+"sector": "Consumer Defensive"
+},
 "MP1.AX": {
 "country": "Australia",
 "industry": "Software - Infrastructure",
 "name": "Megaport Limited",
 "sector": "Technology"
+},
+"MQG.AX": {
+"country": "",
+"industry": "",
+"name": "Macquarie Group Limited",
+"sector": ""
 },
 "MRK.DE": {
 "country": "Germany",
@@ -1793,6 +3485,42 @@
 "name": "Mullen Group Ltd.",
 "sector": "Industrials"
 },
+"MTX.DE": {
+"country": "Germany",
+"industry": "Aerospace & Defense",
+"name": "MTU Aero Engines AG",
+"sector": "Industrials"
+},
+"MUV2.DE": {
+"country": "Germany",
+"industry": "Insurance - Reinsurance",
+"name": "Münchener Rückversicherungs-Gesellschaft Aktiengesellschaft in München",
+"sector": "Financial Services"
+},
+"MX.TO": {
+"country": "Canada",
+"industry": "Chemicals",
+"name": "Methanex Corporation",
+"sector": "Basic Materials"
+},
+"MYCR.ST": {
+"country": "Sweden",
+"industry": "Specialty Industrial Machinery",
+"name": "Mycronic AB (publ)",
+"sector": "Industrials"
+},
+"NAB.AX": {
+"country": "Australia",
+"industry": "Banks - Diversified",
+"name": "National Australia Bank Limited",
+"sector": "Financial Services"
+},
+"NANO.PA": {
+"country": "France",
+"industry": "Biotechnology",
+"name": "Nanobiotix S.A.",
+"sector": "Healthcare"
+},
 "NAT": {
 "country": "Bermuda",
 "industry": "Oil & Gas Midstream",
@@ -1805,11 +3533,23 @@
 "name": "Navin Fluorine International Limited",
 "sector": "Basic Materials"
 },
+"NEM.AX": {
+"country": "United States",
+"industry": "Gold",
+"name": "Newmont Corporation",
+"sector": "Basic Materials"
+},
 "NEM.DE": {
 "country": "Germany",
 "industry": "Software - Application",
 "name": "Nemetschek SE",
 "sector": "Technology"
+},
+"NESN.SW": {
+"country": "Switzerland",
+"industry": "Packaged Foods",
+"name": "Nestlé S.A.",
+"sector": "Consumer Defensive"
 },
 "NET": {
 "country": "United States",
@@ -1823,6 +3563,36 @@
 "name": "Netcompany Group A/S",
 "sector": "Technology"
 },
+"NICE": {
+"country": "Israel",
+"industry": "Software - Application",
+"name": "NICE Ltd.",
+"sector": "Technology"
+},
+"NN.AS": {
+"country": "Netherlands",
+"industry": "Insurance - Diversified",
+"name": "NN Group N.V.",
+"sector": "Financial Services"
+},
+"NOD.OL": {
+"country": "Norway",
+"industry": "Semiconductors",
+"name": "Nordic Semiconductor ASA",
+"sector": "Technology"
+},
+"NOVN.SW": {
+"country": "Switzerland",
+"industry": "Drug Manufacturers - General",
+"name": "Novartis AG",
+"sector": "Healthcare"
+},
+"NOVNEE.SW": {
+"country": "Switzerland",
+"industry": "",
+"name": "Novartis AG",
+"sector": ""
+},
 "NSIS-B.CO": {
 "country": "Denmark",
 "industry": "Specialty Chemicals",
@@ -1835,6 +3605,12 @@
 "name": "Northern Star Resources Limited",
 "sector": "Basic Materials"
 },
+"NTGY.MC": {
+"country": "Spain",
+"industry": "Utilities - Regulated Gas",
+"name": "Naturgy Energy Group, S.A.",
+"sector": "Utilities"
+},
 "NTRA": {
 "country": "United States",
 "industry": "Diagnostics & Research",
@@ -1846,6 +3622,12 @@
 "industry": "Software - Infrastructure",
 "name": "Netskope, Inc.",
 "sector": "Technology"
+},
+"NWG.L": {
+"country": "United Kingdom",
+"industry": "Banks - Regional",
+"name": "NatWest Group plc",
+"sector": "Financial Services"
 },
 "OET.OL": {
 "country": "Greece",
@@ -1871,6 +3653,12 @@
 "name": "L'Oréal S.A.",
 "sector": "Consumer Defensive"
 },
+"ORG.AX": {
+"country": "Australia",
+"industry": "Utilities - Diversified",
+"name": "Origin Energy Limited",
+"sector": "Utilities"
+},
 "ORKA": {
 "country": "United States",
 "industry": "Biotechnology",
@@ -1889,11 +3677,23 @@
 "name": "OneSpan Inc.",
 "sector": "Technology"
 },
+"OTEX.TO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "OVV.TO": {
 "country": "United States",
 "industry": "Oil & Gas E&P",
 "name": "Ovintiv Inc.",
 "sector": "Energy"
+},
+"P911.DE": {
+"country": "Germany",
+"industry": "Auto Manufacturers",
+"name": "Dr. Ing. h.c. F. Porsche AG",
+"sector": "Consumer Cyclical"
 },
 "PACS": {
 "country": "United States",
@@ -1907,10 +3707,40 @@
 "name": "Paras Defence and Space Technologies Limited",
 "sector": "Industrials"
 },
+"PCOR": {
+"country": "United States",
+"industry": "Software - Application",
+"name": "Procore Technologies, Inc.",
+"sector": "Technology"
+},
+"PCVX": {
+"country": "United States",
+"industry": "Biotechnology",
+"name": "Vaxcyte, Inc.",
+"sector": "Healthcare"
+},
 "PD.TO": {
 "country": "Canada",
 "industry": "Oil & Gas Drilling",
 "name": "Precision Drilling Corporation",
+"sector": "Energy"
+},
+"PHIA.AS": {
+"country": "Netherlands",
+"industry": "Medical Devices",
+"name": "Koninklijke Philips N.V.",
+"sector": "Healthcare"
+},
+"PIRC.MI": {
+"country": "Italy",
+"industry": "Auto Parts",
+"name": "Pirelli & C. S.p.A.",
+"sector": "Consumer Cyclical"
+},
+"PKN.WA": {
+"country": "Poland",
+"industry": "Oil & Gas Integrated",
+"name": "Orlen S.A.",
 "sector": "Energy"
 },
 "PLSE": {
@@ -1943,17 +3773,65 @@
 "name": "Power Corporation of Canada",
 "sector": "Financial Services"
 },
+"PPL.TO": {
+"country": "Canada",
+"industry": "Oil & Gas Midstream",
+"name": "Pembina Pipeline Corporation",
+"sector": "Energy"
+},
+"PSK.TO": {
+"country": "Canada",
+"industry": "Oil & Gas E&P",
+"name": "PrairieSky Royalty Ltd.",
+"sector": "Energy"
+},
+"PSPN.SW": {
+"country": "Switzerland",
+"industry": "Real Estate Services",
+"name": "PSP Swiss Property AG",
+"sector": "Real Estate"
+},
+"PST.MI": {
+"country": "Italy",
+"industry": "Integrated Freight & Logistics",
+"name": "Poste Italiane S.p.A.",
+"sector": "Industrials"
+},
+"PUIG.MC": {
+"country": "Spain",
+"industry": "Household & Personal Products",
+"name": "Puig Brands, S.A.",
+"sector": "Consumer Defensive"
+},
+"PUM.DE": {
+"country": "Germany",
+"industry": "Footwear & Accessories",
+"name": "PUMA SE",
+"sector": "Consumer Cyclical"
+},
 "PURR": {
 "country": "United States",
 "industry": "Capital Markets",
 "name": "Hyperliquid Strategies Inc.",
 "sector": "Financial Services"
 },
+"PXT.TO": {
+"country": "Canada",
+"industry": "Oil & Gas E&P",
+"name": "Parex Resources Inc.",
+"sector": "Energy"
+},
 "QBE.AX": {
 "country": "Australia",
 "industry": "Insurance - Property & Casualty",
 "name": "QBE Insurance Group Limited",
 "sector": "Financial Services"
+},
+"QBR-B.TO": {
+"country": "Canada",
+"industry": "Telecom Services",
+"name": "Quebecor Inc.",
+"sector": "Communication Services"
 },
 "QIA.DE": {
 "country": "Netherlands",
@@ -1967,6 +3845,12 @@
 "name": "QinetiQ Group plc",
 "sector": "Industrials"
 },
+"RACE.MI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "RAND.AS": {
 "country": "Netherlands",
 "industry": "Staffing & Employment Services",
@@ -1979,11 +3863,29 @@
 "name": "Rubrik, Inc.",
 "sector": "Technology"
 },
+"REC.MI": {
+"country": "Italy",
+"industry": "Drug Manufacturers - General",
+"name": "Recordati Industria Chimica e Farmaceutica S.p.A.",
+"sector": "Healthcare"
+},
+"RED.MC": {
+"country": "Spain",
+"industry": "Utilities - Regulated Electric",
+"name": "Redeia Corporación, S.A.",
+"sector": "Utilities"
+},
 "REN.AS": {
 "country": "United Kingdom",
 "industry": "Specialty Business Services",
 "name": "RELX PLC",
 "sector": "Industrials"
+},
+"REP.MC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "REY.MI": {
 "country": "Italy",
@@ -1996,6 +3898,18 @@
 "industry": "Medical Care Facilities",
 "name": "Ramsay Health Care Limited",
 "sector": "Healthcare"
+},
+"RI.PA": {
+"country": "France",
+"industry": "Beverages - Wineries & Distilleries",
+"name": "Pernod Ricard SA",
+"sector": "Consumer Defensive"
+},
+"RILBA.CO": {
+"country": "Denmark",
+"industry": "Banks - Regional",
+"name": "Ringkjøbing Landbobank A/S",
+"sector": "Financial Services"
 },
 "RLAY": {
 "country": "United States",
@@ -2015,6 +3929,12 @@
 "name": "Roche Holding AG",
 "sector": "Healthcare"
 },
+"ROCK-B.CO": {
+"country": "Denmark",
+"industry": "Building Products & Equipment",
+"name": "Rockwool A/S",
+"sector": "Industrials"
+},
 "ROP.SW": {
 "country": "Switzerland",
 "industry": "Drug Manufacturers - General",
@@ -2033,17 +3953,47 @@
 "name": "R R Kabel Limited",
 "sector": "Industrials"
 },
+"RUI.PA": {
+"country": "France",
+"industry": "Oil & Gas Refining & Marketing",
+"name": "Rubis",
+"sector": "Energy"
+},
 "RUS.TO": {
 "country": "Canada",
 "industry": "Industrial Distribution",
 "name": "Russel Metals Inc.",
 "sector": "Industrials"
 },
+"RVMD": {
+"country": "United States",
+"industry": "Biotechnology",
+"name": "Revolution Medicines, Inc.",
+"sector": "Healthcare"
+},
+"RWE.DE": {
+"country": "Germany",
+"industry": "Utilities - Diversified",
+"name": "RWE Aktiengesellschaft",
+"sector": "Utilities"
+},
+"RY.TO": {
+"country": "Canada",
+"industry": "Banks - Diversified",
+"name": "Royal Bank of Canada",
+"sector": "Financial Services"
+},
 "S": {
 "country": "United States",
 "industry": "Software - Infrastructure",
 "name": "SentinelOne, Inc.",
 "sector": "Technology"
+},
+"SAAB-B.ST": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "SAIL": {
 "country": "United States",
@@ -2055,6 +4005,24 @@
 "country": "India",
 "industry": "Diagnostics & Research",
 "name": "Sai Life Sciences Limited",
+"sector": "Healthcare"
+},
+"SALM.OL": {
+"country": "Norway",
+"industry": "Farm Products",
+"name": "SalMar ASA",
+"sector": "Consumer Defensive"
+},
+"SAMPO.HE": {
+"country": "Finland",
+"industry": "Insurance - Diversified",
+"name": "Sampo Oyj",
+"sector": "Financial Services"
+},
+"SAN.PA": {
+"country": "France",
+"industry": "Drug Manufacturers - General",
+"name": "Sanofi",
 "sector": "Healthcare"
 },
 "SANSERA.NS": {
@@ -2069,6 +4037,24 @@
 "name": "SAP SE",
 "sector": "Technology"
 },
+"SBLK": {
+"country": "Greece",
+"industry": "Marine Shipping",
+"name": "Star Bulk Carriers Corp.",
+"sector": "Industrials"
+},
+"SBMO.AS": {
+"country": "Netherlands",
+"industry": "Oil & Gas Equipment & Services",
+"name": "SBM Offshore N.V.",
+"sector": "Energy"
+},
+"SCA-B.ST": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "SCHN.SW": {
 "country": "Switzerland",
 "industry": "Specialty Industrial Machinery",
@@ -2081,17 +4067,59 @@
 "name": "Schindler Holding AG",
 "sector": "Industrials"
 },
+"SCMN.SW": {
+"country": "Switzerland",
+"industry": "Telecom Services",
+"name": "Swisscom AG",
+"sector": "Communication Services"
+},
+"SCR.PA": {
+"country": "France",
+"industry": "Insurance - Reinsurance",
+"name": "SCOR SE",
+"sector": "Financial Services"
+},
+"SDE.TO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "SDZ.SW": {
 "country": "Switzerland",
 "industry": "Drug Manufacturers - Specialty & Generic",
 "name": "Sandoz Group AG",
 "sector": "Healthcare"
 },
+"SEB-A.ST": {
+"country": "Sweden",
+"industry": "Banks - Regional",
+"name": "Skandinaviska Enskilda Banken AB (publ)",
+"sector": "Financial Services"
+},
+"SECU-B.ST": {
+"country": "Sweden",
+"industry": "Security & Protection Services",
+"name": "Securitas AB (publ)",
+"sector": "Industrials"
+},
 "SEDEMAC.NS": {
 "country": "India",
 "industry": "Auto Parts",
 "name": "SEDEMAC Mechatronics Limited",
 "sector": "Consumer Cyclical"
+},
+"SFL": {
+"country": "Bermuda",
+"industry": "Marine Shipping",
+"name": "SFL Corporation Ltd.",
+"sector": "Industrials"
+},
+"SFR.AX": {
+"country": "Australia",
+"industry": "Copper",
+"name": "Sandfire Resources Limited",
+"sector": "Basic Materials"
 },
 "SGE.L": {
 "country": "United Kingdom",
@@ -2104,6 +4132,12 @@
 "industry": "Consulting Services",
 "name": "SGS SA",
 "sector": "Industrials"
+},
+"SHB-A.ST": {
+"country": "Sweden",
+"industry": "Banks - Diversified",
+"name": "Svenska Handelsbanken AB (publ)",
+"sector": "Financial Services"
 },
 "SHEL.L": {
 "country": "United Kingdom",
@@ -2141,11 +4175,53 @@
 "name": "Shreeji Shipping Global Limited",
 "sector": "Industrials"
 },
+"SIGN.SW": {
+"country": "Switzerland",
+"industry": "Packaging & Containers",
+"name": "SIG Group AG",
+"sector": "Consumer Cyclical"
+},
+"SIKA.SW": {
+"country": "Switzerland",
+"industry": "Specialty Chemicals",
+"name": "Sika AG",
+"sector": "Basic Materials"
+},
+"SKA-B.ST": {
+"country": "Sweden",
+"industry": "Engineering & Construction",
+"name": "Skanska AB (publ)",
+"sector": "Industrials"
+},
+"SKE.TO": {
+"country": "Canada",
+"industry": "Other Industrial Metals & Mining",
+"name": "Skeena Resources Limited",
+"sector": "Basic Materials"
+},
+"SKF-B.ST": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "SKYGOLD.NS": {
 "country": "India",
 "industry": "Luxury Goods",
 "name": "Sky Gold and Diamonds Limited",
 "sector": "Consumer Cyclical"
+},
+"SLF.TO": {
+"country": "Canada",
+"industry": "Insurance - Diversified",
+"name": "Sun Life Financial Inc.",
+"sector": "Financial Services"
+},
+"SLHN.SW": {
+"country": "Switzerland",
+"industry": "Insurance - Diversified",
+"name": "Swiss Life Holding AG",
+"sector": "Financial Services"
 },
 "SLS": {
 "country": "United States",
@@ -2153,11 +4229,35 @@
 "name": "SELLAS Life Sciences Group, Inc.",
 "sector": "Healthcare"
 },
+"SN.L": {
+"country": "United Kingdom",
+"industry": "Medical Devices",
+"name": "Smith & Nephew plc",
+"sector": "Healthcare"
+},
 "SNOW": {
 "country": "United States",
 "industry": "Software - Application",
 "name": "Snowflake Inc.",
 "sector": "Technology"
+},
+"SOBI.ST": {
+"country": "Sweden",
+"industry": "Drug Manufacturers - Specialty & Generic",
+"name": "Swedish Orphan Biovitrum AB (publ)",
+"sector": "Healthcare"
+},
+"SOBO.TO": {
+"country": "Canada",
+"industry": "Oil & Gas Midstream",
+"name": "South Bow Corporation",
+"sector": "Energy"
+},
+"SOL.AX": {
+"country": "Australia",
+"industry": "Capital Markets",
+"name": "Washington H. Soul Pattinson and Company Limited",
+"sector": "Financial Services"
 },
 "SONACOMS.NS": {
 "country": "India",
@@ -2177,11 +4277,23 @@
 "name": "Sopra Steria Group SA",
 "sector": "Technology"
 },
+"SPSN.SW": {
+"country": "Switzerland",
+"industry": "Real Estate - Diversified",
+"name": "Swiss Prime Site AG",
+"sector": "Real Estate"
+},
 "SREN.SW": {
 "country": "Switzerland",
 "industry": "Insurance - Reinsurance",
 "name": "Swiss Re AG",
 "sector": "Financial Services"
+},
+"SRG.MI": {
+"country": "Italy",
+"industry": "Utilities - Regulated Gas",
+"name": "Snam S.p.A.",
+"sector": "Utilities"
 },
 "SRT3.DE": {
 "country": "Germany",
@@ -2195,11 +4307,35 @@
 "name": "Sasol Limited",
 "sector": "Basic Materials"
 },
+"SSRM.TO": {
+"country": "United States",
+"industry": "Gold",
+"name": "SSR Mining Inc.",
+"sector": "Basic Materials"
+},
+"STAN.L": {
+"country": "United Kingdom",
+"industry": "Banks - Diversified",
+"name": "Standard Chartered PLC",
+"sector": "Financial Services"
+},
+"STB.OL": {
+"country": "Norway",
+"industry": "Financial Conglomerates",
+"name": "Storebrand ASA",
+"sector": "Financial Services"
+},
 "STLTECH.NS": {
 "country": "India",
 "industry": "Communication Equipment",
 "name": "Sterlite Technologies Limited",
 "sector": "Technology"
+},
+"STMN.SW": {
+"country": "Switzerland",
+"industry": "Medical Instruments & Supplies",
+"name": "Straumann Holding AG",
+"sector": "Healthcare"
 },
 "STNG": {
 "country": "Monaco",
@@ -2219,17 +4355,53 @@
 "name": "Suncor Energy Inc.",
 "sector": "Energy"
 },
+"SUBC.OL": {
+"country": "Luxembourg",
+"industry": "Oil & Gas Equipment & Services",
+"name": "Subsea 7 S.A.",
+"sector": "Energy"
+},
+"SUN.AX": {
+"country": "Australia",
+"industry": "Insurance - Property & Casualty",
+"name": "Suncorp Group Limited",
+"sector": "Financial Services"
+},
 "SUN.SW": {
 "country": "Switzerland",
 "industry": "Specialty Industrial Machinery",
 "name": "Sulzer AG",
 "sector": "Industrials"
 },
+"SUNN.SW": {
+"country": "Switzerland",
+"industry": "Telecom Services",
+"name": "Sunrise Communications AG",
+"sector": "Communication Services"
+},
+"SUNPHARMA.NS": {
+"country": "India",
+"industry": "Drug Manufacturers - Specialty & Generic",
+"name": "Sun Pharmaceutical Industries Limited",
+"sector": "Healthcare"
+},
 "SW.PA": {
 "country": "France",
 "industry": "Specialty Business Services",
 "name": "Sodexo S.A.",
 "sector": "Industrials"
+},
+"SWED-A.ST": {
+"country": "Sweden",
+"industry": "Banks - Regional",
+"name": "Swedbank AB (publ)",
+"sector": "Financial Services"
+},
+"SY1.DE": {
+"country": "Germany",
+"industry": "Specialty Chemicals",
+"name": "Symrise AG",
+"sector": "Basic Materials"
 },
 "SYRE": {
 "country": "United States",
@@ -2243,17 +4415,41 @@
 "name": "Syrma SGS Technology Limited",
 "sector": "Technology"
 },
+"TCS.NS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"TD.TO": {
+"country": "Canada",
+"industry": "Banks - Diversified",
+"name": "The Toronto-Dominion Bank",
+"sector": "Financial Services"
+},
 "TDPOWERSYS.NS": {
 "country": "India",
 "industry": "Specialty Industrial Machinery",
 "name": "TD Power Systems Limited",
 "sector": "Industrials"
 },
+"TE.PA": {
+"country": "France",
+"industry": "Oil & Gas Equipment & Services",
+"name": "Technip Energies N.V.",
+"sector": "Energy"
+},
 "TEAM": {
 "country": "Australia",
 "industry": "Software - Application",
 "name": "Atlassian Corporation",
 "sector": "Technology"
+},
+"TECK-B.TO": {
+"country": "Canada",
+"industry": "Copper",
+"name": "Teck Resources Limited",
+"sector": "Basic Materials"
 },
 "TECN.SW": {
 "country": "Switzerland",
@@ -2267,10 +4463,22 @@
 "name": "Tempus AI, Inc.",
 "sector": "Healthcare"
 },
+"TEMN.SW": {
+"country": "Switzerland",
+"industry": "Software - Application",
+"name": "Temenos AG",
+"sector": "Technology"
+},
 "TEN": {
 "country": "Greece",
 "industry": "Oil & Gas Midstream",
 "name": "Tsakos Energy Navigation Limited",
+"sector": "Energy"
+},
+"TEN.MI": {
+"country": "Luxembourg",
+"industry": "Oil & Gas Equipment & Services",
+"name": "Tenaris S.A.",
 "sector": "Energy"
 },
 "TENB": {
@@ -2285,11 +4493,65 @@
 "name": "Teleperformance SE",
 "sector": "Industrials"
 },
+"TGS.OL": {
+"country": "Norway",
+"industry": "Oil & Gas Equipment & Services",
+"name": "TGS ASA",
+"sector": "Energy"
+},
+"TIETO.HE": {
+"country": "Finland",
+"industry": "Information Technology Services",
+"name": "Tieto Oyj",
+"sector": "Technology"
+},
+"TKA.DE": {
+"country": "Germany",
+"industry": "Conglomerates",
+"name": "thyssenkrupp AG",
+"sector": "Industrials"
+},
+"TKO.TO": {
+"country": "Canada",
+"industry": "Copper",
+"name": "Trekor Metals Limited",
+"sector": "Basic Materials"
+},
+"TLX.DE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"TNE.AX": {
+"country": "Australia",
+"industry": "Software - Application",
+"name": "Technology One Limited",
+"sector": "Technology"
+},
 "TNK": {
 "country": "Bermuda",
 "industry": "Oil & Gas Midstream",
 "name": "Teekay Tankers Ltd.",
 "sector": "Energy"
+},
+"TOU.TO": {
+"country": "Canada",
+"industry": "Oil & Gas E&P",
+"name": "Tourmaline Oil Corp.",
+"sector": "Energy"
+},
+"TPRO.MI": {
+"country": "Italy",
+"industry": "Semiconductors",
+"name": "Technoprobe S.p.A.",
+"sector": "Technology"
+},
+"TREL-B.ST": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "TRMD": {
 "country": "United Kingdom",
@@ -2301,6 +4563,30 @@
 "country": "United Kingdom",
 "industry": "Oil & Gas Midstream",
 "name": "TORM plc",
+"sector": "Energy"
+},
+"TRYG.CO": {
+"country": "Denmark",
+"industry": "Insurance - Diversified",
+"name": "Tryg A/S",
+"sector": "Financial Services"
+},
+"TS": {
+"country": "Luxembourg",
+"industry": "Oil & Gas Equipment & Services",
+"name": "Tenaris S.A.",
+"sector": "Energy"
+},
+"TTE.PA": {
+"country": "France",
+"industry": "Oil & Gas Integrated",
+"name": "TotalEnergies SE",
+"sector": "Energy"
+},
+"TVE.TO": {
+"country": "Canada",
+"industry": "Oil & Gas E&P",
+"name": "Tamarack Valley Energy Ltd.",
 "sector": "Energy"
 },
 "TWST": {
@@ -2315,17 +4601,53 @@
 "name": "10x Genomics, Inc.",
 "sector": "Healthcare"
 },
+"TYRES.HE": {
+"country": "Finland",
+"industry": "Auto Parts",
+"name": "Nokian Renkaat Oyj",
+"sector": "Consumer Cyclical"
+},
 "U": {
 "country": "United States",
 "industry": "Software - Application",
 "name": "Unity Software Inc.",
 "sector": "Technology"
 },
+"UBSG.SW": {
+"country": "Switzerland",
+"industry": "Banks - Diversified",
+"name": "UBS Group AG",
+"sector": "Financial Services"
+},
 "UCB.BR": {
 "country": "Belgium",
 "industry": "Biotechnology",
 "name": "UCB SA",
 "sector": "Healthcare"
+},
+"UMC": {
+"country": "Taiwan",
+"industry": "Semiconductors",
+"name": "United Microelectronics Corporation",
+"sector": "Technology"
+},
+"UMG.AS": {
+"country": "Netherlands",
+"industry": "Entertainment",
+"name": "Universal Music Group N.V.",
+"sector": "Communication Services"
+},
+"UNA.AS": {
+"country": "United Kingdom",
+"industry": "Household & Personal Products",
+"name": "Unilever PLC",
+"sector": "Consumer Defensive"
+},
+"UNI.MI": {
+"country": "Italy",
+"industry": "Insurance - Property & Casualty",
+"name": "Unipol Assicurazioni S.p.A.",
+"sector": "Financial Services"
 },
 "VALMT.HE": {
 "country": "Finland",
@@ -2338,6 +4660,18 @@
 "industry": "Oil & Gas E&P",
 "name": "Vår Energi ASA",
 "sector": "Energy"
+},
+"VET.TO": {
+"country": "Canada",
+"industry": "Oil & Gas E&P",
+"name": "Vermilion Energy Inc.",
+"sector": "Energy"
+},
+"VEU.AX": {
+"country": "",
+"industry": "",
+"name": "Vanguard All-World ex-US Shares Index ETF",
+"sector": ""
 },
 "VONN.SW": {
 "country": "Switzerland",
@@ -2357,11 +4691,23 @@
 "name": "Varonis Systems, Inc.",
 "sector": "Technology"
 },
+"VWS.CO": {
+"country": "Denmark",
+"industry": "Specialty Industrial Machinery",
+"name": "Vestas Wind Systems A/S",
+"sector": "Industrials"
+},
 "WAWI.OL": {
 "country": "Norway",
 "industry": "Marine Shipping",
 "name": "Wallenius Wilhelmsen ASA",
 "sector": "Industrials"
+},
+"WBC.AX": {
+"country": "Australia",
+"industry": "Banks - Diversified",
+"name": "Westpac Banking Corporation",
+"sector": "Financial Services"
 },
 "WCP.TO": {
 "country": "Canada",
@@ -2369,11 +4715,23 @@
 "name": "Whitecap Resources Inc.",
 "sector": "Energy"
 },
+"WDS.AX": {
+"country": "Australia",
+"industry": "Oil & Gas E&P",
+"name": "Woodside Energy Group Ltd",
+"sector": "Energy"
+},
 "WELCORP.NS": {
 "country": "India",
 "industry": "Steel",
 "name": "Welspun Corp Limited",
 "sector": "Basic Materials"
+},
+"WHC.AX": {
+"country": "Australia",
+"industry": "Thermal Coal",
+"name": "Whitehaven Coal Limited",
+"sector": "Energy"
 },
 "WIX": {
 "country": "Israel",
@@ -2393,10 +4751,52 @@
 "name": "Wockhardt Limited",
 "sector": "Healthcare"
 },
+"WPM.TO": {
+"country": "Canada",
+"industry": "Gold",
+"name": "Wheaton Precious Metals Corp.",
+"sector": "Basic Materials"
+},
+"WTC.AX": {
+"country": "Australia",
+"industry": "Software - Application",
+"name": "WiseTech Global Limited",
+"sector": "Technology"
+},
+"XYZ.AX": {
+"country": "United States",
+"industry": "Software - Infrastructure",
+"name": "Block, Inc.",
+"sector": "Technology"
+},
+"ZAL.DE": {
+"country": "Germany",
+"industry": "Internet Retail",
+"name": "Zalando SE",
+"sector": "Consumer Cyclical"
+},
+"ZIM": {
+"country": "Israel",
+"industry": "Marine Shipping",
+"name": "ZIM Integrated Shipping Services Ltd.",
+"sector": "Industrials"
+},
+"ZM": {
+"country": "United States",
+"industry": "Software - Application",
+"name": "Zoom Communications, Inc.",
+"sector": "Technology"
+},
 "ZS": {
 "country": "United States",
 "industry": "Software - Infrastructure",
 "name": "Zscaler, Inc.",
 "sector": "Technology"
+},
+"ZURN.SW": {
+"country": "Switzerland",
+"industry": "Insurance - Diversified",
+"name": "Zurich Insurance Group AG",
+"sector": "Financial Services"
 }
 }
