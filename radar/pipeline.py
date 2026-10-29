@@ -127,7 +127,7 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
             continue
         etfs = [etf_cache.get(e) for e in t.get("etfs") or [] if etf_cache.get(e)]
         st = themes.stats(members, etfs)
-        cat = themes.theme_catalyst(key, cfg.overrides, today)
+        cat = themes.theme_catalyst(key, cfg.overrides, today) or themes.catalyst_auto(st)
         sc = themes.score(st, cat)
         theme_rows.append({"key": key, "name": t["name"], **st, "score": sc, "catalyst": cat,
                            "status": themes.status(st), "etfs": etfs})

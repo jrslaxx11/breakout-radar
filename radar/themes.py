@@ -72,6 +72,22 @@ def theme_catalyst(key: str, overrides: dict, today: date) -> dict | None:
             "date": d.isoformat()}
 
 
+def catalyst_auto(st: dict) -> dict | None:
+    """Huella de catalizadores en precio y volumen, disponible para todas las temáticas.
+
+    Proporción neta de valores con al menos una sesión de +4% y volumen ≥ 1,8x en las últimas
+    21 sesiones (resultados, contratos, guías…) menos los que tuvieron una caída equivalente.
+    """
+    n = st.get("n_breadth") or 0
+    if n < 5:
+        return None
+    net = (st["events_up"] - st["events_down"]) / n
+    pts = 15 * clamp(0.5 + 2.5 * net, 0, 1)
+    note = (f"Automático: {st['events_up']} de {n} valores con subida ≥ 4% y volumen ≥ 1,8x en 21 sesiones; "
+            f"{st['events_down']} con caída equivalente")
+    return {"points": round(pts, 2), "note": note, "source": "", "date": None, "auto": True}
+
+
 def stats(members: list[dict], etfs: list[dict]) -> dict:
     """Estadísticas de la cesta. La amplitud usa solo valores de selección no sesgada."""
     unb = [a for a in members if a["unbiased"]]
@@ -89,6 +105,9 @@ def stats(members: list[dict], etfs: list[dict]) -> dict:
         "near_hi": sum(1 for a in br if a["m"].dhi >= -0.10) / n,
         "dhi_med": median(a["m"].dhi for a in br),
         "vol": vol, "leaders": sum(1 for a in members if (a.get("rs_pct") or 0) >= 0.8),
+        "events_up": sum(1 for a in br if a["m"].ep_up > 0),
+        "events_down": sum(1 for a in br if a["m"].ep_down > 0),
+        "n_breadth": len(br),
     }
 
 

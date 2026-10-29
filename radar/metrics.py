@@ -63,6 +63,8 @@ class Metrics:
     lo10: float
     day_pos: float
     gap: float                 # hueco de apertura de hoy
+    ep_up: int = 0             # sesiones (últimas 21) con subida ≥ 4% y volumen ≥ 1,8x la media de 50
+    ep_down: int = 0           # ídem con caída ≤ -4%
     extra: dict = field(default_factory=dict)
 
 
@@ -117,6 +119,16 @@ def compute(sym: str, df: pd.DataFrame, w: dict) -> Metrics | None:
     hi10, lo10 = float(np.max(h[e - 9:e + 1])), float(np.min(l[e - 9:e + 1]))
     lo5 = float(np.min(l[e - 4:e + 1]))
     rng = h[e] - l[e]
+    ep_up = ep_down = 0
+    for i in range(max(51, e - 20), e + 1):
+        base = sma(v, 50, i - 1)
+        if not base or v[i] < 1.8 * base:
+            continue
+        r = c[i] / c[i - 1] - 1
+        if r >= 0.04:
+            ep_up += 1
+        elif r <= -0.04:
+            ep_down += 1
     dates = df.index
     fmt = lambda i: pd.Timestamp(dates[i]).strftime("%Y-%m-%d")  # noqa: E731
 
@@ -138,6 +150,7 @@ def compute(sym: str, df: pd.DataFrame, w: dict) -> Metrics | None:
         tight=(hi10 - lo10) / c[e], lo5=lo5, lo10=lo10,
         day_pos=float((c[e] - l[e]) / rng) if rng > 0 else 0.5,
         gap=float(o[e] / c[e - 1] - 1) if not math.isnan(o[e]) else 0.0,
+        ep_up=ep_up, ep_down=ep_down,
     )
 
 

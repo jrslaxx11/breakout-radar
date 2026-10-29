@@ -46,8 +46,10 @@ desfavorable.
 
 **Temáticas (fases 2-3).** 0-100: fuerza relativa 30 (mediana de la RS compuesta frente al índice
 regional: 20% 1 mes, 40% 3 meses, 40% 6 meses), consistencia 20, amplitud 20 (solo con valores de
-selección no sesgada), volumen 15 y catalizadores 15. Si un componente no tiene dato, sus puntos
-se redistribuyen. Se seleccionan las 5 mejores, las empatadas a ≤ 0,5 puntos y las forzadas.
+selección no sesgada), volumen 15 y catalizadores 15. El catalizador es manual y con fuente
+(`config/overrides.yaml`) cuando existe; si no, se usa su huella en el precio: proporción neta de
+valores con una sesión de +4% y volumen ≥ 1,8x en las últimas 21 sesiones. Si un componente no
+tiene dato, sus puntos se redistribuyen. Se seleccionan las 5 mejores, las empatadas a ≤ 0,5 puntos y las forzadas.
 
 **Estados (fase 5).** Pivote = máximo de las sesiones 6 a 60 anteriores.
 
