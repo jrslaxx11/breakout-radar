@@ -1,0 +1,78 @@
+name: Radar diario
+
+on:
+  schedule:
+    # 22:30 UTC de lunes a viernes: tras el cierre de EE. UU. (23:30 en España en horario de invierno).
+    - cron: "30 22 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Recalcular aunque la sesión ya esté procesada"
+        type: boolean
+        default: false
+  push:
+    branches: [main]
+    paths: ["radar/**", "config/**", "docs/*.html", "docs/*.js", "docs/*.css", "requirements.txt", ".github/workflows/daily.yml"]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: radar
+  cancel-in-progress: false
+
+jobs:
+  radar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Pruebas
+        run: python -m pytest -q
+
+      - name: Calcular el radar
+        run: |
+          set -o pipefail
+          ARGS=""
+          if [ "${{ github.event_name }}" = "push" ] || [ "${{ inputs.force }}" = "true" ]; then ARGS="--force"; fi
+          mkdir -p docs/data
+          python -m radar run $ARGS 2>&1 | tee docs/data/run-log.txt
+
+      - name: Guardar datos e histórico en el repositorio
+        if: always()
+        run: |
+          git config user.name "radar-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data data/cache
+          if git diff --staged --quiet; then echo "Sin cambios"; exit 0; fi
+          SESSION=$(python -c "import json;print(json.load(open('docs/data/latest.json'))['meta']['session'])" 2>/dev/null || date -u +%F)
+          git commit -m "datos: sesión ${SESSION}"
+          git pull --rebase origin main
+          git push
+
+      - name: Preparar la web
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+  deploy:
+    needs: radar
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicar en GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

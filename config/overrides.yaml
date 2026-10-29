@@ -1,0 +1,73 @@
+# Ajustes manuales verificados con fuente. Es el único lugar donde entra juicio humano
+# (o el resumen diario de Claude). Cada entrada caduca a los `expires_days` días: pasado ese
+# plazo deja de puntuar y el componente se trata como no disponible (se redistribuyen sus puntos).
+
+expires_days: 21
+
+# Catalizadores de temática (0-15 puntos).
+theme_catalysts:
+  LST:
+    points: 12
+    date: 2026-10-21
+    note: "Thermo Fisher bate el 3T y eleva la guía 2026"
+    source: "https://finance.biggo.com/news/US_TMO_2026-10-21"
+  CYB:
+    points: 8
+    date: 2026-10-29
+    note: "Demanda de seguridad ligada a IA; Fortinet bate y eleva guía pero cae un 20%"
+    source: "https://www.investing.com/news/transcripts/earnings-call-transcript-fortinet-beats-q3-2026-estimates-but-shares-plunge-93CH-4981034"
+  TANK:
+    points: 12
+    date: 2026-10-28
+    note: "Fletes récord por Irán y Ormuz; Scorpio cita LR2 a 181.000 USD/día en el 4T"
+    source: "https://www.sec.gov/Archives/edgar/data/0001483934/000162828026067899/q32026earnings-exhibit991.htm"
+  HCM:
+    points: 6
+    date: 2026-10-28
+    note: "Encompass Health eleva la guía 2026; rotación defensiva hacia salud"
+    source: "https://www.sec.gov/Archives/edgar/data/0000785161/000078516126000236/ehcearningsrelease93026.htm"
+  SW:
+    points: 4
+    date: 2026-10-29
+    note: "Negativo: ServiceNow -27% por su guía del 4T"
+    source: "https://finance.yahoo.com/markets/live/stock-market-today-thursday-october-29-dow-sp-500-nasdaq-alphabet-microsoft-earnings-130305714.html"
+  BIO:
+    points: 6
+    date: 2026-10-29
+    note: "Sin catalizador sectorial propio verificado"
+    source: ""
+  ENE:
+    points: 10
+    date: 2026-10-29
+    note: "WTI cerca de 102 USD por el conflicto con Irán"
+    source: "https://finance.yahoo.com/markets/live/stock-market-today-thursday-october-29-dow-sp-500-nasdaq-alphabet-microsoft-earnings-130305714.html"
+  PHA:
+    points: 8
+    date: 2026-10-29
+    note: "Eli Lilly +6,6% por resultados de GLP-1"
+    source: "https://finance.yahoo.com/markets/live/stock-market-today-thursday-october-29-dow-sp-500-nasdaq-alphabet-microsoft-earnings-130305714.html"
+
+# Catalizadores de acción (0-5 puntos). Sustituyen al cálculo automático por reacción a resultados.
+stock_catalysts:
+  EHC:
+    points: 5
+    date: 2026-10-28
+    note: "3T: ingresos +8,9% y guía 2026 elevada"
+    source: "https://www.sec.gov/Archives/edgar/data/0000785161/000078516126000236/ehcearningsrelease93026.htm"
+  STNG:
+    points: 5
+    date: 2026-10-28
+    note: "LR2 a 181.000 USD/día en el 4T; dividendo a 0,75 USD"
+    source: "https://www.sec.gov/Archives/edgar/data/0001483934/000162828026067899/q32026earnings-exhibit991.htm"
+
+# Exclusiones manuales (OPA, suspensiones, etc.).
+exclude:
+  PTC:
+    reason: "OPA en efectivo de Schneider Electric a 205 USD (anunciada el 5-oct-2026): precio anclado"
+    source: "https://www.tikr.com/blog/ptc-soars-33-on-22-6-billion-all-cash-schneider-electric-buyout-certain-and-compelling-value"
+
+# Cotizaciones secundarias: se usa la principal y la otra no entra en clasificaciones.
+duplicates:
+  GMAB: "GMAB.CO"
+  ECO: "OET.OL"
+  HAFN: "HAFNI.OL"

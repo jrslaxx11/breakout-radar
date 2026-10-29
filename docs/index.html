@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Radar de rupturas</title>
+  <meta name="description" content="Watchlist diaria de rupturas en las temáticas líderes del mercado mundial.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231F5FD1'/%3E%3Cpath d='M5 22h22' stroke='%23fff' stroke-width='2'/%3E%3Ccircle cx='21' cy='15' r='4' fill='%23fff'/%3E%3C/svg%3E">
+</head>
+<body>
+  <a class="skip" href="#watchlist">Saltar a la watchlist</a>
+  <header class="top">
+    <div class="wrap top-row">
+      <div class="brand">
+        <h1>Radar de rupturas</h1>
+        <p class="session" id="session">Cargando datos…</p>
+      </div>
+      <nav class="jump" aria-label="Secciones">
+        <a href="#regimen">Régimen</a>
+        <a href="#tematicas">Temáticas</a>
+        <a href="#watchlist">Watchlist</a>
+        <a href="#agenda">Agenda</a>
+        <a href="#metodo">Método</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" id="app" aria-live="polite">
+    <section id="regimen" class="block"></section>
+    <section id="prioridad" class="block"></section>
+    <section id="tematicas" class="block"></section>
+    <section id="watchlist" class="block"></section>
+    <section id="agenda" class="block"></section>
+    <section id="metodo" class="block"></section>
+  </main>
+
+  <footer class="wrap foot" id="foot"></footer>
+  <script src="app.js"></script>
+</body>
+</html>

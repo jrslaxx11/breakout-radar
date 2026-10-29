@@ -1,0 +1,161 @@
+# Definición de temáticas.
+# Cada valor se asigna a UNA temática con esta prioridad:
+#   1) aparece en `tickers` de una temática (listas fijas)
+#   2) su subindustria GICS (componentes del S&P 1500) está en `gics`
+#   3) su industria de Yahoo (resto del universo) está en `yahoo`
+# `etfs` son proxies de referencia; no entran en las clasificaciones de acciones.
+# Para añadir una temática nueva basta con crear otro bloque.
+
+themes:
+  LST:
+    name: "Ciencias de la vida: herramientas y diagnóstico"
+    gics: ["Life Sciences Tools & Services"]
+    yahoo: ["Diagnostics & Research"]
+    etfs: [XLV]
+
+  BIO:
+    name: "Biotecnología"
+    gics: ["Biotechnology"]
+    yahoo: ["Biotechnology"]
+    etfs: [XBI, IBB]
+
+  HCM:
+    name: "Servicios y tecnología sanitaria (incl. medtech)"
+    gics: ["Health Care Technology", "Health Care Services", "Health Care Equipment",
+           "Health Care Supplies", "Health Care Distributors", "Managed Health Care",
+           "Health Care Facilities"]
+    yahoo: ["Medical Devices", "Medical Instruments & Supplies", "Health Information Services",
+            "Medical Care Facilities", "Medical Distribution", "Healthcare Plans"]
+    etfs: [XLV, IHI]
+
+  PHA:
+    name: "Farmacéuticas"
+    gics: ["Pharmaceuticals"]
+    yahoo: ["Drug Manufacturers - General", "Drug Manufacturers - Specialty & Generic"]
+    etfs: [XLV]
+
+  CYB:
+    name: "Ciberseguridad"
+    tickers: [PANW, CRWD, FTNT, ZS, NET, OKTA, S, CHKP, QLYS, TENB, RPD, VRNS, RBRK, SAIL,
+              GEN, AKAM, CVLT, FFIV, NTSK, BB, ATEN, OSPN, CYBR, "4704.T"]
+    etfs: [BUG, CIBR, HACK]
+
+  SW:
+    name: "Software empresarial y cloud"
+    gics: ["Application Software", "Systems Software"]
+    yahoo: ["Software - Application", "Software - Infrastructure"]
+    etfs: [IGV, WCLD]
+
+  ITS:
+    name: "Servicios IT y consultoría"
+    gics: ["IT Consulting & Other Services", "Data Processing & Outsourced Services",
+           "Research & Consulting Services"]
+    yahoo: ["Information Technology Services", "Consulting Services"]
+    etfs: []
+
+  ENE:
+    name: "Energía: petróleo y gas"
+    gics: ["Oil & Gas Exploration & Production", "Integrated Oil & Gas", "Oil & Gas Refining & Marketing",
+           "Oil & Gas Drilling", "Oil & Gas Equipment & Services", "Oil & Gas Storage & Transportation",
+           "Coal & Consumable Fuels"]
+    yahoo: ["Oil & Gas E&P", "Oil & Gas Integrated", "Oil & Gas Midstream", "Oil & Gas Refining & Marketing",
+            "Oil & Gas Equipment & Services", "Oil & Gas Drilling", "Thermal Coal", "Uranium"]
+    etfs: [XLE, XOP, OIH]
+
+  TANK:
+    name: "Petroleros y transporte de gas"
+    tickers: [FRO, DHT, INSW, STNG, TNK, NAT, TRMD, ECO, "HAFNI.OL", "OET.OL", TEN, ASC, IMPP,
+              PSHG, FLNG, "BWLPG.OL", LPG, HSHP, "CAPT.OL"]
+    etfs: []
+
+  SHIP:
+    name: "Transporte marítimo: contenedores y graneles"
+    tickers: [ZIM, MATX, KEX, DAC, GSL, CMRE, "1919.HK", "2603.TW", "2609.TW", "2615.TW",
+              "9101.T", "9104.T", "9107.T", "MAERSK-B.CO", "HLAG.DE", "011200.KS", "WAWI.OL",
+              GOGL, SBLK, GNK, SFL, "1308.HK", "0316.HK", "HAUTO.OL"]
+    yahoo: ["Marine Shipping"]
+    etfs: []
+
+  SEMI:
+    name: "Semiconductores y equipos"
+    gics: ["Semiconductors", "Semiconductor Materials & Equipment"]
+    yahoo: ["Semiconductors", "Semiconductor Equipment & Materials"]
+    etfs: [SMH, SOXX]
+
+  HW:
+    name: "Hardware, redes y componentes electrónicos"
+    gics: ["Electronic Components", "Electronic Manufacturing Services",
+           "Technology Hardware, Storage & Peripherals", "Communications Equipment",
+           "Electronic Equipment & Instruments"]
+    yahoo: ["Electronic Components", "Computer Hardware", "Communication Equipment",
+            "Scientific & Technical Instruments", "Electronics & Computer Distribution"]
+    etfs: []
+
+  BANK:
+    name: "Banca"
+    gics: ["Diversified Banks", "Regional Banks"]
+    yahoo: ["Banks - Diversified", "Banks - Regional"]
+    etfs: [KBE, KRE]
+
+  FIN:
+    name: "Mercados financieros y gestoras"
+    gics: ["Investment Banking & Brokerage", "Financial Exchanges & Data", "Asset Management & Custody Banks"]
+    yahoo: ["Capital Markets", "Financial Data & Stock Exchanges", "Asset Management"]
+    etfs: [XLF]
+
+  INS:
+    name: "Seguros"
+    gics: ["Property & Casualty Insurance", "Reinsurance", "Life & Health Insurance",
+           "Multi-line Insurance", "Insurance Brokers"]
+    yahoo: ["Insurance - Property & Casualty", "Insurance - Reinsurance", "Insurance - Life",
+            "Insurance - Diversified", "Insurance - Specialty", "Insurance Brokers"]
+    etfs: []
+
+  PAY:
+    name: "Fintech y pagos"
+    gics: ["Transaction & Payment Processing Services"]
+    yahoo: ["Credit Services"]
+    etfs: [IPAY, ARKF]
+
+  DEF:
+    name: "Defensa y aeroespacial"
+    gics: ["Aerospace & Defense"]
+    yahoo: ["Aerospace & Defense"]
+    etfs: [ITA, XAR, SHLD]
+
+  ELEC:
+    name: "Electrificación, redes e ingeniería"
+    gics: ["Electrical Components & Equipment", "Heavy Electrical Equipment", "Construction & Engineering",
+           "Independent Power Producers & Energy Traders", "Renewable Electricity"]
+    yahoo: ["Electrical Equipment & Parts", "Engineering & Construction",
+            "Utilities - Independent Power Producers", "Utilities - Renewable"]
+    etfs: [GRID, PAVE]
+
+  MIN:
+    name: "Minería y metales"
+    gics: ["Gold", "Copper", "Steel", "Diversified Metals & Mining", "Aluminum", "Silver",
+           "Precious Metals & Minerals"]
+    yahoo: ["Gold", "Silver", "Copper", "Steel", "Other Industrial Metals & Mining", "Aluminum",
+            "Other Precious Metals & Mining"]
+    etfs: [XME, COPX, GDX]
+
+  CHEM:
+    name: "Química"
+    gics: ["Specialty Chemicals", "Diversified Chemicals", "Commodity Chemicals"]
+    yahoo: ["Specialty Chemicals", "Chemicals"]
+    etfs: [XLB]
+
+  STAP:
+    name: "Consumo básico"
+    gics: ["Personal Care Products", "Household Products", "Consumer Staples Merchandise Retail", "Food Retail"]
+    yahoo: ["Household & Personal Products", "Discount Stores", "Grocery Stores"]
+    etfs: [XLP]
+
+  HOME:
+    name: "Vivienda y materiales de construcción"
+    gics: ["Homebuilding", "Building Products"]
+    yahoo: ["Residential Construction", "Building Products & Equipment"]
+    etfs: [ITB, XHB]
+
+# ETF de referencia generales (se descargan siempre).
+reference_etfs: [SPY, QQQ, IWM, RSP]
