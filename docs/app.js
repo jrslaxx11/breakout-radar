@@ -165,6 +165,7 @@
 
   function renderThemes(d, hist) {
     const comps = [["rs", "Fuerza relativa", 30, 1], ["consistency", "Consistencia", 20, 0.8], ["breadth", "Amplitud", 20, 0.6], ["volume", "Volumen", 15, 0.42], ["catalyst", "Catalizador", 15, 0.26]];
+    const VISIBLE = 12;
     const rows = d.themes.map((t, i) => {
       const s = t.score;
       const segs = comps.map(([k, , max, op]) => s[k] === null || s[k] === undefined
@@ -179,10 +180,13 @@
         <span class="meta">RS 1m/3m/6m ${pct(t.rs1, 0)} / ${pct(t.rs3, 0)} / ${pct(t.rs6, 0)} · ${num(t.p50 * 100, 0)}% sobre SMA50 ${spark(h, 60, 18)}
           ${t.catalyst && t.catalyst.note ? `<br>${t.catalyst.source ? `<a href="${esc(t.catalyst.source)}" target="_blank" rel="noopener">${esc(t.catalyst.note)}</a>` : esc(t.catalyst.note)}` : ""}</span>
       </div>`;
-    }).join("");
+    });
+    const shown = rows.slice(0, VISIBLE).join("");
+    const rest = rows.slice(VISIBLE);
     $("#tematicas").innerHTML = `<h2>Temáticas</h2>
       <p class="lead">Ordenadas por puntuación 0-100. Las marcadas con barra azul a la izquierda son las seleccionadas para buscar acciones.</p>
-      <div class="themes">${rows}</div>
+      <div class="themes">${shown}</div>
+      ${rest.length ? `<details class="more"><summary>Ver las ${rest.length} temáticas restantes</summary><div class="themes">${rest.join("")}</div></details>` : ""}
       <p class="legend">${comps.map(([, n, max, op]) => `<span><i style="background:var(--pivot);opacity:${op}"></i>${n} (${max})</span>`).join("")}<span><i class="na" style="background:repeating-linear-gradient(135deg,var(--rule) 0 3px,transparent 3px 6px)"></i>Sin dato (se redistribuye)</span></p>`;
   }
 

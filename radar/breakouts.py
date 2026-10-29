@@ -123,7 +123,7 @@ def score(m: Metrics, state: str, rs_pct: float, mdv_usd: float, catalyst: float
 def risk(m: Metrics, inv: float | None, next_earnings_days: int | None, pending: bool,
          mdv_usd: float, rcfg: dict) -> tuple[str, int]:
     """Etiqueta de riesgo separada de la puntuación."""
-    pts = 2 if m.atr_pct >= 0.05 else 1 if m.atr_pct >= 0.03 else 0
+    pts = 3 if m.atr_pct >= 0.07 else 2 if m.atr_pct >= 0.05 else 1 if m.atr_pct >= 0.03 else 0
     if pending:
         pts += 3
     elif next_earnings_days is not None and 0 <= next_earnings_days <= rcfg["earnings_near_days"]:

@@ -64,7 +64,8 @@ tiene dato, sus puntos se redistribuyen. Se seleccionan las 5 mejores, las empat
 
 **Puntuación de acciones (fase 6).** Fuerza relativa 25, base y estructura 25, ruptura y volumen
 20, tendencia diaria y semanal 15, liquidez 10, catalizador 5. El riesgo se etiqueta aparte
-(volatilidad, resultados próximos, distancia a la invalidación, liquidez).
+(volatilidad: ATR ≥ 3%, 5% o 7%; resultados en ≤ 14 o ≤ 30 días; invalidación a más de 2,5 ATR o 10%;
+liquidez < 20 M USD). Bajo 0-1, medio 2-3, alto 4 o más.
 
 ## Ejecutar en local
 

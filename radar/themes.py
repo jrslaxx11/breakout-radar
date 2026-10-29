@@ -83,7 +83,7 @@ def catalyst_auto(st: dict) -> dict | None:
         return None
     net = (st["events_up"] - st["events_down"]) / n
     pts = 15 * clamp(0.5 + 2.5 * net, 0, 1)
-    note = (f"Automático: {st['events_up']} de {n} valores con subida ≥ 4% y volumen ≥ 1,8x en 21 sesiones; "
+    note = (f"Huella automática (21 sesiones): {st['events_up']} de {n} con subida ≥ 4% y volumen ≥ 1,8x, "
             f"{st['events_down']} con caída equivalente")
     return {"points": round(pts, 2), "note": note, "source": "", "date": None, "auto": True}
 
@@ -131,7 +131,10 @@ def score(st: dict, catalyst: dict | None) -> dict:
 def status(st: dict) -> str:
     rs1, rs3, rs6 = st["rs1"] or 0, st["rs3"] or 0, st["rs6"] or 0
     if rs3 > 0 and rs6 > 0 and st["p50"] >= 0.6:
-        return "Lidera"
+        # Liderazgo real exige estar cerca de máximos; si no, es un rebote desde mínimos.
+        if st["near_hi"] >= 0.30 or (st.get("dhi_med") or -1) >= -0.15:
+            return "Lidera"
+        return "Mejora (rebote lejos de máximos)"
     if rs1 > 0 and rs3 > 0:
         return "Mejora"
     if rs1 > 0:
