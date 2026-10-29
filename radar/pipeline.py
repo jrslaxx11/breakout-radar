@@ -78,6 +78,11 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
     prev = history.previous_snapshot(session)
     if not force and history.HISTORY_DIR.joinpath(f"{session}.json").exists():
         log.info("La sesión %s ya está procesada; nada que hacer.", session)
+        latest = DOCS_DATA / "latest.json"
+        if write and latest.exists():  # las velas no se versionan: se regeneran para la publicación
+            pres = json.loads(latest.read_text()).get("lists", {}).get("presented", [])
+            (DOCS_DATA / "charts.json").write_text(json.dumps(_clean(_chart_data(prices, pres)),
+                                                              separators=(",", ":"), allow_nan=False))
         return {"skipped": True, "session": session}
 
     fx = _fx_factors(prices, S["fx"])
@@ -297,6 +302,8 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
     }
     if write:
         DOCS_DATA.mkdir(parents=True, exist_ok=True)
+        (DOCS_DATA / "charts.json").write_text(json.dumps(_clean(_chart_data(prices, presented)),
+                                                          separators=(",", ":"), allow_nan=False))
         (DOCS_DATA / "latest.json").write_text(json.dumps(_clean(out), ensure_ascii=False, allow_nan=False,
                                                           default=_json_default))
         snap = {"session": session,
@@ -306,6 +313,25 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
                 "watchlist": {c["sym"]: {"score": round(c["score"], 2), "state": c["state"],
                                          "theme": c["theme"], "rs_pct": round(c["rs_pct"] or 0, 4)} for c in pres}}
         history.write_snapshot(session, _clean(snap))
+    return out
+
+
+def _chart_data(prices: dict, syms: list[str], bars: int = 260) -> dict:
+    """Velas diarias de las candidatas presentadas para el gráfico del dashboard."""
+    out = {}
+    for s in syms:
+        df = prices.get(s)
+        if df is None or not len(df):
+            continue
+        df = df.dropna(subset=["Close", "High", "Low"]).tail(bars)
+        last = float(df["Close"].iloc[-1])
+        dec = 2 if last >= 10 else 4
+        r = lambda col: [round(float(x), dec) for x in df[col].fillna(df["Close"])]  # noqa: E731
+        out[s] = {
+            "t": [d.strftime("%Y-%m-%d") for d in df.index],
+            "o": r("Open") if "Open" in df else r("Close"), "h": r("High"), "l": r("Low"), "c": r("Close"),
+            "v": [int(x) for x in df["Volume"].fillna(0)] if "Volume" in df else [],
+        }
     return out
 
 

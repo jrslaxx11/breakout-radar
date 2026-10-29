@@ -61,6 +61,12 @@ jobs:
           git pull --rebase origin main
           git push
 
+      - name: Descargar la librería de gráficos (código abierto, Apache 2.0)
+        continue-on-error: true
+        run: |
+          mkdir -p docs/vendor
+          curl -fsSL https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js -o docs/vendor/lightweight-charts.js
+
       - name: Preparar la web
         uses: actions/upload-pages-artifact@v3
         with:

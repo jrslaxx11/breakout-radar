@@ -83,6 +83,82 @@
       <circle cx="${last[0]}" cy="${last[1]}" r="2.5" style="fill:var(--pivot)"/></svg>`;
   }
 
+
+  // ---------- gráfico de velas (TradingView Lightweight Charts, código abierto) ----------
+  // Copia local (la descarga el flujo de publicación) y, si falta, la CDN oficial.
+  const LWC_URLS = ["vendor/lightweight-charts.js",
+    "https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"];
+  let lwcPromise = null, chartsPromise = null;
+  const loadScript = (src) => new Promise((ok, ko) => {
+    const sc = document.createElement("script");
+    sc.src = src; sc.async = true;
+    sc.onload = () => (window.LightweightCharts ? ok(window.LightweightCharts) : ko(new Error("librería vacía")));
+    sc.onerror = () => { sc.remove(); ko(new Error("no se pudo cargar " + src)); };
+    document.head.appendChild(sc);
+  });
+  const loadLWC = () => lwcPromise || (lwcPromise = (async () => {
+    if (window.LightweightCharts) return window.LightweightCharts;
+    for (const u of LWC_URLS) { try { return await loadScript(u); } catch { /* siguiente */ } }
+    lwcPromise = null;
+    throw new Error("no se pudo cargar la librería de gráficos");
+  })());
+  const loadCharts = () => chartsPromise || (chartsPromise = getJSON("data/charts.json").catch((e) => { chartsPromise = null; throw e; }));
+  const cssVar = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const alpha = (hex, a) => {
+    const h = hex.replace("#", "");
+    if (h.length !== 6) return hex;
+    return `rgba(${parseInt(h.slice(0, 2), 16)},${parseInt(h.slice(2, 4), 16)},${parseInt(h.slice(4, 6), 16)},${a})`;
+  };
+  const smaSeries = (t, c, n) => {
+    const out = []; let sum = 0;
+    for (let i = 0; i < c.length; i++) {
+      sum += c[i]; if (i >= n) sum -= c[i - n];
+      if (i >= n - 1) out.push({ time: t[i], value: sum / n });
+    }
+    return out;
+  };
+
+  async function drawChart(el, c) {
+    try {
+      const [LWC, all] = await Promise.all([loadLWC(), loadCharts()]);
+      const k = all[c.sym];
+      if (!k) { el.innerHTML = `<p class="empty">Sin velas para ${esc(c.sym)}.</p>`; return; }
+      el.innerHTML = "";
+      const col = { bg: cssVar("--surface"), text: cssVar("--muted"), grid: cssVar("--soft"), rule: cssVar("--rule"),
+        up: cssVar("--pos"), down: cssVar("--neg"), pivot: cssVar("--pivot"), ink: cssVar("--ink") };
+      const chart = LWC.createChart(el, {
+        height: el.clientWidth < 600 ? 300 : 380,
+        layout: { background: { color: col.bg }, textColor: col.text, fontFamily: "Archivo, system-ui, sans-serif" },
+        grid: { vertLines: { color: col.grid }, horzLines: { color: col.grid } },
+        rightPriceScale: { borderColor: col.rule }, timeScale: { borderColor: col.rule, rightOffset: 4 },
+        crosshair: { mode: 0 }, localization: { locale: "es-ES" },
+      });
+      const candles = chart.addCandlestickSeries({ upColor: col.up, downColor: col.down, borderVisible: false,
+        wickUpColor: col.up, wickDownColor: col.down, priceLineVisible: false });
+      candles.setData(k.t.map((t, i) => ({ time: t, open: k.o[i], high: k.h[i], low: k.l[i], close: k.c[i] })));
+      candles.priceScale().applyOptions({ scaleMargins: { top: 0.06, bottom: 0.24 } });
+      if (k.v.length) {
+        const vol = chart.addHistogramSeries({ priceFormat: { type: "volume" }, priceScaleId: "", lastValueVisible: false, priceLineVisible: false });
+        vol.priceScale().applyOptions({ scaleMargins: { top: 0.8, bottom: 0 } });
+        vol.setData(k.t.map((t, i) => ({ time: t, value: k.v[i], color: alpha(k.c[i] >= k.o[i] ? col.up : col.down, 0.35) })));
+      }
+      [[20, 0.9], [50, 0.6], [200, 0.35]].forEach(([n, a]) => {
+        if (k.c.length < n) return;
+        chart.addLineSeries({ color: alpha(col.ink.startsWith("#") ? col.ink : "#14202B", a), lineWidth: n === 20 ? 1 : 2,
+          priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false }).setData(smaSeries(k.t, k.c, n));
+      });
+      candles.createPriceLine({ price: c.pivot, color: col.pivot, lineWidth: 2, lineStyle: 0, axisLabelVisible: true, title: "Pivote" });
+      if (isNum(c.inv)) candles.createPriceLine({ price: c.inv, color: col.down, lineWidth: 1, lineStyle: 2, axisLabelVisible: true, title: "Invalidación" });
+      const n = k.t.length;
+      chart.timeScale().setVisibleLogicalRange({ from: Math.max(0, n - 130), to: n + 3 });
+      const ro = new ResizeObserver(() => chart.applyOptions({ width: el.clientWidth }));
+      ro.observe(el);
+      el._dispose = () => { ro.disconnect(); chart.remove(); };
+    } catch (err) {
+      el.innerHTML = `<p class="empty">No se pudo dibujar el gráfico (${esc(err.message)}). Usa el enlace a TradingView.</p>`;
+    }
+  }
+
   // ---------- secciones ----------
   function renderHeader(d) {
     const m = d.meta;
@@ -247,7 +323,10 @@
     const detail = (c) => {
       const comp = c.components || {};
       const h = scoreHist[c.sym] || [];
-      return `<tr class="detail"><td colspan="12"><div class="detail-grid">
+      return `<tr class="detail"><td colspan="12">
+        <div class="chart-box"><div class="chart" role="img" aria-label="Gráfico diario de ${esc(c.sym)} con pivote e invalidación"><p class="empty">Cargando gráfico…</p></div>
+          <p class="legend"><span><i style="background:var(--pivot)"></i>Pivote ${price(c.pivot, c.currency)}</span><span><i style="background:var(--neg)"></i>Invalidación ${price(c.inv, c.currency)}</span><span>Medias de 20, 50 y 200 sesiones (de más a menos intensa)</span></p></div>
+        <div class="detail-grid">
         <div><h3>Niveles</h3><dl>
           <dt>Resistencia (pivote)</dt><dd>${price(c.pivot, c.currency)} (${dateEs(c.pivot_date)})</dd>
           <dt>Distancia</dt><dd>${pct(c.dist)} · ${num((c.close - c.pivot) / c.atr, 1)} ATR</dd>
@@ -279,9 +358,14 @@
     };
     const toggle = (tr) => {
       const open = tr.getAttribute("aria-expanded") === "true";
-      if (open) { tr.nextElementSibling?.classList.contains("detail") && tr.nextElementSibling.remove(); tr.setAttribute("aria-expanded", "false"); return; }
+      if (open) {
+        const det = tr.nextElementSibling;
+        if (det && det.classList.contains("detail")) { const ch = det.querySelector(".chart"); ch && ch._dispose && ch._dispose(); det.remove(); }
+        tr.setAttribute("aria-expanded", "false"); return;
+      }
       tr.insertAdjacentHTML("afterend", detail(byS[tr.dataset.sym]));
       tr.setAttribute("aria-expanded", "true");
+      drawChart(tr.nextElementSibling.querySelector(".chart"), byS[tr.dataset.sym]);
     };
     tbody.addEventListener("click", (e) => { const tr = e.target.closest("tr.row"); if (tr && !e.target.closest("a")) toggle(tr); });
     tbody.addEventListener("keydown", (e) => { if ((e.key === "Enter" || e.key === " ") && e.target.matches("tr.row")) { e.preventDefault(); toggle(e.target); } });
@@ -328,7 +412,7 @@
         <p><strong>Puntuación de acciones.</strong> Fuerza relativa 25, base y estructura 25, ruptura y volumen 20, tendencia diaria y semanal 15, liquidez 10, catalizador 5. Es una clasificación, no una probabilidad. El riesgo se etiqueta aparte: volatilidad, resultados próximos, distancia a la invalidación y liquidez.</p>
         <p><strong>Límites.</strong> Los niveles son algorítmicos y deben validarse en el gráfico. La amplitud solo se mide en EE. UU. Las fechas de resultados "est." no están confirmadas por la empresa. Ninguna fila es una recomendación de inversión.</p>
       </div>`;
-    $("#foot").innerHTML = `Generado ${esc(d.meta.generated_local.replace("T", " "))} · versión ${esc(d.meta.version)} · <a href="data/latest.json">datos en JSON</a>`;
+    $("#foot").innerHTML = `Generado ${esc(d.meta.generated_local.replace("T", " "))} · versión ${esc(d.meta.version)} · <a href="data/latest.json">datos en JSON</a> · gráficos con <a href="https://www.tradingview.com/lightweight-charts/" target="_blank" rel="noopener">TradingView Lightweight Charts</a>`;
   }
 
   // ---------- arranque ----------
