@@ -156,40 +156,40 @@ discovery:
   enabled: true
   per_region: 150
   regions:                     # región → capitalización mínima en divisa local (~1.000 M USD)
-    us: 2000000000
-    ca: 1400000000
-    gb: 750000000
-    fr: 900000000
-    nl: 900000000
-    it: 900000000
-    es: 900000000
-    se: 9800000000
-    ch: 820000000
-    dk: 6700000000
-    no: 9200000000
-    fi: 900000000
-    jp: 157000000000
-    kr: 1340000000000
-    tw: 32600000000
-    hk: 7800000000
-    au: 1420000000
-    in: 95000000000
+    "us": 2000000000
+    "ca": 1400000000
+    "gb": 750000000
+    "fr": 900000000
+    "nl": 900000000
+    "it": 900000000
+    "es": 900000000
+    "se": 9800000000
+    "ch": 820000000
+    "dk": 6700000000
+    "no": 9200000000
+    "fi": 900000000
+    "jp": 157000000000
+    "kr": 1340000000000
+    "tw": 32600000000
+    "hk": 7800000000
+    "au": 1420000000
+    "in": 95000000000
   exchanges:                   # solo cotizaciones principales
-    us: [NMS, NGM, NCM, NYQ, ASE]
-    ca: [TOR]
-    gb: [LSE]
-    fr: [PAR]
-    nl: [AMS]
-    it: [MIL]
-    es: [MCE]
-    se: [STO]
-    ch: [EBS]
-    dk: [CPH]
-    no: [OSL]
-    fi: [HEL]
-    jp: [JPX]
-    kr: [KSC, KOE]
-    tw: [TAI, TWO]
-    hk: [HKG]
-    au: [ASX]
-    in: [NSI]
+    "us": [NMS, NGM, NCM, NYQ, ASE]
+    "ca": [TOR]
+    "gb": [LSE]
+    "fr": [PAR]
+    "nl": [AMS]
+    "it": [MIL]
+    "es": [MCE]
+    "se": [STO]
+    "ch": [EBS]
+    "dk": [CPH]
+    "no": [OSL]
+    "fi": [HEL]
+    "jp": [JPX]
+    "kr": [KSC, KOE]
+    "tw": [TAI, TWO]
+    "hk": [HKG]
+    "au": [ASX]
+    "in": [NSI]

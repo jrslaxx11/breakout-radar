@@ -95,12 +95,21 @@ def discovery(cfg: Config) -> list[dict]:
         return []
 
     found: list[dict] = []
+    failures = 0
     for region, min_cap in dcfg["regions"].items():
+        region = str(region)
+        if failures >= 3:
+            log.warning("screener: 3 mercados seguidos sin respuesta; se omite el resto")
+            break
         ok_ex = set(dcfg["exchanges"].get(region, []))
-        query = EquityQuery("and", [
-            EquityQuery("eq", ["region", region]),
-            EquityQuery("gt", ["intradaymarketcap", min_cap]),
-        ])
+        try:
+            query = EquityQuery("and", [
+                EquityQuery("eq", ["region", region]),
+                EquityQuery("gt", ["intradaymarketcap", min_cap]),
+            ])
+        except Exception as exc:  # noqa: BLE001
+            log.warning("screener %s: consulta no válida (%s)", region, exc)
+            continue
         quotes = []
         for offset in range(0, dcfg.get("per_region", 150), 100):
             try:
@@ -115,6 +124,7 @@ def discovery(cfg: Config) -> list[dict]:
             if len(batch) < 100:
                 break
             time.sleep(1)
+        failures = 0 if quotes else failures + 1
         for q in quotes:
             if ok_ex and q.get("exchange") not in ok_ex:
                 continue
