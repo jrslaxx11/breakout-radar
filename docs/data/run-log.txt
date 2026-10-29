@@ -1,0 +1,24 @@
+2026-10-29 23:29:00,919 WARNING radar.universe: screener es falló: Failed to perform, curl: (28) Operation timed out after 30001 milliseconds with 0 bytes received. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/runner/work/breakout-radar/breakout-radar/radar/__main__.py", line 32, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/runner/work/breakout-radar/breakout-radar/radar/__main__.py", line 20, in main
+    out = run(force=args.force)
+          ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/breakout-radar/breakout-radar/radar/pipeline.py", line 64, in run
+    universe = build_universe(cfg)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/breakout-radar/breakout-radar/radar/universe.py", line 159, in build_universe
+    for q in discovery(cfg):
+             ^^^^^^^^^^^^^^
+  File "/home/runner/work/breakout-radar/breakout-radar/radar/universe.py", line 101, in discovery
+    EquityQuery("eq", ["region", region]),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/yfinance/screener/query.py", line 29, in __init__
+    self._validate_eq_operand(operand)
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/yfinance/screener/query.py", line 69, in _validate_eq_operand
+    raise ValueError(f'Invalid EQ value "{operand[1]}"')
+ValueError: Invalid EQ value "False"
