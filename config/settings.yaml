@@ -12,7 +12,7 @@ run:
 web:
   # Dirección del Worker de Cloudflare que permite buscar cualquier ticker del mercado (ver README).
   # Vacía: el buscador solo encuentra los valores del universo diario.
-  worker_url: ""
+  worker_url: "https://radar-yahoo.klksoyeljulen.workers.dev"
 
 filters:                       # filtros de calidad iniciales (orientativos)
   min_mdv_usd: 5000000         # mediana de valor negociado 20 sesiones
