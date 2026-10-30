@@ -193,3 +193,50 @@ discovery:
     "hk": [HKG]
     "au": [ASX]
     "in": [NSI]
+
+# Horario de cierre de cada mercado (zona y hora local). Sirve para descartar la barra del día
+# si el mercado aún está abierto y para detectar valores con la última sesión sin publicar.
+market_close:
+  default: ["America/New_York", "16:00"]
+  by_suffix:
+    TO: ["America/Toronto", "16:00"]
+    V: ["America/Toronto", "16:00"]
+    L: ["Europe/London", "16:35"]
+    IR: ["Europe/Dublin", "16:30"]
+    LS: ["Europe/Lisbon", "16:35"]
+    DE: ["Europe/Berlin", "17:35"]
+    PA: ["Europe/Paris", "17:35"]
+    AS: ["Europe/Amsterdam", "17:35"]
+    BR: ["Europe/Brussels", "17:35"]
+    MI: ["Europe/Rome", "17:35"]
+    MC: ["Europe/Madrid", "17:35"]
+    SW: ["Europe/Zurich", "17:30"]
+    VI: ["Europe/Vienna", "17:35"]
+    WA: ["Europe/Warsaw", "17:05"]
+    ST: ["Europe/Stockholm", "17:30"]
+    CO: ["Europe/Copenhagen", "17:00"]
+    OL: ["Europe/Oslo", "16:25"]
+    HE: ["Europe/Helsinki", "18:30"]
+    T: ["Asia/Tokyo", "15:30"]
+    KS: ["Asia/Seoul", "15:30"]
+    KQ: ["Asia/Seoul", "15:30"]
+    TW: ["Asia/Taipei", "13:30"]
+    TWO: ["Asia/Taipei", "13:30"]
+    HK: ["Asia/Hong_Kong", "16:10"]
+    AX: ["Australia/Sydney", "16:10"]
+    NS: ["Asia/Kolkata", "15:30"]
+    BO: ["Asia/Kolkata", "15:30"]
+  indices:
+    "^N225": "T"
+    "^KS11": "KS"
+    "^TWII": "TW"
+    "^HSI": "HK"
+    "^AXJO": "AX"
+    "^BSESN": "NS"
+    "^STOXX": "DE"
+    "^STOXX50E": "DE"
+    "^GDAXI": "DE"
+    "^FCHI": "PA"
+    "^IBEX": "MC"
+    "^FTSE": "L"
+    "^GSPTSE": "TO"

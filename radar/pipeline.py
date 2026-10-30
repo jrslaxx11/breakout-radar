@@ -68,10 +68,17 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
     idx_syms = [i["sym"] for i in S["regime"]["indices"]] + S["regime"]["volatility"]
     bench_syms = sorted({S["benchmarks"]["default"], *S["benchmarks"]["by_suffix"].values()})
     fx_syms = sorted({v["pair"] for v in S["fx"].values()})
+    stale: dict = {}
     if prices is None:
-        from .prices import download
+        from .prices import complete_recent, download, drop_partial_bars
         prices = download(list(universe) + etf_syms + idx_syms + bench_syms + fx_syms,
                           S["run"]["history_days"], S["run"]["download_chunk"], S["run"]["download_pause_s"])
+        mc = S.get("market_close")
+        if mc:
+            dropped = drop_partial_bars(prices, mc)
+            if dropped:
+                log.info("barras parciales descartadas: %d", len(dropped))
+            stale = complete_recent(prices, mc)
 
     ref = prices.get("^GSPC")
     session = ref.index[-1].strftime("%Y-%m-%d") if ref is not None and len(ref) else today.isoformat()
@@ -99,6 +106,8 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
     excluded = cfg.overrides.get("exclude") or {}
     rows: dict[str, dict] = {}
     for sym, info in universe.items():
+        if sym in stale:
+            continue  # sin la última sesión: no se clasifica con datos de un día antes
         df = prices.get(sym)
         m = compute(sym, df, w) if df is not None else None
         if m is None:
@@ -301,7 +310,8 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
         "by_source": {k: sum(1 for r in rows.values() if r["info"].get("source") == k)
                       for k in ("SPX", "MID", "SML", "INTL", "DISC")},
         "markets": sorted({cfg.suffix(s) or "US" for s in rows}),
-        "missing_prices": len(universe) - len(rows),
+        "missing_prices": len(universe) - len(rows) - len([s for s in stale if s in universe]),
+        "stale": len([s for s in stale if s in universe]),
     }
     out = {
         "meta": {"version": VERSION, "generated_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
