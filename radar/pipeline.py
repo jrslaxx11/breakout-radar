@@ -147,17 +147,20 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
 
     spy = bench.get("^GSPC", {})
     etf_cache = {e: themes.etf_stats(prices, e, spy, w) for e in etf_syms}
-    theme_rows = []
+    theme_stats, theme_etfs = {}, {}
     for key, t in theme_defs.items():
         members = [r for r in liquid if r["theme"] == key and not r["dup"]]
         if len(members) < 3:
             continue
-        etfs = [etf_cache.get(e) for e in t.get("etfs") or [] if etf_cache.get(e)]
-        st = themes.stats(members, etfs)
-        cat = themes.theme_catalyst(key, cfg.overrides, today) or themes.catalyst_auto(st)
-        sc = themes.score(st, cat)
-        theme_rows.append({"key": key, "name": t["name"], **st, "score": sc, "catalyst": cat,
-                           "status": themes.status(st), "etfs": etfs})
+        theme_etfs[key] = [etf_cache.get(e) for e in t.get("etfs") or [] if etf_cache.get(e)]
+        theme_stats[key] = themes.stats(members, theme_etfs[key])
+    ranks = themes.rs_ranks(theme_stats)
+    weights = {**themes.DEFAULT_WEIGHTS, **(S.get("theme_score") or {})}
+    theme_rows = []
+    for key, st in theme_stats.items():
+        theme_rows.append({"key": key, "name": theme_defs[key]["name"], **st, "rs_rank": ranks[key],
+                           "score": themes.score(st, ranks[key], weights),
+                           "status": themes.status(st), "etfs": theme_etfs[key]})
     theme_rows.sort(key=lambda x: -x["score"]["total"])
     sel_cfg = S["selection"]
     cut = theme_rows[min(sel_cfg["top_themes"], len(theme_rows)) - 1]["score"]["total"] if theme_rows else 0
@@ -386,6 +389,7 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
                   "pending": pending_list, "eliminated": eliminated, "episodic_pivots": eps[:20]},
         "qm_market": qm_market,
         "qm_const": qm.constants(),
+        "theme_weights": weights,
         "calendar": calendar,
         "web": {"worker_url": (S.get("web") or {}).get("worker_url") or ""},
         # Contexto para evaluar en el navegador cualquier ticker con los mismos umbrales (docs/engine.js).

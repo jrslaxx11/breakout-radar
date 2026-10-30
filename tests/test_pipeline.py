@@ -61,6 +61,15 @@ def test_pipeline_end_to_end(tmp_path, monkeypatch):
     for c in out["candidates"]:
         assert 0 <= c["score"] <= 100
         assert c["state"] in ("CONFIRMADA", "TEMPRANA", "PRE-BREAKOUT", "RETEST", "EXTENDIDA", "EN BASE", "DESCARTADA")
+    # Puntuación de temáticas: sin catalizador, componentes dentro de sus pesos y suma = total.
+    w = out["theme_weights"]
+    assert sum(w.values()) == 100 and "catalyst" not in w
+    for t in out["themes"]:
+        sc = t["score"]
+        assert all(0 <= sc[k] <= w[k] + 1e-9 for k in w)
+        assert abs(sum(sc[k] for k in w) - sc["total"]) < 0.01
+    best = max(out["themes"], key=lambda t: t["rsc"])
+    assert best["rs_rank"] == 1 and best["score"]["rs"] == w["rs"]
     # Líderes de cada temática: hasta 10, ordenadas por fuerza relativa.
     for t in out["themes"]:
         rs = [x["rs_pct"] for x in t["top"]]

@@ -1,7 +1,6 @@
 """Fases 2-3: asignación de temáticas, estadísticas internas y puntuación 0-100."""
 from __future__ import annotations
 
-from datetime import date
 
 from .metrics import median, sma
 
@@ -57,37 +56,6 @@ def etf_stats(prices: dict, sym: str, bench: dict, w: dict) -> dict | None:
     }
 
 
-def theme_catalyst(key: str, overrides: dict, today: date) -> dict | None:
-    """Catalizador manual vigente (no caducado) o None si no hay dato disponible."""
-    c = (overrides.get("theme_catalysts") or {}).get(key)
-    if not c:
-        return None
-    try:
-        d = c["date"] if isinstance(c["date"], date) else date.fromisoformat(str(c["date"]))
-    except (KeyError, ValueError):
-        return None
-    if (today - d).days > overrides.get("expires_days", 21):
-        return None
-    return {"points": float(c.get("points", 0)), "note": c.get("note", ""), "source": c.get("source", ""),
-            "date": d.isoformat()}
-
-
-def catalyst_auto(st: dict) -> dict | None:
-    """Huella de catalizadores en precio y volumen, disponible para todas las temáticas.
-
-    Proporción neta de valores con al menos una sesión de +4% y volumen ≥ 1,8x en las últimas
-    21 sesiones (resultados, contratos, guías…) menos los que tuvieron una caída equivalente.
-    """
-    n = st.get("n_breadth") or 0
-    if n < 5:
-        return None
-    net = (st["events_up"] - st["events_down"]) / n
-    pts = 15 * clamp(0.5 + 2.5 * net, 0, 1)
-    note = (f"Huella automática (21 sesiones): {st['events_up']} de {n} con subida ≥ 4% y volumen ≥ 1,8x, "
-            f"{st['events_down']} con caída equivalente")
-    return {"points": round(pts, 2), "note": note, "source": "", "date": None, "auto": True}
-
-
 def stats(members: list[dict], etfs: list[dict]) -> dict:
     """Estadísticas de la cesta. La amplitud usa solo valores de selección no sesgada."""
     unb = [a for a in members if a["unbiased"]]
@@ -105,26 +73,39 @@ def stats(members: list[dict], etfs: list[dict]) -> dict:
         "near_hi": sum(1 for a in br if a["m"].dhi >= -0.10) / n,
         "dhi_med": median(a["m"].dhi for a in br),
         "vol": vol, "leaders": sum(1 for a in members if (a.get("rs_pct") or 0) >= 0.8),
-        "events_up": sum(1 for a in br if a["m"].ep_up > 0),
-        "events_down": sum(1 for a in br if a["m"].ep_down > 0),
         "n_breadth": len(br),
     }
 
 
-def score(st: dict, catalyst: dict | None) -> dict:
-    """RS 30 · consistencia 20 · amplitud 20 · volumen 15 · catalizadores 15."""
-    p_rs = 30 * clamp(0.5 + (st["rsc"] or 0) / 0.6, 0, 1)
-    p_con = (20 / 3) * sum(1 for x in (st["rs1"], st["rs3"], st["rs6"]) if x is not None and x > 0)
-    p_br = 10 * st["p50"] + 10 * st["p200"]
-    p_vol = 7.5 * clamp((st["vol"] - 0.8) / 0.4, 0, 1) + 7.5 * clamp(st["near_hi"] / 0.6, 0, 1)
-    parts = {"rs": p_rs, "consistency": p_con, "breadth": p_br, "volume": p_vol}
-    if catalyst is None:
-        parts["catalyst"] = None
-        total = sum(parts[k] for k in ("rs", "consistency", "breadth", "volume")) * 100 / 85
-    else:
-        parts["catalyst"] = catalyst["points"]
-        total = p_rs + p_con + p_br + p_vol + catalyst["points"]
-    parts["total"] = round(total, 2)
+DEFAULT_WEIGHTS = {"rs": 45, "consistency": 15, "breadth": 20, "highs": 10, "volume": 10}
+
+
+def rs_ranks(theme_stats: dict[str, dict]) -> dict[str, float]:
+    """Posición de cada temática por fuerza relativa compuesta: 1 = la más fuerte, 0 = la más débil."""
+    keys = sorted(theme_stats, key=lambda k: theme_stats[k]["rsc"] or 0)
+    n = len(keys)
+    return {k: (i / (n - 1) if n > 1 else 1.0) for i, k in enumerate(keys)}
+
+
+def score(st: dict, rs_rank: float, weights: dict | None = None) -> dict:
+    """Puntuación 0-100 de una temática.
+
+    - Fuerza relativa: posición frente a las demás temáticas (comparación entre grupos).
+    - Consistencia: plazos (1, 3 y 6 meses) en los que la mediana supera a su índice (absoluto).
+    - Amplitud: % de valores sobre su SMA50 y su SMA200.
+    - Cerca de máximos: % de valores a menos de un 10% del máximo de 52 semanas (60% o más = máximo).
+    - Volumen: volumen reciente frente al habitual (0,8x = 0; 1,2x o más = máximo).
+    """
+    w = {**DEFAULT_WEIGHTS, **(weights or {})}
+    pos = sum(1 for x in (st["rs1"], st["rs3"], st["rs6"]) if x is not None and x > 0)
+    parts = {
+        "rs": w["rs"] * clamp(rs_rank, 0, 1),
+        "consistency": w["consistency"] * pos / 3,
+        "breadth": w["breadth"] / 2 * (st["p50"] + st["p200"]),
+        "highs": w["highs"] * clamp(st["near_hi"] / 0.6, 0, 1),
+        "volume": w["volume"] * clamp((st["vol"] - 0.8) / 0.4, 0, 1),
+    }
+    parts["total"] = round(sum(parts.values()), 2)
     return parts
 
 

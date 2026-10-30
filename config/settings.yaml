@@ -42,6 +42,14 @@ breakout:
   base_max_dist: 0.12          # EN BASE: hasta un 12% bajo el pivote
   pinned_atr_pct: 0.008        # ATR < 0,8% y rango estrecho = precio anclado (posible OPA)
 
+# Puntuación de temáticas (suma 100). Fuerza relativa: posición frente a las demás temáticas.
+theme_score:
+  rs: 45
+  consistency: 15
+  breadth: 20
+  highs: 10
+  volume: 10
+
 selection:
   top_themes: 5                # temáticas seleccionadas
   tie_points: 0.5              # se incluyen también las empatadas a ≤ 0,5 puntos de la última

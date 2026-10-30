@@ -333,7 +333,9 @@
   }
 
   function renderThemes(d, hist) {
-    const comps = [["rs", "Fuerza relativa", 30, 1], ["consistency", "Consistencia", 20, 0.8], ["breadth", "Amplitud", 20, 0.6], ["volume", "Volumen", 15, 0.42], ["catalyst", "Catalizador", 15, 0.26]];
+    const W = d.theme_weights || { rs: 45, consistency: 15, breadth: 20, highs: 10, volume: 10 };
+    const comps = [["rs", "Fuerza relativa", 1], ["consistency", "Consistencia", 0.78], ["breadth", "Amplitud", 0.58],
+      ["highs", "Cerca de máximos", 0.42], ["volume", "Volumen", 0.28]].map(([k, n, op]) => [k, n, W[k] || 0, op]);
     const VISIBLE = 12;
     const rows = d.themes.map((t, i) => {
       const s = t.score;
@@ -348,7 +350,7 @@
         <span class="sc">${num(s.total, 0)}</span>
         <span class="bar" role="img" aria-label="Componentes de la puntuación">${segs}</span>
         <span class="meta">RS 1m/3m/6m ${pct(t.rs1, 0)} / ${pct(t.rs3, 0)} / ${pct(t.rs6, 0)} · ${num(t.p50 * 100, 0)}% sobre SMA50 ${spark(h, 60, 18)}
-          ${t.catalyst && t.catalyst.note ? `<br>${t.catalyst.source ? `<a href="${esc(t.catalyst.source)}" target="_blank" rel="noopener">${esc(t.catalyst.note)}</a>` : esc(t.catalyst.note)}` : ""}</span>
+          <br>${num(t.near_hi * 100, 0)}% cerca de máximos · posición RS ${num((t.rs_rank ?? 0) * 100, 0)}/100</span>
       </div></summary>${leadersHTML(t)}</details>`;
     });
     const shown = rows.slice(0, VISIBLE).join("");
@@ -357,7 +359,7 @@
       <p class="lead">Ordenadas por puntuación 0-100. Las marcadas con barra azul a la izquierda son las seleccionadas para buscar acciones. Pulsa una temática para ver sus acciones líderes.</p>
       <div class="themes">${shown}</div>
       ${rest.length ? `<details class="more"><summary>Ver las ${rest.length} temáticas restantes</summary><div class="themes">${rest.join("")}</div></details>` : ""}
-      <p class="legend">${comps.map(([, n, max, op]) => `<span><i style="background:var(--pivot);opacity:${op}"></i>${n} (${max})</span>`).join("")}<span><i class="na" style="background:repeating-linear-gradient(135deg,var(--rule) 0 3px,transparent 3px 6px)"></i>Sin dato (se redistribuye)</span></p>`;
+      <p class="legend">${comps.map(([, n, max, op]) => `<span><i style="background:var(--pivot);opacity:${op}"></i>${n} (${max})</span>`).join("")}</p>`;
   }
 
   function bindLeaders() {
@@ -540,10 +542,11 @@
 
   function renderMethod(d) {
     const cv = d.meta.coverage;
+    const W = d.theme_weights || { rs: 45, consistency: 15, breadth: 20, highs: 10, volume: 10 };
     $("#metodo").innerHTML = `<h2>Método y limitaciones</h2>
       <div class="method">
         <p><strong>Datos.</strong> ${esc(d.meta.price_source)}. Solo cierres confirmados de la última sesión de cada mercado; nada en tiempo real. Universo: ${cv.universe.toLocaleString("es-ES")} valores (S&P 500/400/600, lista fija internacional y descubrimiento por mercado), ${cv.with_data.toLocaleString("es-ES")} con datos y ${cv.liquid.toLocaleString("es-ES")} líquidos (≥ 5 M USD diarios y precio ≥ 5 USD).</p>
-        <p><strong>Temáticas.</strong> RS 30 (mediana de la fuerza relativa compuesta frente al índice regional: 20% 1 mes, 40% 3 meses, 40% 6 meses), consistencia 20, amplitud 20 (% sobre SMA50 y SMA200, solo con valores de selección no sesgada), volumen 15 y catalizadores 15. El catalizador es manual y con fuente cuando existe (caduca a los 21 días); si no, se mide su huella en el precio: proporción neta de valores con una sesión de +4% y volumen ≥ 1,8x en las últimas 21 sesiones. Si falta un componente, sus puntos se redistribuyen.</p>
+        <p><strong>Temáticas.</strong> 0-100: fuerza relativa ${W.rs} (posición de la temática frente a las demás según la mediana de la RS compuesta de sus valores: 20% 1 mes, 40% 3 meses, 40% 6 meses, cada valor frente a su índice regional), consistencia ${W.consistency} (plazos de 1, 3 y 6 meses en los que la mediana supera a su índice), amplitud ${W.breadth} (% sobre SMA50 y SMA200, solo con valores de selección no sesgada), cerca de máximos ${W.highs} (% a menos de un 10% del máximo de 52 semanas) y volumen ${W.volume} (últimas 20 sesiones frente a las 50 anteriores, valores y ETF del sector).</p>
         <p><strong>Estados.</strong> Pivote = máximo de las sesiones 6 a 60 anteriores. Confirmada: cierre sobre el pivote con volumen ≥ 1,5x la media de 20 sesiones. Temprana: cruza sin volumen o sin continuidad. Pre-breakout: a ≤ 5% del pivote con base de al menos 10 sesiones (o flag corto de 5-9 sesiones y ≤ 12% de profundidad). Retest: volvió al pivote tras cruzarlo. Extendida: > 10% sobre el pivote o > 3 ATR sobre la SMA20.</p>
         <p><strong>Puntuación de acciones.</strong> Fuerza relativa 25, base y estructura 25, ruptura y volumen 20, tendencia diaria y semanal 15, liquidez 10, catalizador 5. Es una clasificación, no una probabilidad. El riesgo se etiqueta aparte: volatilidad, resultados próximos, distancia a la invalidación y liquidez.</p>
         <p><strong>Plan Qullamaggie.</strong> Codificación propia de sus reglas públicas para rupturas: subida previa ≥ 30% en 1-3 meses, base de 2 semanas a 2 meses con mínimos crecientes sobre SMA10 y SMA20 ascendentes, ADR ≥ 5%, liquidez ≥ 20 M USD y RS en el 10% superior. Entrada en la ruptura del rango de apertura (1-5 min); stop en el mínimo del día y nunca a más de 1 ADR; venta de 1/3-1/2 a los 3-5 días, stop a la entrada y el resto con cierre bajo SMA10 o SMA20. El filtro de mercado usa el Nasdaq 100 frente a sus SMA10 y SMA20. Son niveles orientativos para el estudio del gráfico, no órdenes ni recomendaciones.</p>

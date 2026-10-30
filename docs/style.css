@@ -134,7 +134,8 @@ h3 { font-size: 16px; font-weight: 700; margin: 18px 0 8px; font-variation-setti
 .verdict { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 28px; align-items: start; }
 .verdict-word { font-size: clamp(56px, 11vw, 120px); line-height: 0.86; font-weight: 800; font-variation-settings: "wdth" 62; margin: 0; letter-spacing: -0.01em; }
 .verdict-word[data-v="FAVORABLE"] { color: var(--pos); }
-.verdict-word[data-v="DESFAVORABLE"] { color: var(--neg); }
+.verdict-word[data-v="DESFAVORABLE"] { color: var(--neg); font-size: clamp(48px, 7.4vw, 96px); }
+.verdict-word[data-v="FAVORABLE"] { font-size: clamp(52px, 9vw, 112px); }
 .verdict-sub { margin: 10px 0 0; color: var(--muted); max-width: 52ch; }
 .signals { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
 .signals li { display: grid; grid-template-columns: 22px 1fr; align-items: baseline; font-size: 14px; }

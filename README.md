@@ -27,7 +27,7 @@ o `radar/`, así que editar un catalizador y guardarlo actualiza la web en unos 
 
 | Archivo | Para qué |
 | --- | --- |
-| `config/overrides.yaml` | Catalizadores verificados (temáticas y acciones), exclusiones (OPA, suspensiones) y cotizaciones duplicadas. Cada entrada caduca a los 21 días. |
+| `config/overrides.yaml` | Catalizadores verificados de acciones (caducan a los 21 días), exclusiones (OPA, suspensiones) y cotizaciones duplicadas. |
 | `config/themes.yaml` | Definición de temáticas: listas fijas de tickers, subindustrias GICS, industrias de Yahoo y ETF de referencia. |
 | `config/settings.yaml` | Filtros de liquidez, umbrales de cada estado, número de temáticas, temáticas forzadas, índices del régimen. |
 | `config/universe_intl.csv` | Valores internacionales que se analizan siempre. |
@@ -78,12 +78,17 @@ Russell 2000 sobre SMA50, amplitud del S&P 500, nuevos máximos frente a mínimo
 VIX, STOXX 600 y mayoría de índices asiáticos sobre su SMA50. ≥ 5 favorable, 2-4 mixto, ≤ 1
 desfavorable.
 
-**Temáticas (fases 2-3).** 0-100: fuerza relativa 30 (mediana de la RS compuesta frente al índice
-regional: 20% 1 mes, 40% 3 meses, 40% 6 meses), consistencia 20, amplitud 20 (solo con valores de
-selección no sesgada), volumen 15 y catalizadores 15. El catalizador es manual y con fuente
-(`config/overrides.yaml`) cuando existe; si no, se usa su huella en el precio: proporción neta de
-valores con una sesión de +4% y volumen ≥ 1,8x en las últimas 21 sesiones. Si un componente no
-tiene dato, sus puntos se redistribuyen. Se seleccionan las 5 mejores, las empatadas a ≤ 0,5 puntos y las forzadas.
+**Temáticas (fases 2-3).** 0-100, pesos en `config/settings.yaml` (`theme_score`):
+
+| Componente | Puntos | Cálculo |
+| --- | --- | --- |
+| Fuerza relativa | 45 | Posición de la temática frente a las demás (la más fuerte 45, la más débil 0) según la mediana de la RS compuesta de sus valores: 20% 1 mes, 40% 3 meses, 40% 6 meses, cada valor frente a su índice regional |
+| Consistencia | 15 | 5 por cada plazo (1, 3 y 6 meses) en el que la mediana supera a su índice |
+| Amplitud | 20 | % de valores sobre la SMA50 y sobre la SMA200 (solo valores de selección no sesgada) |
+| Cerca de máximos | 10 | % de valores a menos de un 10% de su máximo de 52 semanas (60% o más = 10) |
+| Volumen | 10 | Volumen de las últimas 20 sesiones frente a las 50 anteriores, valores y ETF del sector (0,8x = 0; 1,2x = 10) |
+
+Se seleccionan las 5 mejores, las empatadas a ≤ 0,5 puntos y las forzadas.
 
 **Estados (fase 5).** Pivote = máximo de las sesiones 6 a 60 anteriores.
 
