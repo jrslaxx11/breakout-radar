@@ -1,69 +1,28 @@
-import datetime as dt
+import datetime as dt, json
+from yfinance.data import YfData
 
-import pandas as pd
-import yfinance as yf
-
-print("ahora UTC", dt.datetime.now(dt.timezone.utc), "yfinance", yf.__version__)
-S = ["IQV", "AAPL", "RSP", "^GSPC", "^STOXX", "SAP.DE", "OR.PA", "MAERSK-B.CO", "7203.T", "CSL.AX", "REY.MI"]
-
-
-def last(df, s):
-    try:
-        sub = df[s] if isinstance(df.columns, pd.MultiIndex) else df
-        sub = sub.dropna(subset=["Close"])
-        return [(str(i.date()), round(float(r.Close), 3)) for i, r in sub.tail(3).iterrows()]
-    except Exception as e:  # noqa: BLE001
-        return repr(e)
-
-
-for per in ("2y", "5d", "1mo"):
-    try:
-        df = yf.download(S, period=per, interval="1d", group_by="ticker", auto_adjust=False, actions=False,
-                         progress=False, threads=True)
-        print(f"\n== download period={per}")
-        for s in S:
-            print(s, last(df, s))
-    except Exception as e:  # noqa: BLE001
-        print(per, repr(e))
-
-start = (dt.date.today() - dt.timedelta(days=730)).isoformat()
-try:
-    df = yf.download(S, start=start, interval="1d", group_by="ticker", auto_adjust=False, actions=False,
-                     progress=False, threads=True)
-    print("\n== download start=", start)
-    for s in S:
-        print(s, last(df, s))
-except Exception as e:  # noqa: BLE001
-    print("start", repr(e))
-
-print("\n== Ticker.history 2y + metadata")
+yd = YfData()
+U = lambda x: str(dt.datetime.fromtimestamp(x, dt.timezone.utc)) if x else None
+print("ahora UTC", dt.datetime.now(dt.timezone.utc))
+S = ["IQV", "AAPL", "RSP", "^GSPC", "^STOXX", "SAP.DE", "OR.PA", "MAERSK-B.CO", "7203.T", "CSL.AX", "REY.MI", "0700.HK", "005930.KS"]
+print("\n== v8 última fila y meta")
 for s in S:
     try:
-        t = yf.Ticker(s)
-        h = t.history(period="2y", auto_adjust=False)
-        md = t.history_metadata or {}
-        rmt = md.get("regularMarketTime")
-        print(s, [str(i.date()) for i in h.index[-2:]], "meta:",
-              dt.datetime.fromtimestamp(rmt, dt.timezone.utc) if rmt else None,
-              md.get("regularMarketPrice"), md.get("regularMarketDayHigh"), md.get("regularMarketDayLow"),
-              md.get("regularMarketVolume"))
-    except Exception as e:  # noqa: BLE001
+        j = yd.get_raw_json(f"https://query2.finance.yahoo.com/v8/finance/chart/{s}", params={"range": "5d", "interval": "1d"})
+        r = j["chart"]["result"][0]; q = r["indicators"]["quote"][0]; m = r["meta"]
+        last = {k: q[k][-1] for k in ("open", "high", "low", "close", "volume")}
+        print(s, U(r["timestamp"][-1]), last, "| meta", U(m.get("regularMarketTime")), m.get("regularMarketPrice"),
+              m.get("regularMarketDayHigh"), m.get("regularMarketDayLow"), m.get("regularMarketVolume"),
+              "| periodo", U(m.get("currentTradingPeriod", {}).get("regular", {}).get("start")), U(m.get("currentTradingPeriod", {}).get("regular", {}).get("end")))
+    except Exception as e:
         print(s, repr(e))
-
-print("\n== v8 crudo")
-try:
-    from yfinance.data import YfData
-    yd = YfData()
-    for s in ("IQV", "SAP.DE", "7203.T"):
-        for rng in ("2y", "5d"):
-            try:
-                j = yd.get_raw_json(f"https://query2.finance.yahoo.com/v8/finance/chart/{s}",
-                                    params={"range": rng, "interval": "1d"})
-                r = j["chart"]["result"][0]
-                ts = r.get("timestamp", [])[-3:]
-                cl = r["indicators"]["quote"][0]["close"][-3:]
-                print(s, rng, [str(dt.datetime.fromtimestamp(x, dt.timezone.utc)) for x in ts], cl)
-            except Exception as e:  # noqa: BLE001
-                print(s, rng, repr(e))
-except Exception as e:  # noqa: BLE001
-    print("YfData", repr(e))
+print("\n== v7 quote")
+for host in ("query1", "query2"):
+    try:
+        j = yd.get_raw_json(f"https://{host}.finance.yahoo.com/v7/finance/quote", params={"symbols": ",".join(S)})
+        for x in j["quoteResponse"]["result"]:
+            print(host, x["symbol"], x.get("marketState"), U(x.get("regularMarketTime")), x.get("regularMarketOpen"), x.get("regularMarketDayHigh"),
+                  x.get("regularMarketDayLow"), x.get("regularMarketPrice"), x.get("regularMarketVolume"), x.get("exchangeTimezoneName"))
+        break
+    except Exception as e:
+        print(host, repr(e))
