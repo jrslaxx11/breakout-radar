@@ -52,8 +52,18 @@ Qullamaggie):
   4. Copiar la dirección del Worker (`https://radar-yahoo.<tu-subdominio>.workers.dev`) en
      `config/settings.yaml`, apartado `web: worker_url`, y guardar. La web se republica sola.
 
-  El Worker solo acepta peticiones de tu web, guarda las respuestas 15 minutos y el plan gratuito
-  permite 100.000 consultas al día. Los valores calculados al momento no tienen temática,
+  El Worker solo acepta peticiones de tu web, guarda los gráficos 15 minutos y los precios 1 minuto,
+  y el plan gratuito permite 100.000 consultas al día. Si cambia `cloudflare/worker.js`, hay que volver
+  a pegarlo en Cloudflare (*Edit code → Deploy*).
+
+## Precios en vivo
+
+Con el Worker configurado, mientras la web está abierta la watchlist y la ficha abierta se actualizan
+cada minuto (cada 5 si no hay ningún mercado abierto) con el último precio de Yahoo Finance: casi en
+tiempo real en EE. UU. y con 15-20 minutos de retraso en la mayoría de bolsas de fuera. La columna
+"Ahora" compara ese precio con los niveles del cierre (pivote, entrada del plan Qullamaggie,
+invalidación) y estima el volumen del día al cierre. Los estados y las puntuaciones siguen siendo los
+del cierre: una ruptura no se confirma hasta que cierra la sesión. Los valores calculados al momento no tienen temática,
   catalizador ni fechas de resultados (su peso se redistribuye, como en el motor diario).
 
 ## Método

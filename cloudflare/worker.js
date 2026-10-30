@@ -5,8 +5,9 @@
  * Cloudflare (plan gratuito: 100.000 peticiones al día) hace la petición y devuelve solo lo
  * necesario, con permiso para que tu web lo lea. No guarda nada ni necesita claves.
  *
- *   GET /chart?symbol=AAPL   → velas diarias de 2 años + metadatos
- *   GET /search?q=apple      → sugerencias de tickers
+ *   GET /chart?symbol=AAPL         → velas diarias de 2 años + metadatos
+ *   GET /search?q=apple            → sugerencias de tickers
+ *   GET /quote?symbols=AAPL,MSFT   → último precio de hasta 40 valores (precios en vivo de la web)
  *
  * Despliegue: dash.cloudflare.com → Workers & Pages → Create → Worker → pega este archivo → Deploy.
  */
@@ -18,6 +19,8 @@ const ALLOWED_ORIGINS = [
   "http://127.0.0.1:8000",
 ];
 const CACHE_SECONDS = 900; // 15 minutos
+const QUOTE_CACHE_SECONDS = 60; // precios en vivo: 1 minuto
+const MAX_QUOTES = 40; // el plan gratuito permite 50 peticiones internas por consulta
 const UA = "Mozilla/5.0 (compatible; breakout-radar/1.0)";
 
 function cors(origin) {
@@ -81,6 +84,34 @@ async function chart(symbol) {
   };
 }
 
+// Último precio de un valor a partir de los metadatos del gráfico del día (no requiere sesión de Yahoo).
+async function quoteOne(symbol) {
+  const u = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=1d&interval=1d`;
+  const j = await yahoo(u);
+  const r = j?.chart?.result?.[0];
+  if (!r) return null;
+  const m = r.meta || {};
+  const q = r.indicators?.quote?.[0] || {};
+  const reg = m.currentTradingPeriod?.regular || {};
+  const now = Date.now() / 1000;
+  const last = (a) => (Array.isArray(a) && a.length ? a[a.length - 1] : null);
+  return {
+    symbol: m.symbol || symbol, currency: m.currency, price: m.regularMarketPrice ?? null,
+    prevClose: m.chartPreviousClose ?? m.previousClose ?? null, open: last(q.open),
+    high: m.regularMarketDayHigh ?? null, low: m.regularMarketDayLow ?? null, volume: m.regularMarketVolume ?? null,
+    time: m.regularMarketTime ?? null, gmtoffset: m.gmtoffset || 0,
+    start: reg.start ?? null, end: reg.end ?? null, isOpen: !!(reg.start && reg.end && reg.start <= now && now < reg.end),
+  };
+}
+
+async function quotes(list) {
+  const out = {};
+  await Promise.all(list.map(async (s) => {
+    try { const q = await quoteOne(s); if (q) out[s] = q; } catch { /* ese valor queda sin precio */ }
+  }));
+  return { at: Math.floor(Date.now() / 1000), quotes: out };
+}
+
 async function search(q) {
   const u = `https://query1.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(q)}&quotesCount=8&newsCount=0&listsCount=0`;
   const j = await yahoo(u);
@@ -104,19 +135,26 @@ export default {
       return res;
     }
     try {
-      let body;
+      let body, ttl = CACHE_SECONDS;
       if (url.pathname === "/chart") {
         const s = (url.searchParams.get("symbol") || "").trim().toUpperCase();
         if (!/^[A-Z0-9.^=\-]{1,20}$/.test(s)) return json({ error: "Ticker no válido" }, 400, origin);
         body = await chart(s);
+      } else if (url.pathname === "/quote") {
+        const list = [...new Set((url.searchParams.get("symbols") || "").toUpperCase().split(",").map((x) => x.trim()).filter(Boolean))];
+        if (!list.length || list.length > MAX_QUOTES || !list.every((x) => /^[A-Z0-9.^=\-]{1,20}$/.test(x))) {
+          return json({ error: `Lista no válida (hasta ${MAX_QUOTES} tickers separados por comas)` }, 400, origin);
+        }
+        body = await quotes(list);
+        ttl = QUOTE_CACHE_SECONDS;
       } else if (url.pathname === "/search") {
         const q = (url.searchParams.get("q") || "").trim();
         if (q.length < 1 || q.length > 40) return json({ error: "Búsqueda no válida" }, 400, origin);
         body = await search(q);
       } else {
-        return json({ ok: true, uso: "/chart?symbol=AAPL · /search?q=apple" }, 200, origin);
+        return json({ ok: true, uso: "/chart?symbol=AAPL · /search?q=apple · /quote?symbols=AAPL,MSFT" }, 200, origin);
       }
-      const res = json(body, 200, origin, { "Cache-Control": `public, max-age=${CACHE_SECONDS}` });
+      const res = json(body, 200, origin, { "Cache-Control": `public, max-age=${ttl}` });
       ctx.waitUntil(cache.put(request, res.clone()));
       return res;
     } catch (err) {

@@ -153,6 +153,7 @@
       candles.priceScale().applyOptions({ scaleMargins: { top: 0.06, bottom: 0.24 } });
       if (k.v && k.v.length) {
         const vol = chart.addHistogramSeries({ priceFormat: { type: "volume" }, priceScaleId: "", lastValueVisible: false, priceLineVisible: false });
+        chart._volSeries = vol;
         vol.priceScale().applyOptions({ scaleMargins: { top: 0.8, bottom: 0 } });
         vol.setData(k.t.map((t, i) => ({ time: t, value: k.v[i] || 0, color: alpha(k.c[i] >= open(i) ? col.up : col.down, 0.35) })));
       }
@@ -171,7 +172,10 @@
       chart.timeScale().setVisibleLogicalRange({ from: Math.max(0, n - 130), to: n + 3 });
       const ro = new ResizeObserver(() => chart.applyOptions({ width: el.clientWidth }));
       ro.observe(el);
-      el._dispose = () => { ro.disconnect(); chart.remove(); };
+      el._dispose = () => { ro.disconnect(); chart.remove(); el._candles = null; };
+      // Para los precios en vivo: la vela del día se dibuja sobre la última del cierre.
+      Object.assign(el, { _candles: candles, _vol: chart._volSeries || null, _sym: c.sym, _lastT: k.t[n - 1], _col: col });
+      updateLiveCharts();
     } catch (err) {
       el.innerHTML = `<p class="empty">No se pudo dibujar el gráfico (${esc(err.message)}). Usa el enlace a TradingView.</p>`;
     }
@@ -441,7 +445,7 @@
       <div class="tbl-wrap"><table id="wl">
         <thead><tr>
           <th class="left" data-sort="sym">Valor</th><th class="left" data-sort="theme">Temática</th><th data-sort="score">Punt.</th>
-          <th class="left" data-sort="state">Estado</th><th class="left">Regla</th><th data-sort="close">Cierre</th>
+          <th class="left" data-sort="state">Estado</th><th class="left">Regla</th><th data-sort="close">Cierre</th><th data-sort="live_dist" title="Último precio de Yahoo Finance, actualizado cada minuto mientras la web está abierta (ordena por distancia al pivote)">Ahora</th>
           <th data-sort="dist">vs pivote</th><th data-sort="inv_pct">Invalidación</th><th data-sort="rvol">Vol. rel.</th>
           <th data-sort="next_earnings">Resultados</th><th data-sort="risk_points">Riesgo</th><th class="left" data-sort="qm_verdict">Qullamaggie</th><th class="left" data-sort="daily_status">Hoy</th>
         </tr></thead><tbody></tbody></table></div>`;
@@ -468,6 +472,7 @@
           <td class="left">${chip(c.state)}</td>
           <td class="left">${ladder(c)}</td>
           <td>${price(c.close, c.currency)} <span class="dim">${esc(c.currency)}</span></td>
+          <td class="live-cell" data-live="${esc(c.sym)}">${liveCell(c)}</td>
           <td class="${cls(c.dist)}">${pct(c.dist)}</td>
           <td title="${esc(pct(c.inv_pct))} desde el cierre">${price(c.inv, c.currency)}</td>
           <td>${num(c.rvol, 2)}x</td>
@@ -475,7 +480,7 @@
           <td class="risk-${esc(c.risk)}">${esc(c.risk)}</td>
           <td class="left">${c.qm ? `<span class="qmv qmv-${esc(c.qm.verdict.replace(/\s+/g, "-"))}">${esc(c.qm.verdict)}</span>` : "—"}</td>
           <td class="left ds ds-${esc(c.daily_status)}">${esc(DS_LABEL[c.daily_status] || c.daily_status || "")}${isNum(c.score_prev) ? ` <span class="dim">(${num(c.score_prev, 0)})</span>` : ""}</td>
-        </tr>`).join("") : `<tr><td colspan="13" class="empty">Ninguna candidata cumple los filtros. Prueba a quitar alguno.</td></tr>`;
+        </tr>`).join("") : `<tr><td colspan="14" class="empty">Ninguna candidata cumple los filtros. Prueba a quitar alguno.</td></tr>`;
     };
     const toggle = (tr) => {
       const open = tr.getAttribute("aria-expanded") === "true";
@@ -485,7 +490,7 @@
         tr.setAttribute("aria-expanded", "false"); return;
       }
       const c = byS[tr.dataset.sym];
-      tr.insertAdjacentHTML("afterend", `<tr class="detail"><td colspan="13"><div class="detail-inner">${detailHTML(c)}</div></td></tr>`);
+      tr.insertAdjacentHTML("afterend", `<tr class="detail"><td colspan="14"><div class="detail-inner">${detailHTML(c)}</div></td></tr>`);
       tr.setAttribute("aria-expanded", "true");
       // La tabla puede ser más ancha que la pantalla: la ficha se ajusta al ancho visible.
       const inner = tr.nextElementSibling.querySelector(".detail-inner"), wrap = tr.closest(".tbl-wrap");
@@ -722,6 +727,7 @@
             <p class="ficha-meta">${chip(c.state)}<span>Puntuación <strong>${num(c.score, 0)}</strong></span>
               <span>Cierre <strong>${price(c.close, c.currency)}</strong> <span class="dim">${esc(c.currency)}</span> <span class="${cls(c.d1)}">${pct(c.d1)}</span></span>
               <span class="risk-${esc(c.risk)}">Riesgo ${esc((c.risk || "").toLowerCase())}</span>${qv}</p>
+            <p class="ficha-live" data-live-ficha></p>
             <p class="ficha-note">${esc(note)}</p>
           </div>
           <button type="button" class="close">Cerrar</button>
@@ -729,6 +735,8 @@
         <div class="ficha-body">${detailHTML(c)}</div>`;
       sec.querySelector(".close").addEventListener("click", closeTicker);
       mountDetail(sec, c, kPromise);
+      LIVE.ficha = c;
+      if (LIVE.q[c.sym]) renderLive(); else liveTick();
     } catch (err) {
       sec.innerHTML = `<div class="ficha-head"><div><h2 class="ficha-tk">${esc(sym)}</h2><p class="ficha-note">${esc(err.message)}.</p></div>
         <button type="button" class="close">Cerrar</button></div>`;
@@ -742,7 +750,7 @@
     const ch = sec.querySelector(".chart");
     if (ch && ch._dispose) ch._dispose();
     sec.hidden = true; sec.innerHTML = "";
-    currentSym = null;
+    currentSym = null; LIVE.ficha = null;
     if (url && tickerFromHash()) history.replaceState(null, "", location.pathname + location.search);
     if (focus) $("#q").focus();
   }
@@ -757,6 +765,110 @@
       history.replaceState(null, "", location.pathname + location.search);
     }
     window.scrollTo({ top: 0, behavior: reducedMotion() ? "auto" : "smooth" });
+  }
+
+  // ---------- precios en vivo (Worker /quote, cada minuto con la web abierta) ----------
+  // Los estados y puntuaciones son siempre los del cierre; aquí solo se compara el último precio
+  // con los niveles (pivote, entrada, invalidación) y se proyecta el volumen del día.
+  const LIVE = { q: {}, at: null, timer: null, error: "", ficha: null };
+  const qDay = (q) => (q && q.time ? new Date((q.time + (q.gmtoffset || 0)) * 1000).toISOString().slice(0, 10) : null);
+  const hhmm = (sec) => new Date(sec * 1000).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
+
+  function liveInfo(c) {
+    const q = c && LIVE.q[c.sym];
+    if (!q || !isNum(q.price)) return null;
+    const day = qDay(q);
+    if (!q.isOpen && !(day && c.date && day > c.date)) return { stale: true, q };
+    const p = q.price;
+    const chg = isNum(q.prevClose) && q.prevClose > 0 ? p / q.prevClose - 1 : null;
+    const dist = p / c.pivot - 1;
+    const trig = c.qm && isNum(c.qm.trigger) ? c.qm.trigger : null;
+    let txt, kind;
+    if (isNum(c.inv) && p < c.inv) { txt = "bajo la invalidación"; kind = "neg"; }
+    else if (trig && p > trig) { txt = "supera la entrada"; kind = "hit"; }
+    else if (p > c.pivot && c.close <= c.pivot) { txt = "rompe el pivote"; kind = "hit"; }
+    else if (p > c.pivot) { txt = `${pct(dist)} sobre el pivote`; kind = "pos"; }
+    else { txt = `a ${num(-dist * 100, 1)}% del pivote`; kind = "near"; }
+    // Volumen relativo: con la sesión abierta, proyección al cierre con un perfil intradía
+    // aproximado (se negocia más al principio): fracción de volumen ≈ fracción de tiempo ^ 0,8.
+    let rv = null, proj = false;
+    if (isNum(q.volume) && c.v20 > 0) {
+      if (q.isOpen && q.start && q.end) {
+        const t = Math.min(1, Math.max(0.03, (Date.now() / 1000 - q.start) / (q.end - q.start)));
+        rv = q.volume / Math.pow(t, 0.8) / c.v20; proj = true;
+      } else rv = q.volume / c.v20;
+    }
+    return { q, p, chg, dist, txt, kind, rv, proj, open: q.isOpen };
+  }
+
+  function liveCell(c) {
+    const L = liveInfo(c);
+    if (!L) return `<span class="dim">—</span>`;
+    if (L.stale) return `<span class="dim" title="Sin cotizaciones nuevas desde el cierre que usa el radar">sin cambios</span>`;
+    return `<span class="lp">${price(L.p, c.currency)}</span> <span class="${cls(L.chg)}">${pct(L.chg)}</span>
+      <small class="ls-${L.kind}">${esc(L.txt)}${isNum(L.rv) ? ` · vol. ${L.proj ? "proy. " : ""}${num(L.rv, 1)}x` : ""}</small>`;
+  }
+
+  function fichaLive(c) {
+    const L = liveInfo(c);
+    if (!L) return "";
+    if (L.stale) return `<span class="live-dot"></span><span class="dim">Sin cotizaciones nuevas desde el cierre del ${dateEs(c.date)}.</span>`;
+    return `<span class="live-dot ${L.open ? "on" : ""}"></span><strong>${L.open ? "Ahora" : "Último cierre"} ${price(L.p, c.currency)}</strong>
+      <span class="${cls(L.chg)}">${pct(L.chg)}</span> · <span class="ls-${L.kind}">${esc(L.txt)}</span>
+      ${isNum(L.rv) ? ` · volumen ${L.proj ? "proyectado " : ""}${num(L.rv, 1)}x la media` : ""}
+      <span class="dim"> · ${hhmm(L.q.time)}${L.open ? "" : ", mercado cerrado"}</span>`;
+  }
+
+  function updateLiveCharts() {
+    document.querySelectorAll(".chart").forEach((el) => {
+      const q = el._candles && LIVE.q[el._sym];
+      const day = qDay(q);
+      if (!q || !day || !isNum(q.price) || day < el._lastT || (day === el._lastT && !q.isOpen)) return;
+      const o = isNum(q.open) && q.open > 0 ? q.open : q.price;
+      try {
+        el._candles.update({ time: day, open: o, high: Math.max(q.high || q.price, q.price, o), low: Math.min(q.low || q.price, q.price, o), close: q.price });
+        if (el._vol && isNum(q.volume)) el._vol.update({ time: day, value: q.volume, color: alpha(q.price >= o ? el._col.up : el._col.down, 0.35) });
+      } catch { /* vela fuera de orden: se ignora */ }
+    });
+  }
+
+  function renderLive() {
+    Object.values(BYS).forEach((c) => { const L = liveInfo(c); c.live_dist = L && !L.stale ? L.dist : null; });
+    document.querySelectorAll("td[data-live]").forEach((td) => { const c = BYS[td.dataset.live]; if (c) td.innerHTML = liveCell(c); });
+    const f = document.querySelector("[data-live-ficha]");
+    if (f && LIVE.ficha) f.innerHTML = fichaLive(LIVE.ficha);
+    updateLiveCharts();
+    const st = $("#live");
+    if (!st) return;
+    st.hidden = false;
+    if (LIVE.error === "update") {
+      st.innerHTML = `<span class="live-dot"></span>Precios en vivo: falta actualizar el Worker de Cloudflare (pega de nuevo cloudflare/worker.js)`;
+      return;
+    }
+    if (LIVE.error) { st.innerHTML = `<span class="live-dot"></span>Precios en vivo no disponibles ahora; se reintenta en 5 minutos`; return; }
+    const us = Object.entries(LIVE.q).find(([sym]) => !sym.includes("."));
+    const open = !!(us && us[1].isOpen);
+    st.innerHTML = `<span class="live-dot ${open ? "on" : ""}"></span>${open ? "Precios en vivo" : "Mercado de EE. UU. cerrado"} · actualizado ${hhmm(LIVE.at / 1000)}`;
+  }
+
+  async function liveTick() {
+    clearTimeout(LIVE.timer);
+    if (!workerUrl() || document.hidden || !D) return;
+    const syms = [...new Set([...(D.lists.presented || []), ...(currentSym ? [currentSym] : [])])].sort();
+    try {
+      for (let i = 0; i < syms.length; i += 40) {
+        const r = await getWorker(`/quote?symbols=${encodeURIComponent(syms.slice(i, i + 40).join(","))}`);
+        if (!r || !r.quotes) throw Object.assign(new Error("Worker sin /quote"), { old: true });
+        Object.assign(LIVE.q, r.quotes);
+      }
+      LIVE.error = ""; LIVE.at = Date.now();
+    } catch (e) {
+      LIVE.error = e.old ? "update" : "fail";
+    }
+    renderLive();
+    if (LIVE.error === "update") return;
+    const anyOpen = Object.values(LIVE.q).some((q) => q.isOpen);
+    LIVE.timer = setTimeout(liveTick, !LIVE.error && anyOpen ? 60000 : 300000);
   }
 
   // ---------- arranque ----------
@@ -792,6 +904,10 @@
       window.addEventListener("hashchange", syncFromUrl);
       syncFromUrl();
       document.querySelectorAll("[data-home]").forEach((a) => a.addEventListener("click", goHome));
+      if (workerUrl()) {
+        liveTick();
+        document.addEventListener("visibilitychange", () => { if (!document.hidden) liveTick(); });
+      }
     } catch (err) {
       $("#app").innerHTML = `<div class="err"><strong>No se han podido cargar los datos.</strong> ${esc(err.message)}. Si es la primera vez, ejecuta el flujo "Radar diario" en la pestaña Actions del repositorio y recarga esta página cuando termine.</div>`;
       $("#session").textContent = "Sin datos";
