@@ -4889,6 +4889,12 @@
 "name": "Kinaxis Inc.",
 "sector": "Technology"
 },
+"LAND.SW": {
+"country": "Switzerland",
+"industry": "Electrical Equipment & Parts",
+"name": "Landis+Gyr Group AG",
+"sector": "Industrials"
+},
 "LATO-B.ST": {
 "country": "Sweden",
 "industry": "Conglomerates",
@@ -6556,6 +6562,12 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"TELIA.ST": {
+"country": "Sweden",
+"industry": "Telecom Services",
+"name": "Telia Company AB (publ)",
+"sector": "Communication Services"
 },
 "TEM": {
 "country": "United States",
