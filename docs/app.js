@@ -450,12 +450,19 @@
       const open = tr.getAttribute("aria-expanded") === "true";
       if (open) {
         const det = tr.nextElementSibling;
-        if (det && det.classList.contains("detail")) { const ch = det.querySelector(".chart"); ch && ch._dispose && ch._dispose(); det.remove(); }
+        if (det && det.classList.contains("detail")) { const ch = det.querySelector(".chart"); ch && (ch._disposeAll || ch._dispose || (() => {}))(); det.remove(); }
         tr.setAttribute("aria-expanded", "false"); return;
       }
       const c = byS[tr.dataset.sym];
-      tr.insertAdjacentHTML("afterend", `<tr class="detail"><td colspan="13">${detailHTML(c)}</td></tr>`);
+      tr.insertAdjacentHTML("afterend", `<tr class="detail"><td colspan="13"><div class="detail-inner">${detailHTML(c)}</div></td></tr>`);
       tr.setAttribute("aria-expanded", "true");
+      // La tabla puede ser más ancha que la pantalla: la ficha se ajusta al ancho visible.
+      const inner = tr.nextElementSibling.querySelector(".detail-inner"), wrap = tr.closest(".tbl-wrap");
+      const fit = () => { inner.style.width = `${Math.max(280, wrap.clientWidth - 22)}px`; };
+      fit();
+      const ro = new ResizeObserver(fit); ro.observe(wrap);
+      const ch = inner.querySelector(".chart"); const prevDispose = () => ch._dispose && ch._dispose();
+      ch._disposeAll = () => { ro.disconnect(); prevDispose(); };
       mountDetail(tr.nextElementSibling, c, loadTicker(c.sym).then((x) => x.k));
     };
     tbody.addEventListener("click", (e) => { const tr = e.target.closest("tr.row"); if (tr && !e.target.closest("a")) toggle(tr); });
