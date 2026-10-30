@@ -12,7 +12,7 @@ on:
         default: false
   push:
     branches: [main]
-    paths: ["radar/**", "config/**", "docs/*.html", "docs/*.js", "docs/*.css", "tests/**", "requirements.txt", ".github/workflows/daily.yml"]
+    paths: ["radar/**", "config/**", "docs/*.html", "docs/*.js", "docs/*.css", "tests/**", "requirements.txt", "constraints.txt", ".github/workflows/daily.yml"]
 
 # Mínimos permisos: lectura por defecto; cada trabajo pide solo lo que necesita.
 permissions:
@@ -40,8 +40,8 @@ jobs:
 
       - name: Instalar dependencias
         run: |
-          pip install -r requirements.txt
-          pip freeze > docs/data/versions.txt   # versiones exactas instaladas (para fijarlas)
+          pip install -r requirements.txt -c constraints.txt   # versiones fijadas, también las indirectas
+          pip freeze > docs/data/versions.txt
 
       - name: Pruebas
         run: python -m pytest -q

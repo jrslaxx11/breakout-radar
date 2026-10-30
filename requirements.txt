@@ -1,7 +1,9 @@
-yfinance>=0.2.54
-pandas>=2.2
-numpy>=1.26
-pyyaml>=6.0
-requests>=2.31
-lxml>=5.0
-pytest>=8.0
+# Versiones fijadas (probadas en GitHub Actions el 30-oct-2026). Para actualizar: subir la versión,
+# dejar que el flujo pase las pruebas y regenerar constraints.txt con docs/data/versions.txt.
+yfinance==1.7.0
+pandas==3.1.0
+numpy==2.5.4
+PyYAML==6.0.3
+requests==2.34.2
+lxml==6.1.3
+pytest==9.2.0
