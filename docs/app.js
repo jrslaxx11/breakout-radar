@@ -617,9 +617,13 @@
 
   const benchName = (sym) => ((D.regime.indices || []).find((i) => i.sym === sym) || {}).name || sym;
 
-  async function openTicker(raw) {
+  let currentSym = null;
+  const tickerFromHash = () => { const m = location.hash.match(/^#valor=(.+)$/); return m ? decodeURIComponent(m[1]).toUpperCase() : null; };
+
+  async function openTicker(raw, { push = true } = {}) {
     const sym = String(raw || "").trim().toUpperCase();
     if (!sym) return;
+    currentSym = sym;
     const sec = $("#ficha");
     const old = sec.querySelector(".chart");
     if (old && old._dispose) old._dispose();
@@ -629,7 +633,9 @@
     const bar = $(".top"), sticky = getComputedStyle(bar).position === "sticky";
     window.scrollTo({ top: sec.getBoundingClientRect().top + window.scrollY - (sticky ? bar.offsetHeight + 8 : 8),
       behavior: reducedMotion() ? "auto" : "smooth" });
-    history.replaceState(null, "", `#valor=${encodeURIComponent(sym)}`);
+    const url = `${location.pathname}${location.search}#valor=${encodeURIComponent(sym)}`;
+    if (push && tickerFromHash() !== sym) history.pushState({ valor: sym }, "", url);
+    else history.replaceState({ valor: sym }, "", url);
     try {
       let idx = null;
       try { idx = await loadIndex(); } catch { /* sin índice */ }
@@ -699,13 +705,27 @@
     }
   }
 
-  function closeTicker() {
+  // Cierra la ficha. `url`: quita el ticker de la dirección (sin crear otra entrada en el historial).
+  function closeTicker({ focus = true, url = true } = {}) {
     const sec = $("#ficha");
     const ch = sec.querySelector(".chart");
     if (ch && ch._dispose) ch._dispose();
     sec.hidden = true; sec.innerHTML = "";
-    history.replaceState(null, "", location.pathname + location.search);
-    $("#q").focus();
+    currentSym = null;
+    if (url && tickerFromHash()) history.replaceState(null, "", location.pathname + location.search);
+    if (focus) $("#q").focus();
+  }
+
+  // Inicio: cierra la ficha, limpia la dirección y vuelve arriba.
+  function goHome(e) {
+    if (e) e.preventDefault();
+    if (currentSym || tickerFromHash()) {
+      closeTicker({ focus: false, url: false });
+      history.pushState(null, "", location.pathname + location.search);
+    } else if (location.hash) {
+      history.replaceState(null, "", location.pathname + location.search);
+    }
+    window.scrollTo({ top: 0, behavior: reducedMotion() ? "auto" : "smooth" });
   }
 
   // ---------- arranque ----------
@@ -730,9 +750,16 @@
       renderAgenda(d, byS);
       renderMethod(d);
       initFinder();
-      const fromHash = () => { const m = location.hash.match(/^#valor=(.+)$/); if (m) openTicker(decodeURIComponent(m[1])); };
-      window.addEventListener("hashchange", fromHash);
-      fromHash();
+      // La dirección manda: #valor=XXX abre esa ficha; sin él, no hay ficha (botón Atrás incluido).
+      const syncFromUrl = () => {
+        const sym = tickerFromHash();
+        if (sym && sym !== currentSym) openTicker(sym, { push: false });
+        else if (!sym && currentSym) closeTicker({ focus: false, url: false });
+      };
+      window.addEventListener("popstate", syncFromUrl);
+      window.addEventListener("hashchange", syncFromUrl);
+      syncFromUrl();
+      document.querySelectorAll("[data-home]").forEach((a) => a.addEventListener("click", goHome));
     } catch (err) {
       $("#app").innerHTML = `<div class="err"><strong>No se han podido cargar los datos.</strong> ${esc(err.message)}. Si es la primera vez, ejecuta el flujo "Radar diario" en la pestaña Actions del repositorio y recarga esta página cuando termine.</div>`;
       $("#session").textContent = "Sin datos";

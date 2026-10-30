@@ -84,6 +84,10 @@ jobs:
           mkdir -p docs/vendor
           curl -fsSL https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js -o docs/vendor/lightweight-charts.js
 
+      - name: Sellar la versión (evita que el navegador use archivos antiguos)
+        if: always() && steps.calc.outcome == 'success' && steps.skip.outputs.skipped != 'true'
+        run: sed -i "s/__BUILD__/${GITHUB_SHA::7}-${GITHUB_RUN_NUMBER}/g" docs/index.html
+
       - name: Preparar la web
         id: upload
         if: always() && steps.calc.outcome == 'success' && steps.skip.outputs.skipped != 'true'
