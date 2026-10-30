@@ -99,12 +99,14 @@
 
   // ---------- gráfico de velas (TradingView Lightweight Charts, código abierto) ----------
   // Copia local (la descarga el flujo de publicación) y, si falta, la CDN oficial.
+  // Integridad (SRI): el navegador rechaza el archivo si no es exactamente la versión 4.2.0 oficial.
+  const LWC_SRI = "sha384-OK7vELvjHdhUFi31JYioPIcRHTROLdcDa6ZsNWgvgLaKj+9JqhU0Ad8g4wz3CXjA";
   const LWC_URLS = ["vendor/lightweight-charts.js",
     "https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"];
   let lwcPromise = null;
   const loadScript = (src) => new Promise((ok, ko) => {
     const sc = document.createElement("script");
-    sc.src = src; sc.async = true;
+    sc.src = src; sc.async = true; sc.integrity = LWC_SRI; sc.crossOrigin = "anonymous";
     sc.onload = () => (window.LightweightCharts ? ok(window.LightweightCharts) : ko(new Error("librería vacía")));
     sc.onerror = () => { sc.remove(); ko(new Error("no se pudo cargar " + src)); };
     document.head.appendChild(sc);
