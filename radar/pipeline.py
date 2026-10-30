@@ -7,7 +7,7 @@ from datetime import date, datetime, timezone
 from zoneinfo import ZoneInfo
 
 from . import breakouts as bo
-from . import fundamentals, history, regime, themes
+from . import fundamentals, history, qullamaggie as qm, regime, themes
 from .config import DOCS_DATA, Config
 from .metrics import compute, rel, rs_composite
 
@@ -90,6 +90,9 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
     for b in bench_syms:
         m = compute(b, prices.get(b), w) if prices.get(b) is not None else None
         bench[b] = {"r1m": m.r1m, "r3m": m.r3m, "r6m": m.r6m} if m else {}
+
+    ndx = prices.get("^NDX")
+    qm_market = qm.market_filter(compute("^NDX", ndx, w) if ndx is not None else None)
 
     # ---------- métricas por valor ----------
     dups = cfg.duplicates()
@@ -211,6 +214,8 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
                 "last_earnings": react["day"] if react else None, "earnings_pending": pending,
                 "catalyst": cat_txt, "catalyst_source": cat_src,
                 "risk": rk_label, "risk_points": rk_pts, "confirm": conf, "invalidate": inval,
+                "qm": qm.evaluate(m, state, r["mdv_usd"] or 0, r.get("rs_pct", 0), qm_market),
+                "s10": m.s10, "adr_pct": m.adr_pct,
             }
 
     # ---------- listas ----------
@@ -257,6 +262,18 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
                             "dist": r["m"].C / r["m"].P - 1, "rvol": r["m"].rvol, "why": c.why})
     outside.sort(key=lambda x: -x["rs_pct"])
 
+    # Episodic pivots de la última sesión (todo el universo líquido).
+    eps = []
+    for r in liquid:
+        if r["dup"]:
+            continue
+        ep = qm.episodic_pivot(r["m"])
+        if ep:
+            eps.append({"sym": r["sym"], "theme": r["theme"], "rs_pct": r.get("rs_pct"),
+                        "name": r["info"].get("name") or r["profile"].get("name") or "",
+                        "currency": r["cur"], "mdv_usd": r["mdv_usd"], **ep})
+    eps.sort(key=lambda x: -x["gap"])
+
     calendar = sorted(({"date": c["next_earnings"], "sym": c["sym"], "est": c["next_earnings_est"]}
                        for c in pres if c["next_earnings"]
                        and 0 <= (fundamentals.days_until(c["next_earnings"], today) or 99) <= 45),
@@ -297,7 +314,8 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
         "candidates": sorted(candidates.values(), key=lambda c: -c["score"]),
         "lists": {"presented": presented, "global_top": global_top, "priority": priority,
                   "by_state": by_state, "others": others, "outside": outside[:15],
-                  "pending": pending_list, "eliminated": eliminated},
+                  "pending": pending_list, "eliminated": eliminated, "episodic_pivots": eps[:20]},
+        "qm_market": qm_market,
         "calendar": calendar,
     }
     if write:

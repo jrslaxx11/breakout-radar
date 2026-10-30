@@ -159,6 +159,49 @@
     }
   }
 
+
+  // ---------- plan según las reglas de Qullamaggie ----------
+  function qmBlock(c) {
+    const q = c.qm, cur = c.currency;
+    const acct = store.get("radar.qm.account", 10000), risk = store.get("radar.qm.risk", 0.5);
+    const checks = q.checks.map((k) => `<li class="${k.ok === true ? "pos" : k.ok === false ? "neg" : "dim"}">
+      <span aria-hidden="true">${k.ok === true ? "✓" : k.ok === false ? "✗" : "·"}</span> ${esc(k.label)}${k.hard ? "" : " <span class=\"dim\">(secundaria)</span>"}: <strong>${esc(k.value)}</strong></li>`).join("");
+    return `<div class="qm-box" data-sym="${esc(c.sym)}">
+      <h3>Plan según las reglas de Qullamaggie · <span class="qmv qmv-${esc(q.verdict.replace(/\s+/g, "-"))}">${esc(q.verdict)}</span></h3>
+      <div class="qm-grid">
+        <div><p class="dim">Requisitos del setup (las no marcadas como secundarias son obligatorias)</p><ul class="checks">${checks}</ul></div>
+        <div><dl>
+          <dt>Entrada</dt><dd>${q.trigger ? `Por encima de <strong>${price(q.trigger, cur)}</strong>` : "—"}<br><span class="dim">${esc(q.entry_note)}</span></dd>
+          <dt>Marco temporal</dt><dd>${esc(q.entry_timeframe)}</dd>
+          <dt>Stop</dt><dd>${esc(q.stop_rule)}${isNum(q.stop_max) ? `; como máximo ${price(q.stop_max, cur)}` : ""}<br><span class="dim">${esc(q.stop_note)}</span></dd>
+          <dt>Salidas</dt><dd><ol class="sells">${q.sell_plan.map((x) => `<li>${esc(x)}</li>`).join("")}</ol>
+            <span class="dim">${esc(q.trail_ma)} actual: ${price(q.trail_value, cur)}</span></dd>
+          <dt>Horizonte</dt><dd>${esc(q.horizon)}</dd>
+        </dl></div>
+        <div class="calc"><p><strong>Tamaño de la posición</strong> <span class="dim">(${esc(q.risk_rule)})</span></p>
+          <label>Cuenta (${esc(cur === "GBp" ? "GBP" : cur)})<input type="number" min="0" step="100" class="qm-acct" value="${esc(acct)}"></label>
+          <label>Riesgo por operación (%)<input type="number" min="0.1" max="1" step="0.05" class="qm-risk" value="${esc(risk)}"></label>
+          <p class="qm-out" aria-live="polite"></p></div>
+      </div></div>`;
+  }
+  function qmCalc(box, c) {
+    if (!box) return;
+    const q = c.qm, out = box.querySelector(".qm-out");
+    const upd = () => {
+      const acct = parseFloat(box.querySelector(".qm-acct").value) || 0, risk = parseFloat(box.querySelector(".qm-risk").value) || 0;
+      store.set("radar.qm.account", acct); store.set("radar.qm.risk", risk);
+      if (!q.trigger || !isNum(q.stop_max)) { out.textContent = "Sin entrada definida hoy."; return; }
+      const px = c.currency === "GBp" ? q.trigger / 100 : q.trigger, stop = c.currency === "GBp" ? q.stop_max / 100 : q.stop_max;
+      const perShare = px - stop;
+      const shares = perShare > 0 ? Math.floor((acct * risk / 100) / perShare) : 0;
+      const posPct = acct > 0 ? shares * px / acct * 100 : 0;
+      out.innerHTML = `Con el stop en el peor caso (1 ADR): <strong>${shares.toLocaleString("es-ES")} acciones</strong>, ${num(shares * px, 0)} de posición (${num(posPct, 1)}% de la cuenta), riesgo ${num(acct * risk / 100, 0)}.` +
+        (posPct > 25 ? ` <span class="neg">Supera el 25% de la cuenta: Qullamaggie limita el tamaño; reduce.</span>` : "") +
+        ` <span class="dim">Si el mínimo real del día está más cerca, el riesgo baja con el mismo número de acciones.</span>`;
+    };
+    box.addEventListener("input", upd); upd();
+  }
+
   // ---------- secciones ----------
   function renderHeader(d) {
     const m = d.meta;
@@ -211,6 +254,7 @@
           <h3>Amplitud en EE. UU.</h3>
           <div class="breadth">${bCell("SPX", "S&P 500")}${bCell("MID", "S&P 400")}${bCell("SML", "S&P 600")}</div>
           ${p50hist.filter(isNum).length > 1 ? `<p class="lead" style="margin-top:10px">Evolución de la amplitud del S&P 500 en el histórico: ${spark(p50hist, 140, 26)}</p>` : ""}
+          ${d.qm_market ? `<p class="qm-light qm-${esc((d.qm_market.light || "").replace("á", "a"))}"><strong>Filtro de mercado Qullamaggie:</strong> ${esc(d.qm_market.text)}${isNum(d.qm_market.close) ? ` (cierre ${num(d.qm_market.close, 0)}; SMA10 ${num(d.qm_market.s10, 0)}; SMA20 ${num(d.qm_market.s20, 0)})` : ""}.</p>` : ""}
           <p class="lead" style="margin-top:10px">VIX ${num(r.vix.vix, 1)} · VIX 3 meses ${num(r.vix.vix3m, 1)}${isNum(r.vix.vix) && isNum(r.vix.vix3m) ? (r.vix.vix < r.vix.vix3m ? " (contango: sin estrés agudo)" : " (invertida: estrés)") : ""}.</p>
         </div>
       </div>`;
@@ -268,7 +312,8 @@
 
   function renderWatchlist(d, byS, scoreHist) {
     const pres = d.lists.presented.map((s) => byS[s]).filter(Boolean);
-    const f = store.get("radar.filters", { theme: "", state: "", risk: "", ds: "", q: "" });
+    pres.forEach((c) => { c.qm_verdict = c.qm ? { "Cumple": 0, "Con reservas": 1, "No cumple": 2 }[c.qm.verdict] : 3; });
+    const f = Object.assign({ theme: "", state: "", risk: "", ds: "", qm: "", q: "" }, store.get("radar.filters", {}));
     const sort = store.get("radar.sort", { key: "score", dir: -1 });
     const themes = [...new Set(pres.map((c) => c.theme))];
     const opt = (v, label, cur) => `<option value="${esc(v)}" ${v === cur ? "selected" : ""}>${esc(label)}</option>`;
@@ -279,6 +324,7 @@
         <label>Estado<select id="f-state">${opt("", "Todos", f.state)}${STATE_ORDER.map((s) => opt(s, STATE_LABEL[s], f.state)).join("")}</select></label>
         <label>Riesgo<select id="f-risk">${opt("", "Todos", f.risk)}${["Bajo", "Medio", "Alto"].map((s) => opt(s, s, f.risk)).join("")}</select></label>
         <label>Cambio vs. sesión anterior<select id="f-ds">${opt("", "Todos", f.ds)}${Object.entries(DS_LABEL).map(([k, v]) => opt(k, v, f.ds)).join("")}</select></label>
+        <label>Qullamaggie<select id="f-qm">${opt("", "Todas", f.qm)}${["Cumple", "Con reservas", "No cumple"].map((s) => opt(s, s, f.qm)).join("")}</select></label>
         <label>Buscar<input id="f-q" type="search" placeholder="Ticker o empresa" value="${esc(f.q)}"></label>
         <span class="count" id="wl-count"></span>
       </div>
@@ -287,13 +333,13 @@
           <th class="left" data-sort="sym">Valor</th><th class="left" data-sort="theme">Temática</th><th data-sort="score">Punt.</th>
           <th class="left" data-sort="state">Estado</th><th class="left">Regla</th><th data-sort="close">Cierre</th>
           <th data-sort="dist">vs pivote</th><th data-sort="inv_pct">Invalidación</th><th data-sort="rvol">Vol. rel.</th>
-          <th data-sort="next_earnings">Resultados</th><th data-sort="risk_points">Riesgo</th><th class="left" data-sort="daily_status">Hoy</th>
+          <th data-sort="next_earnings">Resultados</th><th data-sort="risk_points">Riesgo</th><th class="left" data-sort="qm_verdict">Qullamaggie</th><th class="left" data-sort="daily_status">Hoy</th>
         </tr></thead><tbody></tbody></table></div>`;
 
     const tbody = $("#wl tbody");
     const draw = () => {
       let rows = pres.filter((c) => (!f.theme || c.theme === f.theme) && (!f.state || c.state === f.state)
-        && (!f.risk || c.risk === f.risk) && (!f.ds || c.daily_status === f.ds)
+        && (!f.risk || c.risk === f.risk) && (!f.ds || c.daily_status === f.ds) && (!f.qm || (c.qm && c.qm.verdict === f.qm))
         && (!f.q || (c.sym + " " + c.name).toLowerCase().includes(f.q.toLowerCase())));
       rows.sort((a, b) => {
         const va = a[sort.key], vb = b[sort.key];
@@ -317,13 +363,14 @@
           <td>${num(c.rvol, 2)}x</td>
           <td>${c.next_earnings ? dateEs(c.next_earnings) + (c.next_earnings_est ? " (est.)" : "") : "—"}</td>
           <td class="risk-${esc(c.risk)}">${esc(c.risk)}</td>
+          <td class="left">${c.qm ? `<span class="qmv qmv-${esc(c.qm.verdict.replace(/\s+/g, "-"))}">${esc(c.qm.verdict)}</span>` : "—"}</td>
           <td class="left ds ds-${esc(c.daily_status)}">${esc(DS_LABEL[c.daily_status] || c.daily_status || "")}${isNum(c.score_prev) ? ` <span class="dim">(${num(c.score_prev, 0)})</span>` : ""}</td>
-        </tr>`).join("") : `<tr><td colspan="12" class="empty">Ninguna candidata cumple los filtros. Prueba a quitar alguno.</td></tr>`;
+        </tr>`).join("") : `<tr><td colspan="13" class="empty">Ninguna candidata cumple los filtros. Prueba a quitar alguno.</td></tr>`;
     };
     const detail = (c) => {
       const comp = c.components || {};
       const h = scoreHist[c.sym] || [];
-      return `<tr class="detail"><td colspan="12">
+      return `<tr class="detail"><td colspan="13">
         <div class="chart-box"><div class="chart" role="img" aria-label="Gráfico diario de ${esc(c.sym)} con pivote e invalidación"><p class="empty">Cargando gráfico…</p></div>
           <p class="legend"><span><i style="background:var(--pivot)"></i>Pivote ${price(c.pivot, c.currency)}</span><span><i style="background:var(--neg)"></i>Invalidación ${price(c.inv, c.currency)}</span><span>Medias de 20, 50 y 200 sesiones (de más a menos intensa)</span></p></div>
         <div class="detail-grid">
@@ -354,7 +401,8 @@
           <dt>Riesgo</dt><dd class="risk-${esc(c.risk)}">${esc(c.risk)} (${c.risk_points} puntos)</dd>
           ${h.length > 1 ? `<dt>Histórico</dt><dd>${spark(h, 120, 24)}</dd>` : ""}
         </dl></div>
-      </div></td></tr>`;
+      </div>
+      ${c.qm ? qmBlock(c) : ""}</td></tr>`;
     };
     const toggle = (tr) => {
       const open = tr.getAttribute("aria-expanded") === "true";
@@ -366,11 +414,12 @@
       tr.insertAdjacentHTML("afterend", detail(byS[tr.dataset.sym]));
       tr.setAttribute("aria-expanded", "true");
       drawChart(tr.nextElementSibling.querySelector(".chart"), byS[tr.dataset.sym]);
+      qmCalc(tr.nextElementSibling.querySelector(".qm-box"), byS[tr.dataset.sym]);
     };
     tbody.addEventListener("click", (e) => { const tr = e.target.closest("tr.row"); if (tr && !e.target.closest("a")) toggle(tr); });
     tbody.addEventListener("keydown", (e) => { if ((e.key === "Enter" || e.key === " ") && e.target.matches("tr.row")) { e.preventDefault(); toggle(e.target); } });
     const bind = (id, key) => $(id).addEventListener("input", (e) => { f[key] = e.target.value; store.set("radar.filters", f); draw(); });
-    bind("#f-theme", "theme"); bind("#f-state", "state"); bind("#f-risk", "risk"); bind("#f-ds", "ds"); bind("#f-q", "q");
+    bind("#f-theme", "theme"); bind("#f-state", "state"); bind("#f-risk", "risk"); bind("#f-ds", "ds"); bind("#f-qm", "qm"); bind("#f-q", "q");
     document.querySelectorAll("#wl th[data-sort]").forEach((th) => th.addEventListener("click", () => {
       const k = th.dataset.sort; sort.dir = sort.key === k ? -sort.dir : (["sym", "theme", "state", "next_earnings", "daily_status"].includes(k) ? 1 : -1); sort.key = k;
       store.set("radar.sort", sort); draw();
@@ -396,7 +445,9 @@
           ${others.length ? `<ul class="plain">${others.slice(0, 25).map((o) => `<li>${chip(o.state)} <strong>${esc(o.sym)}</strong> <span class="dim">${esc(o.reason)}</span></li>`).join("")}</ul>` : `<p class="empty">Nada que señalar.</p>`}
           ${elim.length ? `<h3>Eliminadas respecto a la sesión anterior</h3><ul class="plain">${elim.map((e) => `<li><strong>${esc(e.sym)}</strong> <span class="dim">${esc(e.reason)}</span></li>`).join("")}</ul>` : ""}
         </div>
-        <div><h3>Rupturas confirmadas fuera de las temáticas</h3>
+        <div>
+          ${(d.lists.episodic_pivots || []).length ? `<h3>Episodic pivots de la sesión (Qullamaggie)</h3><ul class="plain">${d.lists.episodic_pivots.map((e) => `<li><a href="${tvUrl(e.sym)}" target="_blank" rel="noopener"><strong>${esc(e.sym)}</strong></a> <span class="dim">${esc(e.name)} · hueco ${pct(e.gap)} · volumen ${num(e.rvol, 1)}x · ADR ${pct(e.adr_pct, 1, false)}</span></li>`).join("")}</ul><p class="dim" style="font-size:13px">Plan: comprar el ORH de 1-5 min en los días siguientes si continúa; stop en el mínimo del día.</p>` : ""}
+          <h3>Rupturas confirmadas fuera de las temáticas</h3>
           ${out.length ? `<ul class="plain">${out.map((o) => `<li><a href="${tvUrl(o.sym)}" target="_blank" rel="noopener"><strong>${esc(o.sym)}</strong></a> <span class="dim">${esc(o.name)} · ${esc(themeName(d, o.theme) || "sin temática")} · ${pct(o.dist)} sobre pivote · RS ${num(o.rs_pct * 100, 0)}</span></li>`).join("")}</ul>` : `<p class="empty">Ninguna con RS en el 20% superior.</p>`}
         </div>
       </div>`;
@@ -410,6 +461,7 @@
         <p><strong>Temáticas.</strong> RS 30 (mediana de la fuerza relativa compuesta frente al índice regional: 20% 1 mes, 40% 3 meses, 40% 6 meses), consistencia 20, amplitud 20 (% sobre SMA50 y SMA200, solo con valores de selección no sesgada), volumen 15 y catalizadores 15. El catalizador es manual y con fuente cuando existe (caduca a los 21 días); si no, se mide su huella en el precio: proporción neta de valores con una sesión de +4% y volumen ≥ 1,8x en las últimas 21 sesiones. Si falta un componente, sus puntos se redistribuyen.</p>
         <p><strong>Estados.</strong> Pivote = máximo de las sesiones 6 a 60 anteriores. Confirmada: cierre sobre el pivote con volumen ≥ 1,5x la media de 20 sesiones. Temprana: cruza sin volumen o sin continuidad. Pre-breakout: a ≤ 5% del pivote con base de al menos 10 sesiones (o flag corto de 5-9 sesiones y ≤ 12% de profundidad). Retest: volvió al pivote tras cruzarlo. Extendida: > 10% sobre el pivote o > 3 ATR sobre la SMA20.</p>
         <p><strong>Puntuación de acciones.</strong> Fuerza relativa 25, base y estructura 25, ruptura y volumen 20, tendencia diaria y semanal 15, liquidez 10, catalizador 5. Es una clasificación, no una probabilidad. El riesgo se etiqueta aparte: volatilidad, resultados próximos, distancia a la invalidación y liquidez.</p>
+        <p><strong>Plan Qullamaggie.</strong> Codificación propia de sus reglas públicas para rupturas: subida previa ≥ 30% en 1-3 meses, base de 2 semanas a 2 meses con mínimos crecientes sobre SMA10 y SMA20 ascendentes, ADR ≥ 5%, liquidez ≥ 20 M USD y RS en el 10% superior. Entrada en la ruptura del rango de apertura (1-5 min); stop en el mínimo del día y nunca a más de 1 ADR; venta de 1/3-1/2 a los 3-5 días, stop a la entrada y el resto con cierre bajo SMA10 o SMA20. El filtro de mercado usa el Nasdaq 100 frente a sus SMA10 y SMA20. Son niveles orientativos para el estudio del gráfico, no órdenes ni recomendaciones.</p>
         <p><strong>Límites.</strong> Los niveles son algorítmicos y deben validarse en el gráfico. La amplitud solo se mide en EE. UU. Las fechas de resultados "est." no están confirmadas por la empresa. Ninguna fila es una recomendación de inversión.</p>
       </div>`;
     $("#foot").innerHTML = `Generado ${esc(d.meta.generated_local.replace("T", " "))} · versión ${esc(d.meta.version)} · <a href="data/latest.json">datos en JSON</a> · gráficos con <a href="https://www.tradingview.com/lightweight-charts/" target="_blank" rel="noopener">TradingView Lightweight Charts</a>`;

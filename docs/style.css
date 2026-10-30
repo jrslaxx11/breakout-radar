@@ -174,6 +174,23 @@ tbody tr:last-child td { border-bottom: 0; }
 .risk-Medio { color: var(--s-pre); }
 .ladder { display: block; }
 .detail td { background: var(--paper); white-space: normal; text-align: left; }
+.qmv { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 12.5px; font-weight: 600; }
+.qmv-Cumple { color: var(--pos); background: color-mix(in srgb, var(--pos) 13%, transparent); }
+.qmv-Con-reservas { color: var(--s-pre); background: color-mix(in srgb, var(--s-pre) 13%, transparent); }
+.qmv-No-cumple { color: var(--muted); background: var(--soft); }
+.qm-box { border-top: 1px solid var(--rule); margin-top: 10px; padding-top: 6px; }
+.qm-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) minmax(0, 0.9fr); gap: 18px; font-size: 13px; }
+.qm-grid dl { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; margin: 0; }
+.qm-grid dt { color: var(--muted); }
+.qm-grid dd { margin: 0; }
+.checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.sells { margin: 0; padding-left: 18px; }
+.calc label { display: grid; gap: 3px; margin-bottom: 8px; color: var(--muted); }
+.calc input { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius-s); padding: 5px 8px; }
+.qm-light { margin: 12px 0 0; padding: 8px 12px; border-radius: var(--radius-s); background: var(--surface); border-left: 4px solid var(--muted); font-size: 14px; }
+.qm-verde { border-left-color: var(--pos); }
+.qm-ambar { border-left-color: var(--s-pre); }
+.qm-rojo { border-left-color: var(--neg); }
 .chart-box { margin: 6px 2px 14px; }
 .chart { width: 100%; min-height: 300px; border: 1px solid var(--rule); border-radius: var(--radius-m); overflow: hidden; background: var(--surface); }
 .chart .empty { padding: 16px; }
@@ -200,7 +217,7 @@ tbody tr:last-child td { border-bottom: 0; }
   .prio { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 @media (max-width: 860px) {
-  .verdict, .grid2, .cols, .detail-grid { grid-template-columns: minmax(0, 1fr); }
+  .verdict, .grid2, .cols, .detail-grid, .qm-grid { grid-template-columns: minmax(0, 1fr); }
   .prio { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .theme-row { grid-template-columns: 22px 1fr 44px; }
   .theme-row .bar, .theme-row .meta { grid-column: 2 / -1; }

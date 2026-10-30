@@ -65,6 +65,14 @@ class Metrics:
     gap: float                 # hueco de apertura de hoy
     ep_up: int = 0             # sesiones (últimas 21) con subida ≥ 4% y volumen ≥ 1,8x la media de 50
     ep_down: int = 0           # ídem con caída ≤ -4%
+    high: float = 0.0          # máximo y mínimo de la última sesión
+    low: float = 0.0
+    s10: float | None = None
+    s10up: bool | None = None  # SMA10 por encima de su valor de hace 5 sesiones
+    s20up: bool | None = None
+    adr_pct: float = 0.0       # ADR% al estilo Qullamaggie: media de (máximo/mínimo) en 20 sesiones - 1
+    prior_move: float = 0.0    # subida previa: pivote / mínimo de las 63 sesiones anteriores al pivote - 1
+    higher_lows: bool | None = None
     extra: dict = field(default_factory=dict)
 
 
@@ -151,7 +159,23 @@ def compute(sym: str, df: pd.DataFrame, w: dict) -> Metrics | None:
         day_pos=float((c[e] - l[e]) / rng) if rng > 0 else 0.5,
         gap=float(o[e] / c[e - 1] - 1) if not math.isnan(o[e]) else 0.0,
         ep_up=ep_up, ep_down=ep_down,
+        high=float(h[e]), low=float(l[e]),
+        s10=sma(c, 10, e),
+        s10up=(sma(c, 10, e) > sma(c, 10, e - 5)) if n > 20 else None,
+        s20up=(s20 > sma(c, 20, e - 5)) if s20 and n > 30 else None,
+        adr_pct=float(np.mean(h[e - 19:e + 1] / l[e - 19:e + 1]) - 1),
+        prior_move=float(P / np.min(l[max(0, ip - 63):ip + 1]) - 1),
+        higher_lows=_higher_lows(l, ip, e),
     )
+
+
+def _higher_lows(l: np.ndarray, ip: int, e: int) -> bool | None:
+    """¿Los mínimos de la segunda mitad de la base son más altos que los de la primera?"""
+    span = e - ip
+    if span < 6:
+        return None
+    mid = ip + span // 2
+    return bool(np.min(l[mid:e + 1]) > np.min(l[ip:mid]))
 
 
 def rel(r: float | None, b: float | None) -> float | None:
