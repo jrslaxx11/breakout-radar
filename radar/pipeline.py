@@ -349,6 +349,21 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
             c["mine"] = bool(rows[c["sym"]]["info"].get("mine"))
             c["liquid"] = True
 
+    # ---------- acciones líderes de cada temática: mayor fuerza relativa compuesta ----------
+    view_by = {c["sym"]: c for c in search_view}
+    n_top = sel_cfg.get("leaders_per_theme", 10)
+    for t in theme_rows:
+        mem = sorted((r for r in liquid if r["theme"] == t["key"] and not r["dup"]), key=lambda r: -r["rsc"])
+        t["top"] = []
+        for r in mem[:n_top]:
+            m, v = r["m"], view_by.get(r["sym"]) or {}
+            t["top"].append({
+                "sym": r["sym"], "name": v.get("name") or r["sym"], "currency": r["cur"], "close": m.C,
+                "rs_pct": r.get("rs_pct"), "r1m": m.r1m, "r3m": m.r3m, "r6m": m.r6m, "dhi": m.dhi,
+                "above50": bool(m.s50 and m.C > m.s50), "state": v.get("state"), "score": v.get("score"),
+                "watch": bool(v.get("presented")),
+            })
+
     coverage = {
         "universe": len(universe), "with_data": len(rows), "liquid": len(liquid),
         "by_source": {k: sum(1 for r in rows.values() if r["info"].get("source") == k)

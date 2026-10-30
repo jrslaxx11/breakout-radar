@@ -309,6 +309,25 @@
 
   const themeName = (d, k) => (d.themes.find((t) => t.key === k) || {}).name || k;
 
+  // Acciones líderes de una temática: las de mayor fuerza relativa, estén o no en una ruptura.
+  function leadersHTML(t) {
+    const top = t.top || [];
+    if (!top.length) return `<p class="leaders empty">Sin datos de líderes en esta publicación.</p>`;
+    return `<div class="leaders">
+      <p class="cap">Las ${top.length} acciones con más fuerza relativa de la temática (de ${t.n} valores líquidos). Pulsa una para abrir su ficha.</p>
+      <div class="tbl-wrap"><table class="lt">
+        <thead><tr><th class="left">Valor</th><th title="Percentil de fuerza relativa en todo el universo líquido">RS</th><th>1 m</th><th>3 m</th><th>6 m</th>
+          <th>Desde máx. 52s</th><th class="left">Estado</th><th>Punt.</th></tr></thead>
+        <tbody>${top.map((x) => `<tr data-sym="${esc(x.sym)}" tabindex="0">
+          <td class="tk-cell"><a href="#valor=${encodeURIComponent(x.sym)}">${esc(x.sym)}</a><small>${esc(x.name && x.name !== x.sym ? x.name : "")}</small></td>
+          <td><strong>${num((x.rs_pct || 0) * 100, 0)}</strong></td>
+          <td class="${cls(x.r1m)}">${pct(x.r1m, 0)}</td><td class="${cls(x.r3m)}">${pct(x.r3m, 0)}</td><td class="${cls(x.r6m)}">${pct(x.r6m, 0)}</td>
+          <td class="${x.dhi >= -0.05 ? "pos" : ""}">${pct(x.dhi, 1)}</td>
+          <td class="left">${x.state ? chip(x.state) : "—"}${x.watch ? ` <span class="wl-tag" title="Está en la watchlist de hoy">watchlist</span>` : ""}</td>
+          <td>${isNum(x.score) ? num(x.score, 0) : "—"}</td></tr>`).join("")}</tbody>
+      </table></div></div>`;
+  }
+
   function renderThemes(d, hist) {
     const comps = [["rs", "Fuerza relativa", 30, 1], ["consistency", "Consistencia", 20, 0.8], ["breadth", "Amplitud", 20, 0.6], ["volume", "Volumen", 15, 0.42], ["catalyst", "Catalizador", 15, 0.26]];
     const VISIBLE = 12;
@@ -318,22 +337,34 @@
         ? `<span class="na" style="width:${max}%" title="Catalizador no disponible: sus puntos se redistribuyen"></span>`
         : `<span style="width:${s[k]}%;background:var(--pivot);opacity:${op}" title="${esc(k)}: ${num(s[k], 1)} de ${max}"></span>`).join("");
       const h = hist.map((x) => x.themes && x.themes[t.key]);
-      return `<div class="theme-row ${t.selected ? "sel" : ""}">
+      return `<details class="theme" data-key="${esc(t.key)}"><summary title="Ver las acciones líderes de ${esc(t.name)}">
+        <div class="theme-row ${t.selected ? "sel" : ""}">
         <span class="rk">${i + 1}</span>
-        <span class="tn">${esc(t.name)}<small>${esc(t.status)}${t.forced ? " · incluida a mano" : ""}${t.biased ? " · amplitud con muestra sesgada" : ""}</small></span>
+        <span class="tn">${esc(t.name)} <span class="chev" aria-hidden="true"></span><small>${esc(t.status)}${t.forced ? " · incluida a mano" : ""}${t.biased ? " · amplitud con muestra sesgada" : ""}</small></span>
         <span class="sc">${num(s.total, 0)}</span>
         <span class="bar" role="img" aria-label="Componentes de la puntuación">${segs}</span>
         <span class="meta">RS 1m/3m/6m ${pct(t.rs1, 0)} / ${pct(t.rs3, 0)} / ${pct(t.rs6, 0)} · ${num(t.p50 * 100, 0)}% sobre SMA50 ${spark(h, 60, 18)}
           ${t.catalyst && t.catalyst.note ? `<br>${t.catalyst.source ? `<a href="${esc(t.catalyst.source)}" target="_blank" rel="noopener">${esc(t.catalyst.note)}</a>` : esc(t.catalyst.note)}` : ""}</span>
-      </div>`;
+      </div></summary>${leadersHTML(t)}</details>`;
     });
     const shown = rows.slice(0, VISIBLE).join("");
     const rest = rows.slice(VISIBLE);
     $("#tematicas").innerHTML = `<h2>Temáticas</h2>
-      <p class="lead">Ordenadas por puntuación 0-100. Las marcadas con barra azul a la izquierda son las seleccionadas para buscar acciones.</p>
+      <p class="lead">Ordenadas por puntuación 0-100. Las marcadas con barra azul a la izquierda son las seleccionadas para buscar acciones. Pulsa una temática para ver sus acciones líderes.</p>
       <div class="themes">${shown}</div>
       ${rest.length ? `<details class="more"><summary>Ver las ${rest.length} temáticas restantes</summary><div class="themes">${rest.join("")}</div></details>` : ""}
       <p class="legend">${comps.map(([, n, max, op]) => `<span><i style="background:var(--pivot);opacity:${op}"></i>${n} (${max})</span>`).join("")}<span><i class="na" style="background:repeating-linear-gradient(135deg,var(--rule) 0 3px,transparent 3px 6px)"></i>Sin dato (se redistribuye)</span></p>`;
+  }
+
+  function bindLeaders() {
+    const open = (tr) => { location.hash = `valor=${encodeURIComponent(tr.dataset.sym)}`; };
+    $("#tematicas").addEventListener("click", (e) => {
+      const tr = e.target.closest(".lt tr[data-sym]");
+      if (tr && !e.target.closest("a")) open(tr);
+    });
+    $("#tematicas").addEventListener("keydown", (e) => {
+      if ((e.key === "Enter" || e.key === " ") && e.target.matches(".lt tr[data-sym]")) { e.preventDefault(); open(e.target); }
+    });
   }
 
   // ---------- ficha de un valor (fila desplegada de la watchlist y buscador) ----------
@@ -746,6 +777,7 @@
       renderRegime(d, hist);
       renderPriority(d, byS);
       renderThemes(d, hist);
+      bindLeaders();
       renderWatchlist(d, byS, scoreHist);
       renderAgenda(d, byS);
       renderMethod(d);

@@ -173,8 +173,25 @@ tbody tr:last-child td { border-bottom: 0; }
 .bar span { display: block; height: 100%; }
 .bar .na { background: repeating-linear-gradient(135deg, var(--rule) 0 3px, transparent 3px 6px); }
 .theme-row .meta { font-size: 12.5px; color: var(--muted); }
+.theme > summary { list-style: none; cursor: pointer; border-radius: var(--radius-s); }
+.theme > summary::-webkit-details-marker { display: none; }
+.theme > summary:hover .theme-row { background: var(--soft); }
+.theme > summary:hover .theme-row.sel { background: color-mix(in srgb, var(--soft) 70%, var(--surface)); }
+.chev { display: inline-block; width: 0.9em; color: var(--pivot); font-weight: 700; transition: transform 0.15s ease; }
+.chev::before { content: "›"; }
+.theme[open] .chev { transform: rotate(90deg); }
+@media (prefers-reduced-motion: reduce) { .chev { transition: none; } }
+.theme, .leaders { min-width: 0; }
+.leaders { margin: 4px 0 14px 50px; }
+.leaders .tbl-wrap { max-width: 920px; }
+.leaders .cap { margin: 4px 0 8px; font-size: 13px; color: var(--muted); }
+.lt tbody tr { cursor: pointer; }
+.lt tbody tr:hover td { background: var(--soft); }
+.lt .tk-cell a { color: inherit; text-decoration: none; }
+.lt .tk-cell a:hover { color: var(--pivot); text-decoration: underline; }
+.wl-tag { display: inline-block; margin-left: 4px; padding: 0 6px; border-radius: 999px; font-size: 11.5px; color: var(--pivot); border: 1px solid color-mix(in srgb, var(--pivot) 45%, transparent); }
 .more { margin-top: 6px; }
-.more summary { cursor: pointer; color: var(--pivot); font-size: 14px; padding: 6px 10px; }
+.more > summary { cursor: pointer; color: var(--pivot); font-size: 14px; padding: 6px 10px; }
 .legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12.5px; color: var(--muted); margin: 8px 0 0; }
 .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
 
@@ -259,6 +276,7 @@ tbody tr:last-child td { border-bottom: 0; }
   .prio { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .theme-row { grid-template-columns: 22px 1fr 44px; }
   .theme-row .bar, .theme-row .meta { grid-column: 2 / -1; }
+  .leaders { margin-left: 0; }
   .breadth { grid-template-columns: minmax(0, 1fr); }
   .filters .count { margin-left: 0; width: 100%; }
 }

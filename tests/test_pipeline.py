@@ -61,6 +61,11 @@ def test_pipeline_end_to_end(tmp_path, monkeypatch):
     for c in out["candidates"]:
         assert 0 <= c["score"] <= 100
         assert c["state"] in ("CONFIRMADA", "TEMPRANA", "PRE-BREAKOUT", "RETEST", "EXTENDIDA", "EN BASE", "DESCARTADA")
+    # Líderes de cada temática: hasta 10, ordenadas por fuerza relativa.
+    for t in out["themes"]:
+        rs = [x["rs_pct"] for x in t["top"]]
+        assert 0 < len(rs) <= 10 and rs == sorted(rs, reverse=True)
+        assert all(x["state"] and x["score"] is not None for x in t["top"])
     pres = out["lists"]["presented"]
     assert len(pres) == len(set(pres))
     assert all(out["candidates"][0]["score"] >= c["score"] for c in out["candidates"])

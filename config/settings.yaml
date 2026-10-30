@@ -51,6 +51,7 @@ selection:
   show_per_theme: 5
   global_top: 10
   priority: 5
+  leaders_per_theme: 10        # acciones líderes (mayor fuerza relativa) que se muestran en cada temática
 
 risk:
   earnings_near_days: 14
