@@ -625,7 +625,10 @@
     if (old && old._dispose) old._dispose();
     sec.hidden = false;
     sec.innerHTML = `<p class="empty">Buscando ${esc(sym)}…</p>`;
-    sec.scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" });
+    // Desplaza hasta la ficha sin que la cabecera fija tape el ticker.
+    const bar = $(".top"), sticky = getComputedStyle(bar).position === "sticky";
+    window.scrollTo({ top: sec.getBoundingClientRect().top + window.scrollY - (sticky ? bar.offsetHeight + 8 : 8),
+      behavior: reducedMotion() ? "auto" : "smooth" });
     history.replaceState(null, "", `#valor=${encodeURIComponent(sym)}`);
     try {
       let idx = null;
