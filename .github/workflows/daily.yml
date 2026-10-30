@@ -42,6 +42,7 @@ jobs:
         run: python -m pytest -q
 
       - name: Calcular el radar
+        id: calc
         run: |
           set -o pipefail
           ARGS=""
@@ -58,22 +59,30 @@ jobs:
           if git diff --staged --quiet; then echo "Sin cambios"; exit 0; fi
           SESSION=$(python -c "import json;print(json.load(open('docs/data/latest.json'))['meta']['session'])" 2>/dev/null || date -u +%F)
           git commit -m "datos: sesión ${SESSION}"
-          git pull --rebase origin main
-          git push
+          # Si otra ejecución publicó datos entretanto, se conservan los recién calculados.
+          for i in 1 2 3; do
+            git pull --rebase -X theirs origin main && git push && exit 0
+            git rebase --abort 2>/dev/null || true
+            sleep $((i * 10))
+          done
+          exit 1
 
       - name: Descargar la librería de gráficos (código abierto, Apache 2.0)
+        if: always() && steps.calc.outcome == 'success'
         continue-on-error: true
         run: |
           mkdir -p docs/vendor
           curl -fsSL https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js -o docs/vendor/lightweight-charts.js
 
       - name: Preparar la web
+        if: always() && steps.calc.outcome == 'success'
         uses: actions/upload-pages-artifact@v3
         with:
           path: docs
 
   deploy:
     needs: radar
+    if: always() && needs.radar.result != 'cancelled'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
