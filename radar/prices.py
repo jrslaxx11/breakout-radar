@@ -88,26 +88,85 @@ QUOTE_FIELDS = ("regularMarketPrice,regularMarketOpen,regularMarketDayHigh,regul
                 "regularMarketVolume,regularMarketTime,marketState,exchangeTimezoneName")
 
 
-def fetch_quotes(symbols: list[str], chunk: int = 150, pause: float = 0.5) -> dict[str, dict]:
-    """Cotización de cierre de cada valor (endpoint de cotizaciones de Yahoo, por lotes)."""
+def expected_session(sym: str, mc: dict, now_utc):
+    """Última sesión que ya debería estar cerrada en el mercado del valor (sin festivos)."""
+    from datetime import timedelta
+    from zoneinfo import ZoneInfo
+
+    tz, close = mc["by_suffix"].get(market_of(sym, mc), mc["default"])
+    local = now_utc.astimezone(ZoneInfo(tz))
+    hh, mm = (int(x) for x in close.split(":"))
+    d = local.date()
+    if local < local.replace(hour=hh, minute=mm, second=0, microsecond=0) + timedelta(minutes=20):
+        d -= timedelta(days=1)
+    while d.weekday() >= 5:
+        d -= timedelta(days=1)
+    return d
+
+
+def _quotes_v7(yd, symbols: list[str], chunk: int, pause: float) -> dict[str, dict]:
+    out: dict[str, dict] = {}
+    for i in range(0, len(symbols), chunk):
+        j = yd.get_raw_json("https://query1.finance.yahoo.com/v7/finance/quote",
+                            params={"symbols": ",".join(symbols[i:i + chunk]), "fields": QUOTE_FIELDS})
+        for q in (j.get("quoteResponse") or {}).get("result") or []:
+            if q.get("symbol"):
+                out[q["symbol"]] = q
+        time.sleep(pause)
+    return out
+
+
+def _quote_v8(yd, sym: str, now_ts: float) -> dict | None:
+    """Mismos campos que la cotización, sacados de los metadatos del gráfico (no requiere sesión)."""
+    j = yd.get_raw_json(f"https://query2.finance.yahoo.com/v8/finance/chart/{sym}",
+                        params={"range": "5d", "interval": "1d"})
+    r = ((j.get("chart") or {}).get("result") or [None])[0]
+    if not r:
+        return None
+    m = r.get("meta") or {}
+    reg = (m.get("currentTradingPeriod") or {}).get("regular") or {}
+    q = {k: m.get(k) for k in ("regularMarketTime", "regularMarketPrice", "regularMarketDayHigh",
+                               "regularMarketDayLow", "regularMarketVolume", "exchangeTimezoneName")}
+    q["marketState"] = "REGULAR" if reg.get("start", 0) <= now_ts < reg.get("end", 0) else "CLOSED"
+    ts = r.get("timestamp") or []
+    opens = (((r.get("indicators") or {}).get("quote") or [{}])[0]).get("open") or []
+    if ts and opens and q["regularMarketTime"] and abs(q["regularMarketTime"] - ts[-1]) < 86400:
+        q["regularMarketOpen"] = opens[-1]  # apertura de la fila del día (la que llega sin cierre)
+    return q
+
+
+def fetch_quotes(symbols: list[str], chunk: int = 150, pause: float = 0.5, workers: int = 8) -> dict[str, dict]:
+    """Cotización de cierre de cada valor.
+
+    Primero el endpoint de cotizaciones por lotes (rápido, pero a veces exige una sesión que Yahoo
+    rechaza con 401); si falla, los metadatos del gráfico de cada valor, en paralelo.
+    """
+    from concurrent.futures import ThreadPoolExecutor
+    from datetime import datetime, timezone
+
     from yfinance.data import YfData
 
     yd = YfData()
-    out: dict[str, dict] = {}
-    for i in range(0, len(symbols), chunk):
-        part = symbols[i:i + chunk]
+    try:
+        out = _quotes_v7(yd, symbols, chunk, pause)
+        if out:
+            return out
+    except Exception as exc:  # noqa: BLE001
+        log.warning("cotizaciones por lotes no disponibles (%s); se usan los metadatos del gráfico", exc)
+    now_ts = datetime.now(timezone.utc).timestamp()
+
+    def one(sym):
         for attempt in range(2):
             try:
-                j = yd.get_raw_json("https://query1.finance.yahoo.com/v7/finance/quote",
-                                    params={"symbols": ",".join(part), "fields": QUOTE_FIELDS})
-                for q in (j.get("quoteResponse") or {}).get("result") or []:
-                    if q.get("symbol"):
-                        out[q["symbol"]] = q
-                break
-            except Exception as exc:  # noqa: BLE001
-                log.warning("cotizaciones: bloque %d falló (%s)", i // chunk, exc)
-                time.sleep(pause * 4)
-        time.sleep(pause)
+                return sym, _quote_v8(yd, sym, now_ts)
+            except Exception:  # noqa: BLE001
+                time.sleep(1 + attempt)
+        return sym, None
+
+    with ThreadPoolExecutor(workers) as ex:
+        res = dict(ex.map(one, symbols))
+    out = {s: q for s, q in res.items() if q}
+    log.info("cotizaciones por gráfico: %d de %d", len(out), len(symbols))
     return out
 
 

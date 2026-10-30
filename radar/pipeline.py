@@ -70,15 +70,20 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
     fx_syms = sorted({v["pair"] for v in S["fx"].values()})
     stale: dict = {}
     if prices is None:
-        from .prices import complete_recent, download, drop_partial_bars, fetch_quotes, last_dates, patch_from_quotes
+        from .prices import (complete_recent, download, drop_partial_bars, expected_session, fetch_quotes,
+                             last_dates, patch_from_quotes)
         prices = download(list(universe) + etf_syms + idx_syms + bench_syms + fx_syms,
                           S["run"]["history_days"], S["run"]["download_chunk"], S["run"]["download_pause_s"])
         mc = S.get("market_close")
         if mc:
             try:  # la serie diaria de Yahoo trae el cierre del día con horas de retraso
-                quotes = fetch_quotes([s for s in prices if not s.endswith("=X")])
+                now_utc = datetime.now(timezone.utc)
+                behind = [s for s, df in prices.items() if not s.endswith("=X") and df is not None and len(df)
+                          and df.index[-1].date() < expected_session(s, mc, now_utc)]
+                quotes = fetch_quotes(behind)
                 patched = patch_from_quotes(prices, quotes, mc)
-                log.info("cotizaciones: %d recibidas; última sesión completada en %d valores", len(quotes), len(patched))
+                log.info("última sesión: %d valores sin ella en la serie diaria, %d cotizaciones, %d completados",
+                         len(behind), len(quotes), len(patched))
             except Exception as exc:  # noqa: BLE001
                 log.warning("sin cotizaciones de cierre: %s", exc)
             dropped = drop_partial_bars(prices, mc)

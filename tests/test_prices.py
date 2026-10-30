@@ -78,3 +78,30 @@ def test_no_patch_right_after_close():
     data = {"IQV": frame(["2026-10-28"])}
     t = datetime(2026, 10, 29, 20, 0, tzinfo=timezone.utc)
     assert P.patch_from_quotes(data, {"IQV": quote(t, 275.0, "POST")}, MC, datetime(2026, 10, 29, 20, 5, tzinfo=timezone.utc)) == []
+
+
+def test_expected_session_by_market():
+    now = datetime(2026, 10, 30, 0, 52, tzinfo=timezone.utc)  # viernes 09:52 en Tokio
+    assert str(P.expected_session("IQV", MC, now)) == "2026-10-29"
+    assert str(P.expected_session("SAP.DE", MC, now)) == "2026-10-29"
+    assert str(P.expected_session("7203.T", MC, now)) == "2026-10-29"   # Tokio sigue abierto
+    sat = datetime(2026, 10, 31, 12, 0, tzinfo=timezone.utc)
+    assert str(P.expected_session("IQV", MC, sat)) == "2026-10-30"
+
+
+def test_quote_from_chart_metadata():
+    class FakeYd:
+        def get_raw_json(self, url, params=None):
+            return {"chart": {"result": [{
+                "meta": {"regularMarketTime": 1793304003, "regularMarketPrice": 275.06, "regularMarketDayHigh": 279.36,
+                         "regularMarketDayLow": 272.895, "regularMarketVolume": 1423953,
+                         "exchangeTimezoneName": "America/New_York",
+                         "currentTradingPeriod": {"regular": {"start": 1793280600, "end": 1793304000}}},
+                "timestamp": [1793194200, 1793280600],
+                "indicators": {"quote": [{"open": [270.1, 276.86], "close": [279.04, None]}]}}]}}
+
+    q = P._quote_v8(FakeYd(), "IQV", 1793321520)
+    assert q["marketState"] == "CLOSED" and q["regularMarketOpen"] == 276.86 and q["regularMarketPrice"] == 275.06
+    data = {"IQV": frame(["2026-10-27", "2026-10-28"])}
+    assert P.patch_from_quotes(data, {"IQV": q}, MC, datetime(2026, 10, 30, 0, 52, tzinfo=timezone.utc)) == ["IQV"]
+    assert str(data["IQV"].index[-1].date()) == "2026-10-29" and data["IQV"].iloc[-1]["Open"] == 276.86
