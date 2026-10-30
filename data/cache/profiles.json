@@ -5447,6 +5447,12 @@
 "name": "NatWest Group plc",
 "sector": "Financial Services"
 },
+"NWS.AX": {
+"country": "United States",
+"industry": "Entertainment",
+"name": "News Corporation",
+"sector": "Communication Services"
+},
 "OET.OL": {
 "country": "Greece",
 "industry": "Marine Shipping",
@@ -5752,6 +5758,12 @@
 "industry": "Utilities - Regulated Electric",
 "name": "Redeia Corporación, S.A.",
 "sector": "Utilities"
+},
+"REH.AX": {
+"country": "Australia",
+"industry": "Industrial Distribution",
+"name": "Reece Limited",
+"sector": "Industrials"
 },
 "RELIANCE.NS": {
 "country": "",
