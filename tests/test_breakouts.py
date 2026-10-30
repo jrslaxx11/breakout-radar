@@ -149,3 +149,26 @@ def test_new_high_without_base_is_not_a_breakout():
     cl, m = classify(series(c))
     assert m.cross is None and m.blen < 5
     assert cl.state in (bo.BASE, bo.EXTENDED)
+
+
+def test_v_rebound_is_not_a_breakout_of_the_line():
+    """Caída rápida y rebote en V: el mínimo es reciente, así que la resistencia sigue siendo el máximo."""
+    pre = np.full(200, 60.0)
+    rally = np.linspace(60, 99, 30)
+    v = np.array([98, 97, 96, 95, 94, 92, 88, 84, 81, 86, 91, 93.0])
+    df = series(np.concatenate([pre, rally, v]))
+    cl, m = classify(df)
+    assert m.cross is None and m.level_kind == "máximo" and abs(m.P - m.peak) < 1e-9
+    assert cl.state in (bo.BASE, bo.PRE, bo.DISCARDED)
+
+
+def test_intraday_poke_does_not_reset_the_base():
+    """Un máximo intradía sobre la base que cierra dentro no reinicia la base; la ruptura llega al día siguiente."""
+    df = flat_base()
+    m0 = compute("TEST", df.iloc[:-2], W)
+    top = m0.peak
+    df.iloc[-2] = [top * 0.99, top * 1.03, top * 0.98, top * 0.995, 1.5e6]   # pincha y cierra dentro
+    df.iloc[-1] = [top * 1.0, top * 1.06, top * 0.995, top * 1.05, 3e6]     # cierra sobre el pinchazo
+    cl, m = classify(df)
+    assert m.cross == 0 and abs(m.P - top * 1.03) < 1e-9 and m.blen >= 20
+    assert cl.state == bo.CONFIRMED, cl

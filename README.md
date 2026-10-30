@@ -90,12 +90,14 @@ desfavorable.
 
 Se seleccionan las 5 mejores, las empatadas a ≤ 0,5 puntos y las forzadas.
 
-**Estados (fase 5).** La consolidación empieza en el máximo de las últimas 60 sesiones (máximo de la
-base). Su borde superior es la línea más plana que parte de ese máximo y deja por debajo todos los
-máximos posteriores: plana en un canal o una base de techo plano, descendente en triángulos y flags
-(como dibuja Qullamaggie). El **nivel de ruptura** de cada día es esa línea proyectada a ese día o,
-si queda por encima, el máximo de las 3 sesiones anteriores. Con menos de 5 sesiones desde el máximo
-todavía no hay consolidación.
+**Estados (fase 5).** La consolidación empieza en el máximo más alto de las últimas 60 sesiones que
+tenga al menos 5 sesiones de antigüedad (máximo de la base); si algún cierre posterior lo superó, esa
+base ya está rota. Su borde superior es la línea más plana que parte de ese máximo y deja por debajo
+todos los máximos posteriores: plana en un canal o una base de techo plano, descendente en triángulos y
+flags (como dibuja Qullamaggie). La línea descendente solo vale si la base tocó su zona de mínimos en
+sus dos primeros tercios (mínimos crecientes); en un rebote en V la resistencia sigue siendo el máximo.
+El **nivel de ruptura** de cada día es esa línea proyectada a ese día o, si queda por encima, el máximo
+de las 3 sesiones anteriores (incluidos los máximos intradía que superaron la base sin cerrar fuera).
 
 | Estado | Regla |
 | --- | --- |
@@ -104,7 +106,7 @@ todavía no hay consolidación.
 | Pre-breakout | A ≤ 5% del nivel, base ≥ 10 sesiones y ≤ 30% de profundidad (o flag de 5-9 sesiones y ≤ 12%), sobre la SMA50 |
 | Retest | Cruzó el nivel en las últimas 5 sesiones y vuelve a menos de un 3% |
 | Extendida | > 10% sobre el nivel o > 3 ATR sobre la SMA20 |
-| En base | A ≤ 12% del nivel, o base en formación (menos de 5 sesiones desde el máximo) |
+| En base | A ≤ 12% del nivel, o base en formación (el valor sigue marcando máximos) |
 | Descartada | Ruptura fallida (> 3% bajo el nivel tras cruzarlo), bajo una SMA50 descendente, precio anclado o liquidez insuficiente |
 
 **Setup de Qullamaggie (solo rupturas).** Reglas de su artículo
@@ -117,9 +119,9 @@ con umbrales objetivos (`config/settings.yaml` → `qullamaggie`):
 | ADR ≥ 5% | Obligatoria | Media de máximo/mínimo − 1 en 20 sesiones (escáneres de su comunidad) |
 | Subida previa ≥ 30% | Obligatoria | Del mínimo de las 63 sesiones anteriores al máximo de la base hasta ese máximo |
 | Consolidación de 2 semanas a 2 meses | Obligatoria | 5 a 42 sesiones desde el máximo (5-9 = flag) |
-| Retroceso ordenado | Secundaria | La base corrige ≤ 50% de la subida previa |
-| Mínimos crecientes | Secundaria | Mínimo de la segunda mitad de la base > mínimo de la primera |
-| Rango que se estrecha | Secundaria | Rango diario medio de las últimas sesiones ≤ 80% del del inicio de la base |
+| Retroceso ordenado | Obligatoria | La base corrige ≤ 50% de la subida previa |
+| Mínimos crecientes | Secundaria | El último tercio de la base se mantiene por encima del mínimo de la base |
+| Rango que se estrecha | Secundaria | Rango de precios de las últimas 5 sesiones ≤ 50% del rango de toda la base |
 | Surfea medias | Secundaria | Sobre las SMA10 y SMA20 ascendentes, o sobre la SMA50 ascendente |
 
 "Cumple" exige todas y el Nasdaq 100 sobre sus SMA10 y SMA20 ascendentes; si falla una secundaria o el

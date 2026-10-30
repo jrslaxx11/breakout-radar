@@ -120,12 +120,12 @@ def compute(sym: str, df: pd.DataFrame, w: dict) -> Metrics | None:
     cw, recent_n = w.get("cross_window", 5), w.get("recent_highs", 3)
     cross_i, base = None, None
     for d in range(max(1, e - cw), e + 1):       # primer día de la ventana que cierra sobre su nivel
-        b = _base_at(h, d, lookback, base_min, recent_n)
+        b = _base_at(h, l, c, d, lookback, base_min, recent_n)
         if b is not None and c[d] > b[5]:
             cross_i, base = d, b
             break
     if base is None:                              # sin ruptura: nivel que habría que superar mañana
-        base = _base_at(h, e + 1, lookback, base_min, recent_n, require=False)
+        base = _base_at(h, l, c, e + 1, lookback, base_min, recent_n, require=False)
     ip, H, slope, jt, line_v, P = base
     d_lvl = cross_i if cross_i is not None else e + 1
     base_end = cross_i - 1 if cross_i is not None else e
@@ -184,31 +184,50 @@ def compute(sym: str, df: pd.DataFrame, w: dict) -> Metrics | None:
     )
 
 
-def _base_at(h: np.ndarray, d: int, lookback: int, base_min: int, recent_n: int, require: bool = True):
+def _early_low(l: np.ndarray, ip: int, end: int) -> bool:
+    """¿La base tocó su zona de mínimos (a ≤ 1% del mínimo) en sus dos primeros tercios?
+
+    Es la condición de Qullamaggie de mínimos crecientes vista desde el soporte: en un triángulo o
+    flag el precio no vuelve a perforar el suelo al final; en un rebound en V el mínimo es reciente.
+    """
+    span = end - ip
+    support = float(np.min(l[ip:end + 1]))
+    i_low = ip + int(np.argmax(l[ip:end + 1] <= support * 1.01))
+    return 3 * (i_low - ip) <= 2 * span
+
+
+def _base_at(h: np.ndarray, l: np.ndarray, c: np.ndarray, d: int, lookback: int, base_min: int, recent_n: int,
+             require: bool = True):
     """Consolidación vista el día `d` con las sesiones anteriores (d-1 incluida).
 
-    - Máximo de la base (H): el más alto de las `lookback` sesiones anteriores (primera aparición).
+    - Máximo de la base (H): el más alto entre `lookback` y `base_min` sesiones atrás (primera aparición).
+      Si algún cierre posterior lo superó, esa base ya se rompió: no vale (None, o con `require=False`
+      el máximo más reciente como "base en formación").
     - Resistencia: la línea más plana que parte de H y deja por debajo todos los máximos posteriores
-      (tangente superior). Plana si otro máximo iguala a H; descendente en triángulos y flags.
-    - Nivel de ruptura = el mayor entre la línea proyectada al día `d` y el máximo de las
-      `recent_n` sesiones anteriores (hay que superar también el rango inmediato).
-    Devuelve (índice del máximo, H, pendiente, índice del 2.º punto, línea en d, nivel) o None si la
-    base tiene menos de `base_min` sesiones y `require` es True.
+      (tangente superior): plana en un canal, descendente en triángulos y flags. Solo se usa si la base
+      tocó su zona de mínimos en sus dos primeros tercios (mínimos crecientes); si el mínimo es reciente
+      (rebote en V), la resistencia es H.
+    - Nivel de ruptura = el mayor entre la línea proyectada al día `d` y el máximo de las `recent_n`
+      sesiones anteriores (incluye los máximos intradía que superaron H sin cerrar por encima).
+    Devuelve (índice del máximo, H, pendiente, índice del 2.º punto, línea en d, nivel) o None.
     """
     start = max(0, d - lookback)
-    if d - 1 < start:
-        return None
-    ip = start + int(np.argmax(h[start:d]))
-    if require and d - ip < base_min:
-        return None
+    end_pk = d - base_min
+    ip = start + int(np.argmax(h[start:end_pk + 1])) if end_pk >= start else None
+    if ip is None or (d - 1 > ip and float(np.max(c[ip + 1:d])) > h[ip]):
+        if require:
+            return None
+        ip = start + int(np.argmax(h[start:d]))
+        H = float(h[ip])
+        return ip, H, 0.0, ip, H, H
     H = float(h[ip])
-    if d - 1 > ip:
+    slope, jt = 0.0, ip
+    if d - 1 > ip and _early_low(l, ip, d - 1):
         js = np.arange(ip + 1, d)
         slopes = (h[ip + 1:d] - H) / (js - ip)
         k = int(np.argmax(slopes))
-        slope, jt = min(float(slopes[k]), 0.0), int(js[k])
-    else:
-        slope, jt = 0.0, ip
+        if slopes[k] < 0:
+            slope, jt = float(slopes[k]), int(js[k])
     line_v = H + slope * (d - ip)
     lo = max(ip + 1, d - recent_n)
     recent = float(np.max(h[lo:d])) if lo < d else line_v
@@ -216,17 +235,15 @@ def _base_at(h: np.ndarray, d: int, lookback: int, base_min: int, recent_n: int,
 
 
 def _tight_ratio(h: np.ndarray, l: np.ndarray, ip: int, end: int) -> float | None:
-    """Estrechamiento: rango diario medio de las últimas sesiones de la base frente al del principio."""
+    """Estrechamiento: rango de precios de las últimas sesiones de la base / rango de toda la base."""
     nb = end - ip
     if nb < 4:
         return None
-    late_n = min(5, nb // 2)
-    rng = h / l - 1
-    late = rng[end - late_n + 1:end + 1]
-    early = rng[ip + 1:end - late_n + 1]
-    if not len(early) or float(np.mean(early)) <= 0:
+    k = min(5, nb // 2)
+    full = float(np.max(h[ip:end + 1]) - np.min(l[ip:end + 1]))
+    if full <= 0:
         return None
-    return float(np.mean(late) / np.mean(early))
+    return float((np.max(h[end - k + 1:end + 1]) - np.min(l[end - k + 1:end + 1])) / full)
 
 
 def _next_session(ts: pd.Timestamp) -> str:
@@ -237,12 +254,13 @@ def _next_session(ts: pd.Timestamp) -> str:
 
 
 def _higher_lows(l: np.ndarray, ip: int, e: int) -> bool | None:
-    """¿Los mínimos de la segunda mitad de la base son más altos que los de la primera?"""
+    """Mínimos crecientes: el último tercio de la base se mantiene por encima del mínimo de la base."""
     span = e - ip
     if span < 6:
         return None
-    mid = ip + span // 2
-    return bool(np.min(l[mid:e + 1]) > np.min(l[ip:mid]))
+    support = float(np.min(l[ip:e + 1]))
+    k3 = max(1, span // 3)
+    return bool(float(np.min(l[e - k3 + 1:e + 1])) > support)
 
 
 def rel(r: float | None, b: float | None) -> float | None:

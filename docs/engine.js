@@ -49,10 +49,10 @@
     const lookback = w.pivot_lookback ?? 60, baseMin = w.base_min ?? 5, cw = w.cross_window ?? 5, recentN = w.recent_highs ?? 3;
     let crossI = null, base = null;
     for (let d = Math.max(1, e - cw); d <= e; d++) {
-      const b = baseAt(h, d, lookback, baseMin, recentN, true);
+      const b = baseAt(h, l, c, d, lookback, baseMin, recentN, true);
       if (b && c[d] > b.level) { crossI = d; base = b; break; }
     }
-    if (!base) base = baseAt(h, e + 1, lookback, baseMin, recentN, false);
+    if (!base) base = baseAt(h, l, c, e + 1, lookback, baseMin, recentN, false);
     const { ip, H, slope, jt, lineV } = base, P = base.level;
     const dLvl = crossI !== null ? crossI : e + 1;
     const baseEnd = crossI !== null ? crossI - 1 : e;
@@ -65,9 +65,7 @@
     const hi10 = maxR(h, e - 9, e), lo10 = minR(l, e - 9, e), lo5 = minR(l, e - 4, e);
     const rng = h[e] - l[e];
     let adr = 0; for (let i = e - 19; i <= e; i++) adr += h[i] / l[i];
-    const span = baseEnd - ip;
-    let higherLows = null;
-    if (span >= 6) { const mid = ip + Math.floor(span / 2); higherLows = minR(l, mid, baseEnd) > minR(l, ip, mid - 1); }
+    const higherLows = higherLowsAt(l, ip, baseEnd);
     const s10 = sma(c, 10, e);
     return {
       sym, date: t[e], n, C: c[e], d1: c[e] / c[e - 1] - 1,
@@ -91,19 +89,22 @@
     };
   }
 
-  // Máximo de la base, tangente superior desde él y nivel a superar el día d (ver radar/metrics.py).
-  function baseAt(h, d, lookback, baseMin, recentN, require) {
-    const start = Math.max(0, d - lookback);
-    if (d - 1 < start) return null;
-    let ip = start;
-    for (let i = start; i < d; i++) if (h[i] > h[ip]) ip = i;
-    if (require && d - ip < baseMin) return null;
+  // Máximo de la base, tangente superior desde él y nivel a superar el día d (ver radar/metrics.py: _base_at).
+  function baseAt(h, l, c, d, lookback, baseMin, recentN, require) {
+    const start = Math.max(0, d - lookback), endPk = d - baseMin;
+    let ip = null;
+    if (endPk >= start) { ip = start; for (let i = start; i <= endPk; i++) if (h[i] > h[ip]) ip = i; }
+    if (ip === null || (d - 1 > ip && maxR(c, ip + 1, d - 1) > h[ip])) {
+      if (require) return null;
+      let j = start; for (let i = start; i < d; i++) if (h[i] > h[j]) j = i;
+      return { ip: j, H: h[j], slope: 0, jt: j, lineV: h[j], level: h[j] };
+    }
     const H = h[ip];
     let slope = 0, jt = ip;
-    if (d - 1 > ip) {
-      let best = -Infinity;
-      for (let j = ip + 1; j < d; j++) { const sl = (h[j] - H) / (j - ip); if (sl > best) { best = sl; jt = j; } }
-      slope = Math.min(best, 0);
+    if (d - 1 > ip && earlyLow(l, ip, d - 1)) {
+      let best = -Infinity, bj = ip;
+      for (let j = ip + 1; j < d; j++) { const sl = (h[j] - H) / (j - ip); if (sl > best) { best = sl; bj = j; } }
+      if (best < 0) { slope = best; jt = bj; }
     }
     const lineV = H + slope * (d - ip);
     const lo = Math.max(ip + 1, d - recentN);
@@ -111,15 +112,27 @@
     return { ip, H, slope, jt, lineV, level: Math.max(lineV, recent) };
   }
 
+  // ¿La base tocó su zona de mínimos (a ≤ 1% del mínimo) en sus dos primeros tercios?
+  function earlyLow(l, ip, end) {
+    const span = end - ip, support = minR(l, ip, end);
+    let iLow = ip; while (iLow < end && !(l[iLow] <= support * 1.01)) iLow++;
+    return 3 * (iLow - ip) <= 2 * span;
+  }
+
+  function higherLowsAt(l, ip, end) {
+    const span = end - ip;
+    if (span < 6) return null;
+    const k3 = Math.max(1, Math.floor(span / 3));
+    return minR(l, end - k3 + 1, end) > minR(l, ip, end);
+  }
+
   function tightRatio(h, l, ip, end) {
     const nb = end - ip;
     if (nb < 4) return null;
-    const lateN = Math.min(5, Math.floor(nb / 2));
-    const mean = (i0, i1) => { let s = 0; for (let i = i0; i <= i1; i++) s += h[i] / l[i] - 1; return s / (i1 - i0 + 1); };
-    if (end - lateN < ip + 1) return null;
-    const early = mean(ip + 1, end - lateN);
-    if (early <= 0) return null;
-    return mean(end - lateN + 1, end) / early;
+    const k = Math.min(5, Math.floor(nb / 2));
+    const full = maxR(h, ip, end) - minR(l, ip, end);
+    if (full <= 0) return null;
+    return (maxR(h, end - k + 1, end) - minR(l, end - k + 1, end)) / full;
   }
 
   function nextSession(iso) {
@@ -239,8 +252,8 @@
     return ["", ""];
   }
 
-  const QM_DEFAULTS = { top_pct: 0.02, adr_min: 0.05, prior_move_min: 0.30, base_min: 5, base_max: 42, retrace_max: 0.5, tight_max: 0.8 };
-  const QM_HARD = ["leader", "adr", "prior_move", "base"];
+  const QM_DEFAULTS = { top_pct: 0.02, adr_min: 0.05, prior_move_min: 0.30, base_min: 5, base_max: 42, retrace_max: 0.5, tight_max: 0.5 };
+  const QM_HARD = ["leader", "adr", "prior_move", "base", "orderly"];
   const sgn0 = (x) => { const v = x * 100; return (v >= 0 ? "+" : "") + v.toFixed(0) + "%"; };
 
   // Igual que radar/qullamaggie.py: evaluate.
@@ -262,7 +275,7 @@
       m.retrace === null ? "sin datos" : `corrige el ${pctEs(m.retrace, 0)}`);
     add("higher_lows", m.higher_lows, "Mínimos crecientes en la base", m.higher_lows ? "sí" : (m.higher_lows === false ? "no" : "base corta"));
     add("tight", m.tight_ratio === null ? null : m.tight_ratio <= q.tight_max, "Rango que se estrecha",
-      m.tight_ratio === null ? "base corta" : `rango reciente al ${pctEs(m.tight_ratio, 0)} del inicial`);
+      m.tight_ratio === null ? "base corta" : `últimas sesiones: ${pctEs(m.tight_ratio, 0)} del rango de la base`);
     const surf20 = !!(m.s20 && m.C >= m.s20 && m.s20up && m.s10up);
     const surf50 = !!(m.s50 && m.C >= m.s50 && m.s50up);
     add("ma_surf", surf20 || surf50, "Surfea medias ascendentes (SMA10 y SMA20, o SMA50)", surf20 ? "SMA10 y SMA20" : (surf50 ? "SMA50" : "no"));

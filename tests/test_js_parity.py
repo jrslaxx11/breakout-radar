@@ -71,7 +71,8 @@ def test_engine_js_matches_python(tmp_path, monkeypatch):
         df.index = prices["BRK"].index[-len(df):]
         lvl = mcompute(kind, df.iloc[:-1], BW).P
         c = lvl * mult
-        df.iloc[-1] = [c * 0.99, c * 1.005, c * 0.98, c, vol]
+        # TRIP: mínimo de hoy por encima del suelo de la base (si lo perforase, la línea dejaría de valer).
+        df.iloc[-1] = [c * 0.99, c * 1.005, c * 0.98, c, vol] if kind == "TRI" else [c, c * 1.004, c * 0.995, c, vol]
         prices[kind] = df
         universe[kind] = {"source": "SPX", "name": kind, "gics_sector": "", "unbiased": True,
                           "gics_sub": "Application Software", "hint": ""}

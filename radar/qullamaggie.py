@@ -21,8 +21,8 @@ from __future__ import annotations
 from .metrics import Metrics
 
 DEFAULTS = {"top_pct": 0.02, "adr_min": 0.05, "prior_move_min": 0.30, "base_min": 5, "base_max": 42,
-            "retrace_max": 0.50, "tight_max": 0.80}
-HARD = ("leader", "adr", "prior_move", "base")
+            "retrace_max": 0.50, "tight_max": 0.50}
+HARD = ("leader", "adr", "prior_move", "base", "orderly")
 
 
 def _pct(x: float, d: int = 1) -> str:
@@ -85,7 +85,7 @@ def evaluate(m: Metrics, state: str, market: dict, perf_cut: dict | None = None,
     add("higher_lows", m.higher_lows, "Mínimos crecientes en la base",
         "sí" if m.higher_lows else ("no" if m.higher_lows is False else "base corta"))
     add("tight", None if m.tight_ratio is None else m.tight_ratio <= q["tight_max"], "Rango que se estrecha",
-        "base corta" if m.tight_ratio is None else f"rango reciente al {_pct(m.tight_ratio, 0)} del inicial")
+        "base corta" if m.tight_ratio is None else f"últimas sesiones: {_pct(m.tight_ratio, 0)} del rango de la base")
     surf20 = bool(m.s20 and m.C >= m.s20 and m.s20up and m.s10up)
     surf50 = bool(m.s50 and m.C >= m.s50 and m.s50up)
     add("ma_surf", surf20 or surf50, "Surfea medias ascendentes (SMA10 y SMA20, o SMA50)",
