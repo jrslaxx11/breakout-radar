@@ -428,6 +428,31 @@
       ${c.qm ? qmBlock(c) : ""}`;
   }
 
+  // Despliega bajo una fila de tabla la ficha del valor (gráfico, niveles, puntuación y plan).
+  // `getRec` devuelve (o promete) { rec, k }: el registro del valor y sus velas.
+  function toggleRow(tr, colspan, getRec) {
+    if (tr.getAttribute("aria-expanded") === "true") {
+      const det = tr.nextElementSibling;
+      if (det && det.classList.contains("detail")) { const ch = det.querySelector(".chart"); ch && (ch._disposeAll || ch._dispose || (() => {}))(); det.remove(); }
+      tr.setAttribute("aria-expanded", "false");
+      return;
+    }
+    tr.insertAdjacentHTML("afterend", `<tr class="detail"><td colspan="${colspan}"><div class="detail-inner"><p class="empty">Cargando…</p></div></td></tr>`);
+    tr.setAttribute("aria-expanded", "true");
+    const det = tr.nextElementSibling, inner = det.querySelector(".detail-inner"), wrap = tr.closest(".tbl-wrap");
+    // La tabla puede ser más ancha que la pantalla: la ficha se ajusta al ancho visible.
+    const fit = () => { inner.style.width = `${Math.max(280, wrap.clientWidth - 22)}px`; };
+    fit();
+    const ro = new ResizeObserver(fit); ro.observe(wrap);
+    Promise.resolve(getRec()).then(({ rec, k }) => {
+      if (!det.isConnected) { ro.disconnect(); return; }
+      inner.innerHTML = detailHTML(rec);
+      const ch = inner.querySelector(".chart"); const prevDispose = () => ch._dispose && ch._dispose();
+      ch._disposeAll = () => { ro.disconnect(); prevDispose(); };
+      mountDetail(det, rec, Promise.resolve(k));
+    }).catch((err) => { inner.innerHTML = `<p class="empty">No se pudo cargar la ficha (${esc(err.message)}).</p>`; });
+  }
+
   function mountDetail(root, c, kPromise) {
     const el = root.querySelector(".chart");
     drawChart(el, c, kPromise);
@@ -497,25 +522,10 @@
           <td class="left ds ds-${esc(c.daily_status)}">${esc(DS_LABEL[c.daily_status] || c.daily_status || "")}${isNum(c.score_prev) ? ` <span class="dim">(${num(c.score_prev, 0)})</span>` : ""}</td>
         </tr>`).join("") : `<tr><td colspan="14" class="empty">Ninguna candidata cumple los filtros. Prueba a quitar alguno.</td></tr>`;
     };
-    const toggle = (tr) => {
-      const open = tr.getAttribute("aria-expanded") === "true";
-      if (open) {
-        const det = tr.nextElementSibling;
-        if (det && det.classList.contains("detail")) { const ch = det.querySelector(".chart"); ch && (ch._disposeAll || ch._dispose || (() => {}))(); det.remove(); }
-        tr.setAttribute("aria-expanded", "false"); return;
-      }
+    const toggle = (tr) => toggleRow(tr, 14, () => {
       const c = byS[tr.dataset.sym];
-      tr.insertAdjacentHTML("afterend", `<tr class="detail"><td colspan="14"><div class="detail-inner">${detailHTML(c)}</div></td></tr>`);
-      tr.setAttribute("aria-expanded", "true");
-      // La tabla puede ser más ancha que la pantalla: la ficha se ajusta al ancho visible.
-      const inner = tr.nextElementSibling.querySelector(".detail-inner"), wrap = tr.closest(".tbl-wrap");
-      const fit = () => { inner.style.width = `${Math.max(280, wrap.clientWidth - 22)}px`; };
-      fit();
-      const ro = new ResizeObserver(fit); ro.observe(wrap);
-      const ch = inner.querySelector(".chart"); const prevDispose = () => ch._dispose && ch._dispose();
-      ch._disposeAll = () => { ro.disconnect(); prevDispose(); };
-      mountDetail(tr.nextElementSibling, c, loadTicker(c.sym).then((x) => x.k));
-    };
+      return loadTicker(c.sym).then((x) => ({ rec: c, k: x.k }));
+    });
     tbody.addEventListener("click", (e) => { const tr = e.target.closest("tr.row"); if (tr && !e.target.closest("a")) toggle(tr); });
     tbody.addEventListener("keydown", (e) => { if ((e.key === "Enter" || e.key === " ") && e.target.matches("tr.row")) { e.preventDefault(); toggle(e.target); } });
     const bind = (id, key) => $(id).addEventListener("input", (e) => { f[key] = e.target.value; store.set("radar.filters", f); draw(); });
@@ -538,19 +548,20 @@
       ${rows.length ? `<div class="tbl-wrap"><table class="lt qm-table">
         <thead><tr><th class="left">Valor</th><th class="left">Estado</th><th>Nivel de ruptura</th><th>Distancia</th><th>Ahora</th>
           <th>ADR</th><th>Subida previa</th><th>Base</th><th class="left">Veredicto</th></tr></thead>
-        <tbody>${rows.map((x) => `<tr data-sym="${esc(x.sym)}" tabindex="0">
-          <td class="tk-cell"><a href="#valor=${encodeURIComponent(x.sym)}">${esc(x.sym)}</a><small>${esc(x.name && x.name !== x.sym ? x.name : "")}${x.theme ? " · " + esc(themeName(d, x.theme)) : ""}</small></td>
+        <tbody>${rows.map((x) => `<tr class="row" data-sym="${esc(x.sym)}" tabindex="0" aria-expanded="false">
+          <td class="tk-cell"><a href="#valor=${encodeURIComponent(x.sym)}" title="Abrir la ficha completa">${esc(x.sym)}</a><small>${esc(x.name && x.name !== x.sym ? x.name : "")}${x.theme ? " · " + esc(themeName(d, x.theme)) : ""}</small></td>
           <td class="left">${chip(x.state)}${x.presented ? ` <span class="wl-tag" title="Está en la watchlist de hoy">watchlist</span>` : ""}</td>
           <td>${price(x.pivot, x.currency)}<small class="dim block">${esc(LEVEL_KIND[x.level_kind] || "")}</small></td>
           <td class="${cls(x.dist)}">${pct(x.dist)}</td>
           <td class="live-cell" data-live="${esc(x.sym)}">${liveCell(x)}</td>
           <td>${pct(x.adr_pct, 1, false)}</td><td>${pct(x.prior_move, 0)}</td><td>${x.base_len} ses.</td>
           <td class="left"><span class="qmv qmv-${esc(x.qm.verdict.replace(/\s+/g, "-"))}">${esc(x.qm.verdict)}</span>${x.fails.length ? `<small class="dim block">falla: ${esc(x.fails.join("; ").toLowerCase())}</small>` : ""}</td>
-        </tr>`).join("")}</tbody></table></div>` : `<p class="empty">Hoy ningún valor del universo cumple los requisitos obligatorios y está en ruptura o a punto. Es normal en mercados flojos: Qullamaggie espera.</p>`}`;
-    const open = (tr) => { location.hash = `valor=${encodeURIComponent(tr.dataset.sym)}`; };
-    $("#qullamaggie").addEventListener("click", (e) => { const tr = e.target.closest("tr[data-sym]"); if (tr && !e.target.closest("a")) open(tr); });
+        </tr>`).join("")}</tbody></table></div>` : `<p class="empty">Hoy ningún valor del universo cumple los requisitos obligatorios y está en ruptura o a punto. Es normal en mercados flojos: Qullamaggie espera.</p>`}
+      ${rows.length ? `<p class="dim" style="font-size:13px;margin-top:6px">Pulsa una fila para ver el gráfico y el plan; el ticker abre la ficha completa.</p>` : ""}`;
+    const toggle = (tr) => toggleRow(tr, 9, () => loadTicker(tr.dataset.sym).then((x) => ({ rec: BYS[tr.dataset.sym] || x.rec, k: x.k })));
+    $("#qullamaggie").addEventListener("click", (e) => { const tr = e.target.closest("tr[data-sym]"); if (tr && !e.target.closest("a")) toggle(tr); });
     $("#qullamaggie").addEventListener("keydown", (e) => {
-      if ((e.key === "Enter" || e.key === " ") && e.target.matches("tr[data-sym]")) { e.preventDefault(); open(e.target); }
+      if ((e.key === "Enter" || e.key === " ") && e.target.matches("tr[data-sym]")) { e.preventDefault(); toggle(e.target); }
     });
   }
 

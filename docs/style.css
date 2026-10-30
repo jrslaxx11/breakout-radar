@@ -203,6 +203,8 @@ tbody tr:last-child td { border-bottom: 0; }
 small.block { display: block; font-size: 11.5px; margin-top: 1px; white-space: normal; }
 .legend i.dash { width: 16px; height: 0; border-top: 2px dashed var(--pivot); border-radius: 0; vertical-align: 3px; }
 .qm-table td { vertical-align: top; }
+.qm-table tr.row { cursor: pointer; }
+.qm-table tr.row:hover td { background: var(--soft); }
 .wl-tag { display: inline-block; margin-left: 4px; padding: 0 6px; border-radius: 999px; font-size: 11.5px; color: var(--pivot); border: 1px solid color-mix(in srgb, var(--pivot) 45%, transparent); }
 .more { margin-top: 6px; }
 .more > summary { cursor: pointer; color: var(--pivot); font-size: 14px; padding: 6px 10px; }
@@ -303,3 +305,4 @@ small.block { display: block; font-size: 11.5px; margin-top: 1px; white-space: n
 @media (max-width: 520px) {
   .top { position: static; }
 }
+.lt tbody tr.detail, .lt tbody tr.detail:hover td { cursor: default; background: var(--paper); }
