@@ -788,6 +788,7 @@
     else if (trig && p > trig) { txt = "supera la entrada"; kind = "hit"; }
     else if (p > c.pivot && c.close <= c.pivot) { txt = "rompe el pivote"; kind = "hit"; }
     else if (p > c.pivot) { txt = `${pct(dist)} sobre el pivote`; kind = "pos"; }
+    else if (-dist < 0.001) { txt = "en el pivote"; kind = "near"; }
     else { txt = `a ${num(-dist * 100, 1)}% del pivote`; kind = "near"; }
     // Volumen relativo: con la sesión abierta, proyección al cierre con un perfil intradía
     // aproximado (se negocia más al principio): fracción de volumen ≈ fracción de tiempo ^ 0,8.
