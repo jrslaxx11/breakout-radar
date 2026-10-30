@@ -70,26 +70,31 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
     fx_syms = sorted({v["pair"] for v in S["fx"].values()})
     stale: dict = {}
     if prices is None:
-        from .prices import complete_recent, download, drop_partial_bars
+        from .prices import complete_recent, download, drop_partial_bars, fetch_quotes, last_dates, patch_from_quotes
         prices = download(list(universe) + etf_syms + idx_syms + bench_syms + fx_syms,
                           S["run"]["history_days"], S["run"]["download_chunk"], S["run"]["download_pause_s"])
         mc = S.get("market_close")
         if mc:
+            try:  # la serie diaria de Yahoo trae el cierre del día con horas de retraso
+                quotes = fetch_quotes([s for s in prices if not s.endswith("=X")])
+                patched = patch_from_quotes(prices, quotes, mc)
+                log.info("cotizaciones: %d recibidas; última sesión completada en %d valores", len(quotes), len(patched))
+            except Exception as exc:  # noqa: BLE001
+                log.warning("sin cotizaciones de cierre: %s", exc)
             dropped = drop_partial_bars(prices, mc)
             if dropped:
                 log.info("barras parciales descartadas: %d", len(dropped))
             stale = complete_recent(prices, mc)
+            log.info("última barra por mercado: %s", last_dates(prices, mc))
 
     ref = prices.get("^GSPC")
     session = ref.index[-1].strftime("%Y-%m-%d") if ref is not None and len(ref) else today.isoformat()
     prev = history.previous_snapshot(session)
     if not force and history.HISTORY_DIR.joinpath(f"{session}.json").exists():
         log.info("La sesión %s ya está procesada; nada que hacer.", session)
-        latest = DOCS_DATA / "latest.json"
-        if write and latest.exists():  # las velas no se versionan: se regeneran para la publicación
-            pres = json.loads(latest.read_text()).get("lists", {}).get("presented", [])
-            (DOCS_DATA / "charts.json").write_text(json.dumps(_clean(_chart_data(prices, pres)),
-                                                              separators=(",", ":"), allow_nan=False))
+        if write:  # el flujo no vuelve a publicar la web: se queda la versión anterior
+            DOCS_DATA.mkdir(parents=True, exist_ok=True)
+            (DOCS_DATA / ".skipped").write_text(session)
         return {"skipped": True, "session": session}
 
     fx = _fx_factors(prices, S["fx"])
@@ -305,6 +310,40 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
     sp_groups = {k: [s for s, i in universe.items() if i.get("source") == k] for k in ("SPX", "MID", "SML")}
     reg = regime.regime(prices, S, sp_groups)
 
+    # ---------- vista completa para el buscador ----------
+    search_view = []
+    for sym, r in rows.items():
+        mine = bool(r["info"].get("mine"))
+        liq = (r["mdv_usd"] or 0) >= flt["min_mdv_usd"] and (r["price_usd"] or 0) >= flt["min_price_usd"]
+        if not (liq or mine) or (r["dup"] and not mine):
+            continue
+        if sym in candidates:
+            search_view.append(candidates[sym])
+            continue
+        m = r["m"]
+        ev = evaluate(r, None)
+        rk_label, rk_pts = bo.risk(m, ev["inv"], None, False, r["mdv_usd"] or 0, S["risk"])
+        conf, inval = bo.conditions(m, ev["state"], ev["inv"])
+        search_view.append({
+            "sym": sym, "theme": r["theme"], "name": r["info"].get("name") or r["profile"].get("name") or sym,
+            "exchange": "", "country": r["profile"].get("country") or "", "currency": r["cur"], "date": m.date,
+            "close": m.C, "d1": m.d1, "state": ev["state"], "why": ev["why"], "excluded": "",
+            "score": ev["score"]["total"], "components": ev["score"], "pivot": m.P, "pivot_date": m.piv_date,
+            "dist": m.C / m.P - 1, "base_len": m.blen, "depth": m.depth, "inv": ev["inv"],
+            "inv_pct": (ev["inv"] / m.C - 1) if ev["inv"] else None,
+            "inv_atr": ((m.C - ev["inv"]) / m.atr) if ev["inv"] else None,
+            "atr": m.atr, "atr_pct": m.atr_pct, "vol": m.vol, "v20": m.v20, "rvol": m.rvol, "vdry": m.vdry,
+            "rs_pct": r.get("rs_pct"), "r1m": m.r1m, "r3m": m.r3m, "r6m": m.r6m, "dhi": m.dhi, "hi52": m.hi52,
+            "s10": m.s10, "s20": m.s20, "s50": m.s50, "s200": m.s200, "adr_pct": m.adr_pct,
+            "mdv_usd": r["mdv_usd"], "catalyst": "", "risk": rk_label, "risk_points": rk_pts,
+            "confirm": conf, "invalidate": inval, "mine": mine, "liquid": liq,
+            "qm": qm.evaluate(m, ev["state"], r["mdv_usd"] or 0, r.get("rs_pct", 0) or 0, qm_market),
+        })
+    for c in search_view:
+        if c["sym"] in candidates:
+            c["mine"] = bool(rows[c["sym"]]["info"].get("mine"))
+            c["liquid"] = True
+
     coverage = {
         "universe": len(universe), "with_data": len(rows), "liquid": len(liquid),
         "by_source": {k: sum(1 for r in rows.values() if r["info"].get("source") == k)
@@ -326,12 +365,32 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
                   "by_state": by_state, "others": others, "outside": outside[:15],
                   "pending": pending_list, "eliminated": eliminated, "episodic_pivots": eps[:20]},
         "qm_market": qm_market,
+        "qm_const": qm.constants(),
         "calendar": calendar,
+        "web": {"worker_url": (S.get("web") or {}).get("worker_url") or ""},
+        # Contexto para evaluar en el navegador cualquier ticker con los mismos umbrales (docs/engine.js).
+        "engine": {
+            "settings": {k: S[k] for k in ("windows", "breakout", "filters", "risk", "benchmarks", "currency_by_suffix")},
+            "benchmarks": bench, "fx": fx, "qm_market": qm_market,
+            "rs_dist": [round(r["rsc"], 6) for r in sorted(liquid, key=lambda x: x["rsc"])],
+        },
     }
     if write:
         DOCS_DATA.mkdir(parents=True, exist_ok=True)
-        (DOCS_DATA / "charts.json").write_text(json.dumps(_clean(_chart_data(prices, presented)),
-                                                          separators=(",", ":"), allow_nan=False))
+        # Ficha por valor (puntuaciones + velas) e índice del buscador; se regeneran en cada ejecución
+        # y no se versionan (solo viajan en la web publicada).
+        cdir = DOCS_DATA / "c"
+        cdir.mkdir(parents=True, exist_ok=True)
+        for old in cdir.glob("*.json"):
+            old.unlink()
+        candles = _chart_data(prices, [c["sym"] for c in search_view], bars=S["run"].get("chart_bars", 330))
+        for c in search_view:
+            body = {"rec": _slim(c), "k": candles.get(c["sym"])}
+            (cdir / f"{safe_name(c['sym'])}.json").write_text(
+                json.dumps(_clean(body), ensure_ascii=False, separators=(",", ":"), allow_nan=False, default=_json_default))
+        index = [[c["sym"], c.get("name") or "", c.get("theme") or "", c["state"], round(c["score"], 1)] for c in search_view]
+        (DOCS_DATA / "universe.json").write_text(json.dumps({"session": session, "rows": index}, ensure_ascii=False,
+                                                            separators=(",", ":")))
         (DOCS_DATA / "latest.json").write_text(json.dumps(_clean(out), ensure_ascii=False, allow_nan=False,
                                                           default=_json_default))
         snap = {"session": session,
@@ -341,7 +400,26 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
                 "watchlist": {c["sym"]: {"score": round(c["score"], 2), "state": c["state"],
                                          "theme": c["theme"], "rs_pct": round(c["rs_pct"] or 0, 4)} for c in pres}}
         history.write_snapshot(session, _clean(snap))
+    out["search_view"] = search_view  # solo para quien llama (pruebas); no va en latest.json
     return out
+
+
+def safe_name(sym: str) -> str:
+    """Nombre de archivo seguro para un ticker (mismo criterio que el dashboard)."""
+    return "".join(ch if ch.isalnum() or ch in "-_" else "_" for ch in sym)
+
+
+def _slim(o, sig: int = 5):
+    """Redondea los decimales para que el archivo del buscador pese menos."""
+    import math
+
+    if isinstance(o, dict):
+        return {k: _slim(v, sig) for k, v in o.items() if v is not None and v != ""}
+    if isinstance(o, list):
+        return [_slim(v, sig) for v in o]
+    if isinstance(o, float) and math.isfinite(o) and o != 0:
+        return round(o, max(0, sig - 1 - int(math.floor(math.log10(abs(o))))))
+    return o
 
 
 def _chart_data(prices: dict, syms: list[str], bars: int = 260) -> dict:

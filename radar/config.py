@@ -25,6 +25,7 @@ class Config:
     themes: dict
     overrides: dict
     intl: list[tuple[str, str]] = field(default_factory=list)
+    mine: list[str] = field(default_factory=list)
 
     @classmethod
     def load(cls) -> "Config":
@@ -37,7 +38,14 @@ class Config:
                     sym = (row.get("symbol") or "").strip()
                     if sym:
                         intl.append((sym, (row.get("theme_hint") or "").strip()))
+        mine: list[str] = []
+        mpath = CONFIG_DIR / "mis_valores.csv"
+        if mpath.exists():
+            with open(mpath, encoding="utf-8") as fh:
+                rows = (line for line in fh if not line.startswith("#"))
+                mine = [(r.get("symbol") or "").strip() for r in csv.DictReader(rows) if (r.get("symbol") or "").strip()]
         return cls(
+            mine=mine,
             settings=_load_yaml("settings.yaml"),
             themes=_load_yaml("themes.yaml"),
             overrides=_load_yaml("overrides.yaml"),

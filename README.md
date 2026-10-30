@@ -31,6 +31,30 @@ o `radar/`, así que editar un catalizador y guardarlo actualiza la web en unos 
 | `config/themes.yaml` | Definición de temáticas: listas fijas de tickers, subindustrias GICS, industrias de Yahoo y ETF de referencia. |
 | `config/settings.yaml` | Filtros de liquidez, umbrales de cada estado, número de temáticas, temáticas forzadas, índices del régimen. |
 | `config/universe_intl.csv` | Valores internacionales que se analizan siempre. |
+| `config/mis_valores.csv` | Tus valores: se calculan cada día aunque no superen los filtros de liquidez y se pueden abrir desde el buscador. |
+
+## Buscador de cualquier acción
+
+La caja de la cabecera abre la ficha de cualquier valor (gráfico, niveles, puntuación y plan
+Qullamaggie):
+
+- **Valores del universo diario** (≈ 2.700): funciona sin nada más; los datos son los del último
+  cálculo del radar.
+- **Cualquier otro ticker de Yahoo Finance:** la web lo calcula al momento en el navegador con
+  `docs/engine.js`, una réplica exacta del motor de Python (la prueba `tests/test_js_parity.py`
+  comprueba que ambos dan los mismos estados, niveles y puntuaciones). Como el navegador no puede
+  pedir datos a Yahoo directamente, hace falta un pequeño intermediario gratuito en Cloudflare:
+
+  1. Crear una cuenta gratuita en <https://dash.cloudflare.com>.
+  2. *Workers & Pages → Create → Create Worker* → ponerle un nombre (por ejemplo `radar-yahoo`) →
+     *Deploy*.
+  3. *Edit code* → borrar el contenido, pegar el de `cloudflare/worker.js` → *Deploy*.
+  4. Copiar la dirección del Worker (`https://radar-yahoo.<tu-subdominio>.workers.dev`) en
+     `config/settings.yaml`, apartado `web: worker_url`, y guardar. La web se republica sola.
+
+  El Worker solo acepta peticiones de tu web, guarda las respuestas 15 minutos y el plan gratuito
+  permite 100.000 consultas al día. Los valores calculados al momento no tienen temática,
+  catalizador ni fechas de resultados (su peso se redistribuye, como en el motor diario).
 
 ## Método
 
@@ -66,6 +90,16 @@ tiene dato, sus puntos se redistribuyen. Se seleccionan las 5 mejores, las empat
 20, tendencia diaria y semanal 15, liquidez 10, catalizador 5. El riesgo se etiqueta aparte
 (volatilidad: ATR ≥ 3%, 5% o 7%; resultados en ≤ 14 o ≤ 30 días; invalidación a más de 2,5 ATR o 10%;
 liquidez < 20 M USD). Bajo 0-1, medio 2-3, alto 4 o más.
+
+**Datos de la última sesión.** Tras el cierre, Yahoo publica la vela del día sin el precio de cierre
+durante horas (EE. UU. y Europa), y la descarga la descarta. El radar la completa con la cotización
+de cierre de la sesión regular (precio, apertura, máximo, mínimo y volumen) del mismo día, descarta
+la vela de los mercados que siguen abiertos y excluye los valores que aun así no tienen la última
+sesión de su mercado. El registro de cada ejecución (`docs/data/run-log.txt`) indica, por mercado,
+la fecha de la última vela y cuántos valores la tienen.
+
+**Gráficos.** Velas diarias con las medias de 10, 20 y 50 sesiones que usa Qullamaggie para seguir
+la tendencia y gestionar las salidas; la de 200 se activa a mano.
 
 ## Ejecutar en local
 

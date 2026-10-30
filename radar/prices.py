@@ -84,6 +84,76 @@ def market_of(sym: str, mc: dict) -> str:
     return sym.rsplit(".", 1)[1] if "." in sym else ""
 
 
+QUOTE_FIELDS = ("regularMarketPrice,regularMarketOpen,regularMarketDayHigh,regularMarketDayLow,"
+                "regularMarketVolume,regularMarketTime,marketState,exchangeTimezoneName")
+
+
+def fetch_quotes(symbols: list[str], chunk: int = 150, pause: float = 0.5) -> dict[str, dict]:
+    """Cotización de cierre de cada valor (endpoint de cotizaciones de Yahoo, por lotes)."""
+    from yfinance.data import YfData
+
+    yd = YfData()
+    out: dict[str, dict] = {}
+    for i in range(0, len(symbols), chunk):
+        part = symbols[i:i + chunk]
+        for attempt in range(2):
+            try:
+                j = yd.get_raw_json("https://query1.finance.yahoo.com/v7/finance/quote",
+                                    params={"symbols": ",".join(part), "fields": QUOTE_FIELDS})
+                for q in (j.get("quoteResponse") or {}).get("result") or []:
+                    if q.get("symbol"):
+                        out[q["symbol"]] = q
+                break
+            except Exception as exc:  # noqa: BLE001
+                log.warning("cotizaciones: bloque %d falló (%s)", i // chunk, exc)
+                time.sleep(pause * 4)
+        time.sleep(pause)
+    return out
+
+
+def patch_from_quotes(data: dict, quotes: dict, mc: dict, now_utc=None) -> list[str]:
+    """Añade la última sesión cerrada cuando la serie diaria de Yahoo aún no la trae.
+
+    Tras el cierre, Yahoo publica la fila del día con apertura, máximo, mínimo y volumen pero
+    con el cierre vacío durante horas (EE. UU. y Europa); la descarga la descarta. La cotización
+    de cierre del mismo día (precio, máximo, mínimo, apertura y volumen de la sesión regular)
+    la completa. No se toca nada si el mercado sigue abierto.
+    """
+    from datetime import datetime, timezone
+    from zoneinfo import ZoneInfo
+
+    now_utc = now_utc or datetime.now(timezone.utc)
+    patched = []
+    for sym, df in data.items():
+        q = quotes.get(sym)
+        if q is None or df is None or not len(df) or sym.endswith("=X"):
+            continue
+        if q.get("marketState") == "REGULAR":
+            continue
+        t, px = q.get("regularMarketTime"), q.get("regularMarketPrice")
+        if not t or not px or px <= 0 or now_utc.timestamp() - t < 15 * 60:
+            continue
+        hi, lo = q.get("regularMarketDayHigh") or 0, q.get("regularMarketDayLow") or 0
+        if hi <= 0 or lo <= 0:
+            if not sym.startswith("^"):
+                continue
+            hi = lo = px  # índices sin rango intradía: solo se usa el cierre
+        tzname = q.get("exchangeTimezoneName") or mc["by_suffix"].get(market_of(sym, mc), mc["default"])[0]
+        day = datetime.fromtimestamp(t, ZoneInfo(tzname)).date()
+        last = pd.Timestamp(df.index[-1])
+        if day <= last.date():
+            continue
+        op = q.get("regularMarketOpen")
+        row = {"Open": op if op and op > 0 else float("nan"), "High": max(hi, px), "Low": min(lo, px), "Close": px,
+               "Volume": float(q.get("regularMarketVolume") or 0)}
+        if "Adj Close" in df.columns:
+            row["Adj Close"] = px
+        idx = pd.DatetimeIndex([pd.Timestamp(day)], tz=last.tz, name=df.index.name)
+        data[sym] = pd.concat([df, pd.DataFrame([{c: row.get(c, float("nan")) for c in df.columns}], index=idx)])
+        patched.append(sym)
+    return patched
+
+
 def drop_partial_bars(data: dict, mc: dict, now_utc=None) -> list[str]:
     """Quita la barra de hoy si su mercado aún no ha cerrado (ejecuciones a deshora)."""
     from datetime import datetime, timedelta, timezone
@@ -104,6 +174,22 @@ def drop_partial_bars(data: dict, mc: dict, now_utc=None) -> list[str]:
             data[sym] = df.iloc[:-1]
             dropped.append(sym)
     return dropped
+
+
+def last_dates(data: dict, mc: dict) -> str:
+    """Resumen para el registro: fecha más reciente y número de valores que la tienen, por mercado."""
+    groups: dict[str, dict] = {}
+    for sym, df in data.items():
+        if sym.endswith("=X") or sym.startswith("^") or df is None or not len(df):
+            continue
+        g = groups.setdefault(market_of(sym, mc) or "US", {})
+        d = pd.Timestamp(df.index[-1]).date()
+        g[d] = g.get(d, 0) + 1
+    parts = []
+    for k in sorted(groups):
+        top = max(groups[k])
+        parts.append(f"{k} {top} ({groups[k][top]}/{sum(groups[k].values())})")
+    return "; ".join(parts)
 
 
 def complete_recent(data: dict, mc: dict, chunk: int = 60, pause: float = 1.0) -> dict:

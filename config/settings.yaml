@@ -7,6 +7,12 @@ run:
   download_pause_s: 2.0       # pausa entre bloques (evita bloqueos por exceso de peticiones)
   max_profile_fetch: 400      # perfiles (sector/industria) nuevos por ejecución; el resto queda en caché
   timezone: Europe/Madrid
+  chart_bars: 330             # velas por valor en la web (las últimas 130 visibles + 200 para la SMA200)
+
+web:
+  # Dirección del Worker de Cloudflare que permite buscar cualquier ticker del mercado (ver README).
+  # Vacía: el buscador solo encuentra los valores del universo diario.
+  worker_url: ""
 
 filters:                       # filtros de calidad iniciales (orientativos)
   min_mdv_usd: 5000000         # mediana de valor negociado 20 sesiones

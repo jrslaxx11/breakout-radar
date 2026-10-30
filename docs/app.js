@@ -45,6 +45,18 @@
     return `https://www.tradingview.com/chart/?symbol=${encodeURIComponent(p ? `${p}:${b}` : b)}`;
   };
   const yfUrl = (sym) => `https://finance.yahoo.com/quote/${encodeURIComponent(sym)}`;
+  const safeName = (sym) => sym.replace(/[^A-Za-z0-9_-]/g, "_");  // igual que radar/pipeline.py
+  const reducedMotion = () => window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Datos del día y caché de fichas por valor.
+  let D = null, BYS = {}, SCORE_HIST = {};
+  const tickerCache = new Map();
+  const loadTicker = (sym) => {
+    if (!tickerCache.has(sym)) {
+      tickerCache.set(sym, getJSON(`data/c/${safeName(sym)}.json`).catch((e) => { tickerCache.delete(sym); throw e; }));
+    }
+    return tickerCache.get(sym);
+  };
 
   async function getJSON(url) {
     const r = await fetch(url, { cache: "no-cache" });
@@ -88,7 +100,7 @@
   // Copia local (la descarga el flujo de publicación) y, si falta, la CDN oficial.
   const LWC_URLS = ["vendor/lightweight-charts.js",
     "https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"];
-  let lwcPromise = null, chartsPromise = null;
+  let lwcPromise = null;
   const loadScript = (src) => new Promise((ok, ko) => {
     const sc = document.createElement("script");
     sc.src = src; sc.async = true;
@@ -102,7 +114,6 @@
     lwcPromise = null;
     throw new Error("no se pudo cargar la librería de gráficos");
   })());
-  const loadCharts = () => chartsPromise || (chartsPromise = getJSON("data/charts.json").catch((e) => { chartsPromise = null; throw e; }));
   const cssVar = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
   const alpha = (hex, a) => {
     const h = hex.replace("#", "");
@@ -118,14 +129,16 @@
     return out;
   };
 
-  async function drawChart(el, c) {
+  // Medias del gráfico: las que usa Qullamaggie (10, 20 y 50) y la de 200 a demanda.
+  const MAS = [[10, "--ma10", 1.5], [20, "--ma20", 1.5], [50, "--ma50", 2], [200, "--ma200", 1.5]];
+
+  async function drawChart(el, c, kPromise) {
     try {
-      const [LWC, all] = await Promise.all([loadLWC(), loadCharts()]);
-      const k = all[c.sym];
-      if (!k) { el.innerHTML = `<p class="empty">Sin velas para ${esc(c.sym)}.</p>`; return; }
+      const [LWC, k] = await Promise.all([loadLWC(), kPromise]);
+      if (!k || !k.t || !k.t.length) { el.innerHTML = `<p class="empty">Sin velas para ${esc(c.sym)}.</p>`; return; }
       el.innerHTML = "";
       const col = { bg: cssVar("--surface"), text: cssVar("--muted"), grid: cssVar("--soft"), rule: cssVar("--rule"),
-        up: cssVar("--pos"), down: cssVar("--neg"), pivot: cssVar("--pivot"), ink: cssVar("--ink") };
+        up: cssVar("--pos"), down: cssVar("--neg"), pivot: cssVar("--pivot") };
       const chart = LWC.createChart(el, {
         height: el.clientWidth < 600 ? 300 : 380,
         layout: { background: { color: col.bg }, textColor: col.text, fontFamily: "Archivo, system-ui, sans-serif" },
@@ -133,19 +146,24 @@
         rightPriceScale: { borderColor: col.rule }, timeScale: { borderColor: col.rule, rightOffset: 4 },
         crosshair: { mode: 0 }, localization: { locale: "es-ES" },
       });
+      const open = (i) => (isNum(k.o[i]) ? k.o[i] : k.c[i]);
       const candles = chart.addCandlestickSeries({ upColor: col.up, downColor: col.down, borderVisible: false,
         wickUpColor: col.up, wickDownColor: col.down, priceLineVisible: false });
-      candles.setData(k.t.map((t, i) => ({ time: t, open: k.o[i], high: k.h[i], low: k.l[i], close: k.c[i] })));
+      candles.setData(k.t.map((t, i) => ({ time: t, open: open(i), high: k.h[i], low: k.l[i], close: k.c[i] })));
       candles.priceScale().applyOptions({ scaleMargins: { top: 0.06, bottom: 0.24 } });
-      if (k.v.length) {
+      if (k.v && k.v.length) {
         const vol = chart.addHistogramSeries({ priceFormat: { type: "volume" }, priceScaleId: "", lastValueVisible: false, priceLineVisible: false });
         vol.priceScale().applyOptions({ scaleMargins: { top: 0.8, bottom: 0 } });
-        vol.setData(k.t.map((t, i) => ({ time: t, value: k.v[i], color: alpha(k.c[i] >= k.o[i] ? col.up : col.down, 0.35) })));
+        vol.setData(k.t.map((t, i) => ({ time: t, value: k.v[i] || 0, color: alpha(k.c[i] >= open(i) ? col.up : col.down, 0.35) })));
       }
-      [[20, 0.9], [50, 0.6], [200, 0.35]].forEach(([n, a]) => {
+      const show200 = store.get("radar.sma200", false);
+      el._sma = {};
+      MAS.forEach(([n, v, w]) => {
         if (k.c.length < n) return;
-        chart.addLineSeries({ color: alpha(col.ink.startsWith("#") ? col.ink : "#14202B", a), lineWidth: n === 20 ? 1 : 2,
-          priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false }).setData(smaSeries(k.t, k.c, n));
+        const line = chart.addLineSeries({ color: cssVar(v), lineWidth: w, visible: n !== 200 || show200,
+          priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false });
+        line.setData(smaSeries(k.t, k.c, n));
+        el._sma[n] = line;
       });
       candles.createPriceLine({ price: c.pivot, color: col.pivot, lineWidth: 2, lineStyle: 0, axisLabelVisible: true, title: "Pivote" });
       if (isNum(c.inv)) candles.createPriceLine({ price: c.inv, color: col.down, lineWidth: 1, lineStyle: 2, axisLabelVisible: true, title: "Invalidación" });
@@ -159,10 +177,18 @@
     }
   }
 
+  function chartLegend(c) {
+    const on = store.get("radar.sma200", false);
+    return `<p class="legend"><span><i style="background:var(--pivot)"></i>Pivote ${price(c.pivot, c.currency)}</span>
+      <span><i style="background:var(--neg)"></i>Invalidación ${price(c.inv, c.currency)}</span>
+      <span><i style="background:var(--ma10)"></i>SMA10</span><span><i style="background:var(--ma20)"></i>SMA20</span>
+      <span><i style="background:var(--ma50)"></i>SMA50</span>
+      <label class="ma-toggle"><input type="checkbox" class="sma200" ${on ? "checked" : ""}><i style="background:var(--ma200)"></i>SMA200</label></p>`;
+  }
 
   // ---------- plan según las reglas de Qullamaggie ----------
   function qmBlock(c) {
-    const q = c.qm, cur = c.currency;
+    const q = c.qm, cur = c.currency, K = (D && D.qm_const) || q;
     const acct = store.get("radar.qm.account", 10000), risk = store.get("radar.qm.risk", 0.5);
     const checks = q.checks.map((k) => `<li class="${k.ok === true ? "pos" : k.ok === false ? "neg" : "dim"}">
       <span aria-hidden="true">${k.ok === true ? "✓" : k.ok === false ? "✗" : "·"}</span> ${esc(k.label)}${k.hard ? "" : " <span class=\"dim\">(secundaria)</span>"}: <strong>${esc(k.value)}</strong></li>`).join("");
@@ -172,13 +198,13 @@
         <div><p class="dim">Requisitos del setup (las no marcadas como secundarias son obligatorias)</p><ul class="checks">${checks}</ul></div>
         <div><dl>
           <dt>Entrada</dt><dd>${q.trigger ? `Por encima de <strong>${price(q.trigger, cur)}</strong>` : "—"}<br><span class="dim">${esc(q.entry_note)}</span></dd>
-          <dt>Marco temporal</dt><dd>${esc(q.entry_timeframe)}</dd>
-          <dt>Stop</dt><dd>${esc(q.stop_rule)}${isNum(q.stop_max) ? `; como máximo ${price(q.stop_max, cur)}` : ""}<br><span class="dim">${esc(q.stop_note)}</span></dd>
-          <dt>Salidas</dt><dd><ol class="sells">${q.sell_plan.map((x) => `<li>${esc(x)}</li>`).join("")}</ol>
+          <dt>Marco temporal</dt><dd>${esc(K.entry_timeframe)}</dd>
+          <dt>Stop</dt><dd>${esc(K.stop_rule)}${isNum(q.stop_max) ? `; como máximo ${price(q.stop_max, cur)}` : ""}<br><span class="dim">${esc(K.stop_note)}</span></dd>
+          <dt>Salidas</dt><dd><ol class="sells">${(K.sell_plan || []).map((x) => `<li>${esc(x)}</li>`).join("")}</ol>
             <span class="dim">${esc(q.trail_ma)} actual: ${price(q.trail_value, cur)}</span></dd>
-          <dt>Horizonte</dt><dd>${esc(q.horizon)}</dd>
+          <dt>Horizonte</dt><dd>${esc(K.horizon)}</dd>
         </dl></div>
-        <div class="calc"><p><strong>Tamaño de la posición</strong> <span class="dim">(${esc(q.risk_rule)})</span></p>
+        <div class="calc"><p><strong>Tamaño de la posición</strong> <span class="dim">(${esc(K.risk_rule)})</span></p>
           <label>Cuenta (${esc(cur === "GBp" ? "GBP" : cur)})<input type="number" min="0" step="100" class="qm-acct" value="${esc(acct)}"></label>
           <label>Riesgo por operación (%)<input type="number" min="0.1" max="1" step="0.05" class="qm-risk" value="${esc(risk)}"></label>
           <p class="qm-out" aria-live="polite"></p></div>
@@ -310,6 +336,59 @@
       <p class="legend">${comps.map(([, n, max, op]) => `<span><i style="background:var(--pivot);opacity:${op}"></i>${n} (${max})</span>`).join("")}<span><i class="na" style="background:repeating-linear-gradient(135deg,var(--rule) 0 3px,transparent 3px 6px)"></i>Sin dato (se redistribuye)</span></p>`;
   }
 
+  // ---------- ficha de un valor (fila desplegada de la watchlist y buscador) ----------
+  function detailHTML(c) {
+    const comp = c.components || {};
+    const h = SCORE_HIST[c.sym] || [];
+    const live = !!c.live;
+    const catTxt = c.catalyst ? (c.catalyst_source ? `<a href="${esc(c.catalyst_source)}" target="_blank" rel="noopener">${esc(c.catalyst)}</a>` : esc(c.catalyst))
+      : live || comp.catalyst == null ? "no evaluado (su peso se redistribuye)" : "sin catalizador verificado";
+    return `<div class="chart-box"><div class="chart" role="img" aria-label="Gráfico diario de ${esc(c.sym)} con pivote, invalidación y medias móviles"><p class="empty">Cargando gráfico…</p></div>
+        ${chartLegend(c)}</div>
+      <div class="detail-grid">
+        <div><h3>Niveles</h3><dl>
+          <dt>Resistencia (pivote)</dt><dd>${price(c.pivot, c.currency)} (${dateEs(c.pivot_date)})</dd>
+          <dt>Distancia</dt><dd>${pct(c.dist)} · ${num((c.close - c.pivot) / c.atr, 1)} ATR</dd>
+          <dt>Invalidación</dt><dd>${isNum(c.inv) ? `${price(c.inv, c.currency)} (${pct(c.inv_pct)}; ${num(c.inv_atr, 1)} ATR)` : "—"}</dd>
+          <dt>ATR 14</dt><dd>${price(c.atr, c.currency)} (${pct(c.atr_pct, 1, false)})</dd>
+          <dt>Volumen sesión / media 20s</dt><dd>${num(c.vol / 1e6, 2)} M / ${num(c.v20 / 1e6, 2)} M</dd>
+          <dt>Base</dt><dd>${c.base_len} sesiones, profundidad ${pct(c.depth, 0, false)}</dd>
+          <dt>Desde máx. 52s</dt><dd>${pct(c.dhi)}</dd>
+        </dl></div>
+        <div><h3>Hipótesis</h3>
+          ${c.confirm ? `<p><strong>Confirmaría:</strong> ${esc(c.confirm)}</p>` : ""}
+          ${c.invalidate ? `<p><strong>Invalidaría:</strong> ${esc(c.invalidate)}</p>` : ""}
+          ${c.why ? `<p class="dim">${esc(c.why)}</p>` : ""}
+          <p><strong>Catalizador:</strong> ${catTxt}</p>
+          <p><strong>Resultados:</strong> ${c.next_earnings ? dateEs(c.next_earnings, true) + (c.next_earnings_est ? " (estimada)" : "") : live || !c.theme ? "no consultados" : "sin fecha publicada"}</p>
+          <p><a href="${tvUrl(c.sym)}" target="_blank" rel="noopener">Abrir gráfico en TradingView</a> · <a href="${yfUrl(c.sym)}" target="_blank" rel="noopener">Yahoo Finance</a></p>
+        </div>
+        <div><h3>Puntuación ${num(c.score, 1)}</h3><dl>
+          <dt>Fuerza relativa (25)</dt><dd>${num(comp.rs, 1)} · percentil ${num((c.rs_pct || 0) * 100, 0)}</dd>
+          <dt>Base y estructura (25)</dt><dd>${num(comp.base, 0)}</dd>
+          <dt>Ruptura y volumen (20)</dt><dd>${num(comp.breakout, 0)}</dd>
+          <dt>Tendencia (15)</dt><dd>${num(comp.trend, 0)}</dd>
+          <dt>Liquidez (10)</dt><dd>${num(comp.liquidity, 0)} · ${num((c.mdv_usd || 0) / 1e6, 0)} M USD/día</dd>
+          <dt>Catalizador (5)</dt><dd>${comp.catalyst == null ? "sin datos (redistribuido)" : num(comp.catalyst, 0)}</dd>
+          <dt>Capitalización</dt><dd>${isNum(c.mcap_usd) ? num(c.mcap_usd / 1e9, 1) + " B USD" : "no verificada"}</dd>
+          <dt>Riesgo</dt><dd class="risk-${esc(c.risk)}">${esc(c.risk)} (${c.risk_points} punto${c.risk_points === 1 ? "" : "s"})</dd>
+          ${h.length > 1 ? `<dt>Histórico</dt><dd>${spark(h, 120, 24)}</dd>` : ""}
+        </dl></div>
+      </div>
+      ${c.qm ? qmBlock(c) : ""}`;
+  }
+
+  function mountDetail(root, c, kPromise) {
+    const el = root.querySelector(".chart");
+    drawChart(el, c, kPromise);
+    qmCalc(root.querySelector(".qm-box"), c);
+    const box = root.querySelector(".sma200");
+    if (box) box.addEventListener("change", () => {
+      store.set("radar.sma200", box.checked);
+      if (el._sma && el._sma[200]) el._sma[200].applyOptions({ visible: box.checked });
+    });
+  }
+
   function renderWatchlist(d, byS, scoreHist) {
     const pres = d.lists.presented.map((s) => byS[s]).filter(Boolean);
     pres.forEach((c) => { c.qm_verdict = c.qm ? { "Cumple": 0, "Con reservas": 1, "No cumple": 2 }[c.qm.verdict] : 3; });
@@ -325,7 +404,7 @@
         <label>Riesgo<select id="f-risk">${opt("", "Todos", f.risk)}${["Bajo", "Medio", "Alto"].map((s) => opt(s, s, f.risk)).join("")}</select></label>
         <label>Cambio vs. sesión anterior<select id="f-ds">${opt("", "Todos", f.ds)}${Object.entries(DS_LABEL).map(([k, v]) => opt(k, v, f.ds)).join("")}</select></label>
         <label>Qullamaggie<select id="f-qm">${opt("", "Todas", f.qm)}${["Cumple", "Con reservas", "No cumple"].map((s) => opt(s, s, f.qm)).join("")}</select></label>
-        <label>Buscar<input id="f-q" type="search" placeholder="Ticker o empresa" value="${esc(f.q)}"></label>
+        <label>Filtrar<input id="f-q" type="search" placeholder="Ticker o empresa" value="${esc(f.q)}"></label>
         <span class="count" id="wl-count"></span>
       </div>
       <div class="tbl-wrap"><table id="wl">
@@ -367,43 +446,6 @@
           <td class="left ds ds-${esc(c.daily_status)}">${esc(DS_LABEL[c.daily_status] || c.daily_status || "")}${isNum(c.score_prev) ? ` <span class="dim">(${num(c.score_prev, 0)})</span>` : ""}</td>
         </tr>`).join("") : `<tr><td colspan="13" class="empty">Ninguna candidata cumple los filtros. Prueba a quitar alguno.</td></tr>`;
     };
-    const detail = (c) => {
-      const comp = c.components || {};
-      const h = scoreHist[c.sym] || [];
-      return `<tr class="detail"><td colspan="13">
-        <div class="chart-box"><div class="chart" role="img" aria-label="Gráfico diario de ${esc(c.sym)} con pivote e invalidación"><p class="empty">Cargando gráfico…</p></div>
-          <p class="legend"><span><i style="background:var(--pivot)"></i>Pivote ${price(c.pivot, c.currency)}</span><span><i style="background:var(--neg)"></i>Invalidación ${price(c.inv, c.currency)}</span><span>Medias de 20, 50 y 200 sesiones (de más a menos intensa)</span></p></div>
-        <div class="detail-grid">
-        <div><h3>Niveles</h3><dl>
-          <dt>Resistencia (pivote)</dt><dd>${price(c.pivot, c.currency)} (${dateEs(c.pivot_date)})</dd>
-          <dt>Distancia</dt><dd>${pct(c.dist)} · ${num((c.close - c.pivot) / c.atr, 1)} ATR</dd>
-          <dt>Invalidación</dt><dd>${price(c.inv, c.currency)} (${pct(c.inv_pct)}; ${num(c.inv_atr, 1)} ATR)</dd>
-          <dt>ATR 14</dt><dd>${price(c.atr, c.currency)} (${pct(c.atr_pct, 1, false)})</dd>
-          <dt>Volumen sesión / media 20s</dt><dd>${num(c.vol / 1e6, 2)} M / ${num(c.v20 / 1e6, 2)} M</dd>
-          <dt>Base</dt><dd>${c.base_len} sesiones, profundidad ${pct(c.depth, 0, false)}</dd>
-          <dt>Desde máx. 52s</dt><dd>${pct(c.dhi)}</dd>
-        </dl></div>
-        <div><h3>Hipótesis</h3>
-          <p><strong>Confirmaría:</strong> ${esc(c.confirm)}</p>
-          <p><strong>Invalidaría:</strong> ${esc(c.invalidate)}</p>
-          ${c.why ? `<p class="dim">${esc(c.why)}</p>` : ""}
-          <p><strong>Catalizador:</strong> ${c.catalyst ? (c.catalyst_source ? `<a href="${esc(c.catalyst_source)}" target="_blank" rel="noopener">${esc(c.catalyst)}</a>` : esc(c.catalyst)) : "sin catalizador verificado"}</p>
-          <p><a href="${tvUrl(c.sym)}" target="_blank" rel="noopener">Abrir gráfico en TradingView</a> · <a href="${yfUrl(c.sym)}" target="_blank" rel="noopener">Yahoo Finance</a></p>
-        </div>
-        <div><h3>Puntuación ${num(c.score, 1)}</h3><dl>
-          <dt>Fuerza relativa (25)</dt><dd>${num(comp.rs, 1)} · percentil ${num((c.rs_pct || 0) * 100, 0)}</dd>
-          <dt>Base y estructura (25)</dt><dd>${num(comp.base, 0)}</dd>
-          <dt>Ruptura y volumen (20)</dt><dd>${num(comp.breakout, 0)}</dd>
-          <dt>Tendencia (15)</dt><dd>${num(comp.trend, 0)}</dd>
-          <dt>Liquidez (10)</dt><dd>${num(comp.liquidity, 0)} · ${num((c.mdv_usd || 0) / 1e6, 0)} M USD/día</dd>
-          <dt>Catalizador (5)</dt><dd>${comp.catalyst === null ? "sin datos (redistribuido)" : num(comp.catalyst, 0)}</dd>
-          <dt>Capitalización</dt><dd>${isNum(c.mcap_usd) ? num(c.mcap_usd / 1e9, 1) + " B USD" : "no verificada"}</dd>
-          <dt>Riesgo</dt><dd class="risk-${esc(c.risk)}">${esc(c.risk)} (${c.risk_points} puntos)</dd>
-          ${h.length > 1 ? `<dt>Histórico</dt><dd>${spark(h, 120, 24)}</dd>` : ""}
-        </dl></div>
-      </div>
-      ${c.qm ? qmBlock(c) : ""}</td></tr>`;
-    };
     const toggle = (tr) => {
       const open = tr.getAttribute("aria-expanded") === "true";
       if (open) {
@@ -411,10 +453,10 @@
         if (det && det.classList.contains("detail")) { const ch = det.querySelector(".chart"); ch && ch._dispose && ch._dispose(); det.remove(); }
         tr.setAttribute("aria-expanded", "false"); return;
       }
-      tr.insertAdjacentHTML("afterend", detail(byS[tr.dataset.sym]));
+      const c = byS[tr.dataset.sym];
+      tr.insertAdjacentHTML("afterend", `<tr class="detail"><td colspan="13">${detailHTML(c)}</td></tr>`);
       tr.setAttribute("aria-expanded", "true");
-      drawChart(tr.nextElementSibling.querySelector(".chart"), byS[tr.dataset.sym]);
-      qmCalc(tr.nextElementSibling.querySelector(".qm-box"), byS[tr.dataset.sym]);
+      mountDetail(tr.nextElementSibling, c, loadTicker(c.sym).then((x) => x.k));
     };
     tbody.addEventListener("click", (e) => { const tr = e.target.closest("tr.row"); if (tr && !e.target.closest("a")) toggle(tr); });
     tbody.addEventListener("keydown", (e) => { if ((e.key === "Enter" || e.key === " ") && e.target.matches("tr.row")) { e.preventDefault(); toggle(e.target); } });
@@ -462,9 +504,198 @@
         <p><strong>Estados.</strong> Pivote = máximo de las sesiones 6 a 60 anteriores. Confirmada: cierre sobre el pivote con volumen ≥ 1,5x la media de 20 sesiones. Temprana: cruza sin volumen o sin continuidad. Pre-breakout: a ≤ 5% del pivote con base de al menos 10 sesiones (o flag corto de 5-9 sesiones y ≤ 12% de profundidad). Retest: volvió al pivote tras cruzarlo. Extendida: > 10% sobre el pivote o > 3 ATR sobre la SMA20.</p>
         <p><strong>Puntuación de acciones.</strong> Fuerza relativa 25, base y estructura 25, ruptura y volumen 20, tendencia diaria y semanal 15, liquidez 10, catalizador 5. Es una clasificación, no una probabilidad. El riesgo se etiqueta aparte: volatilidad, resultados próximos, distancia a la invalidación y liquidez.</p>
         <p><strong>Plan Qullamaggie.</strong> Codificación propia de sus reglas públicas para rupturas: subida previa ≥ 30% en 1-3 meses, base de 2 semanas a 2 meses con mínimos crecientes sobre SMA10 y SMA20 ascendentes, ADR ≥ 5%, liquidez ≥ 20 M USD y RS en el 10% superior. Entrada en la ruptura del rango de apertura (1-5 min); stop en el mínimo del día y nunca a más de 1 ADR; venta de 1/3-1/2 a los 3-5 días, stop a la entrada y el resto con cierre bajo SMA10 o SMA20. El filtro de mercado usa el Nasdaq 100 frente a sus SMA10 y SMA20. Son niveles orientativos para el estudio del gráfico, no órdenes ni recomendaciones.</p>
+        <p><strong>Gráficos y buscador.</strong> Velas diarias con las medias de 10, 20 y 50 sesiones que usa Qullamaggie (la de 200, opcional). El buscador de la cabecera abre la ficha de cualquier valor del universo diario${d.web && d.web.worker_url ? " y, para el resto del mercado, la calcula al momento en el navegador con los mismos umbrales a partir de los datos de Yahoo Finance (sin temática, catalizador ni fechas de resultados)" : ""}.</p>
         <p><strong>Límites.</strong> Los niveles son algorítmicos y deben validarse en el gráfico. La amplitud solo se mide en EE. UU. Las fechas de resultados "est." no están confirmadas por la empresa. Ninguna fila es una recomendación de inversión.</p>
       </div>`;
     $("#foot").innerHTML = `Generado ${esc(d.meta.generated_local.replace("T", " "))} · versión ${esc(d.meta.version)} · <a href="data/latest.json">datos en JSON</a> · gráficos con <a href="https://www.tradingview.com/lightweight-charts/" target="_blank" rel="noopener">TradingView Lightweight Charts</a>`;
+  }
+
+  // ---------- buscador: cualquier valor ----------
+  // 1) Universo diario (≈ 2.700 valores ya calculados por el motor).
+  // 2) Si hay Worker configurado, cualquier ticker de Yahoo Finance, calculado al momento en el
+  //    navegador con docs/engine.js (mismas reglas y umbrales que el motor diario).
+  let indexPromise = null;
+  const loadIndex = () => indexPromise || (indexPromise = getJSON("data/universe.json").then((u) => {
+    const rows = u.rows || [];
+    return { rows, map: new Map(rows.map((r) => [r[0], r])) };
+  }).catch((e) => { indexPromise = null; throw e; }));
+  const workerUrl = () => ((D && D.web && D.web.worker_url) || "").replace(/\/+$/, "");
+
+  async function getWorker(path) {
+    const r = await fetch(workerUrl() + path);  // petición simple: sin cabeceras que obliguen a preflight
+    let body = null;
+    try { body = await r.json(); } catch { /* sin cuerpo */ }
+    if (!r.ok) {
+      const e = new Error((body && body.error) || `el servicio respondió ${r.status}`);
+      e.status = r.status; throw e;
+    }
+    return body;
+  }
+
+  function suggest(q, idx) {
+    const Q = q.trim().toUpperCase(), ql = q.trim().toLowerCase();
+    if (!Q) return [];
+    const out = [];
+    for (const r of idx.rows) {
+      const sym = r[0], name = (r[1] || "").toLowerCase();
+      const rank = sym === Q ? 0 : sym.startsWith(Q) ? 1 : name.startsWith(ql) ? 2 : name.includes(ql) ? 3 : sym.includes(Q) ? 4 : -1;
+      if (rank >= 0) out.push({ rank, sym, name: r[1], theme: r[2], state: r[3], score: r[4] });
+    }
+    out.sort((a, b) => a.rank - b.rank || b.score - a.score);
+    return out.slice(0, 8);
+  }
+
+  function initFinder() {
+    const input = $("#q"), list = $("#q-list");
+    let items = [], active = -1, seq = 0, timer = null;
+    const close = () => { list.hidden = true; input.setAttribute("aria-expanded", "false"); input.removeAttribute("aria-activedescendant"); active = -1; };
+    const paint = (hint) => {
+      list.innerHTML = items.map((it, i) => `<li role="option" id="q-opt-${i}" data-sym="${esc(it.sym)}" aria-selected="${i === active}">
+          <span class="s">${esc(it.sym)}</span><span class="n">${esc(it.name || "")}</span>
+          <span class="g">${it.live ? "se calcula al momento" : `${esc(STATE_LABEL[it.state] || it.state)} · ${num(it.score, 0)}`}</span></li>`).join("")
+        + (hint ? `<li class="hint" role="presentation">${hint}</li>` : "");
+      list.hidden = !items.length && !hint;
+      input.setAttribute("aria-expanded", String(!list.hidden));
+      if (active >= 0) input.setAttribute("aria-activedescendant", `q-opt-${active}`); else input.removeAttribute("aria-activedescendant");
+    };
+    const pick = (sym) => { close(); input.value = ""; input.blur(); openTicker(sym); };
+    const update = async () => {
+      const q = input.value, my = ++seq;
+      if (!q.trim()) { items = []; close(); return; }
+      let idx = null;
+      try { idx = await loadIndex(); } catch { /* sin índice: solo el Worker */ }
+      if (my !== seq) return;
+      items = idx ? suggest(q, idx) : [];
+      active = items.length ? 0 : -1;
+      const enterHint = `Pulsa Intro para abrir <strong>${esc(q.trim().toUpperCase())}</strong>`;
+      paint(items.length ? "" : workerUrl() ? enterHint : "No está en el universo del radar de hoy.");
+      clearTimeout(timer);
+      if (workerUrl() && q.trim().length >= 2) {
+        timer = setTimeout(async () => {
+          try {
+            const res = await getWorker(`/search?q=${encodeURIComponent(q.trim())}`);
+            if (my !== seq) return;
+            const have = new Set(items.map((x) => x.sym));
+            for (const r of res || []) {
+              if (items.length >= 10) break;
+              if (have.has(r.symbol)) continue;
+              const inIdx = idx && idx.map.get(r.symbol);
+              items.push(inIdx ? { sym: r.symbol, name: inIdx[1], state: inIdx[3], score: inIdx[4] }
+                : { sym: r.symbol, name: `${r.name || ""}${r.exchange ? " · " + r.exchange : ""}`, live: true });
+            }
+            if (active < 0 && items.length) active = 0;
+            paint(items.length ? "" : enterHint);
+          } catch { /* el buscador del Worker es opcional */ }
+        }, 300);
+      }
+    };
+    input.addEventListener("input", update);
+    input.addEventListener("focus", () => { loadIndex().catch(() => {}); if (input.value.trim()) update(); });
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+        if (!items.length) return;
+        e.preventDefault();
+        active = (active + (e.key === "ArrowDown" ? 1 : -1) + items.length) % items.length;
+        paint(""); list.querySelector(`#q-opt-${active}`)?.scrollIntoView({ block: "nearest" });
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+        const q = input.value.trim().toUpperCase();
+        if (!q) return;
+        pick(active >= 0 && items[active] ? items[active].sym : q);
+      } else if (e.key === "Escape") { close(); }
+    });
+    list.addEventListener("mousedown", (e) => { const li = e.target.closest("li[data-sym]"); if (li) { e.preventDefault(); pick(li.dataset.sym); } });
+    document.addEventListener("click", (e) => { if (!e.target.closest(".finder")) close(); });
+  }
+
+  const benchName = (sym) => ((D.regime.indices || []).find((i) => i.sym === sym) || {}).name || sym;
+
+  async function openTicker(raw) {
+    const sym = String(raw || "").trim().toUpperCase();
+    if (!sym) return;
+    const sec = $("#ficha");
+    const old = sec.querySelector(".chart");
+    if (old && old._dispose) old._dispose();
+    sec.hidden = false;
+    sec.innerHTML = `<p class="empty">Buscando ${esc(sym)}…</p>`;
+    sec.scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" });
+    history.replaceState(null, "", `#valor=${encodeURIComponent(sym)}`);
+    try {
+      let idx = null;
+      try { idx = await loadIndex(); } catch { /* sin índice */ }
+      let c, kPromise, note;
+      if (idx && idx.map.has(sym)) {
+        const x = await loadTicker(sym);
+        c = BYS[sym] || x.rec;
+        kPromise = Promise.resolve(x.k);
+        const where = c.theme ? `Temática: ${themeName(D, c.theme)}.` : "Sin temática asignada.";
+        if (c.presented) note = `En la watchlist de hoy. ${where} Datos del cierre del ${dateEs(c.date)}.`;
+        else {
+          const why = c.liquid === false ? "liquidez por debajo del mínimo del radar"
+            : !STATE_ORDER.includes(c.state) ? `estado ${STATE_LABEL[c.state] || c.state}${c.why ? " (" + c.why + ")" : ""}`
+              : D.selected_themes.includes(c.theme) ? "por debajo de las 5 mejores de su temática" : "su temática no está seleccionada hoy";
+          note = `${where} No está en la watchlist: ${why}. Datos del cierre del ${dateEs(c.date)}${BYS[sym] ? "" : "; sin catalizador ni fechas de resultados (su peso se redistribuye)"}.`;
+        }
+      } else if (workerUrl()) {
+        let rawK;
+        try { rawK = await getWorker(`/chart?symbol=${encodeURIComponent(sym)}`); } catch (e) {
+          throw new Error(e.status === 404 || e.status === 400
+            ? `Yahoo Finance no tiene datos de ${sym}. Revisa el ticker: fuera de EE. UU. lleva el sufijo de su bolsa (SAP.DE, 7203.T, AZN.L…)`
+            : `No se pudo consultar ${sym} (${e.message})`);
+        }
+        const E = window.RadarEngine;
+        const { series, partial } = E.prepareSeries(rawK, Date.now() / 1000);
+        const ctx = { ...D.engine, fx: { ...D.engine.fx } };
+        const cur = E.currencyOf(series.symbol, series.meta, ctx.settings);
+        const need = E.fxNeed(cur, ctx.fx);
+        let fxNote = "";
+        if (need) {
+          try {
+            const fxk = await getWorker(`/chart?symbol=${encodeURIComponent(need.pair)}`);
+            const last = fxk.c[fxk.c.length - 1];
+            if (isNum(last) && last > 0) ctx.fx[need.base] = last; else throw new Error("sin cotización");
+          } catch { fxNote = ` No se pudo convertir ${cur} a USD: la liquidez no se puede evaluar.`; }
+        }
+        c = E.evaluateTicker(series, ctx);
+        if (!c) throw new Error(`${sym} tiene menos de 130 sesiones de historial: no se puede evaluar con las reglas del radar`);
+        kPromise = Promise.resolve(series);
+        note = `Calculado ahora con datos de Yahoo Finance hasta el cierre del ${dateEs(c.date)}${partial ? " (la sesión de hoy sigue abierta: se usa el último cierre)" : ""}. ` +
+          `Fuera del universo diario: sin temática, catalizador ni fechas de resultados. Fuerza relativa frente al ${benchName(c.benchmark)}, en percentil del universo líquido del radar.${fxNote}`;
+      } else {
+        sec.innerHTML = `<div class="ficha-head"><div><h2 class="ficha-tk">${esc(sym)}</h2>
+          <p class="ficha-note">No está en el universo del radar de hoy. Para calcular cualquier ticker al momento hay que activar el servicio de búsqueda (Worker de Cloudflare, instrucciones en el README del repositorio).</p></div>
+          <button type="button" class="close">Cerrar</button></div>`;
+        sec.querySelector(".close").addEventListener("click", closeTicker);
+        return;
+      }
+      const qv = c.qm ? `<span class="qmv qmv-${esc(c.qm.verdict.replace(/\s+/g, "-"))}">Qullamaggie: ${esc(c.qm.verdict)}</span>` : "";
+      sec.innerHTML = `<div class="ficha-head">
+          <div>
+            <h2 class="ficha-tk">${esc(c.sym)} <small>${esc(c.name && c.name !== c.sym ? c.name : "")}</small></h2>
+            <p class="ficha-meta">${chip(c.state)}<span>Puntuación <strong>${num(c.score, 0)}</strong></span>
+              <span>Cierre <strong>${price(c.close, c.currency)}</strong> <span class="dim">${esc(c.currency)}</span> <span class="${cls(c.d1)}">${pct(c.d1)}</span></span>
+              <span class="risk-${esc(c.risk)}">Riesgo ${esc((c.risk || "").toLowerCase())}</span>${qv}</p>
+            <p class="ficha-note">${esc(note)}</p>
+          </div>
+          <button type="button" class="close">Cerrar</button>
+        </div>
+        <div class="ficha-body">${detailHTML(c)}</div>`;
+      sec.querySelector(".close").addEventListener("click", closeTicker);
+      mountDetail(sec, c, kPromise);
+    } catch (err) {
+      sec.innerHTML = `<div class="ficha-head"><div><h2 class="ficha-tk">${esc(sym)}</h2><p class="ficha-note">${esc(err.message)}.</p></div>
+        <button type="button" class="close">Cerrar</button></div>`;
+      sec.querySelector(".close").addEventListener("click", closeTicker);
+    }
+  }
+
+  function closeTicker() {
+    const sec = $("#ficha");
+    const ch = sec.querySelector(".chart");
+    if (ch && ch._dispose) ch._dispose();
+    sec.hidden = true; sec.innerHTML = "";
+    history.replaceState(null, "", location.pathname + location.search);
+    $("#q").focus();
   }
 
   // ---------- arranque ----------
@@ -480,6 +711,7 @@
       const byS = Object.fromEntries(d.candidates.map((c) => [c.sym, c]));
       const scoreHist = {};
       hist.forEach((h) => Object.entries(h.watchlist || {}).forEach(([s, v]) => (scoreHist[s] = scoreHist[s] || []).push(v.score)));
+      D = d; BYS = byS; SCORE_HIST = scoreHist;
       renderHeader(d);
       renderRegime(d, hist);
       renderPriority(d, byS);
@@ -487,6 +719,10 @@
       renderWatchlist(d, byS, scoreHist);
       renderAgenda(d, byS);
       renderMethod(d);
+      initFinder();
+      const fromHash = () => { const m = location.hash.match(/^#valor=(.+)$/); if (m) openTicker(decodeURIComponent(m[1])); };
+      window.addEventListener("hashchange", fromHash);
+      fromHash();
     } catch (err) {
       $("#app").innerHTML = `<div class="err"><strong>No se han podido cargar los datos.</strong> ${esc(err.message)}. Si es la primera vez, ejecuta el flujo "Radar diario" en la pestaña Actions del repositorio y recarga esta página cuando termine.</div>`;
       $("#session").textContent = "Sin datos";

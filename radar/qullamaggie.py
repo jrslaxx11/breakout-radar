@@ -86,16 +86,22 @@ def evaluate(m: Metrics, state: str, mdv_usd: float, rs_pct: float, market: dict
     trail_val = m.s10 if trail == "SMA10" else m.s20
     return {
         "verdict": verdict, "checks": checks, "adr_pct": adr,
-        "trigger": trigger, "entry_note": entry_note,
+        "trigger": trigger, "entry_note": entry_note, "stop_max": stop_max,
+        "trail_ma": trail, "trail_value": trail_val,
+    }
+
+
+def constants() -> dict:
+    """Textos comunes a todas las acciones (se envían una sola vez al dashboard)."""
+    return {
         "entry_timeframe": "Intradía: ORH de 1 o 5 minutos (60 minutos si el rango de apertura es amplio)",
-        "stop_rule": "Mínimo del día de entrada", "stop_max": stop_max,
-        "stop_note": f"No entrar si el mínimo del día queda a más de 1 ADR ({pct(adr)}) del precio de entrada",
+        "stop_rule": "Mínimo del día de entrada",
+        "stop_note": "No entrar si el mínimo del día queda a más de 1 ADR del precio de entrada",
         "sell_plan": [
             "Vender 1/3-1/2 a los 3-5 días de la entrada, aprovechando la fuerza",
             "Subir el stop del resto al precio de entrada",
-            f"Vender el resto al primer cierre diario bajo la {trail}",
+            "Vender el resto al primer cierre diario bajo la media de seguimiento (SMA10 si ADR ≥ 5%; si no, SMA20)",
         ],
-        "trail_ma": trail, "trail_value": trail_val,
         "risk_rule": "Riesgo por operación 0,25-1% de la cuenta (habitual 0,3-0,5%)",
         "horizon": "Setup en gráfico diario · entrada intradía · gestión diaria · días a semanas",
     }

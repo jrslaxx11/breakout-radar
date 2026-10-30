@@ -171,6 +171,12 @@ def build_universe(cfg: Config) -> dict[str, dict]:
         if sym and sym not in uni:
             uni[sym] = {"source": "DISC", "name": q.get("name", ""), "gics_sector": "", "gics_sub": "",
                         "hint": "", "unbiased": False, "region": q.get("region")}
+    for sym in cfg.mine:
+        if sym in uni:
+            uni[sym]["mine"] = True
+        else:
+            uni[sym] = {"source": "MINE", "name": "", "gics_sector": "", "gics_sub": "", "hint": "",
+                        "unbiased": False, "mine": True}
     dups = cfg.duplicates()
     for sym, primary in dups.items():
         if sym in uni:

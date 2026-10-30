@@ -19,6 +19,12 @@
         <h1>Radar de rupturas</h1>
         <p class="session" id="session">Cargando datos…</p>
       </div>
+      <div class="finder" role="search">
+        <label for="q" class="sr-only">Buscar cualquier acción</label>
+        <input id="q" type="search" placeholder="Buscar acción: ticker o empresa" autocomplete="off" spellcheck="false"
+          role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="q-list">
+        <ul id="q-list" role="listbox" aria-label="Sugerencias" hidden></ul>
+      </div>
       <nav class="jump" aria-label="Secciones">
         <a href="#regimen">Régimen</a>
         <a href="#tematicas">Temáticas</a>
@@ -30,6 +36,7 @@
   </header>
 
   <main class="wrap" id="app" aria-live="polite">
+    <section id="ficha" class="block" aria-live="polite" hidden></section>
     <section id="regimen" class="block"></section>
     <section id="prioridad" class="block"></section>
     <section id="tematicas" class="block"></section>
@@ -39,6 +46,7 @@
   </main>
 
   <footer class="wrap foot" id="foot"></footer>
+  <script src="engine.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

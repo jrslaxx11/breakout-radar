@@ -4,3 +4,6 @@ __pycache__/
 .venv/
 docs/vendor/
 docs/data/charts.json
+docs/data/c/
+docs/data/universe.json
+docs/data/.skipped

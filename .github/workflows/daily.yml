@@ -12,7 +12,7 @@ on:
         default: false
   push:
     branches: [main]
-    paths: ["radar/**", "config/**", "docs/*.html", "docs/*.js", "docs/*.css", "requirements.txt", ".github/workflows/daily.yml"]
+    paths: ["radar/**", "config/**", "docs/*.html", "docs/*.js", "docs/*.css", "tests/**", "requirements.txt", ".github/workflows/daily.yml"]
 
 permissions:
   contents: write
@@ -27,6 +27,8 @@ jobs:
   radar:
     runs-on: ubuntu-latest
     timeout-minutes: 90
+    outputs:
+      publish: ${{ steps.upload.outcome == 'success' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -50,6 +52,14 @@ jobs:
           mkdir -p docs/data
           python -m radar run $ARGS 2>&1 | tee docs/data/run-log.txt
 
+      - name: ¿Sesión ya publicada?
+        id: skip
+        if: always() && steps.calc.outcome == 'success'
+        run: |
+          # Si la sesión ya estaba procesada no se vuelve a publicar la web (se queda la versión vigente,
+          # que incluye las fichas por valor que no se guardan en el repositorio).
+          if [ -f docs/data/.skipped ]; then echo "skipped=true" >> "$GITHUB_OUTPUT"; rm docs/data/.skipped; fi
+
       - name: Guardar datos e histórico en el repositorio
         if: always()
         run: |
@@ -68,21 +78,22 @@ jobs:
           exit 1
 
       - name: Descargar la librería de gráficos (código abierto, Apache 2.0)
-        if: always() && steps.calc.outcome == 'success'
+        if: always() && steps.calc.outcome == 'success' && steps.skip.outputs.skipped != 'true'
         continue-on-error: true
         run: |
           mkdir -p docs/vendor
           curl -fsSL https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js -o docs/vendor/lightweight-charts.js
 
       - name: Preparar la web
-        if: always() && steps.calc.outcome == 'success'
+        id: upload
+        if: always() && steps.calc.outcome == 'success' && steps.skip.outputs.skipped != 'true'
         uses: actions/upload-pages-artifact@v3
         with:
           path: docs
 
   deploy:
     needs: radar
-    if: always() && needs.radar.result != 'cancelled'
+    if: always() && needs.radar.outputs.publish == 'true'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
