@@ -14,6 +14,7 @@
     T: "TSE", KS: "KRX", KQ: "KRX", TW: "TWSE", TWO: "TPEX", HK: "HKEX", AX: "ASX", TO: "TSX", V: "TSXV",
     NS: "NSE", BO: "BSE",
   };
+  const LEVEL_KIND = { "máximo": "techo plano (máximo de la base)", "línea": "resistencia descendente", "rango": "máximo de las últimas sesiones" };
   const MONTHS = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
 
   // ---------- utilidades ----------
@@ -73,7 +74,7 @@
     const x = (v) => pad + (v - lo) / (hi - lo || 1) * (W - 2 * pad);
     const atrDist = (c.close - c.pivot) / (c.atr || 1);
     const col = getComputedStyle(document.documentElement);
-    const tip = `Cierre ${price(c.close, c.currency)} · pivote ${price(c.pivot, c.currency)}${inv ? " · invalidación " + price(inv, c.currency) : ""} · ${num(atrDist, 1)} ATR desde el pivote`;
+    const tip = `Cierre ${price(c.close, c.currency)} · nivel de ruptura ${price(c.pivot, c.currency)}${inv ? " · invalidación " + price(inv, c.currency) : ""} · ${num(atrDist, 1)} ATR desde el nivel de ruptura`;
     return `<svg class="ladder ${stClass(c.state)}" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(tip)}">
       <title>${esc(tip)}</title>
       <line x1="${pad}" x2="${W - pad}" y1="${H / 2}" y2="${H / 2}" stroke="${col.getPropertyValue("--rule")}" stroke-width="2"/>
@@ -166,7 +167,15 @@
         line.setData(smaSeries(k.t, k.c, n));
         el._sma[n] = line;
       });
-      candles.createPriceLine({ price: c.pivot, color: col.pivot, lineWidth: 2, lineStyle: 0, axisLabelVisible: true, title: "Pivote" });
+      candles.createPriceLine({ price: c.pivot, color: col.pivot, lineWidth: 2, lineStyle: 0, axisLabelVisible: true, title: "Ruptura" });
+      if (Array.isArray(c.line) && c.line.length === 2 && c.line[1][0] > c.line[0][0]) {
+        // Borde superior de la consolidación desde el máximo de la base (plano o descendente).
+        chart.addLineSeries({ color: col.pivot, lineWidth: 2, lineStyle: 2, priceLineVisible: false, lastValueVisible: false,
+          crosshairMarkerVisible: false }).setData(c.line.map(([t, v]) => ({ time: t, value: v })));
+      }
+      if (isNum(c.peak) && c.peak > c.pivot * 1.02) {
+        candles.createPriceLine({ price: c.peak, color: col.text, lineWidth: 1, lineStyle: 1, axisLabelVisible: true, title: "Máx. base" });
+      }
       if (isNum(c.inv)) candles.createPriceLine({ price: c.inv, color: col.down, lineWidth: 1, lineStyle: 2, axisLabelVisible: true, title: "Invalidación" });
       const n = k.t.length;
       chart.timeScale().setVisibleLogicalRange({ from: Math.max(0, n - 130), to: n + 3 });
@@ -183,7 +192,8 @@
 
   function chartLegend(c) {
     const on = store.get("radar.sma200", false);
-    return `<p class="legend"><span><i style="background:var(--pivot)"></i>Pivote ${price(c.pivot, c.currency)}</span>
+    return `<p class="legend"><span><i style="background:var(--pivot)"></i>Ruptura ${price(c.pivot, c.currency)}${c.level_kind ? ` (${esc(LEVEL_KIND[c.level_kind] || c.level_kind)})` : ""}</span>
+      <span><i class="dash"></i>Borde de la consolidación</span>
       <span><i style="background:var(--neg)"></i>Invalidación ${price(c.inv, c.currency)}</span>
       <span><i style="background:var(--ma10)"></i>SMA10</span><span><i style="background:var(--ma20)"></i>SMA20</span>
       <span><i style="background:var(--ma50)"></i>SMA50</span>
@@ -226,7 +236,7 @@
       const shares = perShare > 0 ? Math.floor((acct * risk / 100) / perShare) : 0;
       const posPct = acct > 0 ? shares * px / acct * 100 : 0;
       out.innerHTML = `Con el stop en el peor caso (1 ADR): <strong>${shares.toLocaleString("es-ES")} acciones</strong>, ${num(shares * px, 0)} de posición (${num(posPct, 1)}% de la cuenta), riesgo ${num(acct * risk / 100, 0)}.` +
-        (posPct > 25 ? ` <span class="neg">Supera el 25% de la cuenta: Qullamaggie limita el tamaño; reduce.</span>` : "") +
+        (posPct > 30 ? ` <span class="neg">Supera el 30% de la cuenta: Qullamaggie nunca pasa de ahí de un día para otro (lo habitual es 10-20%).</span>` : "") +
         ` <span class="dim">Si el mínimo real del día está más cerca, el riesgo baja con el mismo número de acciones.</span>`;
     };
     box.addEventListener("input", upd); upd();
@@ -380,12 +390,13 @@
     const live = !!c.live;
     const catTxt = c.catalyst ? (c.catalyst_source ? `<a href="${esc(c.catalyst_source)}" target="_blank" rel="noopener">${esc(c.catalyst)}</a>` : esc(c.catalyst))
       : live || comp.catalyst == null ? "no evaluado (su peso se redistribuye)" : "sin catalizador verificado";
-    return `<div class="chart-box"><div class="chart" role="img" aria-label="Gráfico diario de ${esc(c.sym)} con pivote, invalidación y medias móviles"><p class="empty">Cargando gráfico…</p></div>
+    return `<div class="chart-box"><div class="chart" role="img" aria-label="Gráfico diario de ${esc(c.sym)} con nivel de ruptura, borde de la consolidación, invalidación y medias móviles"><p class="empty">Cargando gráfico…</p></div>
         ${chartLegend(c)}</div>
       <div class="detail-grid">
         <div><h3>Niveles</h3><dl>
-          <dt>Resistencia (pivote)</dt><dd>${price(c.pivot, c.currency)} (${dateEs(c.pivot_date)})</dd>
+          <dt>Nivel de ruptura</dt><dd>${price(c.pivot, c.currency)}${c.level_kind ? `<br><span class="dim">${esc(LEVEL_KIND[c.level_kind] || c.level_kind)}</span>` : ""}</dd>
           <dt>Distancia</dt><dd>${pct(c.dist)} · ${num((c.close - c.pivot) / c.atr, 1)} ATR</dd>
+          <dt>Máximo de la base</dt><dd>${price(isNum(c.peak) ? c.peak : c.pivot, c.currency)} (${dateEs(c.pivot_date)})${c.touch_date && c.peak > c.pivot * 1.02 ? `<br><span class="dim">línea por el máximo del ${dateEs(c.touch_date)}</span>` : ""}</dd>
           <dt>Invalidación</dt><dd>${isNum(c.inv) ? `${price(c.inv, c.currency)} (${pct(c.inv_pct)}; ${num(c.inv_atr, 1)} ATR)` : "—"}</dd>
           <dt>ATR 14</dt><dd>${price(c.atr, c.currency)} (${pct(c.atr_pct, 1, false)})</dd>
           <dt>Volumen sesión / media 20s</dt><dd>${num(c.vol / 1e6, 2)} M / ${num(c.v20 / 1e6, 2)} M</dd>
@@ -434,7 +445,7 @@
     const themes = [...new Set(pres.map((c) => c.theme))];
     const opt = (v, label, cur) => `<option value="${esc(v)}" ${v === cur ? "selected" : ""}>${esc(label)}</option>`;
     $("#watchlist").innerHTML = `<h2>Watchlist</h2>
-      <p class="lead">Las 5 mejores estructuras de cada temática seleccionada. La regla muestra la invalidación (marca roja), el pivote (línea azul) y el cierre (punto). Pulsa una fila para ver niveles y condiciones.</p>
+      <p class="lead">Las 5 mejores estructuras de cada temática seleccionada. La regla muestra la invalidación (marca roja), el nivel de ruptura (línea azul) y el cierre (punto). Pulsa una fila para ver niveles y condiciones.</p>
       <div class="filters">
         <label>Temática<select id="f-theme">${opt("", "Todas", f.theme)}${themes.map((t) => opt(t, themeName(d, t), f.theme)).join("")}</select></label>
         <label>Estado<select id="f-state">${opt("", "Todos", f.state)}${STATE_ORDER.map((s) => opt(s, STATE_LABEL[s], f.state)).join("")}</select></label>
@@ -447,8 +458,8 @@
       <div class="tbl-wrap"><table id="wl">
         <thead><tr>
           <th class="left" data-sort="sym">Valor</th><th class="left" data-sort="theme">Temática</th><th data-sort="score">Punt.</th>
-          <th class="left" data-sort="state">Estado</th><th class="left">Regla</th><th data-sort="close">Cierre</th><th data-sort="live_dist" title="Último precio de Yahoo Finance, actualizado cada minuto mientras la web está abierta (ordena por distancia al pivote)">Ahora</th>
-          <th data-sort="dist">vs pivote</th><th data-sort="inv_pct">Invalidación</th><th data-sort="rvol">Vol. rel.</th>
+          <th class="left" data-sort="state">Estado</th><th class="left">Regla</th><th data-sort="close">Cierre</th><th data-sort="live_dist" title="Último precio de Yahoo Finance, actualizado cada minuto mientras la web está abierta (ordena por distancia al nivel de ruptura)">Ahora</th>
+          <th data-sort="dist">vs nivel</th><th data-sort="inv_pct">Invalidación</th><th data-sort="rvol">Vol. rel.</th>
           <th data-sort="next_earnings">Resultados</th><th data-sort="risk_points">Riesgo</th><th class="left" data-sort="qm_verdict">Qullamaggie</th><th class="left" data-sort="daily_status">Hoy</th>
         </tr></thead><tbody></tbody></table></div>`;
 
@@ -514,6 +525,33 @@
     draw();
   }
 
+  // Escáner Qullamaggie: todo el universo, rupturas que cumplen los requisitos obligatorios.
+  let QMS = {};
+  function renderQM(d) {
+    const rows = d.lists.qm_setups || [];
+    QMS = Object.fromEntries(rows.map((x) => [x.sym, x]));
+    const m = d.qm_market || {};
+    $("#qullamaggie").innerHTML = `<h2>Setups Qullamaggie</h2>
+      <p class="lead">Escáner de todo el universo, no solo de las temáticas: valores entre el 2% que más sube a 1, 3 o 6 meses, con ADR ≥ 5%, subida previa ≥ 30% y consolidación de 2 semanas a 2 meses, que hoy rompen o están a ≤ 5% del nivel de ruptura. "Con reservas": falla alguna regla secundaria${m.light && m.light !== "verde" ? " o el filtro de mercado no está en verde (hoy: " + esc(m.light) + ")" : ""}.</p>
+      ${rows.length ? `<div class="tbl-wrap"><table class="lt qm-table">
+        <thead><tr><th class="left">Valor</th><th class="left">Estado</th><th>Nivel de ruptura</th><th>Distancia</th><th>Ahora</th>
+          <th>ADR</th><th>Subida previa</th><th>Base</th><th class="left">Veredicto</th></tr></thead>
+        <tbody>${rows.map((x) => `<tr data-sym="${esc(x.sym)}" tabindex="0">
+          <td class="tk-cell"><a href="#valor=${encodeURIComponent(x.sym)}">${esc(x.sym)}</a><small>${esc(x.name && x.name !== x.sym ? x.name : "")}${x.theme ? " · " + esc(themeName(d, x.theme)) : ""}</small></td>
+          <td class="left">${chip(x.state)}${x.presented ? ` <span class="wl-tag" title="Está en la watchlist de hoy">watchlist</span>` : ""}</td>
+          <td>${price(x.pivot, x.currency)}<small class="dim block">${esc(LEVEL_KIND[x.level_kind] || "")}</small></td>
+          <td class="${cls(x.dist)}">${pct(x.dist)}</td>
+          <td class="live-cell" data-live="${esc(x.sym)}">${liveCell(x)}</td>
+          <td>${pct(x.adr_pct, 1, false)}</td><td>${pct(x.prior_move, 0)}</td><td>${x.base_len} ses.</td>
+          <td class="left"><span class="qmv qmv-${esc(x.qm.verdict.replace(/\s+/g, "-"))}">${esc(x.qm.verdict)}</span>${x.fails.length ? `<small class="dim block">falla: ${esc(x.fails.join("; ").toLowerCase())}</small>` : ""}</td>
+        </tr>`).join("")}</tbody></table></div>` : `<p class="empty">Hoy ningún valor del universo cumple los requisitos obligatorios y está en ruptura o a punto. Es normal en mercados flojos: Qullamaggie espera.</p>`}`;
+    const open = (tr) => { location.hash = `valor=${encodeURIComponent(tr.dataset.sym)}`; };
+    $("#qullamaggie").addEventListener("click", (e) => { const tr = e.target.closest("tr[data-sym]"); if (tr && !e.target.closest("a")) open(tr); });
+    $("#qullamaggie").addEventListener("keydown", (e) => {
+      if ((e.key === "Enter" || e.key === " ") && e.target.matches("tr[data-sym]")) { e.preventDefault(); open(e.target); }
+    });
+  }
+
   function renderAgenda(d, byS) {
     const cal = d.calendar || [];
     const groups = {};
@@ -533,9 +571,8 @@
           ${elim.length ? `<h3>Eliminadas respecto a la sesión anterior</h3><ul class="plain">${elim.map((e) => `<li><strong>${esc(e.sym)}</strong> <span class="dim">${esc(e.reason)}</span></li>`).join("")}</ul>` : ""}
         </div>
         <div>
-          ${(d.lists.episodic_pivots || []).length ? `<h3>Episodic pivots de la sesión (Qullamaggie)</h3><ul class="plain">${d.lists.episodic_pivots.map((e) => `<li><a href="${tvUrl(e.sym)}" target="_blank" rel="noopener"><strong>${esc(e.sym)}</strong></a> <span class="dim">${esc(e.name)} · hueco ${pct(e.gap)} · volumen ${num(e.rvol, 1)}x · ADR ${pct(e.adr_pct, 1, false)}</span></li>`).join("")}</ul><p class="dim" style="font-size:13px">Plan: comprar el ORH de 1-5 min en los días siguientes si continúa; stop en el mínimo del día.</p>` : ""}
           <h3>Rupturas confirmadas fuera de las temáticas</h3>
-          ${out.length ? `<ul class="plain">${out.map((o) => `<li><a href="${tvUrl(o.sym)}" target="_blank" rel="noopener"><strong>${esc(o.sym)}</strong></a> <span class="dim">${esc(o.name)} · ${esc(themeName(d, o.theme) || "sin temática")} · ${pct(o.dist)} sobre pivote · RS ${num(o.rs_pct * 100, 0)}</span></li>`).join("")}</ul>` : `<p class="empty">Ninguna con RS en el 20% superior.</p>`}
+          ${out.length ? `<ul class="plain">${out.map((o) => `<li><a href="${tvUrl(o.sym)}" target="_blank" rel="noopener"><strong>${esc(o.sym)}</strong></a> <span class="dim">${esc(o.name)} · ${esc(themeName(d, o.theme) || "sin temática")} · ${pct(o.dist)} sobre el nivel · RS ${num(o.rs_pct * 100, 0)}</span></li>`).join("")}</ul>` : `<p class="empty">Ninguna con RS en el 20% superior.</p>`}
         </div>
       </div>`;
   }
@@ -547,9 +584,9 @@
       <div class="method">
         <p><strong>Datos.</strong> ${esc(d.meta.price_source)}. Solo cierres confirmados de la última sesión de cada mercado; nada en tiempo real. Universo: ${cv.universe.toLocaleString("es-ES")} valores (S&P 500/400/600, lista fija internacional y descubrimiento por mercado), ${cv.with_data.toLocaleString("es-ES")} con datos y ${cv.liquid.toLocaleString("es-ES")} líquidos (≥ 5 M USD diarios y precio ≥ 5 USD).</p>
         <p><strong>Temáticas.</strong> 0-100: fuerza relativa ${W.rs} (posición de la temática frente a las demás según la mediana de la RS compuesta de sus valores: 20% 1 mes, 40% 3 meses, 40% 6 meses, cada valor frente a su índice regional), consistencia ${W.consistency} (plazos de 1, 3 y 6 meses en los que la mediana supera a su índice), amplitud ${W.breadth} (% sobre SMA50 y SMA200, solo con valores de selección no sesgada), cerca de máximos ${W.highs} (% a menos de un 10% del máximo de 52 semanas) y volumen ${W.volume} (últimas 20 sesiones frente a las 50 anteriores, valores y ETF del sector).</p>
-        <p><strong>Estados.</strong> Pivote = máximo de las sesiones 6 a 60 anteriores. Confirmada: cierre sobre el pivote con volumen ≥ 1,5x la media de 20 sesiones. Temprana: cruza sin volumen o sin continuidad. Pre-breakout: a ≤ 5% del pivote con base de al menos 10 sesiones (o flag corto de 5-9 sesiones y ≤ 12% de profundidad). Retest: volvió al pivote tras cruzarlo. Extendida: > 10% sobre el pivote o > 3 ATR sobre la SMA20.</p>
+        <p><strong>Estados.</strong> La consolidación empieza en el máximo de las últimas 60 sesiones. Su borde superior es la línea más plana que parte de ese máximo y deja por debajo todos los máximos posteriores: plana en un canal, descendente en triángulos y flags. El nivel de ruptura es esa línea proyectada al día, o el máximo de las 3 sesiones anteriores si queda por encima. Confirmada: cierre sobre el nivel con volumen ≥ 1,5x la media de 20 sesiones y en la mitad alta del día. Temprana: cruza sin volumen o sin continuidad. Pre-breakout: a ≤ 5% del nivel con base de al menos 10 sesiones (o flag de 5-9 y ≤ 12% de profundidad). Retest: volvió al nivel tras cruzarlo. Extendida: > 10% sobre el nivel o > 3 ATR sobre la SMA20. Con menos de 5 sesiones desde el máximo no hay consolidación todavía.</p>
         <p><strong>Puntuación de acciones.</strong> Fuerza relativa 25, base y estructura 25, ruptura y volumen 20, tendencia diaria y semanal 15, liquidez 10, catalizador 5. Es una clasificación, no una probabilidad. El riesgo se etiqueta aparte: volatilidad, resultados próximos, distancia a la invalidación y liquidez.</p>
-        <p><strong>Plan Qullamaggie.</strong> Codificación propia de sus reglas públicas para rupturas: subida previa ≥ 30% en 1-3 meses, base de 2 semanas a 2 meses con mínimos crecientes sobre SMA10 y SMA20 ascendentes, ADR ≥ 5%, liquidez ≥ 20 M USD y RS en el 10% superior. Entrada en la ruptura del rango de apertura (1-5 min); stop en el mínimo del día y nunca a más de 1 ADR; venta de 1/3-1/2 a los 3-5 días, stop a la entrada y el resto con cierre bajo SMA10 o SMA20. El filtro de mercado usa el Nasdaq 100 frente a sus SMA10 y SMA20. Son niveles orientativos para el estudio del gráfico, no órdenes ni recomendaciones.</p>
+        <p><strong>Qullamaggie (solo rupturas).</strong> Reglas de su artículo "3 timeless setups", con umbrales objetivos. Obligatorias: estar entre el 2% que más sube a 1, 3 o 6 meses, ADR ≥ 5%, subida previa ≥ 30% en 1-3 meses y consolidación de 2 semanas a 2 meses (flag desde 5 sesiones). Secundarias: retroceso ordenado (≤ 50% de la subida), mínimos crecientes, rango que se estrecha y precio surfeando las SMA10/SMA20 (o SMA50) ascendentes. Entrada en el máximo de la primera vela de 1, 5 o 60 minutos; stop en el mínimo del día y nunca más ancho que el ADR; venta de 1/3-1/2 a los 3-5 días, stop a la entrada y el resto al primer cierre bajo la SMA10 o SMA20. Posición habitual 10-20%, nunca más del 30%. Filtro de mercado: Nasdaq 100 frente a sus SMA10 y SMA20. Son niveles orientativos para estudiar el gráfico, no órdenes ni recomendaciones.</p>
         <p><strong>Gráficos y buscador.</strong> Velas diarias con las medias de 10, 20 y 50 sesiones que usa Qullamaggie (la de 200, opcional). El buscador de la cabecera abre la ficha de cualquier valor del universo diario${d.web && d.web.worker_url ? " y, para el resto del mercado, la calcula al momento en el navegador con los mismos umbrales a partir de los datos de Yahoo Finance (sin temática, catalizador ni fechas de resultados)" : ""}.</p>
         <p><strong>Límites.</strong> Los niveles son algorítmicos y deben validarse en el gráfico. La amplitud solo se mide en EE. UU. Las fechas de resultados "est." no están confirmadas por la empresa. Ninguna fila es una recomendación de inversión.</p>
       </div>`;
@@ -789,10 +826,10 @@
     let txt, kind;
     if (isNum(c.inv) && p < c.inv) { txt = "bajo la invalidación"; kind = "neg"; }
     else if (trig && p > trig) { txt = "supera la entrada"; kind = "hit"; }
-    else if (p > c.pivot && c.close <= c.pivot) { txt = "rompe el pivote"; kind = "hit"; }
-    else if (p > c.pivot) { txt = `${pct(dist)} sobre el pivote`; kind = "pos"; }
-    else if (-dist < 0.001) { txt = "en el pivote"; kind = "near"; }
-    else { txt = `a ${num(-dist * 100, 1)}% del pivote`; kind = "near"; }
+    else if (p > c.pivot && c.close <= c.pivot) { txt = "rompe el nivel"; kind = "hit"; }
+    else if (p > c.pivot) { txt = `${pct(dist)} sobre el nivel`; kind = "pos"; }
+    else if (-dist < 0.001) { txt = "en el nivel"; kind = "near"; }
+    else { txt = `a ${num(-dist * 100, 1)}% del nivel`; kind = "near"; }
     // Volumen relativo: con la sesión abierta, proyección al cierre con un perfil intradía
     // aproximado (se negocia más al principio): fracción de volumen ≈ fracción de tiempo ^ 0,8.
     let rv = null, proj = false;
@@ -838,7 +875,7 @@
 
   function renderLive() {
     Object.values(BYS).forEach((c) => { const L = liveInfo(c); c.live_dist = L && !L.stale ? L.dist : null; });
-    document.querySelectorAll("td[data-live]").forEach((td) => { const c = BYS[td.dataset.live]; if (c) td.innerHTML = liveCell(c); });
+    document.querySelectorAll("td[data-live]").forEach((td) => { const c = BYS[td.dataset.live] || QMS[td.dataset.live]; if (c) td.innerHTML = liveCell(c); });
     const f = document.querySelector("[data-live-ficha]");
     if (f && LIVE.ficha) f.innerHTML = fichaLive(LIVE.ficha);
     updateLiveCharts();
@@ -858,7 +895,8 @@
   async function liveTick() {
     clearTimeout(LIVE.timer);
     if (!workerUrl() || document.hidden || !D) return;
-    const syms = [...new Set([...(D.lists.presented || []), ...(currentSym ? [currentSym] : [])])].sort();
+    const syms = [...new Set([...(D.lists.presented || []), ...(D.lists.qm_setups || []).map((x) => x.sym),
+      ...(currentSym ? [currentSym] : [])])].sort();
     try {
       for (let i = 0; i < syms.length; i += 40) {
         const r = await getWorker(`/quote?symbols=${encodeURIComponent(syms.slice(i, i + 40).join(","))}`);
@@ -895,6 +933,7 @@
       renderThemes(d, hist);
       bindLeaders();
       renderWatchlist(d, byS, scoreHist);
+      renderQM(d);
       renderAgenda(d, byS);
       renderMethod(d);
       initFinder();

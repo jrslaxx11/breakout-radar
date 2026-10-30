@@ -45,32 +45,29 @@
     const dv = []; for (let i = Math.max(0, e - 19); i <= e; i++) dv.push(c[i] * v[i]);
     dv.sort((a, b) => a - b);
     const mdv = dv[Math.floor(dv.length / 2)];
-    const lookback = w.pivot_lookback ?? 60, minAge = w.pivot_min_age ?? 6, cw = w.cross_window ?? 5;
-    const start = Math.max(0, e - lookback);
-    let ip = start;
-    for (let i = start; i <= e - minAge; i++) if (h[i] > h[ip]) ip = i;
-    const P = h[ip];
-    const Lb = minR(l, ip, e);
-    let crossI = null;
-    for (let i = e - cw; i <= e; i++) if (c[i] > P) { crossI = i; break; }
-    let anyAbove = false;
-    for (let i = e - cw; i <= e; i++) if (c[i] > P) anyAbove = true;
+    // Consolidación y nivel de ruptura (igual que radar/metrics.py: _base_at).
+    const lookback = w.pivot_lookback ?? 60, baseMin = w.base_min ?? 5, cw = w.cross_window ?? 5, recentN = w.recent_highs ?? 3;
+    let crossI = null, base = null;
+    for (let d = Math.max(1, e - cw); d <= e; d++) {
+      const b = baseAt(h, d, lookback, baseMin, recentN, true);
+      if (b && c[d] > b.level) { crossI = d; base = b; break; }
+    }
+    if (!base) base = baseAt(h, e + 1, lookback, baseMin, recentN, false);
+    const { ip, H, slope, jt, lineV } = base, P = base.level;
+    const dLvl = crossI !== null ? crossI : e + 1;
+    const baseEnd = crossI !== null ? crossI - 1 : e;
+    const Lb = minR(l, ip, baseEnd);
+    const loMove = minR(l, Math.max(0, ip - 63), ip);
+    const kind = P > lineV + 1e-9 ? "rango" : (H - lineV > 0.02 * H ? "línea" : "máximo");
     const maxCloseSince = crossI !== null ? maxR(c, crossI, e) : null;
     let rvolCross = null;
-    if (crossI !== null) { const b = sma(v, 20, crossI - 1); rvolCross = b ? v[crossI] / b : null; }
+    if (crossI !== null) { const bv = sma(v, 20, crossI - 1); rvolCross = bv ? v[crossI] / bv : null; }
     const hi10 = maxR(h, e - 9, e), lo10 = minR(l, e - 9, e), lo5 = minR(l, e - 4, e);
     const rng = h[e] - l[e];
-    let epUp = 0, epDown = 0;
-    for (let i = Math.max(51, e - 20); i <= e; i++) {
-      const b = sma(v, 50, i - 1);
-      if (!b || v[i] < 1.8 * b) continue;
-      const r = c[i] / c[i - 1] - 1;
-      if (r >= 0.04) epUp++; else if (r <= -0.04) epDown++;
-    }
     let adr = 0; for (let i = e - 19; i <= e; i++) adr += h[i] / l[i];
-    const span = e - ip;
+    const span = baseEnd - ip;
     let higherLows = null;
-    if (span >= 6) { const mid = ip + Math.floor(span / 2); higherLows = minR(l, mid, e) > minR(l, ip, mid - 1); }
+    if (span >= 6) { const mid = ip + Math.floor(span / 2); higherLows = minR(l, mid, baseEnd) > minR(l, ip, mid - 1); }
     const s10 = sma(c, 10, e);
     return {
       sym, date: t[e], n, C: c[e], d1: c[e] / c[e - 1] - 1,
@@ -80,14 +77,55 @@
       s200up: s200 && s200p ? s200 > s200p : null,
       atr, atr_pct: atr / c[e], hi52, lo52, dhi: c[e] / hi52 - 1,
       vol: v[e], v20, v50, rvol: v20 ? v[e] / v20 : null, vdry: v10 !== null && v50 ? v10 / v50 : null, mdv,
-      P, piv_date: t[ip], blen: e - ip, depth: 1 - Lb / P, cross: crossI !== null ? e - crossI : null,
-      any_closed_above: anyAbove, max_close_since: maxCloseSince, rvol_cross: rvolCross,
+      P, piv_date: t[ip], blen: crossI !== null ? dLvl - ip : e - ip, depth: 1 - Lb / H,
+      cross: crossI !== null ? e - crossI : null,
+      any_closed_above: crossI !== null, max_close_since: maxCloseSince, rvol_cross: rvolCross,
       tight: (hi10 - lo10) / c[e], lo5, lo10, day_pos: rng > 0 ? (c[e] - l[e]) / rng : 0.5,
-      gap: isNum(o[e]) ? o[e] / c[e - 1] - 1 : 0, ep_up: epUp, ep_down: epDown,
+      gap: isNum(o[e]) ? o[e] / c[e - 1] - 1 : 0,
       high: h[e], low: l[e], s10, s10up: n > 20 ? s10 > sma(c, 10, e - 5) : null,
       s20up: s20 && n > 30 ? s20 > sma(c, 20, e - 5) : null,
-      adr_pct: adr / 20 - 1, prior_move: P / minR(l, Math.max(0, ip - 63), ip) - 1, higher_lows: higherLows,
+      adr_pct: adr / 20 - 1, prior_move: H / loMove - 1, higher_lows: higherLows,
+      peak: H, level_kind: kind, line_slope: slope, touch_date: jt !== ip ? t[jt] : null,
+      line: [[t[ip], H], [dLvl <= e ? t[dLvl] : nextSession(t[e]), lineV]],
+      retrace: H > loMove ? (H - Lb) / (H - loMove) : null, tight_ratio: tightRatio(h, l, ip, baseEnd),
     };
+  }
+
+  // Máximo de la base, tangente superior desde él y nivel a superar el día d (ver radar/metrics.py).
+  function baseAt(h, d, lookback, baseMin, recentN, require) {
+    const start = Math.max(0, d - lookback);
+    if (d - 1 < start) return null;
+    let ip = start;
+    for (let i = start; i < d; i++) if (h[i] > h[ip]) ip = i;
+    if (require && d - ip < baseMin) return null;
+    const H = h[ip];
+    let slope = 0, jt = ip;
+    if (d - 1 > ip) {
+      let best = -Infinity;
+      for (let j = ip + 1; j < d; j++) { const sl = (h[j] - H) / (j - ip); if (sl > best) { best = sl; jt = j; } }
+      slope = Math.min(best, 0);
+    }
+    const lineV = H + slope * (d - ip);
+    const lo = Math.max(ip + 1, d - recentN);
+    const recent = lo < d ? maxR(h, lo, d - 1) : lineV;
+    return { ip, H, slope, jt, lineV, level: Math.max(lineV, recent) };
+  }
+
+  function tightRatio(h, l, ip, end) {
+    const nb = end - ip;
+    if (nb < 4) return null;
+    const lateN = Math.min(5, Math.floor(nb / 2));
+    const mean = (i0, i1) => { let s = 0; for (let i = i0; i <= i1; i++) s += h[i] / l[i] - 1; return s / (i1 - i0 + 1); };
+    if (end - lateN < ip + 1) return null;
+    const early = mean(ip + 1, end - lateN);
+    if (early <= 0) return null;
+    return mean(end - lateN + 1, end) / early;
+  }
+
+  function nextSession(iso) {
+    const d = new Date(iso + "T00:00:00Z");
+    do { d.setUTCDate(d.getUTCDate() + 1); } while (d.getUTCDay() === 0 || d.getUTCDay() === 6);
+    return d.toISOString().slice(0, 10);
   }
 
   const rel = (r, b) => (r === null || b === null || b === undefined ? null : (1 + r) / (1 + b) - 1);
@@ -110,14 +148,14 @@
     if (C > P) {
       const ext = C / P - 1;
       if (ext > cfg.extended_pct || (m.s20 && (C - m.s20) > cfg.extended_atr_over_sma20 * m.atr))
-        return { state: "EXTENDIDA", why: `+${(ext * 100).toFixed(1).replace(".", ",")}% sobre pivote` };
+        return { state: "EXTENDIDA", why: `+${(ext * 100).toFixed(1).replace(".", ",")}% sobre el nivel de ruptura` };
       if (m.cross === 0) {
         if ((m.rvol || 0) >= cfg.rvol_confirm && m.day_pos >= 0.5) return shortBase({ state: "CONFIRMADA", why: "" }, m, cfg);
         const why = (m.rvol || 0) < cfg.rvol_confirm ? "volumen < 1,5x" : "cierre en la mitad baja del rango";
         return shortBase({ state: "TEMPRANA", why }, m, cfg);
       }
       if (m.max_close_since && m.max_close_since / P - 1 >= cfg.retest_band && ext <= cfg.retest_band)
-        return { state: "RETEST", why: "vuelve al pivote" };
+        return { state: "RETEST", why: "vuelve al nivel de ruptura" };
       if ((m.rvol_cross || 0) >= cfg.rvol_confirm && ext <= 0.06)
         return shortBase({ state: "CONFIRMADA", why: `ruptura hace ${m.cross} ses.` }, m, cfg);
       const rc = m.rvol_cross ? m.rvol_cross.toFixed(1).replace(".", ",") : "?";
@@ -125,13 +163,17 @@
     }
     const dist = P / C - 1;
     if (m.any_closed_above && C < P * (1 - cfg.failed_break_pct)) return { state: "DESCARTADA", why: "ruptura fallida" };
-    if (m.any_closed_above) return { state: "RETEST", why: "perdió el pivote tras cruzarlo" };
+    if (m.any_closed_above) return { state: "RETEST", why: "perdió el nivel de ruptura tras cruzarlo" };
     const above50 = !!(m.s50 && C > m.s50);
+    if (m.blen < cfg.flag_min_base) {
+      if (m.s20 && (C - m.s20) > cfg.extended_atr_over_sma20 * m.atr) return { state: "EXTENDIDA", why: "en plena subida, sin consolidación" };
+      if (above50) return { state: "EN BASE", why: `base en formación (${m.blen} ses.)` };
+    }
     if (dist <= cfg.pre_dist && m.blen >= cfg.pre_min_base && m.depth <= cfg.pre_max_depth && above50) return { state: "PRE-BREAKOUT", why: "" };
     if (dist <= cfg.pre_dist && m.blen >= cfg.flag_min_base && m.depth <= cfg.flag_max_depth && above50)
       return { state: "PRE-BREAKOUT", why: `flag corto (${m.blen} ses.)` };
-    if (dist <= cfg.base_max_dist && above50) return { state: "EN BASE", why: `${(dist * 100).toFixed(1).replace(".", ",")}% bajo pivote` };
-    return { state: "DESCARTADA", why: !above50 ? "bajo SMA50" : `${(dist * 100).toFixed(0)}% bajo pivote` };
+    if (dist <= cfg.base_max_dist && above50) return { state: "EN BASE", why: `${(dist * 100).toFixed(1).replace(".", ",")}% bajo el nivel de ruptura` };
+    return { state: "DESCARTADA", why: !above50 ? "bajo SMA50" : `${(dist * 100).toFixed(0)}% bajo el nivel de ruptura` };
   }
 
   function invalidation(m, st) {
@@ -190,32 +232,53 @@
     if (st === "CONFIRMADA") return [`Cierres sostenidos > ${f(m.P)} con volumen ≥ media`, invTxt];
     if (st === "TEMPRANA") return [`Nuevo cierre > ${f(Math.max(m.P, m.C))} con ≥ ${volTxt} (1,5x)`, invTxt];
     if (st === "RETEST") return [m.C > m.P ? `Rebote desde ${f(m.P)} con volumen creciente` : `Recuperar y cerrar > ${f(m.P)}`, invTxt];
-    if (st === "PRE-BREAKOUT" || st === "EN BASE") return [`Cierre > ${f(m.P)} con ≥ ${volTxt} (1,5x)`, invTxt];
+    if (st === "PRE-BREAKOUT" || st === "EN BASE") {
+      return [`Cierre > ${f(m.P)}${m.level_kind === "línea" ? " (resistencia descendente)" : ""} con ≥ ${volTxt} (1,5x)`, invTxt];
+    }
     if (st === "EXTENDIDA") return ["Esperar base nueva o retroceso a la SMA20", m.s20 ? `Cierre < SMA20 (${f(m.s20)})` : ""];
     return ["", ""];
   }
 
-  function qmEvaluate(m, st, mdvUsd, rsPct, market) {
+  const QM_DEFAULTS = { top_pct: 0.02, adr_min: 0.05, prior_move_min: 0.30, base_min: 5, base_max: 42, retrace_max: 0.5, tight_max: 0.8 };
+  const QM_HARD = ["leader", "adr", "prior_move", "base"];
+  const sgn0 = (x) => { const v = x * 100; return (v >= 0 ? "+" : "") + v.toFixed(0) + "%"; };
+
+  // Igual que radar/qullamaggie.py: evaluate.
+  function qmEvaluate(m, st, market, perfCut, qcfg) {
+    const q = { ...QM_DEFAULTS, ...(qcfg || {}) };
     const checks = [];
-    const add = (key, ok, label, value) => checks.push({ key, ok, hard: ["prior_move", "adr", "base", "liquidity"].includes(key), label, value });
-    add("prior_move", m.prior_move >= 0.30, "Subida previa ≥ 30% en 1-3 meses", pctEs(m.prior_move));
-    add("base", m.blen >= 5 && m.blen <= 60 && m.depth <= 0.35, "Base de 2 semanas a 2 meses (flag ≥ 5 sesiones)",
-      `${m.blen} sesiones, ${pctEs(m.depth)} de profundidad`);
-    add("adr", m.adr_pct >= 0.05, "ADR ≥ 5%", pctEs(m.adr_pct));
-    add("liquidity", mdvUsd >= 20e6, "Liquidez ≥ 20 M USD/día", `${(mdvUsd / 1e6).toFixed(0).replace(".", ",")} M USD`);
+    const add = (key, ok, label, value) => checks.push({ key, ok, hard: QM_HARD.includes(key), label, value });
+    const top = (q.top_pct * 100).toFixed(0) + "%";
+    const rets = [["1 m", m.r1m, "r1m"], ["3 m", m.r3m, "r3m"], ["6 m", m.r6m, "r6m"]];
+    if (perfCut) {
+      const hits = rets.filter(([, r, k]) => r !== null && perfCut[k] !== null && perfCut[k] !== undefined && r >= perfCut[k]).map(([lab, r]) => `${lab} ${sgn0(r)}`);
+      add("leader", hits.length > 0, `Entre el ${top} que más sube a 1, 3 o 6 meses`,
+        hits.length ? "sí: " + hits.join(", ") : "no: " + rets.filter(([, r]) => r !== null).map(([lab, r]) => `${lab} ${sgn0(r)}`).join(", "));
+    } else add("leader", null, `Entre el ${top} que más sube a 1, 3 o 6 meses`, "sin datos del universo");
+    add("adr", m.adr_pct >= q.adr_min, `ADR ≥ ${pctEs(q.adr_min, 0)} (valor rápido)`, pctEs(m.adr_pct));
+    add("prior_move", m.prior_move >= q.prior_move_min, `Subida previa ≥ ${pctEs(q.prior_move_min, 0)} en 1-3 meses`, pctEs(m.prior_move));
+    add("base", m.blen >= q.base_min && m.blen <= q.base_max, "Consolidación de 2 semanas a 2 meses (flag desde 5 sesiones)", `${m.blen} sesiones`);
+    add("orderly", m.retrace === null ? null : m.retrace <= q.retrace_max, `Retroceso ordenado (corrige ≤ ${pctEs(q.retrace_max, 0)} de la subida)`,
+      m.retrace === null ? "sin datos" : `corrige el ${pctEs(m.retrace, 0)}`);
     add("higher_lows", m.higher_lows, "Mínimos crecientes en la base", m.higher_lows ? "sí" : (m.higher_lows === false ? "no" : "base corta"));
-    const surf = !!(m.s10 && m.s20 && m.C > m.s20 && m.s10 > m.s20 && m.s10up && m.s20up);
-    add("ma_surf", surf, "Sobre SMA10 y SMA20 ascendentes", surf ? "sí" : "no");
-    add("rs", rsPct >= 0.90, "Fuerza relativa en el 10% superior", `percentil ${(rsPct * 100).toFixed(0)}`);
-    const hardFail = checks.some((c) => c.hard && c.ok === false);
-    const softFail = checks.some((c) => !c.hard && c.ok === false);
+    add("tight", m.tight_ratio === null ? null : m.tight_ratio <= q.tight_max, "Rango que se estrecha",
+      m.tight_ratio === null ? "base corta" : `rango reciente al ${pctEs(m.tight_ratio, 0)} del inicial`);
+    const surf20 = !!(m.s20 && m.C >= m.s20 && m.s20up && m.s10up);
+    const surf50 = !!(m.s50 && m.C >= m.s50 && m.s50up);
+    add("ma_surf", surf20 || surf50, "Surfea medias ascendentes (SMA10 y SMA20, o SMA50)", surf20 ? "SMA10 y SMA20" : (surf50 ? "SMA50" : "no"));
+    const hardFail = checks.some((x) => x.hard && x.ok === false);
+    const softFail = checks.some((x) => !x.hard && x.ok === false);
     const verdict = hardFail ? "No cumple" : (softFail || !market || market.light !== "verde") ? "Con reservas" : "Cumple";
     const adr = m.adr_pct, ext = m.C / m.P - 1;
     let trigger = null, note = "Sin setup de entrada";
-    if ((st === "CONFIRMADA" || st === "TEMPRANA") && ext > adr) note = "Ya está a más de 1 ADR de la resistencia: no perseguir; esperar un nuevo rango o flag";
-    else if (st === "CONFIRMADA" || st === "TEMPRANA") { trigger = m.high; note = "Ruptura ya iniciada: entrar solo si supera el máximo de hoy en el rango de apertura (ORH) de 1-5 min"; }
-    else if (st === "PRE-BREAKOUT" || st === "RETEST") { trigger = m.P; note = "Entrar el día que supere la resistencia, en la ruptura del rango de apertura (ORH) de 1-5 min"; }
-    const trail = adr >= 0.05 ? "SMA10" : "SMA20";
+    if ((st === "CONFIRMADA" || st === "TEMPRANA") && ext > adr) note = "Ya está a más de 1 ADR del nivel de ruptura: no perseguir; esperar una nueva consolidación";
+    else if (st === "CONFIRMADA" || st === "TEMPRANA") { trigger = m.high; note = "Ruptura ya iniciada: entrar solo si supera el máximo de hoy en el rango de apertura (ORH)"; }
+    else if (st === "PRE-BREAKOUT" || st === "RETEST") {
+      trigger = m.P;
+      note = m.level_kind === "línea" ? "Entrar el día que supere la resistencia descendente (su valor baja cada sesión), en el ORH"
+        : "Entrar el día que supere la resistencia, en el ORH";
+    }
+    const trail = adr >= q.adr_min ? "SMA10" : "SMA20";
     return { verdict, checks, adr_pct: adr, trigger, entry_note: note, stop_max: trigger ? trigger * (1 - adr) : null,
       trail_ma: trail, trail_value: trail === "SMA10" ? m.s10 : m.s20 };
   }
@@ -300,7 +363,9 @@
       atr: m.atr, atr_pct: m.atr_pct, vol: m.vol, v20: m.v20, rvol: m.rvol, vdry: m.vdry, rs_pct: rsPct,
       r1m: m.r1m, r3m: m.r3m, r6m: m.r6m, rs1, rs3, rs6, dhi: m.dhi, hi52: m.hi52, s10: m.s10, s20: m.s20,
       s50: m.s50, s200: m.s200, adr_pct: m.adr_pct, mdv_usd: mdvUsd, catalyst: "", risk: rk, risk_points: rkp,
-      confirm: conf, invalidate: inval, qm: qmEvaluate(m, cl.state, mdvUsd || 0, rsPct, ctx.qm_market),
+      confirm: conf, invalidate: inval, qm: qmEvaluate(m, cl.state, ctx.qm_market, ctx.perf_cut, ctx.qullamaggie),
+      peak: m.peak, level_kind: m.level_kind, line: m.line, touch_date: m.touch_date, retrace: m.retrace,
+      tight_ratio: m.tight_ratio, prior_move: m.prior_move,
       benchmark: bsym, live: true,
     };
   }

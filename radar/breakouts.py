@@ -31,14 +31,14 @@ def classify(m: Metrics, mdv_usd: float | None, price_usd: float | None, cfg: di
     if C > P:
         ext = C / P - 1
         if ext > cfg["extended_pct"] or (m.s20 and (C - m.s20) > cfg["extended_atr_over_sma20"] * m.atr):
-            return Classification(EXTENDED, f"+{ext * 100:.1f}% sobre pivote".replace(".", ","))
+            return Classification(EXTENDED, f"+{ext * 100:.1f}% sobre el nivel de ruptura".replace(".", ","))
         if m.cross == 0:
             if (m.rvol or 0) >= cfg["rvol_confirm"] and m.day_pos >= 0.5:
                 return _short_base(Classification(CONFIRMED), m, cfg)
             why = "volumen < 1,5x" if (m.rvol or 0) < cfg["rvol_confirm"] else "cierre en la mitad baja del rango"
             return _short_base(Classification(EARLY, why), m, cfg)
         if m.max_close_since and m.max_close_since / P - 1 >= cfg["retest_band"] and ext <= cfg["retest_band"]:
-            return Classification(RETEST, "vuelve al pivote")
+            return Classification(RETEST, "vuelve al nivel de ruptura")
         if (m.rvol_cross or 0) >= cfg["rvol_confirm"] and ext <= 0.06:
             return _short_base(Classification(CONFIRMED, f"ruptura hace {m.cross} ses."), m, cfg)
         rc = f"{m.rvol_cross:.1f}".replace(".", ",") if m.rvol_cross else "?"
@@ -48,15 +48,21 @@ def classify(m: Metrics, mdv_usd: float | None, price_usd: float | None, cfg: di
     if m.any_closed_above and C < P * (1 - cfg["failed_break_pct"]):
         return Classification(DISCARDED, "ruptura fallida")
     if m.any_closed_above:
-        return Classification(RETEST, "perdió el pivote tras cruzarlo")
+        return Classification(RETEST, "perdió el nivel de ruptura tras cruzarlo")
     above50 = bool(m.s50 and C > m.s50)
+    if m.blen < cfg["flag_min_base"]:
+        # Máximo muy reciente: todavía no hay consolidación que romper.
+        if m.s20 and (C - m.s20) > cfg["extended_atr_over_sma20"] * m.atr:
+            return Classification(EXTENDED, "en plena subida, sin consolidación")
+        if above50:
+            return Classification(BASE, f"base en formación ({m.blen} ses.)")
     if dist <= cfg["pre_dist"] and m.blen >= cfg["pre_min_base"] and m.depth <= cfg["pre_max_depth"] and above50:
         return Classification(PRE)
     if dist <= cfg["pre_dist"] and m.blen >= cfg["flag_min_base"] and m.depth <= cfg["flag_max_depth"] and above50:
         return Classification(PRE, f"flag corto ({m.blen} ses.)")
     if dist <= cfg["base_max_dist"] and above50:
-        return Classification(BASE, f"{dist * 100:.1f}% bajo pivote".replace(".", ","))
-    return Classification(DISCARDED, "bajo SMA50" if not above50 else f"{dist * 100:.0f}% bajo pivote")
+        return Classification(BASE, f"{dist * 100:.1f}% bajo el nivel de ruptura".replace(".", ","))
+    return Classification(DISCARDED, "bajo SMA50" if not above50 else f"{dist * 100:.0f}% bajo el nivel de ruptura")
 
 
 def _short_base(c: Classification, m: Metrics, cfg: dict) -> Classification:
@@ -157,7 +163,8 @@ def conditions(m: Metrics, state: str, inv: float | None) -> tuple[str, str]:
             return f"Rebote desde {f(m.P)} con volumen creciente", inv_txt
         return f"Recuperar y cerrar > {f(m.P)}", inv_txt
     if state in (PRE, BASE):
-        return f"Cierre > {f(m.P)} con ≥ {vol_txt} (1,5x)", inv_txt
+        where = " (resistencia descendente)" if m.level_kind == "línea" else ""
+        return f"Cierre > {f(m.P)}{where} con ≥ {vol_txt} (1,5x)", inv_txt
     if state == EXTENDED:
         return "Esperar base nueva o retroceso a la SMA20", f"Cierre < SMA20 ({f(m.s20)})" if m.s20 else ""
     return "", ""

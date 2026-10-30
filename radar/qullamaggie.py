@@ -1,28 +1,45 @@
-"""Plan de operación según las reglas públicas de Qullamaggie (Kristjan Kullamägi).
+"""Setup de ruptura de Qullamaggie (Kristjan Kullamägi) traducido a reglas objetivas.
 
-Reglas codificadas (setup de ruptura, "breakout"):
-  1. Subida previa fuerte: ≥ 30% en los 1-3 meses anteriores a la base.
-  2. Consolidación ordenada de 2 semanas a 2 meses (se aceptan flags de 5-9 sesiones),
-     con mínimos crecientes y el precio "surfeando" las SMA10 y SMA20 ascendentes.
-  3. ADR ≥ 5% (valores volátiles: más recorrido por unidad de capital).
-  4. Liquidez ≥ 20 M USD diarios y fuerza relativa entre el 10% mejor del universo.
-  5. Mercado: Nasdaq 100 sobre sus SMA10 y SMA20 ascendentes para operar con normalidad.
-Entrada: ruptura del máximo del rango de apertura (ORH) de 1 o 5 minutos (60 min si el rango
-es amplio) el día que el precio supera la resistencia de la base.
-Stop: mínimo del día de entrada; no se entra si queda a más de 1 ADR del precio de entrada.
-Riesgo por operación: 0,25-1% de la cuenta (habitual 0,3-0,5%).
-Salidas: vender 1/3-1/2 a los 3-5 días en fuerza y subir el stop al precio de entrada;
-el resto se vende al primer cierre bajo la SMA10 (valores rápidos, ADR ≥ 5%) o la SMA20.
+Fuente principal: "3 TIMELESS setups that have made me TENS OF MILLIONS!" (qullamaggie.com, 2021).
+Búsqueda: el 1-2% de valores que más suben a 1, 3 y 6 meses (escáneres de su comunidad: ADR > 5%).
+Setup en tres pasos:
+  1. Subida grande en los últimos 1-3 meses: 30-100% o más, en días o pocas semanas.
+  2. Retroceso ordenado y consolidación con mínimos crecientes y rango que se estrecha, normalmente
+     de 2 semanas a 2 meses, "surfeando" las SMA10 y SMA20 ascendentes (a veces la SMA50).
+  3. Expansión de rango (ruptura) del borde superior: canal plano, triángulo simétrico o
+     descendente, flag. Ese borde se calcula en radar/metrics.py (_base_at).
+Entrada: máximo de la primera vela de 1, 5 o 60 minutos (ORH), o en el diario cuando empieza a romper.
+Stop: mínimo del día, nunca más ancho que el ADR/ATR.
+Salidas: vender 1/3-1/2 a los 3-5 días y subir el stop a la entrada; el resto, al primer cierre bajo
+la SMA10 o la SMA20 según lo rápido que sea el valor (principiantes: SMA10).
+Tamaño: posiciones del 10-20% de la cuenta, nunca más del 30% de un día para otro; riesgo 0,25-1%.
 
-Episodic pivot (EP): hueco al alza ≥ 10% con volumen ≥ 3x por un catalizador (resultados,
-noticias), preferiblemente tras meses lateral. Entrada en el ORH del día del hueco o de los
-días siguientes; stop en el mínimo del día; mismas salidas.
+Los umbrales están en config/settings.yaml (sección `qullamaggie`); docs/engine.js replica este archivo.
 """
 from __future__ import annotations
 
 from .metrics import Metrics
 
-HARD = ("prior_move", "adr", "base", "liquidity")
+DEFAULTS = {"top_pct": 0.02, "adr_min": 0.05, "prior_move_min": 0.30, "base_min": 5, "base_max": 42,
+            "retrace_max": 0.50, "tight_max": 0.80}
+HARD = ("leader", "adr", "prior_move", "base")
+
+
+def _pct(x: float, d: int = 1) -> str:
+    return f"{x * 100:.{d}f}%".replace(".", ",")
+
+
+def _sgn(x: float) -> str:
+    return f"{x * 100:+.0f}%"
+
+
+def perf_cutoffs(rows: list, top_pct: float) -> dict:
+    """Rentabilidad mínima para estar en el `top_pct` del universo a 1, 3 y 6 meses."""
+    out = {}
+    for k in ("r1m", "r3m", "r6m"):
+        vals = sorted(v for v in (getattr(m, k) for m in rows) if v is not None)
+        out[k] = vals[min(len(vals) - 1, int(len(vals) * (1 - top_pct)))] if vals else None
+    return out
 
 
 def market_filter(m: Metrics | None) -> dict:
@@ -41,27 +58,41 @@ def market_filter(m: Metrics | None) -> dict:
             "s10": m.s10, "s20": m.s20, "close": m.C}
 
 
-def evaluate(m: Metrics, state: str, mdv_usd: float, rs_pct: float, market: dict) -> dict:
-    """Lista de comprobación, veredicto y plan de entrada y salida para una candidata."""
+def evaluate(m: Metrics, state: str, market: dict, perf_cut: dict | None = None, qcfg: dict | None = None) -> dict:
+    """Lista de comprobación, veredicto y plan de entrada y salida."""
+    q = {**DEFAULTS, **(qcfg or {})}
     checks = []
 
     def add(key: str, ok: bool | None, label: str, value: str):
         checks.append({"key": key, "ok": ok, "hard": key in HARD, "label": label, "value": value})
 
-    pct = lambda x: f"{x * 100:.1f}%".replace(".", ",")  # noqa: E731
-    add("prior_move", m.prior_move >= 0.30, "Subida previa ≥ 30% en 1-3 meses", pct(m.prior_move))
-    add("base", 5 <= m.blen <= 60 and m.depth <= 0.35, "Base de 2 semanas a 2 meses (flag ≥ 5 sesiones)",
-        f"{m.blen} sesiones, {pct(m.depth)} de profundidad")
-    add("adr", m.adr_pct >= 0.05, "ADR ≥ 5%", pct(m.adr_pct))
-    add("liquidity", mdv_usd >= 20e6, "Liquidez ≥ 20 M USD/día", f"{mdv_usd / 1e6:.0f} M USD".replace(".", ","))
+    top = f"{q['top_pct'] * 100:.0f}%"
+    rets = (("1 m", m.r1m, "r1m"), ("3 m", m.r3m, "r3m"), ("6 m", m.r6m, "r6m"))
+    if perf_cut:
+        hits = [f"{lab} {_sgn(r)}" for lab, r, k in rets if r is not None and perf_cut.get(k) is not None and r >= perf_cut[k]]
+        add("leader", bool(hits), f"Entre el {top} que más sube a 1, 3 o 6 meses",
+            ("sí: " + ", ".join(hits)) if hits else "no: " + ", ".join(f"{lab} {_sgn(r)}" for lab, r, _ in rets if r is not None))
+    else:
+        add("leader", None, f"Entre el {top} que más sube a 1, 3 o 6 meses", "sin datos del universo")
+    add("adr", m.adr_pct >= q["adr_min"], f"ADR ≥ {_pct(q['adr_min'], 0)} (valor rápido)", _pct(m.adr_pct))
+    add("prior_move", m.prior_move >= q["prior_move_min"], f"Subida previa ≥ {_pct(q['prior_move_min'], 0)} en 1-3 meses",
+        _pct(m.prior_move))
+    add("base", q["base_min"] <= m.blen <= q["base_max"], "Consolidación de 2 semanas a 2 meses (flag desde 5 sesiones)",
+        f"{m.blen} sesiones")
+    add("orderly", None if m.retrace is None else m.retrace <= q["retrace_max"],
+        f"Retroceso ordenado (corrige ≤ {_pct(q['retrace_max'], 0)} de la subida)",
+        "sin datos" if m.retrace is None else f"corrige el {_pct(m.retrace, 0)}")
     add("higher_lows", m.higher_lows, "Mínimos crecientes en la base",
         "sí" if m.higher_lows else ("no" if m.higher_lows is False else "base corta"))
-    surf = bool(m.s10 and m.s20 and m.C > m.s20 and m.s10 > m.s20 and m.s10up and m.s20up)
-    add("ma_surf", surf, "Sobre SMA10 y SMA20 ascendentes", "sí" if surf else "no")
-    add("rs", rs_pct >= 0.90, "Fuerza relativa en el 10% superior", f"percentil {rs_pct * 100:.0f}")
+    add("tight", None if m.tight_ratio is None else m.tight_ratio <= q["tight_max"], "Rango que se estrecha",
+        "base corta" if m.tight_ratio is None else f"rango reciente al {_pct(m.tight_ratio, 0)} del inicial")
+    surf20 = bool(m.s20 and m.C >= m.s20 and m.s20up and m.s10up)
+    surf50 = bool(m.s50 and m.C >= m.s50 and m.s50up)
+    add("ma_surf", surf20 or surf50, "Surfea medias ascendentes (SMA10 y SMA20, o SMA50)",
+        "SMA10 y SMA20" if surf20 else ("SMA50" if surf50 else "no"))
 
-    hard_fail = [c for c in checks if c["hard"] and c["ok"] is False]
-    soft_fail = [c for c in checks if not c["hard"] and c["ok"] is False]
+    hard_fail = any(c["hard"] and c["ok"] is False for c in checks)
+    soft_fail = any(not c["hard"] and c["ok"] is False for c in checks)
     if hard_fail:
         verdict = "No cumple"
     elif soft_fail or market.get("light") != "verde":
@@ -72,47 +103,38 @@ def evaluate(m: Metrics, state: str, mdv_usd: float, rs_pct: float, market: dict
     adr = m.adr_pct
     ext = m.C / m.P - 1
     if state in ("CONFIRMADA", "TEMPRANA") and ext > adr:
-        trigger, entry_note = None, "Ya está a más de 1 ADR de la resistencia: no perseguir; esperar un nuevo rango o flag"
+        trigger, entry_note = None, "Ya está a más de 1 ADR del nivel de ruptura: no perseguir; esperar una nueva consolidación"
     elif state in ("CONFIRMADA", "TEMPRANA"):
         trigger = m.high
-        entry_note = "Ruptura ya iniciada: entrar solo si supera el máximo de hoy en el rango de apertura (ORH) de 1-5 min"
+        entry_note = "Ruptura ya iniciada: entrar solo si supera el máximo de hoy en el rango de apertura (ORH)"
     elif state in ("PRE-BREAKOUT", "RETEST"):
         trigger = m.P
-        entry_note = "Entrar el día que supere la resistencia, en la ruptura del rango de apertura (ORH) de 1-5 min"
+        entry_note = ("Entrar el día que supere la resistencia descendente (su valor baja cada sesión), en el ORH"
+                      if m.level_kind == "línea" else "Entrar el día que supere la resistencia, en el ORH")
     else:
         trigger, entry_note = None, "Sin setup de entrada"
     stop_max = trigger * (1 - adr) if trigger else None
-    trail = "SMA10" if adr >= 0.05 else "SMA20"
-    trail_val = m.s10 if trail == "SMA10" else m.s20
+    trail = "SMA10" if adr >= q["adr_min"] else "SMA20"
     return {
         "verdict": verdict, "checks": checks, "adr_pct": adr,
         "trigger": trigger, "entry_note": entry_note, "stop_max": stop_max,
-        "trail_ma": trail, "trail_value": trail_val,
+        "trail_ma": trail, "trail_value": m.s10 if trail == "SMA10" else m.s20,
     }
 
 
 def constants() -> dict:
     """Textos comunes a todas las acciones (se envían una sola vez al dashboard)."""
     return {
-        "entry_timeframe": "Intradía: ORH de 1 o 5 minutos (60 minutos si el rango de apertura es amplio)",
+        "entry_timeframe": "Intradía: máximo de la primera vela de 1, 5 o 60 minutos (la de 60 solo cubre 9:30-10:00), "
+                           "o en el gráfico diario cuando empieza a romper",
         "stop_rule": "Mínimo del día de entrada",
-        "stop_note": "No entrar si el mínimo del día queda a más de 1 ADR del precio de entrada",
+        "stop_note": "Nunca más ancho que el ADR (o el ATR) del valor; si lo es, no hay entrada",
         "sell_plan": [
-            "Vender 1/3-1/2 a los 3-5 días de la entrada, aprovechando la fuerza",
+            "Vender 1/3-1/2 a los 3-5 días de la entrada",
             "Subir el stop del resto al precio de entrada",
-            "Vender el resto al primer cierre diario bajo la media de seguimiento (SMA10 si ADR ≥ 5%; si no, SMA20)",
+            "Vender el resto al primer cierre diario bajo la SMA10 o la SMA20, según lo rápido que sea el valor "
+            "(principiantes: SMA10)",
         ],
-        "risk_rule": "Riesgo por operación 0,25-1% de la cuenta (habitual 0,3-0,5%)",
+        "risk_rule": "Riesgo por operación 0,25-1% de la cuenta; posición habitual 10-20%, nunca más del 30% de un día para otro",
         "horizon": "Setup en gráfico diario · entrada intradía · gestión diaria · días a semanas",
-    }
-
-
-def episodic_pivot(m: Metrics) -> dict | None:
-    """Detecta un EP en la última sesión: hueco ≥ 10%, volumen ≥ 3x y cierre en la mitad alta."""
-    if m.gap < 0.10 or (m.rvol or 0) < 3 or m.day_pos < 0.5:
-        return None
-    return {
-        "gap": m.gap, "rvol": m.rvol, "close": m.C, "high": m.high, "low": m.low, "adr_pct": m.adr_pct,
-        "plan": "Día 2 o siguientes: comprar la ruptura del máximo del rango de apertura (ORH) de 1-5 min; "
-                "stop en el mínimo del día; vender 1/3-1/2 a los 3-5 días y el resto con la SMA10/SMA20",
     }

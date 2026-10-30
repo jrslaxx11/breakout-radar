@@ -63,6 +63,18 @@ def test_engine_js_matches_python(tmp_path, monkeypatch):
         prices[kind] = shaped(kind, seed=10 + i)
         universe[kind] = {"source": "SPX", "name": kind, "gics_sector": "", "unbiased": True,
                           "gics_sub": "Application Software", "hint": ""}
+    # Triángulos: ruptura de la resistencia descendente (por debajo del máximo) y pre-ruptura.
+    from radar.metrics import compute as mcompute
+    from tests.test_breakouts import W as BW, triangle
+    for kind, mult, vol in (("TRI", 1.03, 2.5e6), ("TRIP", 0.975, 1e6)):
+        df = triangle()
+        df.index = prices["BRK"].index[-len(df):]
+        lvl = mcompute(kind, df.iloc[:-1], BW).P
+        c = lvl * mult
+        df.iloc[-1] = [c * 0.99, c * 1.005, c * 0.98, c, vol]
+        prices[kind] = df
+        universe[kind] = {"source": "SPX", "name": kind, "gics_sector": "", "unbiased": True,
+                          "gics_sub": "Application Software", "hint": ""}
     out = run(universe=universe, prices=prices, details_fn=lambda s: {}, profiles_fn=lambda s, l: {},
               today=date(2026, 10, 29), write=False, force=True)
     ctx = json.loads(json.dumps(out["engine"]))
@@ -78,7 +90,10 @@ def test_engine_js_matches_python(tmp_path, monkeypatch):
         py, js = view[s], res[s]
         states.add(py["state"])
         assert js["state"] == py["state"] and js["why"] == py["why"], s
-        for k in ("close", "pivot", "inv", "atr", "rvol", "vdry", "adr_pct", "rs_pct", "mdv_usd", "s10", "s20"):
+        assert (js["level_kind"], js["line"][0][0], js["line"][1][0]) == (py["level_kind"], py["line"][0][0], py["line"][1][0]), s
+        assert close(js["line"][1][1], py["line"][1][1]) and js.get("touch_date") == py.get("touch_date"), s
+        for k in ("close", "pivot", "inv", "atr", "rvol", "vdry", "adr_pct", "rs_pct", "mdv_usd", "s10", "s20",
+                  "peak", "retrace", "tight_ratio", "prior_move", "base_len", "depth"):
             assert close(js[k], py[k]), (s, k, js[k], py[k])
         for k in ("rs", "base", "breakout", "trend", "liquidity"):
             assert close(js["components"][k], py["components"][k]), (s, k)
@@ -93,6 +108,9 @@ def test_engine_js_matches_python(tmp_path, monkeypatch):
         assert close(qj["trigger"], qp["trigger"]) and close(qj["stop_max"], qp["stop_max"]), s
     # Las series con forma garantizan que se prueban varios estados, no solo los aleatorios.
     assert len(states) >= 4, states
+    assert view["TRI"]["state"] == "CONFIRMADA" and view["TRI"]["pivot"] < view["TRI"]["peak"] * 0.97
+    assert view["TRIP"]["state"] == "PRE-BREAKOUT"
+    assert {c["level_kind"] for c in view.values()} >= {"línea", "máximo"}
 
 
 def test_prepare_series_js():

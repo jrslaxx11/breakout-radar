@@ -90,16 +90,44 @@ desfavorable.
 
 Se seleccionan las 5 mejores, las empatadas a ≤ 0,5 puntos y las forzadas.
 
-**Estados (fase 5).** Pivote = máximo de las sesiones 6 a 60 anteriores.
+**Estados (fase 5).** La consolidación empieza en el máximo de las últimas 60 sesiones (máximo de la
+base). Su borde superior es la línea más plana que parte de ese máximo y deja por debajo todos los
+máximos posteriores: plana en un canal o una base de techo plano, descendente en triángulos y flags
+(como dibuja Qullamaggie). El **nivel de ruptura** de cada día es esa línea proyectada a ese día o,
+si queda por encima, el máximo de las 3 sesiones anteriores. Con menos de 5 sesiones desde el máximo
+todavía no hay consolidación.
 
 | Estado | Regla |
 | --- | --- |
-| Confirmada | Cierre sobre el pivote con volumen ≥ 1,5x la media de 20 sesiones y cierre en la mitad alta del día |
-| Temprana | Cruza el pivote sin volumen suficiente o sin continuidad |
-| Pre-breakout | A ≤ 5% del pivote, base ≥ 10 sesiones y ≤ 30% de profundidad (o flag de 5-9 sesiones y ≤ 12%), sobre la SMA50 |
-| Retest | Cruzó el pivote en las últimas 5 sesiones y vuelve a menos de un 3% |
-| Extendida | > 10% sobre el pivote o > 3 ATR sobre la SMA20 |
-| Descartada | Ruptura fallida (> 3% bajo el pivote tras cruzarlo), bajo una SMA50 descendente, precio anclado o liquidez insuficiente |
+| Confirmada | Cierre sobre el nivel de ruptura con volumen ≥ 1,5x la media de 20 sesiones y cierre en la mitad alta del día |
+| Temprana | Cruza el nivel sin volumen suficiente o sin continuidad |
+| Pre-breakout | A ≤ 5% del nivel, base ≥ 10 sesiones y ≤ 30% de profundidad (o flag de 5-9 sesiones y ≤ 12%), sobre la SMA50 |
+| Retest | Cruzó el nivel en las últimas 5 sesiones y vuelve a menos de un 3% |
+| Extendida | > 10% sobre el nivel o > 3 ATR sobre la SMA20 |
+| En base | A ≤ 12% del nivel, o base en formación (menos de 5 sesiones desde el máximo) |
+| Descartada | Ruptura fallida (> 3% bajo el nivel tras cruzarlo), bajo una SMA50 descendente, precio anclado o liquidez insuficiente |
+
+**Setup de Qullamaggie (solo rupturas).** Reglas de su artículo
+["3 timeless setups"](https://qullamaggie.com/my-3-timeless-setups-that-have-made-me-tens-of-millions)
+con umbrales objetivos (`config/settings.yaml` → `qullamaggie`):
+
+| Regla | Tipo | Cálculo |
+| --- | --- | --- |
+| Líder | Obligatoria | Entre el 2% del universo que más sube a 1, 3 o 6 meses |
+| ADR ≥ 5% | Obligatoria | Media de máximo/mínimo − 1 en 20 sesiones (escáneres de su comunidad) |
+| Subida previa ≥ 30% | Obligatoria | Del mínimo de las 63 sesiones anteriores al máximo de la base hasta ese máximo |
+| Consolidación de 2 semanas a 2 meses | Obligatoria | 5 a 42 sesiones desde el máximo (5-9 = flag) |
+| Retroceso ordenado | Secundaria | La base corrige ≤ 50% de la subida previa |
+| Mínimos crecientes | Secundaria | Mínimo de la segunda mitad de la base > mínimo de la primera |
+| Rango que se estrecha | Secundaria | Rango diario medio de las últimas sesiones ≤ 80% del del inicio de la base |
+| Surfea medias | Secundaria | Sobre las SMA10 y SMA20 ascendentes, o sobre la SMA50 ascendente |
+
+"Cumple" exige todas y el Nasdaq 100 sobre sus SMA10 y SMA20 ascendentes; si falla una secundaria o el
+mercado no está en verde, "Con reservas". La sección "Setups Qullamaggie" aplica estas reglas a todo
+el universo líquido, no solo a las temáticas, y lista los valores que rompen o están a ≤ 5% del nivel.
+Entrada en el máximo de la primera vela de 1, 5 o 60 minutos; stop en el mínimo del día (nunca más ancho
+que el ADR); vender 1/3-1/2 a los 3-5 días, stop a la entrada y el resto al primer cierre bajo la SMA10 o
+la SMA20. Posición habitual 10-20% de la cuenta, nunca más del 30%; riesgo 0,25-1%.
 
 **Puntuación de acciones (fase 6).** Fuerza relativa 25, base y estructura 25, ruptura y volumen
 20, tendencia diaria y semanal 15, liquidez 10, catalizador 5. El riesgo se etiqueta aparte

@@ -136,6 +136,8 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
               if (r["mdv_usd"] or 0) >= flt["min_mdv_usd"] and (r["price_usd"] or 0) >= flt["min_price_usd"]]
     for i, r in enumerate(sorted(liquid, key=lambda x: x["rsc"])):
         r["rs_pct"] = (i + 1) / len(liquid)
+    qcfg = {**qm.DEFAULTS, **(S.get("qullamaggie") or {})}
+    perf_cut = qm.perf_cutoffs([r["m"] for r in liquid], qcfg["top_pct"])
 
     # ---------- perfiles y temáticas ----------
     need_prof = [r["sym"] for r in sorted(liquid, key=lambda x: -x["rsc"]) if not r["info"].get("gics_sub")]
@@ -236,8 +238,8 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
                 "last_earnings": react["day"] if react else None, "earnings_pending": pending,
                 "catalyst": cat_txt, "catalyst_source": cat_src,
                 "risk": rk_label, "risk_points": rk_pts, "confirm": conf, "invalidate": inval,
-                "qm": qm.evaluate(m, state, r["mdv_usd"] or 0, r.get("rs_pct", 0), qm_market),
-                "s10": m.s10, "adr_pct": m.adr_pct,
+                "qm": qm.evaluate(m, state, qm_market, perf_cut, qcfg),
+                "s10": m.s10, "adr_pct": m.adr_pct, **_level_fields(m),
             }
 
     # ---------- listas ----------
@@ -283,18 +285,6 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
                             "name": r["info"].get("name") or r["profile"].get("name") or "",
                             "dist": r["m"].C / r["m"].P - 1, "rvol": r["m"].rvol, "why": c.why})
     outside.sort(key=lambda x: -x["rs_pct"])
-
-    # Episodic pivots de la última sesión (todo el universo líquido).
-    eps = []
-    for r in liquid:
-        if r["dup"]:
-            continue
-        ep = qm.episodic_pivot(r["m"])
-        if ep:
-            eps.append({"sym": r["sym"], "theme": r["theme"], "rs_pct": r.get("rs_pct"),
-                        "name": r["info"].get("name") or r["profile"].get("name") or "",
-                        "currency": r["cur"], "mdv_usd": r["mdv_usd"], **ep})
-    eps.sort(key=lambda x: -x["gap"])
 
     calendar = sorted(({"date": c["next_earnings"], "sym": c["sym"], "est": c["next_earnings_est"]}
                        for c in pres if c["next_earnings"]
@@ -345,12 +335,30 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
             "s10": m.s10, "s20": m.s20, "s50": m.s50, "s200": m.s200, "adr_pct": m.adr_pct,
             "mdv_usd": r["mdv_usd"], "catalyst": "", "risk": rk_label, "risk_points": rk_pts,
             "confirm": conf, "invalidate": inval, "mine": mine, "liquid": liq,
-            "qm": qm.evaluate(m, ev["state"], r["mdv_usd"] or 0, r.get("rs_pct", 0) or 0, qm_market),
+            "qm": qm.evaluate(m, ev["state"], qm_market, perf_cut, qcfg), **_level_fields(m),
         })
     for c in search_view:
         if c["sym"] in candidates:
             c["mine"] = bool(rows[c["sym"]]["info"].get("mine"))
             c["liquid"] = True
+
+    # ---------- escáner Qullamaggie: todo el universo líquido, solo rupturas ----------
+    order = {bo.CONFIRMED: 0, bo.EARLY: 1, bo.RETEST: 2, bo.PRE: 3}
+    qm_setups = []
+    for c in search_view:
+        q = c.get("qm") or {}
+        if not c.get("liquid") or c.get("excluded") or q.get("verdict") == "No cumple" or c["state"] not in order:
+            continue
+        fails = [k["label"] for k in q.get("checks", []) if k["ok"] is False]
+        qm_setups.append({
+            "sym": c["sym"], "name": c["name"], "theme": c.get("theme"), "state": c["state"], "why": c["why"],
+            "date": c["date"], "close": c["close"], "currency": c["currency"], "pivot": c["pivot"], "dist": c["dist"],
+            "inv": c["inv"], "v20": c["v20"], "peak": c["peak"], "level_kind": c["level_kind"],
+            "adr_pct": c["adr_pct"], "prior_move": c["prior_move"], "base_len": c["base_len"],
+            "score": c["score"], "presented": bool(c.get("presented")), "fails": fails,
+            "qm": {"verdict": q["verdict"], "trigger": q["trigger"], "stop_max": q["stop_max"]},
+        })
+    qm_setups.sort(key=lambda x: (order[x["state"]], -x["dist"]))
 
     # ---------- acciones líderes de cada temática: mayor fuerza relativa compuesta ----------
     view_by = {c["sym"]: c for c in search_view}
@@ -386,7 +394,7 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
         "candidates": sorted(candidates.values(), key=lambda c: -c["score"]),
         "lists": {"presented": presented, "global_top": global_top, "priority": priority,
                   "by_state": by_state, "others": others, "outside": outside[:15],
-                  "pending": pending_list, "eliminated": eliminated, "episodic_pivots": eps[:20]},
+                  "pending": pending_list, "eliminated": eliminated, "qm_setups": qm_setups},
         "qm_market": qm_market,
         "qm_const": qm.constants(),
         "theme_weights": weights,
@@ -395,7 +403,7 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
         # Contexto para evaluar en el navegador cualquier ticker con los mismos umbrales (docs/engine.js).
         "engine": {
             "settings": {k: S[k] for k in ("windows", "breakout", "filters", "risk", "benchmarks", "currency_by_suffix")},
-            "benchmarks": bench, "fx": fx, "qm_market": qm_market,
+            "benchmarks": bench, "fx": fx, "qm_market": qm_market, "perf_cut": perf_cut, "qullamaggie": qcfg,
             "rs_dist": [round(r["rsc"], 6) for r in sorted(liquid, key=lambda x: x["rsc"])],
         },
     }
@@ -426,6 +434,12 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
         history.write_snapshot(session, _clean(snap))
     out["search_view"] = search_view  # solo para quien llama (pruebas); no va en latest.json
     return out
+
+
+def _level_fields(m) -> dict:
+    """Consolidación y nivel de ruptura para el dashboard."""
+    return {"peak": m.peak, "level_kind": m.level_kind, "line": m.line, "touch_date": m.touch_date,
+            "retrace": m.retrace, "tight_ratio": m.tight_ratio, "prior_move": m.prior_move}
 
 
 def safe_name(sym: str) -> str:

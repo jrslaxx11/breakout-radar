@@ -63,16 +63,22 @@ class Metrics:
     lo10: float
     day_pos: float
     gap: float                 # hueco de apertura de hoy
-    ep_up: int = 0             # sesiones (últimas 21) con subida ≥ 4% y volumen ≥ 1,8x la media de 50
-    ep_down: int = 0           # ídem con caída ≤ -4%
     high: float = 0.0          # máximo y mínimo de la última sesión
     low: float = 0.0
     s10: float | None = None
     s10up: bool | None = None  # SMA10 por encima de su valor de hace 5 sesiones
     s20up: bool | None = None
     adr_pct: float = 0.0       # ADR% al estilo Qullamaggie: media de (máximo/mínimo) en 20 sesiones - 1
-    prior_move: float = 0.0    # subida previa: pivote / mínimo de las 63 sesiones anteriores al pivote - 1
+    prior_move: float = 0.0    # subida previa: máximo de la base / mínimo de las 63 sesiones anteriores - 1
     higher_lows: bool | None = None
+    # Consolidación y nivel de ruptura (ver _base_at)
+    peak: float = 0.0          # máximo con el que empieza la consolidación
+    level_kind: str = "máximo"  # "máximo" (techo plano), "línea" (resistencia descendente) o "rango" (máximo reciente)
+    line_slope: float = 0.0    # pendiente de la resistencia por sesión (≤ 0)
+    touch_date: str | None = None  # segundo punto que define la línea
+    line: list | None = None   # [[fecha, valor], [fecha, valor]] para dibujarla
+    retrace: float | None = None   # parte de la subida previa que ha corregido la base (0-1)
+    tight_ratio: float | None = None  # rango diario reciente / rango diario al inicio de la base
     extra: dict = field(default_factory=dict)
 
 
@@ -108,37 +114,41 @@ def compute(sym: str, df: pd.DataFrame, w: dict) -> Metrics | None:
     dv = sorted(c[i] * v[i] for i in range(max(0, e - 19), e + 1))
     mdv = float(dv[len(dv) // 2])
 
-    # Pivote: máximo de las sesiones [e-lookback, e-min_age] (primera aparición).
-    lookback, min_age = w.get("pivot_lookback", 60), w.get("pivot_min_age", 6)
-    start = max(0, e - lookback)
-    seg = h[start:e - min_age + 1]
-    ip = start + int(np.argmax(seg))
-    P = float(h[ip])
-    Lb = float(np.min(l[ip:e + 1]))
-    cw = w.get("cross_window", 5)
-    cross_i = next((i for i in range(e - cw, e + 1) if c[i] > P), None)
+    # Consolidación y nivel de ruptura (Qullamaggie: el precio rompe el borde superior de la
+    # consolidación, que puede ser un techo plano o una resistencia descendente: triángulos y flags).
+    lookback, base_min = w.get("pivot_lookback", 60), w.get("base_min", 5)
+    cw, recent_n = w.get("cross_window", 5), w.get("recent_highs", 3)
+    cross_i, base = None, None
+    for d in range(max(1, e - cw), e + 1):       # primer día de la ventana que cierra sobre su nivel
+        b = _base_at(h, d, lookback, base_min, recent_n)
+        if b is not None and c[d] > b[5]:
+            cross_i, base = d, b
+            break
+    if base is None:                              # sin ruptura: nivel que habría que superar mañana
+        base = _base_at(h, e + 1, lookback, base_min, recent_n, require=False)
+    ip, H, slope, jt, line_v, P = base
+    d_lvl = cross_i if cross_i is not None else e + 1
+    base_end = cross_i - 1 if cross_i is not None else e
+    Lb = float(np.min(l[ip:base_end + 1]))
+    lo_move = float(np.min(l[max(0, ip - 63):ip + 1]))
+    if P > line_v + 1e-9:
+        kind = "rango"
+    elif H - line_v > 0.02 * H:          # más de un 2% por debajo del máximo: resistencia descendente
+        kind = "línea"
+    else:
+        kind = "máximo"
     max_close_since = float(np.max(c[cross_i:e + 1])) if cross_i is not None else None
-    any_above = any(c[i] > P for i in range(e - cw, e + 1))
     rvol_cross = None
     if cross_i is not None:
-        base = sma(v, 20, cross_i - 1)
-        rvol_cross = float(v[cross_i] / base) if base else None
+        bv = sma(v, 20, cross_i - 1)
+        rvol_cross = float(v[cross_i] / bv) if bv else None
 
     hi10, lo10 = float(np.max(h[e - 9:e + 1])), float(np.min(l[e - 9:e + 1]))
     lo5 = float(np.min(l[e - 4:e + 1]))
     rng = h[e] - l[e]
-    ep_up = ep_down = 0
-    for i in range(max(51, e - 20), e + 1):
-        base = sma(v, 50, i - 1)
-        if not base or v[i] < 1.8 * base:
-            continue
-        r = c[i] / c[i - 1] - 1
-        if r >= 0.04:
-            ep_up += 1
-        elif r <= -0.04:
-            ep_down += 1
     dates = df.index
     fmt = lambda i: pd.Timestamp(dates[i]).strftime("%Y-%m-%d")  # noqa: E731
+    line_end = fmt(d_lvl) if d_lvl <= e else _next_session(pd.Timestamp(dates[e]))
 
     return Metrics(
         sym=sym, date=fmt(e), n=n, C=float(c[e]), d1=float(c[e] / c[e - 1] - 1),
@@ -152,21 +162,78 @@ def compute(sym: str, df: pd.DataFrame, w: dict) -> Metrics | None:
         vol=float(v[e]), v20=v20, v50=v50,
         rvol=float(v[e] / v20) if v20 else None,
         vdry=float(v10 / v50) if v10 is not None and v50 else None,
-        mdv=mdv, P=P, piv_date=fmt(ip), blen=e - ip, depth=1 - Lb / P,
+        mdv=mdv, P=float(P), piv_date=fmt(ip), blen=d_lvl - ip if cross_i is not None else e - ip,
+        depth=1 - Lb / H,
         cross=(e - cross_i) if cross_i is not None else None,
-        any_closed_above=any_above, max_close_since=max_close_since, rvol_cross=rvol_cross,
+        any_closed_above=cross_i is not None, max_close_since=max_close_since, rvol_cross=rvol_cross,
         tight=(hi10 - lo10) / c[e], lo5=lo5, lo10=lo10,
         day_pos=float((c[e] - l[e]) / rng) if rng > 0 else 0.5,
         gap=float(o[e] / c[e - 1] - 1) if not math.isnan(o[e]) else 0.0,
-        ep_up=ep_up, ep_down=ep_down,
         high=float(h[e]), low=float(l[e]),
         s10=sma(c, 10, e),
         s10up=(sma(c, 10, e) > sma(c, 10, e - 5)) if n > 20 else None,
         s20up=(s20 > sma(c, 20, e - 5)) if s20 and n > 30 else None,
         adr_pct=float(np.mean(h[e - 19:e + 1] / l[e - 19:e + 1]) - 1),
-        prior_move=float(P / np.min(l[max(0, ip - 63):ip + 1]) - 1),
-        higher_lows=_higher_lows(l, ip, e),
+        prior_move=float(H / lo_move - 1),
+        higher_lows=_higher_lows(l, ip, base_end),
+        peak=float(H), level_kind=kind, line_slope=float(slope),
+        touch_date=fmt(jt) if jt != ip else None,
+        line=[[fmt(ip), float(H)], [line_end, float(line_v)]],
+        retrace=float((H - Lb) / (H - lo_move)) if H > lo_move else None,
+        tight_ratio=_tight_ratio(h, l, ip, base_end),
     )
+
+
+def _base_at(h: np.ndarray, d: int, lookback: int, base_min: int, recent_n: int, require: bool = True):
+    """Consolidación vista el día `d` con las sesiones anteriores (d-1 incluida).
+
+    - Máximo de la base (H): el más alto de las `lookback` sesiones anteriores (primera aparición).
+    - Resistencia: la línea más plana que parte de H y deja por debajo todos los máximos posteriores
+      (tangente superior). Plana si otro máximo iguala a H; descendente en triángulos y flags.
+    - Nivel de ruptura = el mayor entre la línea proyectada al día `d` y el máximo de las
+      `recent_n` sesiones anteriores (hay que superar también el rango inmediato).
+    Devuelve (índice del máximo, H, pendiente, índice del 2.º punto, línea en d, nivel) o None si la
+    base tiene menos de `base_min` sesiones y `require` es True.
+    """
+    start = max(0, d - lookback)
+    if d - 1 < start:
+        return None
+    ip = start + int(np.argmax(h[start:d]))
+    if require and d - ip < base_min:
+        return None
+    H = float(h[ip])
+    if d - 1 > ip:
+        js = np.arange(ip + 1, d)
+        slopes = (h[ip + 1:d] - H) / (js - ip)
+        k = int(np.argmax(slopes))
+        slope, jt = min(float(slopes[k]), 0.0), int(js[k])
+    else:
+        slope, jt = 0.0, ip
+    line_v = H + slope * (d - ip)
+    lo = max(ip + 1, d - recent_n)
+    recent = float(np.max(h[lo:d])) if lo < d else line_v
+    return ip, H, slope, jt, line_v, max(line_v, recent)
+
+
+def _tight_ratio(h: np.ndarray, l: np.ndarray, ip: int, end: int) -> float | None:
+    """Estrechamiento: rango diario medio de las últimas sesiones de la base frente al del principio."""
+    nb = end - ip
+    if nb < 4:
+        return None
+    late_n = min(5, nb // 2)
+    rng = h / l - 1
+    late = rng[end - late_n + 1:end + 1]
+    early = rng[ip + 1:end - late_n + 1]
+    if not len(early) or float(np.mean(early)) <= 0:
+        return None
+    return float(np.mean(late) / np.mean(early))
+
+
+def _next_session(ts: pd.Timestamp) -> str:
+    nxt = ts + pd.Timedelta(days=1)
+    while nxt.weekday() >= 5:
+        nxt += pd.Timedelta(days=1)
+    return nxt.strftime("%Y-%m-%d")
 
 
 def _higher_lows(l: np.ndarray, ip: int, e: int) -> bool | None:

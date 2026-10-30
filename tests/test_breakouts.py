@@ -92,3 +92,60 @@ def test_score_redistributes_missing_catalyst():
     missing = bo.score(m, bo.PRE, 0.9, 60e6, None)
     assert missing["total"] == pytest.approx(with_zero["total"] * 100 / 95, abs=0.01)
     assert 0 <= with_zero["total"] <= 100
+
+
+def triangle(n=260, base_len=30, peak=100.0, drop=0.07):
+    """Lateral, subida del 67% en 30 sesiones y triángulo: máximos descendentes y mínimos planos."""
+    pre = np.full(n - base_len - 30, 60.0)
+    rally = np.linspace(60, peak / 1.01, 30)
+    t = np.arange(1, base_len + 1)
+    top = peak * (1 - drop * t / base_len)          # resistencia descendente
+    low = peak * 0.91
+    wave = 0.5 + 0.5 * np.cos(t * 2 * np.pi / 6)      # toca la resistencia cada 6 sesiones
+    return series(np.concatenate([pre, rally, low + (top / 1.01 - low) * wave]))
+
+
+def flat_base(n=260, base_len=25, top=100.0):
+    """Subida y base con techo plano: los máximos vuelven al mismo nivel cada 6 sesiones."""
+    pre = np.full(n - base_len - 30, 60.0)
+    rally = np.linspace(60, top / 1.01, 30)
+    t = np.arange(1, base_len + 1)
+    wave = 0.5 + 0.5 * np.cos(t * 2 * np.pi / 6)
+    return series(np.concatenate([pre, rally, top * 0.93 + (top / 1.01 - top * 0.93) * wave]))
+
+
+def test_breakout_through_descending_line_below_the_peak():
+    df = triangle()
+    m0 = compute("TEST", df.iloc[:-1], W)
+    line_tomorrow = m0.P
+    assert m0.level_kind == "línea" and line_tomorrow < m0.peak * 0.95
+    # Ruptura: cierra un 3% sobre la línea, muy por debajo del máximo de la base.
+    c = line_tomorrow * 1.03
+    df.iloc[-1] = [c * 0.99, c * 1.005, c * 0.98, c, 2.5e6]
+    cl, m = classify(df)
+    assert m.cross == 0 and abs(m.P - line_tomorrow) / line_tomorrow < 1e-9
+    assert m.C < m.peak * 0.97
+    assert cl.state == bo.CONFIRMED, cl
+
+
+def test_pre_breakout_below_descending_line():
+    df = triangle()
+    m0 = compute("TEST", df.iloc[:-1], W)
+    c = m0.P * 0.975
+    df.iloc[-1] = [c, c * 1.004, c * 0.99, c, 1e6]
+    cl, m = classify(df)
+    # Mañana hay que superar la línea o, si queda por debajo, el máximo de las últimas 3 sesiones.
+    assert m.level_kind in ("línea", "rango") and m.cross is None and m.P < m.peak * 0.97
+    assert cl.state == bo.PRE and m.P / m.C - 1 < 0.05
+
+
+def test_flat_top_keeps_peak_as_level():
+    m = compute("TEST", flat_base(), W)
+    assert m.level_kind == "máximo" and abs(m.P - m.peak) < 1e-6
+
+
+def test_new_high_without_base_is_not_a_breakout():
+    c = np.linspace(50, 120, 260)                       # sube sin pausa
+    cl, m = classify(series(c))
+    assert m.cross is None and m.blen < 5
+    assert cl.state in (bo.BASE, bo.EXTENDED)
