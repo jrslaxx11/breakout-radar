@@ -1,0 +1,51 @@
+name: Diagnóstico Yahoo
+on:
+  push:
+    branches: [diag]
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install -q yfinance pandas
+      - name: Fechas de la última barra
+        shell: python
+        run: |
+          import datetime as dt, json
+          import yfinance as yf
+          print("ahora UTC", dt.datetime.now(dt.timezone.utc), "yfinance", yf.__version__)
+          S = ["IQV", "AAPL", "RSP", "^GSPC", "^STOXX", "SAP.DE", "OR.PA", "MAERSK-B.CO", "7203.T", "CSL.AX", "REY.MI"]
+          def last(df, s):
+              try:
+                  sub = df[s] if isinstance(df.columns, __import__("pandas").MultiIndex) else df
+                  sub = sub.dropna(subset=["Close"])
+                  return [(str(i.date()), round(float(r.Close), 3)) for i, r in sub.tail(3).iterrows()]
+              except Exception as e:
+                  return repr(e)
+          for per in ("2y", "5d"):
+              df = yf.download(S, period=per, interval="1d", group_by="ticker", auto_adjust=False, actions=False, progress=False, threads=True)
+              print(f"\n== download period={per}")
+              for s in S: print(s, last(df, s))
+          start = (dt.date.today() - dt.timedelta(days=730)).isoformat()
+          df = yf.download(S, start=start, interval="1d", group_by="ticker", auto_adjust=False, actions=False, progress=False, threads=True)
+          print("\n== download start=", start)
+          for s in S: print(s, last(df, s))
+          print("\n== Ticker.history 2y + metadata")
+          for s in S:
+              t = yf.Ticker(s)
+              h = t.history(period="2y", auto_adjust=False)
+              md = t.history_metadata or {}
+              rmt = md.get("regularMarketTime")
+              print(s, [str(i.date()) for i in h.index[-2:]], "meta:", dt.datetime.fromtimestamp(rmt, dt.timezone.utc) if rmt else None,
+                    md.get("regularMarketPrice"), md.get("regularMarketDayHigh"), md.get("regularMarketDayLow"), md.get("regularMarketVolume"))
+          from yfinance.data import YfData
+          yd = YfData()
+          print("\n== v8 crudo")
+          for s in ("IQV", "SAP.DE", "7203.T"):
+              for rng in ("2y", "5d"):
+                  j = yd.get_raw_json(f"https://query2.finance.yahoo.com/v8/finance/chart/{s}", params={"range": rng, "interval": "1d"})
+                  r = j["chart"]["result"][0]
+                  ts = r.get("timestamp", [])[-3:]
+                  cl = r["indicators"]["quote"][0]["close"][-3:]
+                  print(s, rng, [str(dt.datetime.fromtimestamp(x, dt.timezone.utc)) for x in ts], cl)
