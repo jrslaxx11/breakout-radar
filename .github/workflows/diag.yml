@@ -1,20 +1,31 @@
-name: Diagnóstico Yahoo
+name: Estudio de históricos (temporal)
 on:
   push:
     branches: [diag]
+    paths: ["estudio/tickers.txt", "estudio/descargar.py", ".github/workflows/diag.yml"]
 permissions:
   contents: write
 jobs:
-  diag:
+  descarga:
     runs-on: ubuntu-latest
+    timeout-minutes: 80
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
-      - run: pip install -q yfinance pandas
-      - name: Fechas de la última barra
-        run: python diag.py 2>&1 | tee diag.txt || true
+      - run: pip install -q yfinance==1.7.0 pandas==3.1.0 numpy==2.5.4
+      - name: Descargar
+        run: python estudio/descargar.py estudio/tickers.txt out.npz 2>&1 | tee estudio/log.txt
+      - name: Cifrar (solo se puede leer con la clave privada, que no está en el repositorio)
+        run: |
+          ls -la out.npz
+          openssl rand -hex 32 > k.txt
+          openssl enc -aes-256-cbc -pbkdf2 -salt -in out.npz -out out.enc -pass file:k.txt
+          openssl pkeyutl -encrypt -pubin -inkey estudio/pub.pem -pkeyopt rsa_padding_mode:oaep -in k.txt -out estudio/k.enc
+          rm -f k.txt out.npz
+          mkdir -p estudio/datos && split -b 40m -d out.enc estudio/datos/parte_ && rm out.enc
+          ls -la estudio/datos
       - name: Guardar
         run: |
           git config user.name radar-bot; git config user.email bot@example.com
-          git add diag.txt && git commit -m "resultado" && git push
+          git add estudio && git commit -m "estudio: históricos cifrados" && git push
