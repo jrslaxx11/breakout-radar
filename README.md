@@ -158,6 +158,24 @@ el 10,8% de las veces y las de 1 estrella el 0,6%. El mismo estudio quitó el "r
 reglas obligatorias (descartaba el 45% de sus setups sin distinguirlos) y alargó la base a 60 sesiones
 (un 24% de sus setups pasa de 42). Las capturas y transcripciones no forman parte del repositorio.
 
+**High tight flags (`radar/htf.py`).** El setup favorito de Qullamaggie ("high tide flag" en sus
+directos, casi 400 menciones): un movimiento enorme en pocas semanas y una bandera corta que se apoya
+en las medias de 10 y 20 antes de romper; no necesita estar en máximos históricos. La sección "High
+tight flags" lo busca en todo el universo líquido (`config/settings.yaml` → `htf`):
+
+| Parte | Criterio |
+| --- | --- |
+| Mástil | Subida ≥ 90% desde el mínimo de las 40 sesiones anteriores al máximo de la consolidación |
+| Bandera | De 5 a 30 sesiones desde ese máximo (3-4: en formación) |
+| Corrección | ≤ 35% desde el máximo; hasta 25%, clásica; más, profunda |
+
+Los umbrales salen de sus rupturas (mediana de su bandera: 13 sesiones y 22% de corrección; en valores
+tan rápidos es más profunda que el 20-25% de la definición clásica). Medido con este código la víspera
+de cada ruptura, el 19,5% de las suyas tiene esta forma frente al 2,2% de las rupturas normales; en
+rupturas normales con esta forma, el 34% subió más de un 20% en 20 sesiones y el 7% más de un 50%
+(13% y 1,5% en las demás). Se muestran las que rompen hoy o siguen en la base, ordenadas por estrellas,
+y el gráfico marca el mástil y el suelo de la bandera.
+
 **Puntuación de acciones (fase 6).** Fuerza relativa 25, base y estructura 25, ruptura y volumen
 20, tendencia diaria y semanal 15, liquidez 10, catalizador 5. El riesgo se etiqueta aparte
 (volatilidad: ATR ≥ 3%, 5% o 7%; resultados en ≤ 14 o ≤ 30 días; invalidación a más de 2,5 ATR o 10%;

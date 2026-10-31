@@ -76,6 +76,13 @@ def test_engine_js_matches_python(tmp_path, monkeypatch):
         prices[kind] = df
         universe[kind] = {"source": "SPX", "name": kind, "gics_sector": "", "unbiased": True,
                           "gics_sub": "Application Software", "hint": ""}
+    # High tight flag: mástil del 150% en 35 sesiones y bandera estrecha.
+    from tests.test_stars import _lows_on_sma10, high_tide_flag
+    df = _lows_on_sma10(high_tide_flag(n=255))  # bandera de 20 sesiones
+    df.index = prices["BRK"].index[-len(df):]
+    prices["HTF"] = df
+    universe["HTF"] = {"source": "SPX", "name": "HTF", "gics_sector": "", "unbiased": True,
+                       "gics_sub": "Application Software", "hint": ""}
     out = run(universe=universe, prices=prices, details_fn=lambda s: {}, profiles_fn=lambda s, l: {},
               today=date(2026, 10, 29), write=False, force=True)
     ctx = json.loads(json.dumps(out["engine"]))
@@ -112,10 +119,18 @@ def test_engine_js_matches_python(tmp_path, monkeypatch):
         assert sj["points"] == sp["points"] and sj["chart_stars"] == sp["chart_stars"], s
         assert [(i["key"], i["pts"], i["value"]) for i in sj["items"]] == [(i["key"], i["pts"], i["value"]) for i in sp["items"]], s
         assert sj["penalties"] == sp["penalties"] and sj["pillars"] == sp["pillars"], s
+        hj, hp = js["htf"], py["htf"]
+        assert (hj is None) == (hp is None), s
+        if hp:
+            assert (hj["kind"], hj["text"], hj["pole_len"], hj["flag_len"], hj["pole_date"], hj["peak_date"], hj["flag_end"]) == \
+                   (hp["kind"], hp["text"], hp["pole_len"], hp["flag_len"], hp["pole_date"], hp["peak_date"], hp["flag_end"]), s
+            assert all(close(hj[k], hp[k]) for k in ("pole", "depth", "peak", "flag_low", "pole_lo")), s
     # Las series con forma garantizan que se prueban varios estados, no solo los aleatorios.
     assert len(states) >= 4, states
     assert view["TRI"]["state"] == "CONFIRMADA" and view["TRI"]["pivot"] < view["TRI"]["peak"] * 0.97
     assert view["TRIP"]["state"] == "PRE-BREAKOUT"
+    assert view["HTF"]["htf"] and view["HTF"]["htf"]["kind"] == "clásica", view["HTF"]["htf"]
+    assert any(x["sym"] == "HTF" for x in out["lists"]["htf_setups"])
     assert {c["level_kind"] for c in view.values()} >= {"línea", "máximo"}
 
 

@@ -175,6 +175,15 @@
         chart.addLineSeries({ color: col.pivot, lineWidth: 2, lineStyle: 2, priceLineVisible: false, lastValueVisible: false,
           crosshairMarkerVisible: false }).setData(c.line.map(([t, v]) => ({ time: t, value: v })));
       }
+      const H = c.htf;
+      if (H && H.pole_date && H.peak_date && H.peak_date > H.pole_date) {
+        // High tight flag: mástil (del mínimo al máximo) y suelo de la bandera.
+        const sc = cssVar("--star"), opt = { priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false };
+        chart.addLineSeries({ ...opt, color: sc, lineWidth: 3 }).setData([{ time: H.pole_date, value: H.pole_lo }, { time: H.peak_date, value: H.peak }]);
+        if (H.flag_end > H.peak_date) chart.addLineSeries({ ...opt, color: sc, lineWidth: 2, lineStyle: 1 })
+          .setData([{ time: H.peak_date, value: H.flag_low }, { time: H.flag_end, value: H.flag_low }]);
+        candles.setMarkers([{ time: H.peak_date, position: "aboveBar", color: sc, shape: "arrowDown", text: `HTF +${Math.round(H.pole * 100)}%` }]);
+      }
       if (isNum(c.peak) && c.peak > c.pivot * 1.02) {
         candles.createPriceLine({ price: c.peak, color: col.text, lineWidth: 1, lineStyle: 1, axisLabelVisible: true, title: "Máx. base" });
       }
@@ -199,6 +208,7 @@
       <span><i style="background:var(--neg)"></i>Invalidación ${price(c.inv, c.currency)}</span>
       <span><i style="background:var(--ma10)"></i>SMA10</span><span><i style="background:var(--ma20)"></i>SMA20</span>
       <span><i style="background:var(--ma50)"></i>SMA50</span>
+      ${c.htf ? `<span><i style="background:var(--star)"></i>Mástil y suelo de la bandera (high tight flag)</span>` : ""}
       <label class="ma-toggle"><input type="checkbox" class="sma200" ${on ? "checked" : ""}><i style="background:var(--ma200)"></i>SMA200</label></p>`;
   }
 
@@ -436,6 +446,7 @@
           ${c.confirm ? `<p><strong>Confirmaría:</strong> ${esc(c.confirm)}</p>` : ""}
           ${c.invalidate ? `<p><strong>Invalidaría:</strong> ${esc(c.invalidate)}</p>` : ""}
           ${c.why ? `<p class="dim">${esc(c.why)}</p>` : ""}
+          ${c.htf ? `<p><strong>High tight flag ${esc(c.htf.kind)}:</strong> ${esc(c.htf.text)}.</p>` : ""}
           <p><strong>Catalizador:</strong> ${catTxt}</p>
           <p><strong>Resultados:</strong> ${c.next_earnings ? dateEs(c.next_earnings, true) + (c.next_earnings_est ? " (estimada)" : "") : live || !c.theme ? "no consultados" : "sin fecha publicada"}</p>
           <p><a href="${tvUrl(c.sym)}" target="_blank" rel="noopener">Abrir gráfico en TradingView</a> · <a href="${yfUrl(c.sym)}" target="_blank" rel="noopener">Yahoo Finance</a></p>
@@ -598,6 +609,38 @@
     });
   }
 
+  // High tight flags: mástil ≥ 90% en ≤ 40 sesiones y bandera corta, en todo el universo líquido.
+  function renderHTF(d) {
+    const rows = d.lists.htf_setups || [];
+    const K = d.htf_const || { pole_min: 0.9, pole_days: 40, flag_min: 5, flag_max: 30, depth_max: 0.35, depth_classic: 0.25 };
+    const by = (k) => rows.filter((x) => x.kind === k).length;
+    const top = rows.filter((x) => (x.stars || 0) >= 4.5);
+    $("#htf").innerHTML = `<h2>High tight flags</h2>
+      <p class="lead">El setup favorito de Qullamaggie ("high tide flag" en sus directos): un mástil de al menos +${num(K.pole_min * 100, 0)}% en ${K.pole_days} sesiones o menos y una bandera corta que se apoya en las medias de 10 y 20 y se estrecha antes de romper. No hace falta que esté en máximos históricos; importa el impulso reciente. Escáner de todo el universo líquido: banderas de ${K.flag_min} a ${K.flag_max} sesiones (de 3-4, en formación) que corrigen como mucho un ${num(K.depth_max * 100, 0)}% desde el máximo (hasta ${num(K.depth_classic * 100, 0)}%, clásica; más, profunda) y que hoy rompen o siguen en la base. Ordenadas por estrellas.</p>
+      ${rows.length ? `<p class="five-note"><strong>${rows.length} high tight flag${rows.length === 1 ? "" : "s"} hoy:</strong> ${by("clásica")} clásica${by("clásica") === 1 ? "" : "s"}, ${by("profunda")} profunda${by("profunda") === 1 ? "" : "s"} y ${by("en formación")} en formación${top.length ? `. Con 4,5-5 estrellas: ${top.map((x) => `<a href="#valor=${encodeURIComponent(x.sym)}">${esc(x.sym)}</a> ${starsHTML(x.stars, true)}`).join(" · ")}` : ""}.</p>
+      <div class="tbl-wrap"><table class="lt qm-table htf-table">
+        <thead><tr><th class="left">Valor</th><th class="left">Estrellas</th><th class="left">Estado</th><th>Mástil</th><th>Bandera</th>
+          <th>Nivel de ruptura</th><th>Distancia</th><th>Ahora</th><th>ADR</th></tr></thead>
+        <tbody>${rows.map((x) => `<tr class="row${(x.stars || 0) >= 4.5 ? " top5" : ""}" data-sym="${esc(x.sym)}" tabindex="0" aria-expanded="false">
+          <td class="tk-cell"><a href="#valor=${encodeURIComponent(x.sym)}" title="Abrir la ficha completa">${esc(x.sym)}</a><small>${esc(x.name && x.name !== x.sym ? x.name : "")}${x.theme ? " · " + esc(themeName(d, x.theme)) : ""}</small></td>
+          <td class="left star-cell">${starsHTML(x.stars)}<small>${isNum(x.star_points) ? `${x.star_points}/66 pts` : ""}${x.qm_verdict && x.qm_verdict !== "No cumple" ? " · " + esc(x.qm_verdict.toLowerCase()) : ""}</small></td>
+          <td class="left">${chip(x.state)}${x.presented ? ` <span class="wl-tag" title="Está en la watchlist de hoy">watchlist</span>` : ""}</td>
+          <td><strong>+${num(x.pole * 100, 0)}%</strong><small class="dim block">en ${x.pole_len} ses.</small></td>
+          <td>${x.flag_len} ses. · −${num(x.depth * 100, 0)}%<small class="dim block">${esc(x.kind)}</small></td>
+          <td>${price(x.pivot, x.currency)}<small class="dim block">${esc(LEVEL_KIND[x.level_kind] || "")}</small></td>
+          <td class="${cls(x.dist)}">${pct(x.dist)}</td>
+          <td class="live-cell" data-live="${esc(x.sym)}">${liveCell(x)}</td>
+          <td>${pct(x.adr_pct, 1, false)}</td>
+        </tr>`).join("")}</tbody></table></div>
+      <p class="dim" style="font-size:13px;margin-top:6px">Pulsa una fila para ver el gráfico con el mástil y la bandera marcados, las estrellas y el plan; el ticker abre la ficha completa.</p>`
+      : `<p class="empty">Hoy no hay ningún high tight flag en el universo. Son raros (el 2% de las rupturas) y aparecen sobre todo en mercados fuertes y temáticas calientes.</p>`}`;
+    const toggle = (tr) => toggleRow(tr, 9, () => loadTicker(tr.dataset.sym).then((x) => ({ rec: BYS[tr.dataset.sym] || x.rec, k: x.k })));
+    $("#htf").addEventListener("click", (e) => { const tr = e.target.closest("tr[data-sym]"); if (tr && !e.target.closest("a")) toggle(tr); });
+    $("#htf").addEventListener("keydown", (e) => {
+      if ((e.key === "Enter" || e.key === " ") && e.target.matches("tr[data-sym]")) { e.preventDefault(); toggle(e.target); }
+    });
+  }
+
   function renderAgenda(d, byS) {
     const cal = d.calendar || [];
     const groups = {};
@@ -634,6 +677,7 @@
         <p><strong>Puntuación de acciones.</strong> Fuerza relativa 25, base y estructura 25, ruptura y volumen 20, tendencia diaria y semanal 15, liquidez 10, catalizador 5. Es una clasificación, no una probabilidad. El riesgo se etiqueta aparte: volatilidad, resultados próximos, distancia a la invalidación y liquidez.</p>
         <p><strong>Qullamaggie (solo rupturas).</strong> Reglas de su artículo "3 timeless setups" y de sus directos, con umbrales objetivos. Obligatorias: estar entre el 2% que más sube a 1, 3 o 6 meses (cierre frente al mínimo del periodo, la fórmula de sus escáneres), ADR ≥ 5%, subida previa ≥ 30% en 1-3 meses y consolidación de 5 a 60 sesiones. Secundarias: mínimos crecientes (el último tercio de la base sobre su mínimo), rango que se estrecha (últimas 5 sesiones ≤ 50% del rango de la base) y precio surfeando las SMA10/SMA20 (o SMA50) ascendentes. Entrada en el máximo de la primera vela de 1, 5 o 60 minutos; stop en el mínimo del día y nunca más ancho que el ADR; venta de 1/3-1/2 a los 3-5 días, stop a la entrada y el resto al primer cierre bajo la SMA10 o SMA20. Posición habitual 10-20%, nunca más del 30%. Filtro de mercado: Nasdaq 100 frente a sus SMA10 y SMA20. Son niveles orientativos para estudiar el gráfico, no órdenes ni recomendaciones.</p>
         <p><strong>Estrellas (1-5).</strong> Qullamaggie califica sus setups con estrellas ("five star setup") y solo opera fuerte los de 4-5. Aquí se puntúan sobre 66 con los rasgos que distinguen sus operaciones, medidos con datos diarios en 704 de las 1.212 rupturas de su archivo de capturas (el resto son valores que ya no cotizan) frente a 141.000 rupturas normales de los mismos valores: gran subida previa (20), valor rápido por ADR (12), tendencia limpia con la SMA20 holgadamente sobre la SMA50 y una subida lineal (14), medias de 10 y 20 que alcanzan al precio y mínimos que se apoyan en la de 10 (12) y compresión en las últimas sesiones con volumen seco (8); resta si ya lleva 4 bases o la consolidación tiene menos de 5 sesiones. 50 puntos son 5 estrellas y cada 5 puntos menos, media estrella. En una temática líder suma media estrella, como él hace con los sectores calientes. Distancias y rangos en ADR del propio valor, el último día de la base. Resultado del estudio: 5 estrellas las tiene el 23% de sus setups en tendencia y el 2,6% de las rupturas normales; y en rupturas normales, ajenas a él, las de 5 estrellas subieron más de un 50% en 20 sesiones el 10,8% de las veces frente al 0,6% de las de 1 estrella. El retroceso de la base no los distinguía, por eso ya no es obligatorio. Es una medida de calidad del gráfico, no una probabilidad de acierto.</p>
+        <p><strong>High tight flags.</strong> Mástil: subida ≥ 90% desde el mínimo de las 40 sesiones anteriores al máximo de la consolidación. Bandera: de 5 a 30 sesiones desde ese máximo (3-4, en formación) con una corrección ≤ 35% (≤ 25%, clásica). Los umbrales salen de sus propias rupturas (mediana de su bandera: 13 sesiones y 22%). Medido con este código la víspera de cada ruptura, el 19,5% de las suyas tiene esta forma frente al 2,2% de las rupturas normales; y en rupturas normales con esta forma, el 34% subió más de un 20% en 20 sesiones y el 7% más de un 50% (13% y 1,5% en las demás). En el gráfico, el mástil va en trazo grueso y el suelo de la bandera en punteado.</p>
         <p><strong>Gráficos y buscador.</strong> Velas diarias con las medias de 10, 20 y 50 sesiones que usa Qullamaggie (la de 200, opcional). El buscador de la cabecera abre la ficha de cualquier valor del universo diario${d.web && d.web.worker_url ? " y, para el resto del mercado, la calcula al momento en el navegador con los mismos umbrales a partir de los datos de Yahoo Finance (sin temática, catalizador ni fechas de resultados)" : ""}.</p>
         <p><strong>Límites.</strong> Los niveles son algorítmicos y deben validarse en el gráfico. La amplitud solo se mide en EE. UU. Las fechas de resultados "est." no están confirmadas por la empresa. Ninguna fila es una recomendación de inversión.</p>
       </div>`;
@@ -943,7 +987,7 @@
   async function liveTick() {
     clearTimeout(LIVE.timer);
     if (!workerUrl() || document.hidden || !D) return;
-    const syms = [...new Set([...(D.lists.presented || []), ...(D.lists.qm_setups || []).map((x) => x.sym),
+    const syms = [...new Set([...(D.lists.presented || []), ...(D.lists.qm_setups || []).map((x) => x.sym), ...(D.lists.htf_setups || []).map((x) => x.sym),
       ...(currentSym ? [currentSym] : [])])].sort();
     try {
       for (let i = 0; i < syms.length; i += 40) {
@@ -982,6 +1026,7 @@
       bindLeaders();
       renderWatchlist(d, byS, scoreHist);
       renderQM(d);
+      renderHTF(d);
       renderAgenda(d, byS);
       renderMethod(d);
       initFinder();

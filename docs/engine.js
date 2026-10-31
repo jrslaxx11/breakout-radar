@@ -88,7 +88,15 @@
       retrace: H > loMove ? (H - Lb) / (H - loMove) : null, tight_ratio: tightRatio(h, l, ip, baseEnd),
       mom1: mom(c, l, e, 22), mom3: mom(c, l, e, 67), mom6: mom(c, l, e, 126),
       setup: setupAt(c, h, l, v, baseEnd, ip, crossI !== null ? dLvl - ip : e - ip),
+      pole: poleAt(l, t, ip, baseEnd, crossI !== null ? dLvl - ip : e - ip, H, Lb, w.pole_days ?? 40),
     };
+  }
+
+  // Mástil y bandera de la consolidación actual (igual que radar/metrics.py: _pole).
+  function poleAt(l, t, ip, baseEnd, blen, H, Lb, days) {
+    const lo = argMin(l, Math.max(0, ip - days), ip);
+    return { pole: H / l[lo] - 1, pole_len: ip - lo, pole_lo: l[lo], pole_date: t[lo], peak: H, peak_date: t[ip],
+      flag_len: blen, depth: 1 - Lb / H, flag_low: Lb, flag_end: t[baseEnd] };
   }
 
   // Subida desde el mínimo de n sesiones (fórmula de los escáneres de Qullamaggie).
@@ -380,6 +388,16 @@
       pillars, items, penalties: pen, bases: s.bases };
   }
 
+  // High tight flag (igual que radar/htf.py: evaluate).
+  const HTF_DEFAULTS = { pole_min: 0.9, flag_forming: 3, flag_min: 5, flag_max: 30, depth_max: 0.35, depth_classic: 0.25 };
+  function htfEvaluate(m, cfg) {
+    const p = m.pole, q = { ...HTF_DEFAULTS, ...(cfg || {}) };
+    if (!p || p.pole < q.pole_min || p.flag_len < q.flag_forming || p.flag_len > q.flag_max || p.depth > q.depth_max) return null;
+    const kind = p.flag_len < q.flag_min ? "en formación" : p.depth <= q.depth_classic ? "clásica" : "profunda";
+    const text = `Mástil +${pct0(p.pole)} en ${p.pole_len} sesiones; bandera de ${p.flag_len} sesiones que corrige un ${pct0(p.depth)} desde el máximo`;
+    return { ...p, kind, text };
+  }
+
   // Divisas con unidad menor (peniques, centavos, agorot): base y escala.
   const MINOR = { GBp: ["GBP", 0.01], GBX: ["GBP", 0.01], ZAc: ["ZAR", 0.01], ILA: ["ILS", 0.01] };
 
@@ -461,14 +479,14 @@
       r1m: m.r1m, r3m: m.r3m, r6m: m.r6m, rs1, rs3, rs6, dhi: m.dhi, hi52: m.hi52, s10: m.s10, s20: m.s20,
       s50: m.s50, s200: m.s200, adr_pct: m.adr_pct, mdv_usd: mdvUsd, catalyst: "", risk: rk, risk_points: rkp,
       confirm: conf, invalidate: inval, qm: qmEvaluate(m, cl.state, ctx.qm_market, ctx.perf_cut, ctx.qullamaggie),
-      stars: starRate(m, false),
+      stars: starRate(m, false), htf: htfEvaluate(m, ctx.htf),
       peak: m.peak, level_kind: m.level_kind, line: m.line, touch_date: m.touch_date, retrace: m.retrace,
       tight_ratio: m.tight_ratio, prior_move: m.prior_move,
       benchmark: bsym, live: true,
     };
   }
 
-  const api = { compute, classify, invalidation, score, risk, conditions, qmEvaluate, starRate, evaluateTicker, prepareSeries,
+  const api = { compute, classify, invalidation, score, risk, conditions, qmEvaluate, starRate, htfEvaluate, evaluateTicker, prepareSeries,
     currencyOf, fxNeed, fxFactor, rel, rsComposite };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.RadarEngine = api;

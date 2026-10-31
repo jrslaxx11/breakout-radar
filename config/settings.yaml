@@ -28,6 +28,7 @@ windows:
   base_min: 5                  # sesiones mínimas desde ese máximo para hablar de consolidación (flag)
   cross_window: 5              # sesiones en las que se busca el día de la ruptura
   recent_highs: 3              # la ruptura también debe superar el máximo de las 3 sesiones anteriores
+  pole_days: 40                # high tight flag: el mástil se mide desde el mínimo de las 40 sesiones previas al máximo
 
 breakout:
   rvol_confirm: 1.5            # volumen relativo mínimo para RUPTURA CONFIRMADA
@@ -52,6 +53,15 @@ qullamaggie:
   base_min: 5            # consolidación de 5 (flag) a 60 sesiones: un 24% de sus setups pasa de 42
   base_max: 60
   tight_max: 0.50        # rango de precios de las últimas 5 sesiones ≤ 50% del rango de toda la base
+
+# High tight flag (sección "High tight flags"): mástil y bandera calibrados con sus operaciones (radar/htf.py).
+htf:
+  pole_min: 0.90         # mástil: subida ≥ 90% desde el mínimo de las 40 sesiones previas al máximo
+  flag_forming: 3        # bandera de 3-4 sesiones: en formación
+  flag_min: 5
+  flag_max: 30           # bandera de 5 a 30 sesiones (mediana en sus casos: 13)
+  depth_max: 0.35        # corrección ≤ 35% desde el máximo (mediana en sus casos: 22%)
+  depth_classic: 0.25    # hasta 25%: bandera clásica; más: profunda
 
 # Puntuación de temáticas (suma 100). Fuerza relativa: posición frente a las demás temáticas.
 theme_score:

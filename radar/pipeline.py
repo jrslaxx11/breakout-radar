@@ -7,7 +7,7 @@ from datetime import date, datetime, timezone
 from zoneinfo import ZoneInfo
 
 from . import breakouts as bo
-from . import fundamentals, history, qullamaggie as qm, regime, stars, themes
+from . import fundamentals, history, htf, qullamaggie as qm, regime, stars, themes
 from .config import DOCS_DATA, Config
 from .metrics import compute, rel, rs_composite
 
@@ -137,6 +137,7 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
     for i, r in enumerate(sorted(liquid, key=lambda x: x["rsc"])):
         r["rs_pct"] = (i + 1) / len(liquid)
     qcfg = {**qm.DEFAULTS, **(S.get("qullamaggie") or {})}
+    hcfg = {**htf.DEFAULTS, **(S.get("htf") or {})}
     perf_cut = qm.perf_cutoffs([r["m"] for r in liquid], qcfg["top_pct"])
 
     # ---------- perfiles y temáticas ----------
@@ -239,7 +240,7 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
                 "catalyst": cat_txt, "catalyst_source": cat_src,
                 "risk": rk_label, "risk_points": rk_pts, "confirm": conf, "invalidate": inval,
                 "qm": qm.evaluate(m, state, qm_market, perf_cut, qcfg),
-                "stars": stars.rate(m, theme_hot=True),
+                "stars": stars.rate(m, theme_hot=True), "htf": htf.evaluate(m, hcfg),
                 "s10": m.s10, "adr_pct": m.adr_pct, **_level_fields(m),
             }
 
@@ -337,7 +338,8 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
             "mdv_usd": r["mdv_usd"], "catalyst": "", "risk": rk_label, "risk_points": rk_pts,
             "confirm": conf, "invalidate": inval, "mine": mine, "liquid": liq,
             "qm": qm.evaluate(m, ev["state"], qm_market, perf_cut, qcfg),
-            "stars": stars.rate(m, theme_hot=r["theme"] in selected), **_level_fields(m),
+            "stars": stars.rate(m, theme_hot=r["theme"] in selected), "htf": htf.evaluate(m, hcfg),
+            **_level_fields(m),
         })
     for c in search_view:
         if c["sym"] in candidates:
@@ -365,6 +367,24 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
         })
     # Primero las de más estrellas; a igualdad, las más avanzadas y las más cerca del nivel.
     qm_setups.sort(key=lambda x: (-(x["stars"] or 0), order[x["state"]], -x["dist"]))
+
+    # ---------- high tight flags: mástil ≥ 90% en ≤ 40 sesiones y bandera corta, en todo el universo ----------
+    htf_order = {bo.CONFIRMED: 0, bo.EARLY: 1, bo.RETEST: 2, bo.PRE: 3, bo.BASE: 4}
+    htf_setups = []
+    for c in search_view:
+        h = c.get("htf")
+        if not h or not c.get("liquid") or c.get("excluded") or c["state"] not in htf_order:
+            continue
+        st, q = c.get("stars") or {}, c.get("qm") or {}
+        htf_setups.append({
+            "sym": c["sym"], "name": c["name"], "theme": c.get("theme"), "state": c["state"], "why": c["why"],
+            "date": c["date"], "close": c["close"], "currency": c["currency"], "pivot": c["pivot"], "dist": c["dist"],
+            "level_kind": c["level_kind"], "adr_pct": c["adr_pct"], "presented": bool(c.get("presented")),
+            "stars": st.get("stars"), "star_points": st.get("points"), "theme_bonus": bool(st.get("theme_bonus")),
+            "qm_verdict": q.get("verdict"), "kind": h["kind"], "pole": h["pole"], "pole_len": h["pole_len"],
+            "flag_len": h["flag_len"], "depth": h["depth"],
+        })
+    htf_setups.sort(key=lambda x: (-(x["stars"] or 0), htf_order[x["state"]], -x["dist"]))
 
     # ---------- acciones líderes de cada temática: mayor fuerza relativa compuesta ----------
     view_by = {c["sym"]: c for c in search_view}
@@ -400,10 +420,12 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
         "candidates": sorted(candidates.values(), key=lambda c: -c["score"]),
         "lists": {"presented": presented, "global_top": global_top, "priority": priority,
                   "by_state": by_state, "others": others, "outside": outside[:15],
-                  "pending": pending_list, "eliminated": eliminated, "qm_setups": qm_setups},
+                  "pending": pending_list, "eliminated": eliminated, "qm_setups": qm_setups,
+                  "htf_setups": htf_setups},
         "qm_market": qm_market,
         "qm_const": qm.constants(),
         "stars_const": stars.constants(),
+        "htf_const": {**htf.constants(), **hcfg, "pole_days": w.get("pole_days", 40)},
         "theme_weights": weights,
         "calendar": calendar,
         "web": {"worker_url": (S.get("web") or {}).get("worker_url") or ""},
@@ -411,6 +433,7 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
         "engine": {
             "settings": {k: S[k] for k in ("windows", "breakout", "filters", "risk", "benchmarks", "currency_by_suffix")},
             "benchmarks": bench, "fx": fx, "qm_market": qm_market, "perf_cut": perf_cut, "qullamaggie": qcfg,
+            "htf": hcfg,
             "rs_dist": [round(r["rsc"], 6) for r in sorted(liquid, key=lambda x: x["rsc"])],
         },
     }

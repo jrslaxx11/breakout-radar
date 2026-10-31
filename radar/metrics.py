@@ -85,6 +85,8 @@ class Metrics:
     mom6: float | None = None
     # Foto del setup la víspera de la ruptura (hoy si aún no ha roto): ver _setup y radar/stars.py
     setup: dict = field(default_factory=dict)
+    # Mástil y bandera de la consolidación actual (high tight flag): ver radar/htf.py
+    pole: dict = field(default_factory=dict)
     extra: dict = field(default_factory=dict)
 
 
@@ -189,7 +191,21 @@ def compute(sym: str, df: pd.DataFrame, w: dict) -> Metrics | None:
         tight_ratio=_tight_ratio(h, l, ip, base_end),
         mom1=_mom(c, l, e, 22), mom3=_mom(c, l, e, 67), mom6=_mom(c, l, e, 126),
         setup=_setup(c, h, l, v, base_end, ip, d_lvl - ip if cross_i is not None else e - ip),
+        pole=_pole(h, l, ip, base_end, d_lvl - ip if cross_i is not None else e - ip, H, Lb,
+                   w.get("pole_days", 40), fmt),
     )
+
+
+def _pole(h: np.ndarray, l: np.ndarray, ip: int, base_end: int, blen: int, H: float, Lb: float, days: int, fmt) -> dict:
+    """Mástil (subida desde el mínimo de las `days` sesiones anteriores al máximo de la base hasta ese
+    máximo) y bandera (la consolidación desde el máximo: duración y corrección)."""
+    lm = max(0, ip - days)
+    lo = lm + int(np.argmin(l[lm:ip + 1]))
+    return {
+        "pole": float(H / l[lo] - 1), "pole_len": int(ip - lo), "pole_lo": float(l[lo]), "pole_date": fmt(lo),
+        "peak": float(H), "peak_date": fmt(ip), "flag_len": int(blen), "depth": float(1 - Lb / H),
+        "flag_low": float(Lb), "flag_end": fmt(base_end),
+    }
 
 
 def _mom(c: np.ndarray, l: np.ndarray, s: int, n: int) -> float | None:
