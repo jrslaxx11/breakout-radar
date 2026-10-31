@@ -27,8 +27,8 @@ def bajar(chunk):
 def main(src, dst):
     tickers = [t.strip() for t in open(src) if t.strip()]
     out, sin_datos = {}, []
-    for i in range(0, len(tickers), 40):
-        chunk = tickers[i:i + 40]
+    for i in range(0, len(tickers), 8):
+        chunk = tickers[i:i + 8]
         df = bajar(chunk)
         for t in chunk:
             try:
@@ -48,8 +48,8 @@ def main(src, dst):
             for f in FIELDS:
                 col = sub[f] if f in sub else pd.Series(np.nan, index=sub.index)
                 out[t + "|" + f[0]] = col.to_numpy(dtype=np.float32)
-        print(f"{min(i + 40, len(tickers))}/{len(tickers)} · con datos {len(out) // 6}", flush=True)
-        time.sleep(1)
+        print(f"{min(i + 8, len(tickers))}/{len(tickers)} · con datos {len(out) // 6}", flush=True)
+        time.sleep(4)
     np.savez_compressed(dst, **out)
     print("con datos:", len(out) // 6, "· sin datos:", len(sin_datos))
     print("SIN DATOS:", " ".join(sin_datos))
