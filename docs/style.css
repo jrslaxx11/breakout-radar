@@ -24,6 +24,7 @@
   --ma20: #C27A00;
   --ma50: #7A3EB1;
   --ma200: #8593A1;
+  --star: #B7791F;
   --radius-s: 4px;
   --radius-m: 10px;
   --w-cond: 72;
@@ -53,6 +54,7 @@
     --ma20: #E8A73E;
     --ma50: #B48AE8;
     --ma200: #7C8C9C;
+    --star: #E8B34A;
     color-scheme: dark;
   }
 }
@@ -200,7 +202,7 @@ tbody tr:last-child td { border-bottom: 0; }
 .lt tbody tr:hover td { background: var(--soft); }
 .lt .tk-cell a { color: inherit; text-decoration: none; }
 .lt .tk-cell a:hover { color: var(--pivot); text-decoration: underline; }
-small.block { display: block; font-size: 11.5px; margin-top: 1px; white-space: normal; }
+small.block { display: block; font-size: 11.5px; margin-top: 1px; padding: 0; white-space: normal; }
 .legend i.dash { width: 16px; height: 0; border-top: 2px dashed var(--pivot); border-radius: 0; vertical-align: 3px; }
 .qm-table td { vertical-align: top; }
 .qm-table tr.row { cursor: pointer; }
@@ -256,6 +258,27 @@ small.block { display: block; font-size: 11.5px; margin-top: 1px; white-space: n
 .sells { margin: 0; padding-left: 18px; }
 .calc label { display: grid; gap: 3px; margin-bottom: 8px; color: var(--muted); }
 .calc input { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius-s); padding: 5px 8px; }
+/* Estrellas: cinco estrellas vacías y encima las llenas recortadas a su proporción. */
+.stars { position: relative; display: inline-block; font-size: 15px; line-height: 1; letter-spacing: 1px; color: var(--rule); white-space: nowrap; vertical-align: -1px; }
+.stars::before { content: "★★★★★"; }
+.stars > i { position: absolute; top: 0; left: 0; bottom: 0; overflow: hidden; color: var(--star); font-style: normal; white-space: nowrap; }
+.stars > i::before { content: "★★★★★"; }
+.stars.sm { font-size: 12.5px; }
+.star-cell { white-space: nowrap; }
+.star-cell small { display: block; font-size: 11.5px; color: var(--muted); }
+.qm-table tr.top5 > td { background: color-mix(in srgb, var(--star) 8%, transparent); }
+.qm-table tr.top5:hover > td { background: color-mix(in srgb, var(--star) 14%, transparent); }
+.star-box { margin: 4px 0 14px; font-size: 13px; }
+.star-box h4 { margin: 4px 0 8px; font-size: 14px; font-weight: 650; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.pillars { display: grid; gap: 5px; max-width: 560px; }
+.pillar { display: grid; grid-template-columns: minmax(0, 24ch) minmax(60px, 1fr) 5ch; gap: 10px; align-items: center; }
+.pillar .bar { height: 6px; background: var(--soft); border-radius: 3px; overflow: hidden; }
+.pillar .bar > i { display: block; height: 100%; background: var(--star); }
+.pillar .pts { text-align: right; color: var(--muted); }
+.star-box details { margin-top: 8px; }
+.star-box summary { cursor: pointer; color: var(--pivot); }
+.star-box .checks { margin-top: 6px; }
+.five-note { margin: 0 0 12px; padding: 8px 12px; border-left: 4px solid var(--star); background: var(--surface); border-radius: var(--radius-s); font-size: 14px; max-width: 95ch; }
 .qm-light { margin: 12px 0 0; padding: 8px 12px; border-radius: var(--radius-s); background: var(--surface); border-left: 4px solid var(--muted); font-size: 14px; }
 .qm-verde { border-left-color: var(--pos); }
 .qm-ambar { border-left-color: var(--s-pre); }

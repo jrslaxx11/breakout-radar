@@ -202,6 +202,32 @@
       <label class="ma-toggle"><input type="checkbox" class="sma200" ${on ? "checked" : ""}><i style="background:var(--ma200)"></i>SMA200</label></p>`;
   }
 
+  // ---------- estrellas del setup (radar/stars.py) ----------
+  const starTxt = (x) => (x % 1 ? num(x, 1) : num(x, 0));
+  function starsHTML(x, small) {
+    if (!isNum(x)) return "—";
+    return `<span class="stars${small ? " sm" : ""}" role="img" aria-label="${starTxt(x)} de 5 estrellas" title="${starTxt(x)} de 5 estrellas"><i style="width:${(x / 5) * 100}%"></i></span>`;
+  }
+  const PILLAR_LABEL = { lider: "Gran subida previa", velocidad: "Valor rápido (ADR)", tendencia: "Tendencia limpia",
+    medias: "Las medias alcanzan al precio", compresion: "Compresión antes de romper" };
+  function starBlock(st) {
+    if (!st) return "";
+    const P = (D && D.stars_const && D.stars_const.pillars) || Object.entries(PILLAR_LABEL).map(([key, label]) => ({ key, label, max: 0 }));
+    const max = {}; st.items.forEach((i) => { max[i.pillar] = (max[i.pillar] || 0) + i.max; });
+    const bars = P.map((p) => {
+      const v = st.pillars[p.key] || 0, mx = p.max || max[p.key] || 1;
+      return `<div class="pillar"><span>${esc(p.label)}</span><span class="bar"><i style="width:${Math.max(0, v / mx) * 100}%"></i></span><span class="pts">${v}/${mx}</span></div>`;
+    }).join("");
+    const li = st.items.map((i) => `<li class="${i.pts > 0 ? "pos" : "dim"}"><span aria-hidden="true">${i.pts > 0 ? "✓" : "·"}</span> ${esc(i.label)}: <strong>${esc(i.value)}</strong> <span class="dim">(${i.pts}/${i.max})</span></li>`).join("")
+      + (st.penalties || []).map((x) => `<li class="neg"><span aria-hidden="true">✗</span> ${esc(x.label)} <span class="dim">(${x.pts})</span></li>`).join("");
+    return `<div class="star-box">
+      <h4>Calidad del setup ${starsHTML(st.stars)} <span>${starTxt(st.stars)} de 5 · ${st.points}/${st.max} puntos${st.theme_bonus ? " · incluye +½ por estar en una temática líder" : ""}</span></h4>
+      <div class="pillars">${bars}</div>
+      <details><summary>Ver los criterios y sus puntos</summary><ul class="checks">${li}</ul></details>
+      <p class="dim" style="margin:6px 0 0">Puntuación calibrada con 704 rupturas que operó Qullamaggie: 5 estrellas las tiene el 23% de las suyas y el 2,6% de las rupturas normales. Se mide el último día de la base.</p>
+    </div>`;
+  }
+
   // ---------- plan según las reglas de Qullamaggie ----------
   function qmBlock(c) {
     const q = c.qm, cur = c.currency, K = (D && D.qm_const) || q;
@@ -210,6 +236,7 @@
       <span aria-hidden="true">${k.ok === true ? "✓" : k.ok === false ? "✗" : "·"}</span> ${esc(k.label)}${k.hard ? "" : " <span class=\"dim\">(secundaria)</span>"}: <strong>${esc(k.value)}</strong></li>`).join("");
     return `<div class="qm-box" data-sym="${esc(c.sym)}">
       <h3>Plan según las reglas de Qullamaggie · <span class="qmv qmv-${esc(q.verdict.replace(/\s+/g, "-"))}">${esc(q.verdict)}</span></h3>
+      ${starBlock(c.stars)}
       <div class="qm-grid">
         <div><p class="dim">Requisitos del setup (las no marcadas como secundarias son obligatorias)</p><ul class="checks">${checks}</ul></div>
         <div><dl>
@@ -518,7 +545,7 @@
           <td>${num(c.rvol, 2)}x</td>
           <td>${c.next_earnings ? dateEs(c.next_earnings) + (c.next_earnings_est ? " (est.)" : "") : "—"}</td>
           <td class="risk-${esc(c.risk)}">${esc(c.risk)}</td>
-          <td class="left">${c.qm ? `<span class="qmv qmv-${esc(c.qm.verdict.replace(/\s+/g, "-"))}">${esc(c.qm.verdict)}</span>` : "—"}</td>
+          <td class="left">${c.qm ? `<span class="qmv qmv-${esc(c.qm.verdict.replace(/\s+/g, "-"))}">${esc(c.qm.verdict)}</span>` : "—"}${c.stars ? `<small class="block">${starsHTML(c.stars.stars, true)}</small>` : ""}</td>
           <td class="left ds ds-${esc(c.daily_status)}">${esc(DS_LABEL[c.daily_status] || c.daily_status || "")}${isNum(c.score_prev) ? ` <span class="dim">(${num(c.score_prev, 0)})</span>` : ""}</td>
         </tr>`).join("") : `<tr><td colspan="14" class="empty">Ninguna candidata cumple los filtros. Prueba a quitar alguno.</td></tr>`;
     };
@@ -543,13 +570,19 @@
     const rows = d.lists.qm_setups || [];
     QMS = Object.fromEntries(rows.map((x) => [x.sym, x]));
     const m = d.qm_market || {};
+    const top = rows.filter((x) => (x.stars || 0) >= 4.5);
+    const n5 = top.filter((x) => x.stars >= 5).length;
     $("#qullamaggie").innerHTML = `<h2>Setups Qullamaggie</h2>
-      <p class="lead">Escáner de todo el universo, no solo de las temáticas: valores entre el 2% que más sube a 1, 3 o 6 meses, con ADR ≥ 5%, subida previa ≥ 30%, consolidación de 2 semanas a 2 meses y retroceso ordenado, que hoy rompen o están a ≤ 5% del nivel de ruptura. "Con reservas": falla alguna regla secundaria${m.light && m.light !== "verde" ? " o el filtro de mercado no está en verde (hoy: " + esc(m.light) + ")" : ""}.</p>
+      <p class="lead">Escáner de todo el universo, no solo de las temáticas: valores entre el 2% que más sube a 1, 3 o 6 meses (desde el mínimo del periodo, como en sus escáneres), con ADR ≥ 5%, subida previa ≥ 30% y una consolidación de 5 a 60 sesiones, que hoy rompen o están a ≤ 5% del nivel de ruptura. Ordenados por estrellas: la calidad del setup puntuada con los rasgos que distinguen sus propias operaciones. "Con reservas": falla alguna regla secundaria${m.light && m.light !== "verde" ? " o el filtro de mercado no está en verde (hoy: " + esc(m.light) + ")" : ""}.</p>
+      ${rows.length ? `<p class="five-note">${top.length
+        ? `<strong>Candidatas de 5 estrellas hoy:</strong> ${top.map((x) => `<a href="#valor=${encodeURIComponent(x.sym)}">${esc(x.sym)}</a> ${starsHTML(x.stars, true)}`).join(" · ")}<span class="dim"> (${n5} con 5 y ${top.length - n5} con 4,5)</span>`
+        : `<strong>Hoy ninguna llega a 4,5 estrellas.</strong> <span class="dim">Las 5 estrellas son raras: el 1-3% de las rupturas. Qullamaggie espera a que aparezcan.</span>`}</p>` : ""}
       ${rows.length ? `<div class="tbl-wrap"><table class="lt qm-table">
-        <thead><tr><th class="left">Valor</th><th class="left">Estado</th><th>Nivel de ruptura</th><th>Distancia</th><th>Ahora</th>
+        <thead><tr><th class="left">Valor</th><th class="left">Estrellas</th><th class="left">Estado</th><th>Nivel de ruptura</th><th>Distancia</th><th>Ahora</th>
           <th>ADR</th><th>Subida previa</th><th>Base</th><th class="left">Veredicto</th></tr></thead>
-        <tbody>${rows.map((x) => `<tr class="row" data-sym="${esc(x.sym)}" tabindex="0" aria-expanded="false">
+        <tbody>${rows.map((x) => `<tr class="row${(x.stars || 0) >= 4.5 ? " top5" : ""}" data-sym="${esc(x.sym)}" tabindex="0" aria-expanded="false">
           <td class="tk-cell"><a href="#valor=${encodeURIComponent(x.sym)}" title="Abrir la ficha completa">${esc(x.sym)}</a><small>${esc(x.name && x.name !== x.sym ? x.name : "")}${x.theme ? " · " + esc(themeName(d, x.theme)) : ""}</small></td>
+          <td class="left star-cell">${starsHTML(x.stars)}<small>${isNum(x.star_points) ? `${x.star_points}/66 pts` : ""}${x.theme_bonus ? " · +½ temática líder" : ""}</small></td>
           <td class="left">${chip(x.state)}${x.presented ? ` <span class="wl-tag" title="Está en la watchlist de hoy">watchlist</span>` : ""}</td>
           <td>${price(x.pivot, x.currency)}<small class="dim block">${esc(LEVEL_KIND[x.level_kind] || "")}</small></td>
           <td class="${cls(x.dist)}">${pct(x.dist)}</td>
@@ -557,8 +590,8 @@
           <td>${pct(x.adr_pct, 1, false)}</td><td>${pct(x.prior_move, 0)}</td><td>${x.base_len} ses.</td>
           <td class="left"><span class="qmv qmv-${esc(x.qm.verdict.replace(/\s+/g, "-"))}">${esc(x.qm.verdict)}</span>${x.fails.length ? `<small class="dim block">falla: ${esc(x.fails.join("; ").toLowerCase())}</small>` : ""}</td>
         </tr>`).join("")}</tbody></table></div>` : `<p class="empty">Hoy ningún valor del universo cumple los requisitos obligatorios y está en ruptura o a punto. Es normal en mercados flojos: Qullamaggie espera.</p>`}
-      ${rows.length ? `<p class="dim" style="font-size:13px;margin-top:6px">Pulsa una fila para ver el gráfico y el plan; el ticker abre la ficha completa.</p>` : ""}`;
-    const toggle = (tr) => toggleRow(tr, 9, () => loadTicker(tr.dataset.sym).then((x) => ({ rec: BYS[tr.dataset.sym] || x.rec, k: x.k })));
+      ${rows.length ? `<p class="dim" style="font-size:13px;margin-top:6px">Pulsa una fila para ver el gráfico, el desglose de las estrellas y el plan; el ticker abre la ficha completa.</p>` : ""}`;
+    const toggle = (tr) => toggleRow(tr, 10, () => loadTicker(tr.dataset.sym).then((x) => ({ rec: BYS[tr.dataset.sym] || x.rec, k: x.k })));
     $("#qullamaggie").addEventListener("click", (e) => { const tr = e.target.closest("tr[data-sym]"); if (tr && !e.target.closest("a")) toggle(tr); });
     $("#qullamaggie").addEventListener("keydown", (e) => {
       if ((e.key === "Enter" || e.key === " ") && e.target.matches("tr[data-sym]")) { e.preventDefault(); toggle(e.target); }
@@ -599,7 +632,8 @@
         <p><strong>Temáticas.</strong> 0-100: fuerza relativa ${W.rs} (posición de la temática frente a las demás según la mediana de la RS compuesta de sus valores: 20% 1 mes, 40% 3 meses, 40% 6 meses, cada valor frente a su índice regional), consistencia ${W.consistency} (plazos de 1, 3 y 6 meses en los que la mediana supera a su índice), amplitud ${W.breadth} (% sobre SMA50 y SMA200, solo con valores de selección no sesgada), cerca de máximos ${W.highs} (% a menos de un 10% del máximo de 52 semanas) y volumen ${W.volume} (últimas 20 sesiones frente a las 50 anteriores, valores y ETF del sector).</p>
         <p><strong>Estados.</strong> La consolidación empieza en el máximo de las últimas 60 sesiones con al menos 5 de antigüedad (si un cierre posterior lo superó, la base ya está rota). Su borde superior es la línea más plana que parte de ese máximo y deja por debajo los máximos posteriores: plana en un canal, descendente en triángulos y flags; la descendente solo vale si la base tocó su suelo en sus dos primeros tercios (en un rebote en V manda el máximo). El nivel de ruptura es esa línea proyectada al día, o el máximo de las 3 sesiones anteriores si queda por encima. Confirmada: cierre sobre el nivel con volumen ≥ 1,5x la media de 20 sesiones y en la mitad alta del día. Temprana: cruza sin volumen o sin continuidad. Pre-breakout: a ≤ 5% del nivel con base de al menos 10 sesiones (o flag de 5-9 y ≤ 12% de profundidad). Retest: volvió al nivel tras cruzarlo. Extendida: > 10% sobre el nivel o > 3 ATR sobre la SMA20.</p>
         <p><strong>Puntuación de acciones.</strong> Fuerza relativa 25, base y estructura 25, ruptura y volumen 20, tendencia diaria y semanal 15, liquidez 10, catalizador 5. Es una clasificación, no una probabilidad. El riesgo se etiqueta aparte: volatilidad, resultados próximos, distancia a la invalidación y liquidez.</p>
-        <p><strong>Qullamaggie (solo rupturas).</strong> Reglas de su artículo "3 timeless setups", con umbrales objetivos. Obligatorias: estar entre el 2% que más sube a 1, 3 o 6 meses, ADR ≥ 5%, subida previa ≥ 30% en 1-3 meses, consolidación de 2 semanas a 2 meses (flag desde 5 sesiones) y retroceso ordenado (≤ 50% de la subida). Secundarias: mínimos crecientes (el último tercio de la base sobre su mínimo), rango que se estrecha (últimas 5 sesiones ≤ 50% del rango de la base) y precio surfeando las SMA10/SMA20 (o SMA50) ascendentes. Entrada en el máximo de la primera vela de 1, 5 o 60 minutos; stop en el mínimo del día y nunca más ancho que el ADR; venta de 1/3-1/2 a los 3-5 días, stop a la entrada y el resto al primer cierre bajo la SMA10 o SMA20. Posición habitual 10-20%, nunca más del 30%. Filtro de mercado: Nasdaq 100 frente a sus SMA10 y SMA20. Son niveles orientativos para estudiar el gráfico, no órdenes ni recomendaciones.</p>
+        <p><strong>Qullamaggie (solo rupturas).</strong> Reglas de su artículo "3 timeless setups" y de sus directos, con umbrales objetivos. Obligatorias: estar entre el 2% que más sube a 1, 3 o 6 meses (cierre frente al mínimo del periodo, la fórmula de sus escáneres), ADR ≥ 5%, subida previa ≥ 30% en 1-3 meses y consolidación de 5 a 60 sesiones. Secundarias: mínimos crecientes (el último tercio de la base sobre su mínimo), rango que se estrecha (últimas 5 sesiones ≤ 50% del rango de la base) y precio surfeando las SMA10/SMA20 (o SMA50) ascendentes. Entrada en el máximo de la primera vela de 1, 5 o 60 minutos; stop en el mínimo del día y nunca más ancho que el ADR; venta de 1/3-1/2 a los 3-5 días, stop a la entrada y el resto al primer cierre bajo la SMA10 o SMA20. Posición habitual 10-20%, nunca más del 30%. Filtro de mercado: Nasdaq 100 frente a sus SMA10 y SMA20. Son niveles orientativos para estudiar el gráfico, no órdenes ni recomendaciones.</p>
+        <p><strong>Estrellas (1-5).</strong> Qullamaggie califica sus setups con estrellas ("five star setup") y solo opera fuerte los de 4-5. Aquí se puntúan sobre 66 con los rasgos que distinguen sus operaciones, medidos con datos diarios en 704 de las 1.212 rupturas de su archivo de capturas (el resto son valores que ya no cotizan) frente a 141.000 rupturas normales de los mismos valores: gran subida previa (20), valor rápido por ADR (12), tendencia limpia con la SMA20 holgadamente sobre la SMA50 y una subida lineal (14), medias de 10 y 20 que alcanzan al precio y mínimos que se apoyan en la de 10 (12) y compresión en las últimas sesiones con volumen seco (8); resta si ya lleva 4 bases o la consolidación tiene menos de 5 sesiones. 50 puntos son 5 estrellas y cada 5 puntos menos, media estrella. En una temática líder suma media estrella, como él hace con los sectores calientes. Distancias y rangos en ADR del propio valor, el último día de la base. Resultado del estudio: 5 estrellas las tiene el 23% de sus setups en tendencia y el 2,6% de las rupturas normales; y en rupturas normales, ajenas a él, las de 5 estrellas subieron más de un 50% en 20 sesiones el 10,8% de las veces frente al 0,6% de las de 1 estrella. El retroceso de la base no los distinguía, por eso ya no es obligatorio. Es una medida de calidad del gráfico, no una probabilidad de acierto.</p>
         <p><strong>Gráficos y buscador.</strong> Velas diarias con las medias de 10, 20 y 50 sesiones que usa Qullamaggie (la de 200, opcional). El buscador de la cabecera abre la ficha de cualquier valor del universo diario${d.web && d.web.worker_url ? " y, para el resto del mercado, la calcula al momento en el navegador con los mismos umbrales a partir de los datos de Yahoo Finance (sin temática, catalizador ni fechas de resultados)" : ""}.</p>
         <p><strong>Límites.</strong> Los niveles son algorítmicos y deben validarse en el gráfico. La amplitud solo se mide en EE. UU. Las fechas de resultados "est." no están confirmadas por la empresa. Ninguna fila es una recomendación de inversión.</p>
       </div>`;
@@ -779,7 +813,8 @@
             <h2 class="ficha-tk">${esc(c.sym)} <small>${esc(c.name && c.name !== c.sym ? c.name : "")}</small></h2>
             <p class="ficha-meta">${chip(c.state)}<span>Puntuación <strong>${num(c.score, 0)}</strong></span>
               <span>Cierre <strong>${price(c.close, c.currency)}</strong> <span class="dim">${esc(c.currency)}</span> <span class="${cls(c.d1)}">${pct(c.d1)}</span></span>
-              <span class="risk-${esc(c.risk)}">Riesgo ${esc((c.risk || "").toLowerCase())}</span>${qv}</p>
+              <span class="risk-${esc(c.risk)}">Riesgo ${esc((c.risk || "").toLowerCase())}</span>${qv}
+              ${c.stars ? `<span>Setup ${starsHTML(c.stars.stars)} <strong>${starTxt(c.stars.stars)}</strong></span>` : ""}</p>
             <p class="ficha-live" data-live-ficha></p>
             <p class="ficha-note">${esc(note)}</p>
           </div>

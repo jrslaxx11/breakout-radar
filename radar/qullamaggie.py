@@ -1,7 +1,8 @@
 """Setup de ruptura de Qullamaggie (Kristjan Kullamägi) traducido a reglas objetivas.
 
 Fuente principal: "3 TIMELESS setups that have made me TENS OF MILLIONS!" (qullamaggie.com, 2021).
-Búsqueda: el 1-2% de valores que más suben a 1, 3 y 6 meses (escáneres de su comunidad: ADR > 5%).
+Búsqueda: el 1-2% de valores que más suben a 1, 3 y 6 meses, medido como él en sus escáneres: cierre
+frente al mínimo de las últimas 22, 67 y 126 sesiones (ADR > 5% para cuentas pequeñas).
 Setup en tres pasos:
   1. Subida grande en los últimos 1-3 meses: 30-100% o más, en días o pocas semanas.
   2. Retroceso ordenado y consolidación con mínimos crecientes y rango que se estrecha, normalmente
@@ -15,14 +16,17 @@ la SMA10 o la SMA20 según lo rápido que sea el valor (principiantes: SMA10).
 Tamaño: posiciones del 10-20% de la cuenta, nunca más del 30% de un día para otro; riesgo 0,25-1%.
 
 Los umbrales están en config/settings.yaml (sección `qullamaggie`); docs/engine.js replica este archivo.
+La calidad del setup (1-5 estrellas) se puntúa aparte en radar/stars.py, calibrada con sus operaciones.
+Ese estudio también ajustó estas reglas: su base llega a 60 sesiones (un 24% pasa de 42) y el retroceso
+de la base no distingue sus setups (el límite del 50% descartaba el 45% de ellos), así que no se exige.
 """
 from __future__ import annotations
 
 from .metrics import Metrics
 
-DEFAULTS = {"top_pct": 0.02, "adr_min": 0.05, "prior_move_min": 0.30, "base_min": 5, "base_max": 42,
-            "retrace_max": 0.50, "tight_max": 0.50}
-HARD = ("leader", "adr", "prior_move", "base", "orderly")
+DEFAULTS = {"top_pct": 0.02, "adr_min": 0.05, "prior_move_min": 0.30, "base_min": 5, "base_max": 60,
+            "tight_max": 0.50}
+HARD = ("leader", "adr", "prior_move", "base")
 
 
 def _pct(x: float, d: int = 1) -> str:
@@ -34,9 +38,9 @@ def _sgn(x: float) -> str:
 
 
 def perf_cutoffs(rows: list, top_pct: float) -> dict:
-    """Rentabilidad mínima para estar en el `top_pct` del universo a 1, 3 y 6 meses."""
+    """Subida mínima (desde el mínimo de 1, 3 y 6 meses) para estar en el `top_pct` del universo."""
     out = {}
-    for k in ("r1m", "r3m", "r6m"):
+    for k in ("mom1", "mom3", "mom6"):
         vals = sorted(v for v in (getattr(m, k) for m in rows) if v is not None)
         out[k] = vals[min(len(vals) - 1, int(len(vals) * (1 - top_pct)))] if vals else None
     return out
@@ -67,21 +71,19 @@ def evaluate(m: Metrics, state: str, market: dict, perf_cut: dict | None = None,
         checks.append({"key": key, "ok": ok, "hard": key in HARD, "label": label, "value": value})
 
     top = f"{q['top_pct'] * 100:.0f}%"
-    rets = (("1 m", m.r1m, "r1m"), ("3 m", m.r3m, "r3m"), ("6 m", m.r6m, "r6m"))
+    rets = (("1 m", m.mom1, "mom1"), ("3 m", m.mom3, "mom3"), ("6 m", m.mom6, "mom6"))
     if perf_cut:
         hits = [f"{lab} {_sgn(r)}" for lab, r, k in rets if r is not None and perf_cut.get(k) is not None and r >= perf_cut[k]]
-        add("leader", bool(hits), f"Entre el {top} que más sube a 1, 3 o 6 meses",
+        add("leader", bool(hits), f"Entre el {top} que más sube a 1, 3 o 6 meses (desde el mínimo)",
             ("sí: " + ", ".join(hits)) if hits else "no: " + ", ".join(f"{lab} {_sgn(r)}" for lab, r, _ in rets if r is not None))
     else:
-        add("leader", None, f"Entre el {top} que más sube a 1, 3 o 6 meses", "sin datos del universo")
+        add("leader", None, f"Entre el {top} que más sube a 1, 3 o 6 meses (desde el mínimo)", "sin datos del universo")
     add("adr", m.adr_pct >= q["adr_min"], f"ADR ≥ {_pct(q['adr_min'], 0)} (valor rápido)", _pct(m.adr_pct))
-    add("prior_move", m.prior_move >= q["prior_move_min"], f"Subida previa ≥ {_pct(q['prior_move_min'], 0)} en 1-3 meses",
-        _pct(m.prior_move))
-    add("base", q["base_min"] <= m.blen <= q["base_max"], "Consolidación de 2 semanas a 2 meses (flag desde 5 sesiones)",
+    move = max(x for x in (m.prior_move, m.mom3) if x is not None)
+    add("prior_move", move >= q["prior_move_min"], f"Subida previa ≥ {_pct(q['prior_move_min'], 0)} en 1-3 meses",
+        _pct(move))
+    add("base", q["base_min"] <= m.blen <= q["base_max"], "Consolidación de 1 semana a 3 meses (flag desde 5 sesiones)",
         f"{m.blen} sesiones")
-    add("orderly", None if m.retrace is None else m.retrace <= q["retrace_max"],
-        f"Retroceso ordenado (corrige ≤ {_pct(q['retrace_max'], 0)} de la subida)",
-        "sin datos" if m.retrace is None else f"corrige el {_pct(m.retrace, 0)}")
     add("higher_lows", m.higher_lows, "Mínimos crecientes en la base",
         "sí" if m.higher_lows else ("no" if m.higher_lows is False else "base corta"))
     add("tight", None if m.tight_ratio is None else m.tight_ratio <= q["tight_max"], "Rango que se estrecha",

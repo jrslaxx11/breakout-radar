@@ -107,6 +107,11 @@ def test_engine_js_matches_python(tmp_path, monkeypatch):
         assert [(c["key"], c["ok"], c["value"]) for c in qj["checks"]] == \
                [(c["key"], c["ok"], c["value"]) for c in qp["checks"]], s
         assert close(qj["trigger"], qp["trigger"]) and close(qj["stop_max"], qp["stop_max"]), s
+        # Estrellas: mismos puntos, criterios y textos (el JS no conoce la temática: sin bonificación).
+        sj, sp = js["stars"], py["stars"]
+        assert sj["points"] == sp["points"] and sj["chart_stars"] == sp["chart_stars"], s
+        assert [(i["key"], i["pts"], i["value"]) for i in sj["items"]] == [(i["key"], i["pts"], i["value"]) for i in sp["items"]], s
+        assert sj["penalties"] == sp["penalties"] and sj["pillars"] == sp["pillars"], s
     # Las series con forma garantizan que se prueban varios estados, no solo los aleatorios.
     assert len(states) >= 4, states
     assert view["TRI"]["state"] == "CONFIRMADA" and view["TRI"]["pivot"] < view["TRI"]["peak"] * 0.97

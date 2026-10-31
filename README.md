@@ -115,21 +115,48 @@ con umbrales objetivos (`config/settings.yaml` → `qullamaggie`):
 
 | Regla | Tipo | Cálculo |
 | --- | --- | --- |
-| Líder | Obligatoria | Entre el 2% del universo que más sube a 1, 3 o 6 meses |
+| Líder | Obligatoria | Entre el 2% del universo que más sube a 1, 3 o 6 meses, medido como en sus escáneres: cierre / mínimo de 22, 67 o 126 sesiones − 1 |
 | ADR ≥ 5% | Obligatoria | Media de máximo/mínimo − 1 en 20 sesiones (escáneres de su comunidad) |
-| Subida previa ≥ 30% | Obligatoria | Del mínimo de las 63 sesiones anteriores al máximo de la base hasta ese máximo |
-| Consolidación de 2 semanas a 2 meses | Obligatoria | 5 a 42 sesiones desde el máximo (5-9 = flag) |
-| Retroceso ordenado | Obligatoria | La base corrige ≤ 50% de la subida previa |
+| Subida previa ≥ 30% | Obligatoria | La mayor entre la subida del mínimo de las 63 sesiones anteriores al máximo de la base hasta ese máximo y la subida de 3 meses desde el mínimo |
+| Consolidación de 1 semana a 3 meses | Obligatoria | 5 a 60 sesiones desde el máximo (5-9 = flag) |
 | Mínimos crecientes | Secundaria | El último tercio de la base se mantiene por encima del mínimo de la base |
 | Rango que se estrecha | Secundaria | Rango de precios de las últimas 5 sesiones ≤ 50% del rango de toda la base |
 | Surfea medias | Secundaria | Sobre las SMA10 y SMA20 ascendentes, o sobre la SMA50 ascendente |
 
 "Cumple" exige todas y el Nasdaq 100 sobre sus SMA10 y SMA20 ascendentes; si falla una secundaria o el
 mercado no está en verde, "Con reservas". La sección "Setups Qullamaggie" aplica estas reglas a todo
-el universo líquido, no solo a las temáticas, y lista los valores que rompen o están a ≤ 5% del nivel.
+el universo líquido, no solo a las temáticas, y lista los valores que rompen o están a ≤ 5% del nivel,
+ordenados por estrellas.
 Entrada en el máximo de la primera vela de 1, 5 o 60 minutos; stop en el mínimo del día (nunca más ancho
 que el ADR); vender 1/3-1/2 a los 3-5 días, stop a la entrada y el resto al primer cierre bajo la SMA10 o
 la SMA20. Posición habitual 10-20% de la cuenta, nunca más del 30%; riesgo 0,25-1%.
+
+**Estrellas del setup (1-5, `radar/stars.py`).** Qullamaggie califica sus setups con estrellas
+("five star setup", más de 700 menciones en 360 directos de su Swing Trading School) y solo opera
+fuerte los de 4-5. La puntuación se calibró con sus propias operaciones: 704 de las 1.212 rupturas de
+su archivo de capturas (el resto son valores que ya no cotizan en Yahoo) medidas con datos diarios
+y comparadas con 141.000 rupturas normales (cierre sobre el máximo de 10 sesiones) de esos mismos
+valores. Los criterios son los que él repite y su peso sale de una regresión logística por tramos,
+redondeada a puntos enteros. Todo se mide el último día de la base (hoy si aún no rompe; la víspera si
+ya rompió) y las distancias y rangos en ADR del propio valor.
+
+| Bloque | Puntos | Criterio |
+| --- | --- | --- |
+| Gran subida previa | 20 | Subida previa (la mayor de las dos de arriba) ≥ 30%: 9 · ≥ 75%: 14 · ≥ 150%: 20 |
+| Valor rápido | 12 | ADR ≥ 5%: 7 · ≥ 8%: 12 |
+| Tendencia limpia | 14 | SMA20 ≥ 1 ADR sobre la SMA50: 7 · SMA20 ascendente: 3 · subida lineal (movimiento neto ≥ 40% del recorrido diario): 4 |
+| Las medias alcanzan al precio | 12 | Cierre a ≤ 0,5 ADR de la SMA10: 4 (≤ 1 ADR: 2) · a ≤ 1 ADR de la SMA20: 1 · algún mínimo de las 3 últimas sesiones toca o perfora la SMA10: 7 |
+| Compresión | 8 | Rango de 3 sesiones ≤ 1 ADR: 2 · de 5 sesiones ≤ 1,25 ADR: 2 · vela de la víspera ≤ 0,75 ADR: 2 · volumen de 5 sesiones ≤ 70% del de 50: 2 |
+| Penalizaciones | − | 4 o más bases completadas desde el mínimo de 6 meses: −4 · consolidación de menos de 5 sesiones: −6 |
+
+50 puntos o más son 5 estrellas y cada 5 puntos menos, media estrella (menos de 15: 1). En una temática
+líder suma media estrella, como él hace con los sectores calientes. Resultados del estudio (rupturas
+sobre una SMA50 ascendente): 5 estrellas las tiene el 23% de sus setups y el 2,6% de las rupturas
+normales; 4 o más, el 51% frente al 12% (AUC 0,81, estable en 1975-2004, 2005-2015 y 2016-2021). En
+rupturas normales, ajenas a sus operaciones, las de 5 estrellas subieron más de un 50% en 20 sesiones
+el 10,8% de las veces y las de 1 estrella el 0,6%. El mismo estudio quitó el "retroceso ≤ 50%" de las
+reglas obligatorias (descartaba el 45% de sus setups sin distinguirlos) y alargó la base a 60 sesiones
+(un 24% de sus setups pasa de 42). Las capturas y transcripciones no forman parte del repositorio.
 
 **Puntuación de acciones (fase 6).** Fuerza relativa 25, base y estructura 25, ruptura y volumen
 20, tendencia diaria y semanal 15, liquidez 10, catalizador 5. El riesgo se etiqueta aparte

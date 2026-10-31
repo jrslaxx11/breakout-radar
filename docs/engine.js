@@ -86,6 +86,48 @@
       peak: H, level_kind: kind, line_slope: slope, touch_date: jt !== ip ? t[jt] : null,
       line: [[t[ip], H], [dLvl <= e ? t[dLvl] : nextSession(t[e]), lineV]],
       retrace: H > loMove ? (H - Lb) / (H - loMove) : null, tight_ratio: tightRatio(h, l, ip, baseEnd),
+      mom1: mom(c, l, e, 22), mom3: mom(c, l, e, 67), mom6: mom(c, l, e, 126),
+      setup: setupAt(c, h, l, v, baseEnd, ip, crossI !== null ? dLvl - ip : e - ip),
+    };
+  }
+
+  // Subida desde el mínimo de n sesiones (fórmula de los escáneres de Qullamaggie).
+  const mom = (c, l, s, n) => (s + 1 < n ? null : c[s] / minR(l, s - n + 1, s) - 1);
+  const argMin = (a, i, j) => { let k = i; for (let x = i + 1; x <= j; x++) if (a[x] < a[k]) k = x; return k; };
+
+  function linearity(c, a, b) {
+    if (b - a < 3) return null;
+    let net = 0, tot = 0;
+    for (let i = a + 1; i <= b; i++) { const r = Math.log(c[i]) - Math.log(c[i - 1]); net += r; tot += Math.abs(r); }
+    return tot > 0 ? Math.abs(net) / tot : null;
+  }
+
+  function countBases(h, c, a, s) {
+    let runHi = h[a], pause = 0, cnt = 0;
+    for (let i = a + 1; i <= s; i++) {
+      if (c[i] > runHi) { if (pause >= 5) cnt++; runHi = Math.max(runHi, h[i]); pause = 0; } else pause++;
+    }
+    return cnt;
+  }
+
+  // Rasgos del setup el último día de la base (igual que radar/metrics.py: _setup).
+  function setupAt(c, h, l, v, s, ip, blen) {
+    if (s < 50) return {};
+    let a = 0; for (let i = s - 19; i <= s; i++) a += h[i] / l[i];
+    const adr = a / 20 - 1;
+    if (adr <= 0) return {};
+    const unit = adr * c[s];
+    const s10 = sma(c, 10, s), s20 = sma(c, 20, s), s50 = sma(c, 50, s), s20p = sma(c, 20, s - 5);
+    const lo6 = argMin(l, Math.max(0, s - 125), s);
+    const loI = argMin(l, Math.max(0, ip - 63), ip);
+    let v50 = 0; for (let i = s - 50; i < s; i++) v50 += v[i]; v50 /= 50;
+    let v5 = 0; for (let i = s - 4; i <= s; i++) v5 += v[i]; v5 /= 5;
+    return {
+      adr, mom3: mom(c, l, s, 67), d10: (c[s] - s10) / unit, d20: (c[s] - s20) / unit, sp: (s20 - s50) / unit,
+      s20up: s20p !== null && s20 > s20p, lo10: (minR(l, s - 2, s) - s10) / unit,
+      t3: (maxR(h, s - 2, s) - minR(l, s - 2, s)) / unit, t5: (maxR(h, s - 4, s) - minR(l, s - 4, s)) / unit,
+      rng: (h[s] - l[s]) / unit, vd5: v50 > 0 ? v5 / v50 : null, lin: linearity(c, loI, ip),
+      bases: countBases(h, c, lo6, s), blen,
     };
   }
 
@@ -252,8 +294,8 @@
     return ["", ""];
   }
 
-  const QM_DEFAULTS = { top_pct: 0.02, adr_min: 0.05, prior_move_min: 0.30, base_min: 5, base_max: 42, retrace_max: 0.5, tight_max: 0.5 };
-  const QM_HARD = ["leader", "adr", "prior_move", "base", "orderly"];
+  const QM_DEFAULTS = { top_pct: 0.02, adr_min: 0.05, prior_move_min: 0.30, base_min: 5, base_max: 60, tight_max: 0.5 };
+  const QM_HARD = ["leader", "adr", "prior_move", "base"];
   const sgn0 = (x) => { const v = x * 100; return (v >= 0 ? "+" : "") + v.toFixed(0) + "%"; };
 
   // Igual que radar/qullamaggie.py: evaluate.
@@ -262,17 +304,16 @@
     const checks = [];
     const add = (key, ok, label, value) => checks.push({ key, ok, hard: QM_HARD.includes(key), label, value });
     const top = (q.top_pct * 100).toFixed(0) + "%";
-    const rets = [["1 m", m.r1m, "r1m"], ["3 m", m.r3m, "r3m"], ["6 m", m.r6m, "r6m"]];
+    const rets = [["1 m", m.mom1, "mom1"], ["3 m", m.mom3, "mom3"], ["6 m", m.mom6, "mom6"]];
     if (perfCut) {
       const hits = rets.filter(([, r, k]) => r !== null && perfCut[k] !== null && perfCut[k] !== undefined && r >= perfCut[k]).map(([lab, r]) => `${lab} ${sgn0(r)}`);
-      add("leader", hits.length > 0, `Entre el ${top} que más sube a 1, 3 o 6 meses`,
+      add("leader", hits.length > 0, `Entre el ${top} que más sube a 1, 3 o 6 meses (desde el mínimo)`,
         hits.length ? "sí: " + hits.join(", ") : "no: " + rets.filter(([, r]) => r !== null).map(([lab, r]) => `${lab} ${sgn0(r)}`).join(", "));
-    } else add("leader", null, `Entre el ${top} que más sube a 1, 3 o 6 meses`, "sin datos del universo");
+    } else add("leader", null, `Entre el ${top} que más sube a 1, 3 o 6 meses (desde el mínimo)`, "sin datos del universo");
     add("adr", m.adr_pct >= q.adr_min, `ADR ≥ ${pctEs(q.adr_min, 0)} (valor rápido)`, pctEs(m.adr_pct));
-    add("prior_move", m.prior_move >= q.prior_move_min, `Subida previa ≥ ${pctEs(q.prior_move_min, 0)} en 1-3 meses`, pctEs(m.prior_move));
-    add("base", m.blen >= q.base_min && m.blen <= q.base_max, "Consolidación de 2 semanas a 2 meses (flag desde 5 sesiones)", `${m.blen} sesiones`);
-    add("orderly", m.retrace === null ? null : m.retrace <= q.retrace_max, `Retroceso ordenado (corrige ≤ ${pctEs(q.retrace_max, 0)} de la subida)`,
-      m.retrace === null ? "sin datos" : `corrige el ${pctEs(m.retrace, 0)}`);
+    const move = Math.max(...[m.prior_move, m.mom3].filter((x) => x !== null && x !== undefined));
+    add("prior_move", move >= q.prior_move_min, `Subida previa ≥ ${pctEs(q.prior_move_min, 0)} en 1-3 meses`, pctEs(move));
+    add("base", m.blen >= q.base_min && m.blen <= q.base_max, "Consolidación de 1 semana a 3 meses (flag desde 5 sesiones)", `${m.blen} sesiones`);
     add("higher_lows", m.higher_lows, "Mínimos crecientes en la base", m.higher_lows ? "sí" : (m.higher_lows === false ? "no" : "base corta"));
     add("tight", m.tight_ratio === null ? null : m.tight_ratio <= q.tight_max, "Rango que se estrecha",
       m.tight_ratio === null ? "base corta" : `últimas sesiones: ${pctEs(m.tight_ratio, 0)} del rango de la base`);
@@ -294,6 +335,49 @@
     const trail = adr >= q.adr_min ? "SMA10" : "SMA20";
     return { verdict, checks, adr_pct: adr, trigger, entry_note: note, stop_max: trigger ? trigger * (1 - adr) : null,
       trail_ma: trail, trail_value: trail === "SMA10" ? m.s10 : m.s20 };
+  }
+
+  // Estrellas del setup (igual que radar/stars.py: rate). Calibradas con 704 rupturas de Qullamaggie.
+  const STAR_STEPS = [[50, 5], [45, 4.5], [40, 4], [35, 3.5], [30, 3], [25, 2.5], [20, 2], [15, 1.5]];
+  const STAR_PILLARS = ["lider", "velocidad", "tendencia", "medias", "compresion"];
+  const starsFor = (p) => { for (const [lo, st] of STAR_STEPS) if (p >= lo) return st; return 1; };
+  const adrTxt = (x) => (x >= 0 ? "+" : "") + x.toFixed(1).replace(".", ",") + " ADR";
+  const numTxt = (x, d = 1) => x.toFixed(d).replace(".", ",");
+  const pct0 = (x) => (x * 100).toFixed(0) + "%";
+
+  function starRate(m, themeHot) {
+    const s = m.setup || {};
+    if (!Object.keys(s).length) return null;
+    const items = [];
+    const add = (pillar, key, label, pts, max, value) => items.push({ pillar, key, label, pts, max, value });
+    const mm = Math.max(...[m.prior_move, s.mom3].filter((x) => x !== null && x !== undefined));
+    add("lider", "move", "Subida previa (máximo entre la subida a la base y la de 3 meses desde el mínimo)",
+      mm >= 1.5 ? 20 : mm >= 0.75 ? 14 : mm >= 0.3 ? 9 : 0, 20, `+${pct0(mm)} (9 pts ≥ 30%, 14 ≥ 75%, 20 ≥ 150%)`);
+    add("velocidad", "adr", "ADR de 20 sesiones", s.adr >= 0.08 ? 12 : s.adr >= 0.05 ? 7 : 0, 12,
+      `${numTxt(s.adr * 100)}% (7 pts ≥ 5%, 12 ≥ 8%)`);
+    add("tendencia", "sp", "SMA20 al menos 1 ADR por encima de la SMA50", s.sp >= 1 ? 7 : 0, 7, adrTxt(s.sp));
+    add("tendencia", "s20up", "SMA20 ascendente", s.s20up ? 3 : 0, 3, s.s20up ? "sí" : "no");
+    add("tendencia", "lin", "Subida previa lineal (movimiento neto ≥ 40% del recorrido diario)",
+      (s.lin || 0) >= 0.4 ? 4 : 0, 4, s.lin === null || s.lin === undefined ? "sin datos" : pct0(s.lin));
+    add("medias", "d10", "Cierre cerca de la SMA10", s.d10 <= 0.5 ? 4 : s.d10 <= 1 ? 2 : 0, 4, `${adrTxt(s.d10)} (4 pts ≤ 0,5; 2 ≤ 1)`);
+    add("medias", "d20", "Cierre a ≤ 1 ADR de la SMA20", s.d20 <= 1 ? 1 : 0, 1, adrTxt(s.d20));
+    add("medias", "lo10", "Se apoya en la SMA10: algún mínimo de las 3 últimas sesiones la toca o la perfora",
+      s.lo10 <= 0 ? 7 : 0, 7, adrTxt(s.lo10));
+    add("compresion", "t3", "Rango de las 3 últimas sesiones ≤ 1 ADR", s.t3 <= 1 ? 2 : 0, 2, `${numTxt(s.t3)} ADR`);
+    add("compresion", "t5", "Rango de las 5 últimas sesiones ≤ 1,25 ADR", s.t5 <= 1.25 ? 2 : 0, 2, `${numTxt(s.t5)} ADR`);
+    add("compresion", "rng", "Vela de la víspera estrecha (≤ 0,75 ADR)", s.rng <= 0.75 ? 2 : 0, 2, `${numTxt(s.rng)} ADR`);
+    add("compresion", "vd5", "Volumen seco: media de 5 sesiones ≤ 70% de la de 50",
+      s.vd5 !== null && s.vd5 <= 0.7 ? 2 : 0, 2, s.vd5 === null ? "sin datos" : pct0(s.vd5));
+    const pen = [];
+    if (s.bases >= 4) pen.push({ key: "bases", label: `${s.bases} bases ya completadas desde el mínimo de 6 meses (ruptura tardía)`, pts: -4 });
+    if (s.blen < 5) pen.push({ key: "blen", label: `Consolidación de solo ${s.blen} sesiones`, pts: -6 });
+    const pillars = {};
+    for (const k of STAR_PILLARS) pillars[k] = items.filter((i) => i.pillar === k).reduce((a, i) => a + i.pts, 0);
+    const total = Object.values(pillars).reduce((a, b) => a + b, 0) + pen.reduce((a, p) => a + p.pts, 0);
+    const chart = starsFor(total);
+    const bonus = themeHot && chart < 5 ? 0.5 : 0;
+    return { stars: Math.min(5, chart + bonus), chart_stars: chart, theme_bonus: bonus > 0, points: total, max: 66,
+      pillars, items, penalties: pen, bases: s.bases };
   }
 
   // Divisas con unidad menor (peniques, centavos, agorot): base y escala.
@@ -377,13 +461,14 @@
       r1m: m.r1m, r3m: m.r3m, r6m: m.r6m, rs1, rs3, rs6, dhi: m.dhi, hi52: m.hi52, s10: m.s10, s20: m.s20,
       s50: m.s50, s200: m.s200, adr_pct: m.adr_pct, mdv_usd: mdvUsd, catalyst: "", risk: rk, risk_points: rkp,
       confirm: conf, invalidate: inval, qm: qmEvaluate(m, cl.state, ctx.qm_market, ctx.perf_cut, ctx.qullamaggie),
+      stars: starRate(m, false),
       peak: m.peak, level_kind: m.level_kind, line: m.line, touch_date: m.touch_date, retrace: m.retrace,
       tight_ratio: m.tight_ratio, prior_move: m.prior_move,
       benchmark: bsym, live: true,
     };
   }
 
-  const api = { compute, classify, invalidation, score, risk, conditions, qmEvaluate, evaluateTicker, prepareSeries,
+  const api = { compute, classify, invalidation, score, risk, conditions, qmEvaluate, starRate, evaluateTicker, prepareSeries,
     currencyOf, fxNeed, fxFactor, rel, rsComposite };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.RadarEngine = api;

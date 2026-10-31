@@ -46,12 +46,11 @@ breakout:
 # Setup de ruptura de Qullamaggie (radar/qullamaggie.py). Obligatorios: líder, ADR, subida previa,
 # duración de la base y retroceso ordenado; el resto rebaja el veredicto a "Con reservas".
 qullamaggie:
-  top_pct: 0.02          # entre el 2% que más sube a 1, 3 o 6 meses
+  top_pct: 0.02          # entre el 2% que más sube a 1, 3 o 6 meses (cierre frente al mínimo del periodo)
   adr_min: 0.05          # ADR ≥ 5%
   prior_move_min: 0.30   # subida previa ≥ 30% en los 1-3 meses anteriores a la base
-  base_min: 5            # consolidación de 5 (flag) a 42 sesiones (2 meses)
-  base_max: 42
-  retrace_max: 0.50      # retroceso ordenado: corrige como mucho la mitad de la subida
+  base_min: 5            # consolidación de 5 (flag) a 60 sesiones: un 24% de sus setups pasa de 42
+  base_max: 60
   tight_max: 0.50        # rango de precios de las últimas 5 sesiones ≤ 50% del rango de toda la base
 
 # Puntuación de temáticas (suma 100). Fuerza relativa: posición frente a las demás temáticas.

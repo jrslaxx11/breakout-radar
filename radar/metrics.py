@@ -79,6 +79,12 @@ class Metrics:
     line: list | None = None   # [[fecha, valor], [fecha, valor]] para dibujarla
     retrace: float | None = None   # parte de la subida previa que ha corregido la base (0-1)
     tight_ratio: float | None = None  # rango diario reciente / rango diario al inicio de la base
+    # Momento al estilo Qullamaggie (sus escáneres): cierre / mínimo de 22, 67 y 126 sesiones - 1
+    mom1: float | None = None
+    mom3: float | None = None
+    mom6: float | None = None
+    # Foto del setup la víspera de la ruptura (hoy si aún no ha roto): ver _setup y radar/stars.py
+    setup: dict = field(default_factory=dict)
     extra: dict = field(default_factory=dict)
 
 
@@ -181,7 +187,76 @@ def compute(sym: str, df: pd.DataFrame, w: dict) -> Metrics | None:
         line=[[fmt(ip), float(H)], [line_end, float(line_v)]],
         retrace=float((H - Lb) / (H - lo_move)) if H > lo_move else None,
         tight_ratio=_tight_ratio(h, l, ip, base_end),
+        mom1=_mom(c, l, e, 22), mom3=_mom(c, l, e, 67), mom6=_mom(c, l, e, 126),
+        setup=_setup(c, h, l, v, base_end, ip, d_lvl - ip if cross_i is not None else e - ip),
     )
+
+
+def _mom(c: np.ndarray, l: np.ndarray, s: int, n: int) -> float | None:
+    """Subida desde el mínimo de las últimas `n` sesiones (fórmula de los escáneres de Qullamaggie)."""
+    if s + 1 < n:
+        return None
+    return float(c[s] / np.min(l[s - n + 1:s + 1]) - 1)
+
+
+def _linearity(c: np.ndarray, a: int, b: int) -> float | None:
+    """Limpieza de un tramo: movimiento neto / suma de movimientos diarios (1 = línea recta)."""
+    if b - a < 3:
+        return None
+    lr = np.diff(np.log(c[a:b + 1]))
+    tot = float(np.sum(np.abs(lr)))
+    return float(abs(np.sum(lr)) / tot) if tot > 0 else None
+
+
+def _setup(c: np.ndarray, h: np.ndarray, l: np.ndarray, v: np.ndarray, s: int, ip: int, blen: int) -> dict:
+    """Rasgos del setup el día `s` (último día de la base) para la puntuación en estrellas.
+
+    Las distancias y rangos van en unidades de ADR del propio valor, que es como Qullamaggie juzga lo
+    que está "cerca" o "estrecho" en valores de volatilidad muy distinta.
+    """
+    if s < 50:
+        return {}
+    adr = float(np.mean(h[s - 19:s + 1] / l[s - 19:s + 1]) - 1)
+    if adr <= 0:
+        return {}
+    unit = adr * c[s]
+    s10, s20, s50 = sma(c, 10, s), sma(c, 20, s), sma(c, 50, s)
+    s20p = sma(c, 20, s - 5)
+    lo = max(0, s - 125)
+    lo6 = lo + int(np.argmin(l[lo:s + 1]))
+    lm = max(0, ip - 63)
+    lo_i = lm + int(np.argmin(l[lm:ip + 1]))
+    v50 = float(np.mean(v[s - 50:s])) if s >= 50 else 0.0
+    return {
+        "adr": adr,
+        "mom3": _mom(c, l, s, 67),
+        "d10": float((c[s] - s10) / unit),                         # distancia a la SMA10 en ADR
+        "d20": float((c[s] - s20) / unit),
+        "sp": float((s20 - s50) / unit),                           # SMA20 sobre la SMA50 en ADR
+        "s20up": bool(s20p is not None and s20 > s20p),
+        "lo10": float((np.min(l[s - 2:s + 1]) - s10) / unit),     # mínimos de 3 sesiones frente a la SMA10
+        "t3": float((np.max(h[s - 2:s + 1]) - np.min(l[s - 2:s + 1])) / unit),
+        "t5": float((np.max(h[s - 4:s + 1]) - np.min(l[s - 4:s + 1])) / unit),
+        "rng": float((h[s] - l[s]) / unit),
+        "vd5": float(np.mean(v[s - 4:s + 1]) / v50) if v50 > 0 else None,
+        "lin": _linearity(c, lo_i, ip),
+        "bases": _count_bases(h, c, lo6, s),
+        "blen": int(blen),
+    }
+
+
+def _count_bases(h: np.ndarray, c: np.ndarray, a: int, s: int) -> int:
+    """Bases completadas entre `a` y `s`: pausas de ≥ 5 sesiones sin superar el máximo alcanzado,
+    seguidas de un cierre por encima de él."""
+    run_hi, pause, cnt = h[a], 0, 0
+    for i in range(a + 1, s + 1):
+        if c[i] > run_hi:
+            if pause >= 5:
+                cnt += 1
+            run_hi, pause = max(run_hi, h[i]), 0
+        else:
+            pause += 1
+    return cnt
 
 
 def _early_low(l: np.ndarray, ip: int, end: int) -> bool:
