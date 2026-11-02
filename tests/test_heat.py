@@ -33,3 +33,51 @@ def test_scan_hits_and_group():
     assert heat.group_of({"gics_sub": "Semiconductors"}, {}) == "Semiconductors"
     assert heat.group_of({"gics_sub": "Application Software"}, {}) == "Software - Application"
     assert heat.group_of({}, None) is None
+    assert heat.group_of({"gics_sub": "Semiconductors"}, {"industry": "Solar"}, "Banks—Regional") == "Banks - Regional"
+
+
+def test_us_industries_screener_and_cache(tmp_path, monkeypatch):
+    from datetime import datetime, timedelta, timezone
+
+    from radar import fundamentals as f
+    monkeypatch.setattr(f, "INDUSTRY_CACHE", tmp_path / "industries.json")
+    monkeypatch.setattr(f, "CACHE_DIR", tmp_path)
+    calls = []
+
+    def screen(ind, offset):
+        calls.append((ind, offset))
+        n = {"Biotechnology": 300, "Uranium": 4, "Software—Application": 1}[ind]  # biotecnología: dos páginas
+        return [{"symbol": f"{ind[:3].upper()}{i}"} for i in range(offset, min(n, offset + 250))]
+    now = datetime(2026, 11, 2, tzinfo=timezone.utc)
+    m = f.us_industries({"min_total": 10, "pause_s": 0}, screen=screen,
+                        industries=["Biotechnology", "Uranium", "Software—Application"], now=now)
+    assert len(m) == 305 and m["URA3"] == "Uranium" and m["BIO299"] == "Biotechnology"
+    assert m["SOF0"] == "Software - Application"            # mismo nombre que en el perfil
+    assert calls == [("Biotechnology", 0), ("Biotechnology", 250), ("Uranium", 0), ("Software—Application", 0)]
+    # Caché semanal: no vuelve a consultar.
+    m2 = f.us_industries({"min_total": 10}, screen=lambda i, o: 1 / 0, industries=["Uranium"], now=now + timedelta(days=3))
+    assert m2 == m
+    # Si el screener falla, se conserva la caché anterior.
+    m3 = f.us_industries({"min_total": 10, "pause_s": 0}, screen=lambda i, o: 1 / 0, industries=["Uranium"] * 6,
+                         now=now + timedelta(days=9))
+    assert m3 == m
+
+
+def test_profiles_retry_empty(tmp_path, monkeypatch):
+    from datetime import date
+
+    from radar import fundamentals as f
+    monkeypatch.setattr(f, "PROFILE_CACHE", tmp_path / "profiles.json")
+    monkeypatch.setattr(f, "CACHE_DIR", tmp_path)
+    monkeypatch.setattr(f.time, "sleep", lambda s: None)
+    answers = {"A": {}, "B": {"longName": "B Corp", "industry": "Solar"}}
+    c = f.profiles(["A", "B"], 10, today=date(2026, 11, 2), fetch=lambda s: answers[s])
+    assert c["A"]["tries"] == 1 and c["B"]["industry"] == "Solar"
+    # Al día siguiente no se reintenta; a los 8 días sí, y responde.
+    answers["A"] = {"longName": "A Inc", "industry": "Uranium"}
+    assert f.profiles(["A", "B"], 10, today=date(2026, 11, 3), fetch=lambda s: answers[s])["A"]["industry"] == ""
+    assert f.profiles(["A", "B"], 10, today=date(2026, 11, 10), fetch=lambda s: answers[s])["A"]["industry"] == "Uranium"
+    # 25 vacíos seguidos: Yahoo no responde y se para.
+    seen = []
+    f.profiles([f"Z{i}" for i in range(40)], 100, today=date(2026, 11, 10), fetch=lambda s: seen.append(s) or {})
+    assert len(seen) == 25

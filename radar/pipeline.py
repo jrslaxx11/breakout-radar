@@ -49,7 +49,7 @@ def _stock_catalyst(sym: str, react: dict | None, has_earn_data: bool, overrides
 
 
 def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict | None = None,
-        details_fn=None, profiles_fn=None, today: date | None = None, write: bool = True,
+        details_fn=None, profiles_fn=None, industries_fn=None, today: date | None = None, write: bool = True,
         force: bool = False) -> dict:
     cfg = cfg or Config.load()
     S = cfg.settings
@@ -154,11 +154,12 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
     # de los del S&P sigue saliendo de su GICS, pero los sectores calientes usan la industria de Yahoo.
     need_prof = [r["sym"] for r in sorted(liquid, key=lambda x: -x["rsc"])]
     prof = (profiles_fn or fundamentals.profiles)(need_prof, S["run"]["max_profile_fetch"])
+    ind_map = (industries_fn or fundamentals.us_industries)((S.get("heat") or {}).get("industry_screen"))
     lookup = themes.build_lookup(theme_defs)
     for r in rows.values():
         r["profile"] = prof.get(r["sym"], {})
         r["theme"] = themes.assign(r["sym"], r["info"], r["profile"], lookup)
-        r["group"] = heat.group_of(r["info"], r["profile"])
+        r["group"] = heat.group_of(r["info"], r["profile"], ind_map.get(r["sym"]))
 
     # ---------- sectores calientes: cuántos valores de cada industria están en sus escáneres ----------
     heat_cfg = {**heat.DEFAULTS, **(S.get("heat") or {})}

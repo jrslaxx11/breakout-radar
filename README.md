@@ -196,7 +196,7 @@ cuando muchos de sus valores aparecen a la vez entre los que más suben a 1, 3 y
 
 | Paso | Criterio |
 | --- | --- |
-| Sector | Industria de Yahoo Finance (biotecnología, semiconductores, uranio, solar, transporte marítimo…); para los valores del S&P sin perfil, su subindustria GICS traducida a la industria equivalente |
+| Sector | Industria de Yahoo Finance (biotecnología, semiconductores, uranio, solar, transporte marítimo…) de cada acción de EE. UU., sacada del screener de Yahoo con una consulta por industria (caché semanal, `industry_screen`); si falta, la del perfil del valor o su subindustria GICS traducida |
 | Universo | Solo EE. UU., como sus escáneres: es el único mercado con todo el universo líquido; los internacionales entran en el radar por ser líderes o ganadores y harían parecer calientes sus sectores (`us_only`) |
 | Escáner | El 7% del mercado de EE. UU. que más sube a 1, 3 o 6 meses desde el mínimo del periodo (su "rank 93" de TC2000) |
 | Calor | Valores del sector en el escáner × la parte del sector que suponen. Solo el número favorecería siempre a los sectores con cientos de valores; solo la proporción, a los de tres |
@@ -204,8 +204,9 @@ cuando muchos de sus valores aparecen a la vez entre los que más suben a 1, 3 y
 | Valores rápidos | Los del escáner con ADR ≥ 5% de los sectores calientes que siguen en forma (no descartados: ni bajo la SMA50, ni con la ruptura fallida, ni lejos del nivel), hasta 15 por sector, con estado, estrellas, plazos en el escáner y aviso de resultados |
 
 El ranking muestra también cuántos valores tenía cada sector en el escáner la sesión anterior, para ver
-si se calienta o se enfría. Los perfiles de Yahoo se descargan poco a poco (700 por ejecución, con
-caché), así que las primeras sesiones algunos valores fuera del S&P aún no tienen sector.
+si se calienta o se enfría. La industria sale del screener porque el perfil de cada valor
+(`Ticker.info`) llega vacío en la mayoría de consultas desde GitHub Actions; los perfiles vacíos se
+reintentan cada 7 días (hasta 3 veces) y la descarga se detiene si Yahoo encadena 25 vacíos.
 
 **Puntuación de acciones (fase 6).** Fuerza relativa 25, base y estructura 25, ruptura y volumen
 20, tendencia diaria y semanal 15, liquidez 10, catalizador 5. El riesgo se etiqueta aparte

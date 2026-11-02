@@ -72,6 +72,12 @@ heat:
   hot_top: 8             # como mucho los 8 sectores de más calor
   fast_adr: 0.05         # valor rápido: ADR ≥ 5%
   focus_per_group: 15    # como mucho 15 valores por sector en el foco
+  industry_screen:       # industria de cada acción de EE. UU. con el screener de Yahoo (una consulta por industria)
+    enabled: true
+    min_cap: 50000000    # capitalización ≥ 50 M USD
+    refresh_days: 7
+    pause_s: 0.5
+    min_total: 1500      # si salen menos acciones, se conserva la caché anterior
 
 # Puntuación de temáticas (suma 100). Fuerza relativa: posición frente a las demás temáticas.
 theme_score:

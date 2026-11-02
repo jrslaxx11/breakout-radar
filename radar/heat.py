@@ -6,7 +6,8 @@ lot of 50-100% moves over the past few weeks, boom, that's the leading sector").
 "hasta las peores acciones se mueven más que las mejores de un sector frío".
 
 - Sector: la industria de Yahoo Finance (biotecnología, semiconductores, uranio, solar, transporte
-  marítimo...), que es el grano con el que él habla de sectores; si aún no hay perfil, la subindustria GICS.
+  marítimo...), que es el grano con el que él habla de sectores. Sale del screener de Yahoo (consulta por
+  industria, semanal); si no, del perfil del valor o de su subindustria GICS.
 - Escáner: el 7% del mercado de EE. UU. que más sube a 1, 3 o 6 meses desde el mínimo del periodo
   (su "rank 93" de TC2000), con los mismos umbrales para los internacionales.
 - Calor: valores del sector en el escáner × la parte del sector que suponen (n² / tamaño). Solo el número
@@ -72,7 +73,7 @@ INDUSTRY_ES = {
     "Pharmaceutical Retailers": "Farmacias", "Pollution & Treatment Controls": "Control de contaminación",
     "Publishing": "Editoriales", "Railroads": "Ferrocarriles", "Real Estate - Development": "Promoción inmobiliaria",
     "Real Estate - Diversified": "Inmobiliarias diversificadas", "Real Estate Services": "Servicios inmobiliarios",
-    "Recreational Vehicles": "Vehículos recreativos", "Refiners & Pipelines": "Refino y oleoductos",
+    "Recreational Vehicles": "Vehículos recreativos", "Motorcycle Manufacturers": "Fabricantes de motos", "Refiners & Pipelines": "Refino y oleoductos",
     "Rental & Leasing Services": "Alquiler de equipos", "Residential Construction": "Constructoras de viviendas",
     "Resorts & Casinos": "Resorts y casinos", "Restaurants": "Restaurantes", "REIT - Diversified": "REIT diversificados",
     "REIT - Healthcare Facilities": "REIT sanitarios", "REIT - Hotel & Motel": "REIT hoteleros",
@@ -146,12 +147,12 @@ GICS_TO_YAHOO = {
 }
 
 
-def group_of(info: dict, profile: dict | None) -> str | None:
-    """Sector fino del valor: industria de Yahoo; si aún no hay perfil, su subindustria GICS traducida a la
-    industria de Yahoo equivalente."""
-    ind = (profile or {}).get("industry")
+def group_of(info: dict, profile: dict | None, screened: str | None = None) -> str | None:
+    """Sector fino del valor: industria de Yahoo (del screener o del perfil); si no hay ninguna, su
+    subindustria GICS traducida a la industria de Yahoo equivalente."""
+    ind = screened or (profile or {}).get("industry")
     if ind:
-        return ind
+        return ind.replace("—", " - ")
     sub = info.get("gics_sub")
     return GICS_TO_YAHOO.get(sub, sub) if sub else None
 

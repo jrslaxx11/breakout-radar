@@ -53,6 +53,7 @@ def test_pipeline_end_to_end(tmp_path, monkeypatch):
                                 "last_earnings": None, "next_earnings": "2026-12-01",
                                 "next_earnings_est": True} for s in syms}
     out = run(universe=universe, prices=prices, details_fn=details, profiles_fn=lambda s, l: {},
+              industries_fn=lambda c: {},
               today=date(2026, 10, 29), write=False, force=True)
     assert out["regime"]["label"] in ("FAVORABLE", "MIXTO", "DESFAVORABLE")
     keys = {t["key"] for t in out["themes"]}
