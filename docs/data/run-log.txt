@@ -1,6 +1,11 @@
-2026-11-02 12:57:57,416 INFO radar.prices: precios: 3690 de 3692 tickers
-2026-11-02 12:57:58,047 INFO radar.pipeline: última sesión: 10 valores sin ella en la serie diaria, 10 cotizaciones, 0 completados
-2026-11-02 12:57:58,092 INFO radar.pipeline: barras parciales descartadas: 957
-2026-11-02 12:57:59,791 INFO radar.prices: última sesión: 10 valores atrasados, 0 completados, 10 siguen atrasados
-2026-11-02 12:57:59,808 INFO radar.pipeline: última barra por mercado: AS 2026-10-30 (56/57); AX 2026-11-02 (158/159); BR 2026-10-30 (2/2); CO 2026-10-30 (44/44); DE 2026-10-30 (68/68); HE 2026-10-30 (44/44); HK 2026-11-02 (155/156); KQ 2026-11-02 (37/37); KS 2026-11-02 (117/117); L 2026-10-30 (86/86); LS 2026-10-30 (1/1); MC 2026-10-30 (81/81); MI 2026-10-30 (88/88); NS 2026-11-02 (84/84); OL 2026-10-30 (69/69); PA 2026-10-30 (147/147); ST 2026-10-30 (150/150); SW 2026-10-30 (150/150); T 2026-11-02 (171/171); TO 2026-10-30 (122/123); TW 2026-11-02 (123/123); TWO 2026-11-02 (35/35); US 2026-10-30 (1644/1650); VI 2026-10-30 (1/1); WA 2026-10-30 (1/1)
-Sesión 2026-10-30 · régimen DESFAVORABLE · 2643 valores líquidos · temáticas LST, CYB, TANK, BIO, ITS · 23 candidatas
+2026-11-02 13:48:13,385 INFO radar.prices: precios: 5907 de 5908 tickers
+2026-11-02 13:48:15,011 INFO radar.universe: universo EE. UU.: 2684 líquidos de 5908 cotizados
+2026-11-02 13:54:59,612 INFO radar.prices: precios: 4794 de 4796 tickers
+2026-11-02 13:54:59,974 WARNING radar.prices: cotizaciones por lotes no disponibles (HTTP Error 401: ); se usan los metadatos del gráfico
+2026-11-02 13:55:00,192 INFO radar.prices: cotizaciones por gráfico: 10 de 10
+2026-11-02 13:55:00,194 INFO radar.pipeline: última sesión: 10 valores sin ella en la serie diaria, 10 cotizaciones, 0 completados
+2026-11-02 13:55:00,307 INFO radar.pipeline: barras parciales descartadas: 961
+2026-11-02 13:55:01,762 INFO radar.prices: última sesión: 10 valores atrasados, 0 completados, 10 siguen atrasados
+2026-11-02 13:55:01,799 INFO radar.pipeline: última barra por mercado: AS 2026-10-30 (56/57); AX 2026-11-02 (158/159); BR 2026-10-30 (2/2); CO 2026-10-30 (44/44); DE 2026-10-30 (68/68); HE 2026-10-30 (44/44); HK 2026-11-02 (155/156); KQ 2026-11-02 (37/37); KS 2026-11-02 (117/117); L 2026-10-30 (83/83); LS 2026-10-30 (1/1); MC 2026-10-30 (81/81); MI 2026-10-30 (88/88); NS 2026-11-02 (84/84); OL 2026-10-30 (69/69); PA 2026-10-30 (147/147); ST 2026-10-30 (150/150); SW 2026-10-30 (150/150); T 2026-11-02 (171/171); TO 2026-10-30 (122/123); TW 2026-11-02 (123/123); TWO 2026-11-02 (35/35); US 2026-10-30 (2748/2754); VI 2026-10-30 (1/1); WA 2026-10-30 (1/1)
+2026-11-02 13:55:02,055 INFO radar.pipeline: sesión 2026-10-30: 900 series recortadas a esa fecha (mercados que ya cotizaron el día siguiente)
+Sesión 2026-10-30 · régimen DESFAVORABLE · 3706 valores líquidos · temáticas LST, CYB, TANK, BIO, ITS · 24 candidatas
