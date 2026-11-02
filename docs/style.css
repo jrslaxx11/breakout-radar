@@ -343,6 +343,7 @@ small.block { display: block; font-size: 11.5px; margin-top: 1px; padding: 0; wh
 .focus-table tr.grp th .dim { color: var(--muted); font-weight: 500; font-size: 13px; }
 .focus-table tbody:first-of-type tr.grp th { padding-top: 6px; }
 .focus-table td.in-scan { font-weight: 750; color: var(--ink); }
+.focus-table td:nth-child(3) { min-width: 150px; max-width: 250px; white-space: normal; line-height: 1.9; }
 .htf-tag { color: var(--star); border-color: color-mix(in srgb, var(--star) 50%, transparent); }
 .hot-tag { display: inline-block; margin-left: 4px; padding: 0 6px; border-radius: 999px; font-size: 11.5px; font-weight: 600; color: var(--hot); background: color-mix(in srgb, var(--hot) 12%, transparent); }
 .heat-more { margin-top: 14px; }

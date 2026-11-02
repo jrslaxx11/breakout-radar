@@ -645,7 +645,7 @@
             <td class="left">${chip(x.state)} ${tags(x)}</td>
             <td>${pct(x.adr_pct, 1, false)}</td>
             ${mom(x, "1 m", x.mom1)}${mom(x, "3 m", x.mom3)}${mom(x, "6 m", x.mom6)}
-            <td>${price(x.pivot, x.currency)}<small class="dim block">${esc(LEVEL_KIND[x.level_kind] || "")}</small></td>
+            <td title="${esc(LEVEL_KIND[x.level_kind] || "")}">${price(x.pivot, x.currency)}</td>
             <td class="${cls(x.dist)}">${pct(x.dist)}</td>
             <td class="live-cell" data-live="${esc(x.sym)}">${liveCell(x)}</td>
           </tr>`).join("")}</tbody>`).join("")}</table></div>
