@@ -3145,6 +3145,14 @@
 "sector": "",
 "tries": 1
 },
+"ALGN": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "ALIV-SDB.ST": {
 "country": "Sweden",
 "industry": "Auto Parts",
@@ -3180,6 +3188,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"ALLN.SW": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "ALLY": {
 "country": "",
@@ -3603,6 +3619,14 @@
 "name": "",
 "sector": ""
 },
+"ARE": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "ARE.TO": {
 "country": "Canada",
 "industry": "Engineering & Construction",
@@ -3690,6 +3714,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"AS": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "ASAN": {
 "country": "",
@@ -3846,6 +3878,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"ATMU": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "ATO": {
 "country": "",
@@ -4441,6 +4481,14 @@
 "name": "",
 "sector": ""
 },
+"BEPC": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "BESI.AS": {
 "country": "",
 "industry": "",
@@ -4452,6 +4500,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"BETR": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "BF-B": {
 "country": "",
@@ -4572,6 +4628,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"BIRK": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "BJ": {
 "country": "",
@@ -5162,6 +5226,14 @@
 "industry": "Information Technology Services",
 "name": "Capgemini SE",
 "sector": "Technology"
+},
+"CAPR": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "CAPT.OL": {
 "country": "Greece",
@@ -6270,6 +6342,14 @@
 "industry": "REIT - Healthcare Facilities",
 "name": "CareTrust REIT, Inc.",
 "sector": "Real Estate"
+},
+"CTRN": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "CTS": {
 "country": "",
@@ -8077,6 +8157,14 @@
 "name": "",
 "sector": ""
 },
+"FLO": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "FLOC": {
 "country": "United States",
 "industry": "Oil & Gas Equipment & Services",
@@ -8310,6 +8398,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"FTAI": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "FTDR": {
 "country": "",
@@ -8575,6 +8671,14 @@
 "name": "",
 "sector": ""
 },
+"GFI": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "GFL": {
 "country": "",
 "industry": "",
@@ -8798,6 +8902,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"GRBK": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "GRC": {
 "country": "United States",
@@ -9276,6 +9388,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"HMY": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "HNGE": {
 "country": "United States",
@@ -10159,11 +10279,27 @@
 "name": "",
 "sector": ""
 },
+"JBGS": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "JBS": {
 "country": "Netherlands",
 "industry": "Packaged Foods",
 "name": "JBS N.V.",
 "sector": "Consumer Defensive"
+},
+"JBTM": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "JCI": {
 "country": "",
@@ -10750,6 +10886,14 @@
 "industry": "Electronic Components",
 "name": "Littelfuse, Inc.",
 "sector": "Technology"
+},
+"LGIH": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "LGND": {
 "country": "",
@@ -12125,6 +12269,14 @@
 "name": "",
 "sector": ""
 },
+"NCC-B.ST": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "NCLH": {
 "country": "",
 "industry": "",
@@ -12256,6 +12408,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"NEXI.MI": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "NEXT": {
 "country": "",
@@ -13463,6 +13623,14 @@
 "name": "Koninklijke Philips N.V.",
 "sector": "Healthcare"
 },
+"PHIN": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "PHM": {
 "country": "",
 "industry": "",
@@ -13819,6 +13987,14 @@
 "name": "",
 "sector": ""
 },
+"PS": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "PSA": {
 "country": "",
 "industry": "",
@@ -13872,6 +14048,14 @@
 "industry": "Integrated Freight & Logistics",
 "name": "Poste Italiane S.p.A.",
 "sector": "Industrials"
+},
+"PSUS": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "PSX": {
 "country": "",
@@ -17037,6 +17221,14 @@
 "name": "",
 "sector": ""
 },
+"ULS": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "ULTA": {
 "country": "",
 "industry": "",
@@ -17366,6 +17558,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"VIPS": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "VIR": {
 "country": "",
