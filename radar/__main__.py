@@ -18,7 +18,15 @@ def main(argv: list[str] | None = None) -> int:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
     logging.getLogger("yfinance").setLevel(logging.CRITICAL)
     # yfinance aún usa `inplace=`, que pandas 3.1 marca como obsoleto: miles de avisos que tapan el registro.
+    # Además del filtro, se intercepta la impresión (alguna librería reinicia los filtros durante la descarga).
     warnings.filterwarnings("ignore", message=r".*inplace keyword.*")
+    show = warnings.showwarning
+
+    def quiet(message, category, filename, lineno, file=None, line=None):
+        if "inplace keyword" not in str(message):
+            show(message, category, filename, lineno, file, line)
+
+    warnings.showwarning = quiet
     if args.cmd == "run":
         out = run(force=args.force)
         if out.get("skipped"):
