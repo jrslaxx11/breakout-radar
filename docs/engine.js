@@ -302,7 +302,7 @@
     return ["", ""];
   }
 
-  const QM_DEFAULTS = { top_pct: 0.02, adr_min: 0.05, prior_move_min: 0.30, base_min: 5, base_max: 60, tight_max: 0.5 };
+  const QM_DEFAULTS = { top_pct: 0.02, adr_min: 0.05, prior_move_min: 0.30, base_min: 5, base_max: 60, tight_max: 0.5, earnings_days: 7 };
   const QM_HARD = ["leader", "adr", "prior_move", "base"];
   const sgn0 = (x) => { const v = x * 100; return (v >= 0 ? "+" : "") + v.toFixed(0) + "%"; };
 

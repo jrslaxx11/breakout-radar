@@ -212,6 +212,14 @@
       <label class="ma-toggle"><input type="checkbox" class="sma200" ${on ? "checked" : ""}><i style="background:var(--ma200)"></i>SMA200</label></p>`;
   }
 
+  // Aviso de resultados próximos (Qullamaggie no entra con resultados en pocos días).
+  const earnDays = () => ((D && D.engine && D.engine.qullamaggie && D.engine.qullamaggie.earnings_days) || 7);
+  function earnTag(x) {
+    if (!isNum(x.earnings_days) || x.earnings_days > earnDays()) return "";
+    const n = x.earnings_days;
+    return ` <span class="earn-tag" title="Publica resultados el ${esc(dateEs(x.next_earnings))}: Qullamaggie no entra con resultados en pocos días">${n === 0 ? "resultados hoy" : `resultados en ${n} día${n === 1 ? "" : "s"}`}</span>`;
+  }
+
   // ---------- estrellas del setup (radar/stars.py) ----------
   const starTxt = (x) => (x % 1 ? num(x, 1) : num(x, 0));
   function starsHTML(x, small) {
@@ -584,7 +592,7 @@
     const top = rows.filter((x) => (x.stars || 0) >= 4.5);
     const n5 = top.filter((x) => x.stars >= 5).length;
     $("#qullamaggie").innerHTML = `<h2>Setups Qullamaggie</h2>
-      <p class="lead">Escáner de todo el universo, no solo de las temáticas: valores entre el 2% que más sube a 1, 3 o 6 meses (desde el mínimo del periodo, como en sus escáneres), con ADR ≥ 5%, subida previa ≥ 30% y una consolidación de 5 a 60 sesiones, que hoy rompen o están a ≤ 5% del nivel de ruptura. Ordenados por estrellas: la calidad del setup puntuada con los rasgos que distinguen sus propias operaciones. "Con reservas": falla alguna regla secundaria${m.light && m.light !== "verde" ? " o el filtro de mercado no está en verde (hoy: " + esc(m.light) + ")" : ""}.</p>
+      <p class="lead">Escáner de todo el universo, no solo de las temáticas: todas las acciones de EE. UU. con liquidez suficiente más las internacionales del radar. Valores entre el 2% del mercado de EE. UU. que más sube a 1, 3 o 6 meses (desde el mínimo del periodo, como en sus escáneres), con ADR ≥ 5%, subida previa ≥ 30% y una consolidación de 5 a 60 sesiones, que hoy rompen o están a ≤ 5% del nivel de ruptura. Ordenados por estrellas: la calidad del setup puntuada con los rasgos que distinguen sus propias operaciones. "Con reservas": falla alguna regla secundaria, publica resultados en ${earnDays()} días o menos (él no entra)${m.light && m.light !== "verde" ? " o el filtro de mercado no está en verde (hoy: " + esc(m.light) + ")" : ""}.</p>
       ${rows.length ? `<p class="five-note">${top.length
         ? `<strong>Candidatas de 5 estrellas hoy:</strong> ${top.map((x) => `<a href="#valor=${encodeURIComponent(x.sym)}">${esc(x.sym)}</a> ${starsHTML(x.stars, true)}`).join(" · ")}<span class="dim"> (${n5} con 5 y ${top.length - n5} con 4,5)</span>`
         : `<strong>Hoy ninguna llega a 4,5 estrellas.</strong> <span class="dim">Las 5 estrellas son raras: el 1-3% de las rupturas. Qullamaggie espera a que aparezcan.</span>`}</p>` : ""}
@@ -594,7 +602,7 @@
         <tbody>${rows.map((x) => `<tr class="row${(x.stars || 0) >= 4.5 ? " top5" : ""}" data-sym="${esc(x.sym)}" tabindex="0" aria-expanded="false">
           <td class="tk-cell"><a href="#valor=${encodeURIComponent(x.sym)}" title="Abrir la ficha completa">${esc(x.sym)}</a><small>${esc(x.name && x.name !== x.sym ? x.name : "")}${x.theme ? " · " + esc(themeName(d, x.theme)) : ""}</small></td>
           <td class="left star-cell">${starsHTML(x.stars)}<small>${isNum(x.star_points) ? `${x.star_points}/66 pts` : ""}${x.theme_bonus ? " · +½ temática líder" : ""}</small></td>
-          <td class="left">${chip(x.state)}${x.presented ? ` <span class="wl-tag" title="Está en la watchlist de hoy">watchlist</span>` : ""}</td>
+          <td class="left">${chip(x.state)}${x.presented ? ` <span class="wl-tag" title="Está en la watchlist de hoy">watchlist</span>` : ""}${earnTag(x)}</td>
           <td>${price(x.pivot, x.currency)}<small class="dim block">${esc(LEVEL_KIND[x.level_kind] || "")}</small></td>
           <td class="${cls(x.dist)}">${pct(x.dist)}</td>
           <td class="live-cell" data-live="${esc(x.sym)}">${liveCell(x)}</td>
@@ -624,7 +632,7 @@
         <tbody>${rows.map((x) => `<tr class="row${(x.stars || 0) >= 4.5 ? " top5" : ""}" data-sym="${esc(x.sym)}" tabindex="0" aria-expanded="false">
           <td class="tk-cell"><a href="#valor=${encodeURIComponent(x.sym)}" title="Abrir la ficha completa">${esc(x.sym)}</a><small>${esc(x.name && x.name !== x.sym ? x.name : "")}${x.theme ? " · " + esc(themeName(d, x.theme)) : ""}</small></td>
           <td class="left star-cell">${starsHTML(x.stars)}<small>${isNum(x.star_points) ? `${x.star_points}/66 pts` : ""}${x.qm_verdict && x.qm_verdict !== "No cumple" ? " · " + esc(x.qm_verdict.toLowerCase()) : ""}</small></td>
-          <td class="left">${chip(x.state)}${x.presented ? ` <span class="wl-tag" title="Está en la watchlist de hoy">watchlist</span>` : ""}</td>
+          <td class="left">${chip(x.state)}${x.presented ? ` <span class="wl-tag" title="Está en la watchlist de hoy">watchlist</span>` : ""}${earnTag(x)}</td>
           <td><strong>+${num(x.pole * 100, 0)}%</strong><small class="dim block">en ${x.pole_len} ses.</small></td>
           <td>${x.flag_len} ses. · −${num(x.depth * 100, 0)}%<small class="dim block">${esc(x.kind)}</small></td>
           <td>${price(x.pivot, x.currency)}<small class="dim block">${esc(LEVEL_KIND[x.level_kind] || "")}</small></td>
@@ -671,7 +679,7 @@
     const W = d.theme_weights || { rs: 45, consistency: 15, breadth: 20, highs: 10, volume: 10 };
     $("#metodo").innerHTML = `<h2>Método y limitaciones</h2>
       <div class="method">
-        <p><strong>Datos.</strong> ${esc(d.meta.price_source)}. Solo cierres confirmados de la última sesión de cada mercado; nada en tiempo real. Universo: ${cv.universe.toLocaleString("es-ES")} valores (S&P 500/400/600, lista fija internacional y descubrimiento por mercado), ${cv.with_data.toLocaleString("es-ES")} con datos y ${cv.liquid.toLocaleString("es-ES")} líquidos (≥ 5 M USD diarios y precio ≥ 5 USD).</p>
+        <p><strong>Datos.</strong> ${esc(d.meta.price_source)}. Solo cierres confirmados; todos los mercados se cortan en la última sesión cerrada de EE. UU., aunque el cálculo se haga de día. Nada en tiempo real. Universo: ${cv.universe.toLocaleString("es-ES")} valores (S&P 500/400/600; todas las acciones cotizadas en EE. UU. con ≥ 5 M USD diarios y precio ≥ 5 USD según el directorio oficial de Nasdaq, filtro revisado cada semana; lista fija internacional y descubrimiento por mercado), ${cv.with_data.toLocaleString("es-ES")} con datos y ${cv.liquid.toLocaleString("es-ES")} líquidos (≥ 5 M USD diarios y precio ≥ 5 USD).</p>
         <p><strong>Temáticas.</strong> 0-100: fuerza relativa ${W.rs} (posición de la temática frente a las demás según la mediana de la RS compuesta de sus valores: 20% 1 mes, 40% 3 meses, 40% 6 meses, cada valor frente a su índice regional), consistencia ${W.consistency} (plazos de 1, 3 y 6 meses en los que la mediana supera a su índice), amplitud ${W.breadth} (% sobre SMA50 y SMA200, solo con valores de selección no sesgada), cerca de máximos ${W.highs} (% a menos de un 10% del máximo de 52 semanas) y volumen ${W.volume} (últimas 20 sesiones frente a las 50 anteriores, valores y ETF del sector).</p>
         <p><strong>Estados.</strong> La consolidación empieza en el máximo de las últimas 60 sesiones con al menos 5 de antigüedad (si un cierre posterior lo superó, la base ya está rota). Su borde superior es la línea más plana que parte de ese máximo y deja por debajo los máximos posteriores: plana en un canal, descendente en triángulos y flags; la descendente solo vale si la base tocó su suelo en sus dos primeros tercios (en un rebote en V manda el máximo). El nivel de ruptura es esa línea proyectada al día, o el máximo de las 3 sesiones anteriores si queda por encima. Confirmada: cierre sobre el nivel con volumen ≥ 1,5x la media de 20 sesiones y en la mitad alta del día. Temprana: cruza sin volumen o sin continuidad. Pre-breakout: a ≤ 5% del nivel con base de al menos 10 sesiones (o flag de 5-9 y ≤ 12% de profundidad). Retest: volvió al nivel tras cruzarlo. Extendida: > 10% sobre el nivel o > 3 ATR sobre la SMA20.</p>
         <p><strong>Puntuación de acciones.</strong> Fuerza relativa 25, base y estructura 25, ruptura y volumen 20, tendencia diaria y semanal 15, liquidez 10, catalizador 5. Es una clasificación, no una probabilidad. El riesgo se etiqueta aparte: volatilidad, resultados próximos, distancia a la invalidación y liquidez.</p>

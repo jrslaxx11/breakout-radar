@@ -1,7 +1,10 @@
 """Construcción del universo de acciones.
 
-Tres fuentes:
+Cuatro fuentes:
   * S&P 500, S&P 400 y S&P 600 (Wikipedia, con clasificación GICS). Selección no sesgada.
+  * Todas las acciones cotizadas en EE. UU. (directorio oficial de Nasdaq Trader: Nasdaq, NYSE,
+    NYSE American y Arca) con liquidez suficiente: es el terreno de caza de Qullamaggie, que escanea
+    todo el mercado, no un índice. El filtro de liquidez se recalcula una vez por semana.
   * Lista fija internacional (config/universe_intl.csv). Selección no sesgada.
   * Descubrimiento: valores con mayor subida en 52 semanas por mercado (screener de Yahoo).
     Sesgado hacia los ganadores: sirve para encontrar candidatas, no para medir amplitud.
@@ -10,6 +13,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 import time
 from datetime import datetime, timezone
 from io import StringIO
@@ -27,6 +31,11 @@ WIKI = {
     "SML": "https://en.wikipedia.org/wiki/List_of_S%26P_600_companies",
 }
 UA = {"User-Agent": "breakout-radar/1.0 (personal research; github actions)"}
+NASDAQ_TRADER = ("https://www.nasdaqtrader.com/dynamic/SymDir/nasdaqlisted.txt",
+                 "https://www.nasdaqtrader.com/dynamic/SymDir/otherlisted.txt")
+# Instrumentos que no son acciones ordinarias (los ADR/ADS sí se mantienen: Qullamaggie también los opera).
+NOT_COMMON = re.compile(r"\b(warrants?|rights?|units?|preferred|preference|notes? due|debentures?|"
+                        r"subordinated|perpetual|% (series|fixed|senior))\b", re.I)
 
 
 def _read_wiki_table(url: str) -> pd.DataFrame:
@@ -145,6 +154,91 @@ def discovery(cfg: Config) -> list[dict]:
     return found
 
 
+def parse_symbol_directory(text: str, kind: str) -> list[dict]:
+    """Acciones ordinarias (y ADR) de un archivo del directorio de Nasdaq Trader.
+
+    kind="nasdaq": Symbol|Security Name|Market Category|Test Issue|Financial Status|Round Lot Size|ETF|NextShares
+    kind="other":  ACT Symbol|Security Name|Exchange|CQS Symbol|ETF|Round Lot Size|Test Issue|NASDAQ Symbol
+    """
+    lines = [x for x in text.splitlines() if x and not x.startswith("File Creation Time")]
+    if not lines:
+        return []
+    head = lines[0].split("|")
+    out = []
+    for line in lines[1:]:
+        row = dict(zip(head, line.split("|")))
+        sym = (row.get("Symbol") if kind == "nasdaq" else row.get("ACT Symbol")) or ""
+        name = row.get("Security Name", "")
+        if row.get("Test Issue") != "N" or row.get("ETF") != "N" or not sym:
+            continue
+        if any(ch in sym for ch in "$+=^#*") or NOT_COMMON.search(name):
+            continue
+        exch = "Nasdaq" if kind == "nasdaq" else {"N": "NYSE", "A": "NYSE American", "P": "NYSE Arca",
+                                                   "Z": "Cboe", "V": "IEX"}.get(row.get("Exchange", ""), "")
+        out.append({"symbol": sym.replace(".", "-"), "name": name.split(" - ")[0].strip(), "exchange": exch})
+    return out
+
+
+def us_listed() -> list[dict]:
+    """Todas las acciones cotizadas en EE. UU. según el directorio oficial de Nasdaq Trader."""
+    rows = []
+    for url, kind in zip(NASDAQ_TRADER, ("nasdaq", "other")):
+        r = requests.get(url, headers=UA, timeout=60)
+        r.raise_for_status()
+        rows += parse_symbol_directory(r.text, kind)
+    seen, out = set(), []
+    for x in rows:
+        if x["symbol"] not in seen:
+            seen.add(x["symbol"])
+            out.append(x)
+    return out
+
+
+def us_liquid(cfg: Config, download_fn=None, listed_fn=None) -> list[dict]:
+    """Acciones de EE. UU. con liquidez suficiente (valor negociado y precio), con caché semanal.
+
+    Una vez por semana descarga un mes de datos de todo el directorio y guarda las que pasan el filtro;
+    el resto de días usa la lista guardada. Si algo falla, se queda con la última lista válida.
+    """
+    ucfg = cfg.settings.get("us_universe") or {}
+    if not ucfg.get("enabled", True):
+        return []
+    cache = CACHE_DIR / "us_liquid.json"
+    old = json.loads(cache.read_text()) if cache.exists() else None
+    if old:
+        age = datetime.now(timezone.utc) - datetime.fromisoformat(old["fetched"])
+        if age.days < ucfg.get("refresh_days", 7):
+            return old["rows"]
+    try:
+        listed = (listed_fn or us_listed)()
+        if len(listed) < 3000:
+            raise RuntimeError(f"directorio incompleto ({len(listed)} valores)")
+        if download_fn is None:
+            from .prices import download as download_fn
+        prices = download_fn([x["symbol"] for x in listed], 30, ucfg.get("chunk", 150), ucfg.get("pause_s", 1.0),
+                             period="1mo")
+        min_mdv, min_px = ucfg.get("min_mdv_usd", 5_000_000), ucfg.get("min_price_usd", 3)
+        rows = []
+        for x in listed:
+            df = prices.get(x["symbol"])
+            if df is None or len(df) < 10:
+                continue
+            dv = (df["Close"] * df["Volume"].fillna(0)).tail(20)
+            mdv, px = float(dv.median()), float(df["Close"].iloc[-1])
+            if mdv >= min_mdv and px >= min_px:
+                rows.append({**x, "mdv": round(mdv)})
+        if len(rows) < 1000:
+            raise RuntimeError(f"solo {len(rows)} valores líquidos")
+        CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        cache.write_text(json.dumps({"fetched": datetime.now(timezone.utc).isoformat(), "listed": len(listed),
+                                     "rows": rows}, ensure_ascii=False, separators=(",", ":")))
+        log.info("universo EE. UU.: %d líquidos de %d cotizados", len(rows), len(listed))
+        return rows
+    except Exception as exc:  # noqa: BLE001
+        log.warning("universo EE. UU. no actualizado (%s); se usa la última lista", exc)
+        return old["rows"] if old else []
+
+
 def build_universe(cfg: Config) -> dict[str, dict]:
     """Devuelve {ticker: info}. `unbiased` indica si el valor sirve para medir amplitud."""
     uni: dict[str, dict] = {}
@@ -166,6 +260,11 @@ def build_universe(cfg: Config) -> dict[str, dict]:
             if sym not in uni:
                 uni[sym] = {"source": "INTL", "name": "", "gics_sector": "", "gics_sub": "",
                             "hint": key, "unbiased": True}
+    for q in us_liquid(cfg):
+        sym = q["symbol"]
+        if sym not in uni:
+            uni[sym] = {"source": "USA", "name": q.get("name", ""), "gics_sector": "", "gics_sub": "",
+                        "hint": "", "unbiased": False}
     for q in discovery(cfg):
         sym = q.get("symbol")
         if sym and sym not in uni:

@@ -188,6 +188,16 @@ fx:
 
 # Descubrimiento internacional: valores con mayor subida en 52 semanas por mercado
 # (screener de Yahoo). Si falla, el radar sigue con la lista fija de config/universe_intl.csv.
+# Todas las acciones de EE. UU. (directorio de Nasdaq Trader) con liquidez suficiente. El filtro
+# descarga un mes de datos de unas 6.000 acciones, así que se recalcula solo una vez por semana.
+us_universe:
+  enabled: true
+  min_mdv_usd: 5000000         # mediana de valor negociado de 20 sesiones
+  min_price_usd: 5
+  refresh_days: 7
+  chunk: 150
+  pause_s: 1.0
+
 discovery:
   enabled: true
   per_region: 150

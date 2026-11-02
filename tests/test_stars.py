@@ -100,3 +100,17 @@ def test_qm_rules_follow_the_study():
     assert move["ok"] is True
     cut = qm.perf_cutoffs([m], 0.02)
     assert set(cut) == {"mom1", "mom3", "mom6"} and cut["mom3"] == m.mom3
+
+
+def test_earnings_guard():
+    from datetime import date
+    q = {"verdict": "Cumple", "checks": []}
+    qm.add_earnings(q, "2026-11-05", False, date(2026, 11, 2), 7)
+    assert q["verdict"] == "Con reservas" and q["earnings_days"] == 3
+    assert q["checks"][-1]["ok"] is False and q["checks"][-1]["value"].startswith("5-nov (en 3 días")
+    q2 = {"verdict": "Cumple", "checks": []}
+    qm.add_earnings(q2, "2026-12-01", True, date(2026, 11, 2), 7)
+    assert q2["verdict"] == "Cumple" and q2["checks"][-1]["ok"] is True and "estimada" in q2["checks"][-1]["value"]
+    q3 = {"verdict": "Cumple", "checks": []}
+    qm.add_earnings(q3, None, None, date(2026, 11, 2), 7)
+    assert q3 == {"verdict": "Cumple", "checks": []}

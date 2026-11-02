@@ -80,3 +80,12 @@ def test_pipeline_end_to_end(tmp_path, monkeypatch):
     assert all(out["candidates"][0]["score"] >= c["score"] for c in out["candidates"])
     # La amplitud del S&P se calcula con los grupos SPX/MID/SML del universo.
     assert out["regime"]["breadth"]["SPX"]["now"]["n"] > 0
+
+
+def test_truncate_to_session():
+    from radar.pipeline import _truncate_to
+    idx = pd.bdate_range("2026-10-26", "2026-11-03")
+    df = pd.DataFrame({"Close": range(len(idx))}, index=idx)
+    prices = {"A.T": df, "B": df[df.index <= "2026-10-30"]}
+    assert _truncate_to(prices, "2026-10-30") == 1
+    assert prices["A.T"].index[-1] == pd.Timestamp("2026-10-30") and len(prices["B"]) == 5

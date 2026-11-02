@@ -22,10 +22,13 @@ de la base no distingue sus setups (el límite del 50% descartaba el 45% de ello
 """
 from __future__ import annotations
 
+from datetime import date
+
 from .metrics import Metrics
 
 DEFAULTS = {"top_pct": 0.02, "adr_min": 0.05, "prior_move_min": 0.30, "base_min": 5, "base_max": 60,
-            "tight_max": 0.50}
+            "tight_max": 0.50, "earnings_days": 7}
+_MESES = ("ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic")
 HARD = ("leader", "adr", "prior_move", "base")
 
 
@@ -122,6 +125,28 @@ def evaluate(m: Metrics, state: str, market: dict, perf_cut: dict | None = None,
         "trigger": trigger, "entry_note": entry_note, "stop_max": stop_max,
         "trail_ma": trail, "trail_value": m.s10 if trail == "SMA10" else m.s20,
     }
+
+
+def add_earnings(q: dict | None, next_iso: str | None, est: bool | None, today: date, days_max: int) -> None:
+    """Añade al plan la comprobación de resultados próximos: Qullamaggie pasa de los setups que publican
+    resultados en pocos días (el hueco puede saltarse el stop). Si los hay, "Cumple" baja a "Con reservas".
+    Sin fecha conocida no se añade nada."""
+    if not q or not next_iso:
+        return
+    try:
+        d = date.fromisoformat(next_iso)
+    except ValueError:
+        return
+    days = (d - today).days
+    if days < 0:
+        return
+    ok = days > days_max
+    when = f"{d.day}-{_MESES[d.month - 1]} (en {days} día{'' if days == 1 else 's'}{', fecha estimada' if est else ''})"
+    q["checks"].append({"key": "earnings", "ok": ok, "hard": False,
+                        "label": f"Sin resultados en los próximos {days_max} días", "value": when})
+    q["earnings_days"] = days
+    if not ok and q["verdict"] == "Cumple":
+        q["verdict"] = "Con reservas"
 
 
 def constants() -> dict:

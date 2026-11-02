@@ -32,11 +32,11 @@ def _split_download(df: pd.DataFrame, tickers: list[str]) -> dict[str, pd.DataFr
 
 
 def download(tickers: list[str], days: int, chunk: int = 80, pause: float = 2.0,
-             retries: int = 3) -> dict[str, pd.DataFrame]:
+             retries: int = 3, period: str | None = None) -> dict[str, pd.DataFrame]:
     """OHLCV diario ajustado por splits (no por dividendos), como TradingView por defecto."""
     import yfinance as yf
 
-    period = "2y" if days > 250 else "1y"   # yfinance solo acepta periodos estándar
+    period = period or ("2y" if days > 250 else "1y")   # yfinance solo acepta periodos estándar
     data: dict[str, pd.DataFrame] = {}
     tickers = list(dict.fromkeys(tickers))
     for i in range(0, len(tickers), chunk):

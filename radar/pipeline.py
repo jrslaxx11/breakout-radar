@@ -94,6 +94,12 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
 
     ref = prices.get("^GSPC")
     session = ref.index[-1].strftime("%Y-%m-%d") if ref is not None and len(ref) else today.isoformat()
+    # Todo el radar mira la misma sesión: la última cerrada en EE. UU. Si se ejecuta de día (a mano o al subir
+    # código), los mercados de Asia ya pueden tener la sesión siguiente; se recortan para no mezclar días.
+    cut = _truncate_to(prices, session)
+    if cut:
+        log.info("sesión %s: %d series recortadas a esa fecha (mercados que ya cotizaron el día siguiente)",
+                 session, cut)
     prev = history.previous_snapshot(session)
     if not force and history.HISTORY_DIR.joinpath(f"{session}.json").exists():
         log.info("La sesión %s ya está procesada; nada que hacer.", session)
@@ -138,7 +144,10 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
         r["rs_pct"] = (i + 1) / len(liquid)
     qcfg = {**qm.DEFAULTS, **(S.get("qullamaggie") or {})}
     hcfg = {**htf.DEFAULTS, **(S.get("htf") or {})}
-    perf_cut = qm.perf_cutoffs([r["m"] for r in liquid], qcfg["top_pct"])
+    # Líder: entre los que más suben del mercado de EE. UU., como en sus escáneres (los internacionales se
+    # comparan con esos mismos umbrales).
+    us_liquid = [r["m"] for r in liquid if not cfg.suffix(r["sym"]) and not r["sym"].startswith("^")]
+    perf_cut = qm.perf_cutoffs(us_liquid if len(us_liquid) >= 300 else [r["m"] for r in liquid], qcfg["top_pct"])
 
     # ---------- perfiles y temáticas ----------
     need_prof = [r["sym"] for r in sorted(liquid, key=lambda x: -x["rsc"]) if not r["info"].get("gics_sub")]
@@ -348,6 +357,26 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
 
     # ---------- escáner Qullamaggie: todo el universo líquido, solo rupturas ----------
     order = {bo.CONFIRMED: 0, bo.EARLY: 1, bo.RETEST: 2, bo.PRE: 3}
+    htf_order = {bo.CONFIRMED: 0, bo.EARLY: 1, bo.RETEST: 2, bo.PRE: 3, bo.BASE: 4}
+
+    # Resultados próximos: él no entra si publican en pocos días. Las candidatas de la watchlist ya tienen
+    # la fecha; se consulta para las del escáner y los high tight flags.
+    def scanned(c: dict) -> bool:
+        if not c.get("liquid") or c.get("excluded"):
+            return False
+        q = c.get("qm") or {}
+        return (q.get("verdict") not in (None, "No cumple") and c["state"] in order) or \
+            (bool(c.get("htf")) and c["state"] in htf_order)
+    extra = [c["sym"] for c in search_view if scanned(c) and c["sym"] not in candidates]
+    extra_det = (details_fn or fundamentals.details)(extra) if extra else {}
+    for c in search_view:
+        if c["sym"] in candidates:  # cada candidata aparece una sola vez en la vista
+            qm.add_earnings(c.get("qm"), c.get("next_earnings"), c.get("next_earnings_est"), today,
+                            qcfg["earnings_days"])
+        elif c["sym"] in extra_det:
+            d = extra_det[c["sym"]] or {}
+            c["next_earnings"], c["next_earnings_est"] = d.get("next_earnings"), d.get("next_earnings_est")
+            qm.add_earnings(c.get("qm"), c["next_earnings"], c["next_earnings_est"], today, qcfg["earnings_days"])
     qm_setups = []
     for c in search_view:
         q = c.get("qm") or {}
@@ -364,12 +393,12 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
             "qm": {"verdict": q["verdict"], "trigger": q["trigger"], "stop_max": q["stop_max"]},
             "stars": st.get("stars"), "chart_stars": st.get("chart_stars"), "star_points": st.get("points"),
             "theme_bonus": bool(st.get("theme_bonus")), "hot_theme": c.get("theme") in selected,
+            "next_earnings": c.get("next_earnings"), "earnings_days": q.get("earnings_days"),
         })
     # Primero las de más estrellas; a igualdad, las más avanzadas y las más cerca del nivel.
     qm_setups.sort(key=lambda x: (-(x["stars"] or 0), order[x["state"]], -x["dist"]))
 
     # ---------- high tight flags: mástil ≥ 90% en ≤ 40 sesiones y bandera corta, en todo el universo ----------
-    htf_order = {bo.CONFIRMED: 0, bo.EARLY: 1, bo.RETEST: 2, bo.PRE: 3, bo.BASE: 4}
     htf_setups = []
     for c in search_view:
         h = c.get("htf")
@@ -383,6 +412,7 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
             "stars": st.get("stars"), "star_points": st.get("points"), "theme_bonus": bool(st.get("theme_bonus")),
             "qm_verdict": q.get("verdict"), "kind": h["kind"], "pole": h["pole"], "pole_len": h["pole_len"],
             "flag_len": h["flag_len"], "depth": h["depth"],
+            "next_earnings": c.get("next_earnings"), "earnings_days": q.get("earnings_days"),
         })
     htf_setups.sort(key=lambda x: (-(x["stars"] or 0), htf_order[x["state"]], -x["dist"]))
 
@@ -404,7 +434,7 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
     coverage = {
         "universe": len(universe), "with_data": len(rows), "liquid": len(liquid),
         "by_source": {k: sum(1 for r in rows.values() if r["info"].get("source") == k)
-                      for k in ("SPX", "MID", "SML", "INTL", "DISC")},
+                      for k in ("SPX", "MID", "SML", "USA", "INTL", "DISC")},
         "markets": sorted({cfg.suffix(s) or "US" for s in rows}),
         "missing_prices": len(universe) - len(rows) - len([s for s in stale if s in universe]),
         "stale": len([s for s in stale if s in universe]),
@@ -464,6 +494,23 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
         history.write_snapshot(session, _clean(snap))
     out["search_view"] = search_view  # solo para quien llama (pruebas); no va en latest.json
     return out
+
+
+def _truncate_to(prices: dict, session: str) -> int:
+    """Quita de cada serie las velas posteriores a `session` (AAAA-MM-DD). Devuelve cuántas series recorta."""
+    import pandas as pd
+
+    end = pd.Timestamp(session) + pd.Timedelta(days=1)
+    n = 0
+    for sym, df in list(prices.items()):
+        if df is None or not len(df):
+            continue
+        idx = df.index.tz_localize(None) if getattr(df.index, "tz", None) is not None else df.index
+        keep = idx < end
+        if not keep.all():
+            prices[sym] = df[keep]
+            n += 1
+    return n
 
 
 def _level_fields(m) -> dict:

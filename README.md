@@ -68,10 +68,23 @@ del cierre: una ruptura no se confirma hasta que cierra la sesión. Los valores 
 
 ## Método
 
-**Universo.** S&P 500, S&P 400 y S&P 600 (con su clasificación GICS), la lista fija internacional
-y un descubrimiento semanal de los mayores ganadores de 52 semanas en 18 mercados. Filtros:
-mediana de valor negociado ≥ 5 M USD y precio ≥ 5 USD; capitalización ≥ 500 M USD en las
-candidatas finales.
+**Universo.** S&P 500, S&P 400 y S&P 600 (con su clasificación GICS); todas las acciones cotizadas en
+EE. UU. (directorio oficial de Nasdaq Trader: Nasdaq, NYSE, NYSE American y Arca, sin ETF, warrants,
+derechos, unidades ni preferentes) con mediana de valor negociado ≥ 5 M USD y precio ≥ 5 USD, filtro
+que se revisa una vez por semana (`config/settings.yaml` → `us_universe`, caché en
+`data/cache/us_liquid.json`); la lista fija internacional y un descubrimiento semanal de los mayores
+ganadores de 52 semanas en 18 mercados. Filtros: mediana de valor negociado ≥ 5 M USD y precio ≥ 5 USD;
+capitalización ≥ 500 M USD en las candidatas finales de la watchlist (no en los escáneres de
+Qullamaggie y high tight flags, que incluyen valores pequeños como él). El "líder" de Qullamaggie se mide
+frente al mercado de EE. UU.
+
+**Una sola sesión.** Todos los mercados se cortan en la última sesión cerrada de EE. UU., también si
+el cálculo se lanza de día (a mano o al subir código): Asia ya puede haber cotizado el día siguiente y
+no se mezcla.
+
+**Resultados próximos.** Las candidatas de la watchlist, del escáner de Qullamaggie y los high tight
+flags consultan su próxima fecha de resultados. Si publica en 7 días o menos, el plan lo marca y
+"Cumple" pasa a "Con reservas": Qullamaggie no abre rupturas con resultados a la vista.
 
 **Régimen (fase 1).** Suma de señales (+1/−1): S&P 500 sobre SMA50 y SMA200, Nasdaq 100 y
 Russell 2000 sobre SMA50, amplitud del S&P 500, nuevos máximos frente a mínimos, estructura del
