@@ -239,7 +239,7 @@
     const li = st.items.map((i) => `<li class="${i.pts > 0 ? "pos" : "dim"}"><span aria-hidden="true">${i.pts > 0 ? "✓" : "·"}</span> ${esc(i.label)}: <strong>${esc(i.value)}</strong> <span class="dim">(${i.pts}/${i.max})</span></li>`).join("")
       + (st.penalties || []).map((x) => `<li class="neg"><span aria-hidden="true">✗</span> ${esc(x.label)} <span class="dim">(${x.pts})</span></li>`).join("");
     return `<div class="star-box">
-      <h4>Calidad del setup ${starsHTML(st.stars)} <span>${starTxt(st.stars)} de 5 · ${st.points}/${st.max} puntos${st.theme_bonus ? " · incluye +½ por estar en una temática líder" : ""}</span></h4>
+      <h4>Calidad del setup ${starsHTML(st.stars)} <span>${starTxt(st.stars)} de 5 · ${st.points}/${st.max} puntos${st.theme_bonus ? " · incluye +½ por estar en una temática líder o un sector caliente" : ""}</span></h4>
       <div class="pillars">${bars}</div>
       <details><summary>Ver los criterios y sus puntos</summary><ul class="checks">${li}</ul></details>
       <p class="dim" style="margin:6px 0 0">Puntuación calibrada con 704 rupturas que operó Qullamaggie: 5 estrellas las tiene el 23% de las suyas y el 2,6% de las rupturas normales. Se mide el último día de la base.</p>
@@ -467,11 +467,20 @@
           <dt>Liquidez (10)</dt><dd>${num(comp.liquidity, 0)} · ${num((c.mdv_usd || 0) / 1e6, 0)} M USD/día</dd>
           <dt>Catalizador (5)</dt><dd>${comp.catalyst == null ? "sin datos (redistribuido)" : num(comp.catalyst, 0)}</dd>
           <dt>Capitalización</dt><dd>${isNum(c.mcap_usd) ? num(c.mcap_usd / 1e9, 1) + " B USD" : "no verificada"}</dd>
+          ${c.group_name ? `<dt>Sector</dt><dd>${sectorTxt(c)}</dd>` : ""}
           <dt>Riesgo</dt><dd class="risk-${esc(c.risk)}">${esc(c.risk)} (${c.risk_points} punto${c.risk_points === 1 ? "" : "s"})</dd>
           ${h.length > 1 ? `<dt>Histórico</dt><dd>${spark(h, 120, 24)}</dd>` : ""}
         </dl></div>
       </div>
       ${c.qm ? qmBlock(c) : ""}`;
+  }
+
+  // Sector (industria) del valor, su posición en el ranking de calor y los plazos en los que está en el escáner.
+  function sectorTxt(c) {
+    const g = ((D && D.lists && D.lists.hot_groups) || []).find((x) => x.group === c.group);
+    const where = g ? (g.hot ? ` · <a href="#calientes">caliente, n.º ${g.rank}</a>` : ` · n.º ${g.rank} por calor`) : "";
+    const sc = (c.scan || []).length ? `<br><span class="dim">En el escáner a ${esc(c.scan.join(", "))}</span>` : "";
+    return `${esc(c.group_name)}${where}${sc}`;
   }
 
   // Despliega bajo una fila de tabla la ficha del valor (gráfico, niveles, puntuación y plan).
@@ -583,11 +592,84 @@
     draw();
   }
 
+  // Filas de las tablas del escáner (QM, high tight flags y foco) para refrescar su precio en vivo.
+  const ROWS = {};
+  const keepRows = (rows) => rows.forEach((x) => { if (!ROWS[x.sym] || x.qm) ROWS[x.sym] = x; });
+
+  // ---------- sectores calientes y sus valores rápidos ----------
+  function renderHot(d) {
+    const G = d.lists.hot_groups || [], F = d.lists.focus || [];
+    const K = d.heat_const || { scan_pct: 0.07, hot_min: 3, hot_lift: 2, hot_top: 8, fast_adr: 0.05 };
+    keepRows(F);
+    const hot = G.filter((g) => g.hot);
+    const hasPrev = G.some((g) => isNum(g.prev_scan_n));
+    const trend = (g) => {
+      if (!hasPrev) return "—";
+      if (!isNum(g.prev_scan_n)) return `<span class="pos">nuevo</span>`;
+      const dlt = g.scan_n - g.prev_scan_n;
+      return dlt > 0 ? `<span class="pos">+${dlt}</span>` : dlt < 0 ? `<span class="neg">${dlt}</span>` : `<span class="dim">=</span>`;
+    };
+    const tk = (s) => `<a href="#valor=${encodeURIComponent(s)}">${esc(s)}</a>`;
+    const groupsTbl = G.length ? `<div class="tbl-wrap"><table class="lt heat-table">
+        <thead><tr><th>N.º</th><th class="left">Sector</th><th class="left" title="Valores del sector entre el ${num(K.scan_pct * 100, 0)}% de EE. UU. que más sube a 1, 3 o 6 meses">En el escáner</th>
+          <th title="Valores del escáner con ADR ≥ ${num(K.fast_adr * 100, 0)}%">Rápidos</th><th title="Mediana de la subida desde el mínimo de 1 mes de los valores del escáner">1 m</th>
+          <th title="Mediana de la subida desde el mínimo de 3 meses de los valores del escáner">3 m</th><th title="Valores en el escáner frente a la sesión anterior">vs ayer</th>
+          <th class="left">Los que más suben</th></tr></thead>
+        <tbody>${G.map((g) => `<tr class="${g.hot ? "hot" : "cold"}">
+          <td>${g.rank}</td>
+          <td class="left"><strong title="${esc(g.group)} (industria de Yahoo Finance)">${esc(g.name)}</strong>${g.hot ? ` <span class="hot-tag">caliente</span>` : ""}</td>
+          <td class="left heat-cell"><span class="heat-bar" aria-hidden="true"><i style="width:${Math.min(100, g.share * 100)}%"></i></span>
+            <strong>${g.scan_n}</strong> <span class="dim">de ${g.n} · ${num(g.share * 100, 0)}%</span></td>
+          <td>${g.fast_n}</td><td>${pct(g.med_mom1, 0)}</td><td>${pct(g.med_mom3, 0)}</td><td>${trend(g)}</td>
+          <td class="left tk-list">${(g.top || []).slice(0, 6).map(tk).join(" ")}</td>
+        </tr>`).join("")}</tbody></table></div>` : "";
+    const scanned = (x, k) => (x.scan || []).includes(k);
+    const mom = (x, k, v) => `<td class="${scanned(x, k) ? "in-scan" : "dim"}"${scanned(x, k) ? ` title="Entre el ${num(K.scan_pct * 100, 0)}% que más sube a ${k}"` : ""}>${pct(v, 0)}</td>`;
+    const tags = (x) => [
+      x.qm_verdict && x.qm_verdict !== "No cumple" ? `<span class="wl-tag" title="Cumple los requisitos obligatorios de Qullamaggie">QM ${esc(x.qm_verdict.toLowerCase())}</span>` : "",
+      x.htf_kind ? `<span class="wl-tag htf-tag" title="High tight flag">HTF ${esc(x.htf_kind)}</span>` : "",
+      x.presented ? `<span class="wl-tag" title="Está en la watchlist de hoy">watchlist</span>` : "",
+    ].join(" ") + earnTag(x);
+    const byG = {};
+    F.forEach((x) => (byG[x.group] = byG[x.group] || []).push(x));
+    const focusTbl = F.length ? `<div class="tbl-wrap"><table class="lt qm-table focus-table">
+        <thead><tr><th class="left">Valor</th><th class="left">Estrellas</th><th class="left">Estado</th><th>ADR</th>
+          <th title="Subida desde el mínimo de 22 sesiones">1 m</th><th title="Subida desde el mínimo de 67 sesiones">3 m</th><th title="Subida desde el mínimo de 126 sesiones">6 m</th>
+          <th>Nivel de ruptura</th><th>Distancia</th><th>Ahora</th></tr></thead>
+        ${hot.filter((g) => byG[g.group]).map((g) => `<tbody>
+          <tr class="grp"><th colspan="10" scope="colgroup">${esc(g.name)} <span class="dim">· sector n.º ${g.rank} · ${g.scan_n} en el escáner, ${byG[g.group].length} rápido${byG[g.group].length === 1 ? "" : "s"}</span></th></tr>
+          ${byG[g.group].map((x) => `<tr class="row${(x.stars || 0) >= 4.5 && STATE_ORDER.includes(x.state) ? " top5" : ""}" data-sym="${esc(x.sym)}" tabindex="0" aria-expanded="false">
+            <td class="tk-cell"><a href="#valor=${encodeURIComponent(x.sym)}" title="Abrir la ficha completa">${esc(x.sym)}</a><small>${esc(x.name && x.name !== x.sym ? x.name : "")}</small></td>
+            <td class="left star-cell">${starsHTML(x.stars)}<small>${isNum(x.star_points) ? `${x.star_points}/66 pts` : ""}${x.theme_bonus ? " · +½ sector caliente" : ""}</small></td>
+            <td class="left">${chip(x.state)} ${tags(x)}</td>
+            <td>${pct(x.adr_pct, 1, false)}</td>
+            ${mom(x, "1 m", x.mom1)}${mom(x, "3 m", x.mom3)}${mom(x, "6 m", x.mom6)}
+            <td>${price(x.pivot, x.currency)}<small class="dim block">${esc(LEVEL_KIND[x.level_kind] || "")}</small></td>
+            <td class="${cls(x.dist)}">${pct(x.dist)}</td>
+            <td class="live-cell" data-live="${esc(x.sym)}">${liveCell(x)}</td>
+          </tr>`).join("")}</tbody>`).join("")}</table></div>
+      <p class="dim" style="font-size:13px;margin-top:6px">En negrita, los plazos en los que entra en el escáner. Pulsa una fila para ver el gráfico, las estrellas y el plan; el ticker abre la ficha completa.</p>` : "";
+    const ready = F.filter((x) => STATE_ORDER.includes(x.state)).sort((a, b) => (b.stars || 0) - (a.stars || 0));
+    $("#calientes").innerHTML = `<h2>Sectores calientes</h2>
+      <blockquote class="qm-quote"><p lang="en">“I wanna focus on the fast moving stocks in the hot sectors.”</p><cite>Qullamaggie</cite></blockquote>
+      <p class="lead">Él no mide los sectores con índices sino con sus escáneres: un sector está caliente cuando muchos de sus valores aparecen a la vez entre los que más suben, y ahí "hasta las peores acciones se mueven más que las mejores de un sector frío". Escáner: el ${num(K.scan_pct * 100, 0)}% del mercado de EE. UU. que más sube a 1, 3 o 6 meses desde el mínimo del periodo. Sector: la industria de Yahoo Finance. Caliente: al menos ${K.hot_min} valores en el escáner, el doble de su cuota normal (${num(K.hot_lift * K.scan_pct * 100, 0)}% del sector) y entre los ${K.hot_top} de más calor (valores en el escáner × parte del sector que suponen). Debajo, sus valores rápidos (ADR ≥ ${num(K.fast_adr * 100, 0)}%): la lista donde él busca los setups.</p>
+      ${G.length ? (hot.length
+        ? `<p class="five-note"><strong>${hot.length} sector${hot.length === 1 ? "" : "es"} caliente${hot.length === 1 ? "" : "s"} hoy:</strong> ${hot.map((g) => esc(g.name)).join(", ")}.${ready.length ? ` Sus valores rápidos que rompen o están a punto: ${ready.slice(0, 12).map((x) => `${tk(x.sym)} ${starsHTML(x.stars, true)}`).join(" · ")}` : " Ninguno de sus valores rápidos rompe ni está a punto hoy: toca vigilarlos."}</p>`
+        : `<p class="five-note"><strong>Hoy ningún sector llega a caliente.</strong> <span class="dim">Con el mercado flojo los escáneres se reparten entre muchos sectores sin que ninguno destaque.</span></p>`)
+        : `<p class="empty">Sin datos de sectores en este informe. Aparecerán en la próxima actualización.</p>`}
+      ${focusTbl ? `<h3>Valores rápidos de los sectores calientes</h3>${focusTbl}` : ""}
+      ${G.length ? `<details class="heat-more"${F.length ? "" : " open"}><summary>Ranking de sectores por calor (${G.length})</summary>${groupsTbl}</details>` : ""}`;
+    const toggle = (tr) => toggleRow(tr, 10, () => loadTicker(tr.dataset.sym).then((x) => ({ rec: BYS[tr.dataset.sym] || x.rec, k: x.k })));
+    $("#calientes").addEventListener("click", (e) => { const tr = e.target.closest("tr[data-sym]"); if (tr && !e.target.closest("a")) toggle(tr); });
+    $("#calientes").addEventListener("keydown", (e) => {
+      if ((e.key === "Enter" || e.key === " ") && e.target.matches("tr[data-sym]")) { e.preventDefault(); toggle(e.target); }
+    });
+  }
+
   // Escáner Qullamaggie: todo el universo, rupturas que cumplen los requisitos obligatorios.
-  let QMS = {};
   function renderQM(d) {
     const rows = d.lists.qm_setups || [];
-    QMS = Object.fromEntries(rows.map((x) => [x.sym, x]));
+    keepRows(rows);
     const m = d.qm_market || {};
     const top = rows.filter((x) => (x.stars || 0) >= 4.5);
     const n5 = top.filter((x) => x.stars >= 5).length;
@@ -601,7 +683,7 @@
           <th>ADR</th><th>Subida previa</th><th>Base</th><th class="left">Veredicto</th></tr></thead>
         <tbody>${rows.map((x) => `<tr class="row${(x.stars || 0) >= 4.5 ? " top5" : ""}" data-sym="${esc(x.sym)}" tabindex="0" aria-expanded="false">
           <td class="tk-cell"><a href="#valor=${encodeURIComponent(x.sym)}" title="Abrir la ficha completa">${esc(x.sym)}</a><small>${esc(x.name && x.name !== x.sym ? x.name : "")}${x.theme ? " · " + esc(themeName(d, x.theme)) : ""}</small></td>
-          <td class="left star-cell">${starsHTML(x.stars)}<small>${isNum(x.star_points) ? `${x.star_points}/66 pts` : ""}${x.theme_bonus ? " · +½ temática líder" : ""}</small></td>
+          <td class="left star-cell">${starsHTML(x.stars)}<small>${isNum(x.star_points) ? `${x.star_points}/66 pts` : ""}${x.theme_bonus ? " · +½ sector caliente" : ""}</small></td>
           <td class="left">${chip(x.state)}${x.presented ? ` <span class="wl-tag" title="Está en la watchlist de hoy">watchlist</span>` : ""}${earnTag(x)}</td>
           <td>${price(x.pivot, x.currency)}<small class="dim block">${esc(LEVEL_KIND[x.level_kind] || "")}</small></td>
           <td class="${cls(x.dist)}">${pct(x.dist)}</td>
@@ -620,6 +702,7 @@
   // High tight flags: mástil ≥ 90% en ≤ 40 sesiones y bandera corta, en todo el universo líquido.
   function renderHTF(d) {
     const rows = d.lists.htf_setups || [];
+    keepRows(rows);
     const K = d.htf_const || { pole_min: 0.9, pole_days: 40, flag_min: 5, flag_max: 30, depth_max: 0.35, depth_classic: 0.25 };
     const by = (k) => rows.filter((x) => x.kind === k).length;
     const top = rows.filter((x) => (x.stars || 0) >= 4.5);
@@ -684,7 +767,8 @@
         <p><strong>Estados.</strong> La consolidación empieza en el máximo de las últimas 60 sesiones con al menos 5 de antigüedad (si un cierre posterior lo superó, la base ya está rota). Su borde superior es la línea más plana que parte de ese máximo y deja por debajo los máximos posteriores: plana en un canal, descendente en triángulos y flags; la descendente solo vale si la base tocó su suelo en sus dos primeros tercios (en un rebote en V manda el máximo). El nivel de ruptura es esa línea proyectada al día, o el máximo de las 3 sesiones anteriores si queda por encima. Confirmada: cierre sobre el nivel con volumen ≥ 1,5x la media de 20 sesiones y en la mitad alta del día. Temprana: cruza sin volumen o sin continuidad. Pre-breakout: a ≤ 5% del nivel con base de al menos 10 sesiones (o flag de 5-9 y ≤ 12% de profundidad). Retest: volvió al nivel tras cruzarlo. Extendida: > 10% sobre el nivel o > 3 ATR sobre la SMA20.</p>
         <p><strong>Puntuación de acciones.</strong> Fuerza relativa 25, base y estructura 25, ruptura y volumen 20, tendencia diaria y semanal 15, liquidez 10, catalizador 5. Es una clasificación, no una probabilidad. El riesgo se etiqueta aparte: volatilidad, resultados próximos, distancia a la invalidación y liquidez.</p>
         <p><strong>Qullamaggie (solo rupturas).</strong> Reglas de su artículo "3 timeless setups" y de sus directos, con umbrales objetivos. Obligatorias: estar entre el 2% que más sube a 1, 3 o 6 meses (cierre frente al mínimo del periodo, la fórmula de sus escáneres), ADR ≥ 5%, subida previa ≥ 30% en 1-3 meses y consolidación de 5 a 60 sesiones. Secundarias: mínimos crecientes (el último tercio de la base sobre su mínimo), rango que se estrecha (últimas 5 sesiones ≤ 50% del rango de la base) y precio surfeando las SMA10/SMA20 (o SMA50) ascendentes. Entrada en el máximo de la primera vela de 1, 5 o 60 minutos; stop en el mínimo del día y nunca más ancho que el ADR; venta de 1/3-1/2 a los 3-5 días, stop a la entrada y el resto al primer cierre bajo la SMA10 o SMA20. Posición habitual 10-20%, nunca más del 30%. Filtro de mercado: Nasdaq 100 frente a sus SMA10 y SMA20. Son niveles orientativos para estudiar el gráfico, no órdenes ni recomendaciones.</p>
-        <p><strong>Estrellas (1-5).</strong> Qullamaggie califica sus setups con estrellas ("five star setup") y solo opera fuerte los de 4-5. Aquí se puntúan sobre 66 con los rasgos que distinguen sus operaciones, medidos con datos diarios en 704 de las 1.212 rupturas de su archivo de capturas (el resto son valores que ya no cotizan) frente a 141.000 rupturas normales de los mismos valores: gran subida previa (20), valor rápido por ADR (12), tendencia limpia con la SMA20 holgadamente sobre la SMA50 y una subida lineal (14), medias de 10 y 20 que alcanzan al precio y mínimos que se apoyan en la de 10 (12) y compresión en las últimas sesiones con volumen seco (8); resta si ya lleva 4 bases o la consolidación tiene menos de 5 sesiones. 50 puntos son 5 estrellas y cada 5 puntos menos, media estrella. En una temática líder suma media estrella, como él hace con los sectores calientes. Distancias y rangos en ADR del propio valor, el último día de la base. Resultado del estudio: 5 estrellas las tiene el 23% de sus setups en tendencia y el 2,6% de las rupturas normales; y en rupturas normales, ajenas a él, las de 5 estrellas subieron más de un 50% en 20 sesiones el 10,8% de las veces frente al 0,6% de las de 1 estrella. El retroceso de la base no los distinguía, por eso ya no es obligatorio. Es una medida de calidad del gráfico, no una probabilidad de acierto.</p>
+        <p><strong>Estrellas (1-5).</strong> Qullamaggie califica sus setups con estrellas ("five star setup") y solo opera fuerte los de 4-5. Aquí se puntúan sobre 66 con los rasgos que distinguen sus operaciones, medidos con datos diarios en 704 de las 1.212 rupturas de su archivo de capturas (el resto son valores que ya no cotizan) frente a 141.000 rupturas normales de los mismos valores: gran subida previa (20), valor rápido por ADR (12), tendencia limpia con la SMA20 holgadamente sobre la SMA50 y una subida lineal (14), medias de 10 y 20 que alcanzan al precio y mínimos que se apoyan en la de 10 (12) y compresión en las últimas sesiones con volumen seco (8); resta si ya lleva 4 bases o la consolidación tiene menos de 5 sesiones. 50 puntos son 5 estrellas y cada 5 puntos menos, media estrella. En una temática líder o un sector caliente (ver Sectores calientes) suma media estrella: él da más nota al mismo gráfico si su sector está caliente. Distancias y rangos en ADR del propio valor, el último día de la base. Resultado del estudio: 5 estrellas las tiene el 23% de sus setups en tendencia y el 2,6% de las rupturas normales; y en rupturas normales, ajenas a él, las de 5 estrellas subieron más de un 50% en 20 sesiones el 10,8% de las veces frente al 0,6% de las de 1 estrella. El retroceso de la base no los distinguía, por eso ya no es obligatorio. Es una medida de calidad del gráfico, no una probabilidad de acierto.</p>
+        <p><strong>Sectores calientes.</strong> "I wanna focus on the fast moving stocks in the hot sectors." Sector: la industria de Yahoo Finance (para los valores del S&P sin perfil, su subindustria GICS traducida a la industria equivalente). Escáner: el ${num(((d.heat_const || {}).scan_pct || 0.07) * 100, 0)}% del mercado de EE. UU. que más sube a 1, 3 o 6 meses desde el mínimo del periodo, equivalente a sus escáneres de TC2000; los internacionales se miden con los mismos umbrales. Calor: valores del sector en el escáner multiplicados por la parte del sector que suponen. Solo el número favorecería siempre a los sectores con cientos de valores, que siempre aportan alguno por azar; solo la proporción, a los de tres valores. Caliente: al menos ${(d.heat_const || {}).hot_min || 3} valores en el escáner, el doble de su cuota normal y entre los ${(d.heat_const || {}).hot_top || 8} de más calor. Valores rápidos: los del escáner con ADR ≥ 5%, como mucho ${(d.heat_const || {}).focus_per_group || 15} por sector. Es un filtro para saber dónde mirar; el setup lo dan el estado, las estrellas y el plan.</p>
         <p><strong>High tight flags.</strong> Mástil: subida ≥ 90% desde el mínimo de las 40 sesiones anteriores al máximo de la consolidación. Bandera: de 5 a 30 sesiones desde ese máximo (3-4, en formación) con una corrección ≤ 35% (≤ 25%, clásica). Los umbrales salen de sus propias rupturas (mediana de su bandera: 13 sesiones y 22%). Medido con este código la víspera de cada ruptura, el 19,5% de las suyas tiene esta forma frente al 2,2% de las rupturas normales; y en rupturas normales con esta forma, el 34% subió más de un 20% en 20 sesiones y el 7% más de un 50% (13% y 1,5% en las demás). En el gráfico, el mástil va en trazo grueso y el suelo de la bandera en punteado.</p>
         <p><strong>Gráficos y buscador.</strong> Velas diarias con las medias de 10, 20 y 50 sesiones que usa Qullamaggie (la de 200, opcional). El buscador de la cabecera abre la ficha de cualquier valor del universo diario${d.web && d.web.worker_url ? " y, para el resto del mercado, la calcula al momento en el navegador con los mismos umbrales a partir de los datos de Yahoo Finance (sin temática, catalizador ni fechas de resultados)" : ""}.</p>
         <p><strong>Límites.</strong> Los niveles son algorítmicos y deben validarse en el gráfico. La amplitud solo se mide en EE. UU. Las fechas de resultados "est." no están confirmadas por la empresa. Ninguna fila es una recomendación de inversión.</p>
@@ -975,7 +1059,7 @@
 
   function renderLive() {
     Object.values(BYS).forEach((c) => { const L = liveInfo(c); c.live_dist = L && !L.stale ? L.dist : null; });
-    document.querySelectorAll("td[data-live]").forEach((td) => { const c = BYS[td.dataset.live] || QMS[td.dataset.live]; if (c) td.innerHTML = liveCell(c); });
+    document.querySelectorAll("td[data-live]").forEach((td) => { const c = BYS[td.dataset.live] || ROWS[td.dataset.live]; if (c) td.innerHTML = liveCell(c); });
     const f = document.querySelector("[data-live-ficha]");
     if (f && LIVE.ficha) f.innerHTML = fichaLive(LIVE.ficha);
     updateLiveCharts();
@@ -996,7 +1080,7 @@
     clearTimeout(LIVE.timer);
     if (!workerUrl() || document.hidden || !D) return;
     const syms = [...new Set([...(D.lists.presented || []), ...(D.lists.qm_setups || []).map((x) => x.sym), ...(D.lists.htf_setups || []).map((x) => x.sym),
-      ...(currentSym ? [currentSym] : [])])].sort();
+      ...(D.lists.focus || []).map((x) => x.sym), ...(currentSym ? [currentSym] : [])])].sort();
     try {
       for (let i = 0; i < syms.length; i += 40) {
         const r = await getWorker(`/quote?symbols=${encodeURIComponent(syms.slice(i, i + 40).join(","))}`);
@@ -1033,6 +1117,7 @@
       renderThemes(d, hist);
       bindLeaders();
       renderWatchlist(d, byS, scoreHist);
+      renderHot(d);
       renderQM(d);
       renderHTF(d);
       renderAgenda(d, byS);

@@ -163,7 +163,7 @@ ya rompió) y las distancias y rangos en ADR del propio valor.
 | Penalizaciones | − | 4 o más bases completadas desde el mínimo de 6 meses: −4 · consolidación de menos de 5 sesiones: −6 |
 
 50 puntos o más son 5 estrellas y cada 5 puntos menos, media estrella (menos de 15: 1). En una temática
-líder suma media estrella, como él hace con los sectores calientes. Resultados del estudio (rupturas
+líder o un sector caliente suma media estrella: él da más nota al mismo gráfico si su sector está caliente. Resultados del estudio (rupturas
 sobre una SMA50 ascendente): 5 estrellas las tiene el 23% de sus setups y el 2,6% de las rupturas
 normales; 4 o más, el 51% frente al 12% (AUC 0,81, estable en 1975-2004, 2005-2015 y 2016-2021). En
 rupturas normales, ajenas a sus operaciones, las de 5 estrellas subieron más de un 50% en 20 sesiones
@@ -188,6 +188,23 @@ de cada ruptura, el 19,5% de las suyas tiene esta forma frente al 2,2% de las ru
 rupturas normales con esta forma, el 34% subió más de un 20% en 20 sesiones y el 7% más de un 50%
 (13% y 1,5% en las demás). Se muestran las que rompen hoy o siguen en la base, ordenadas por estrellas,
 y el gráfico marca el mástil y el suelo de la bandera.
+
+**Sectores calientes (`radar/heat.py`).** "I wanna focus on the fast moving stocks in the hot
+sectors." Qullamaggie no mide los sectores con índices sino con sus escáneres: un sector está caliente
+cuando muchos de sus valores aparecen a la vez entre los que más suben a 1, 3 y 6 meses. La sección
+"Sectores calientes" hace lo mismo (`config/settings.yaml` → `heat`):
+
+| Paso | Criterio |
+| --- | --- |
+| Sector | Industria de Yahoo Finance (biotecnología, semiconductores, uranio, solar, transporte marítimo…); para los valores del S&P sin perfil, su subindustria GICS traducida a la industria equivalente |
+| Escáner | El 7% del mercado de EE. UU. que más sube a 1, 3 o 6 meses desde el mínimo del periodo (su "rank 93" de TC2000); internacionales con los mismos umbrales |
+| Calor | Valores del sector en el escáner × la parte del sector que suponen. Solo el número favorecería siempre a los sectores con cientos de valores; solo la proporción, a los de tres |
+| Caliente | ≥ 3 valores en el escáner, el doble de su cuota normal (≥ 14% del sector) y entre los 8 de más calor |
+| Valores rápidos | Los del escáner con ADR ≥ 5% de los sectores calientes, hasta 15 por sector, con estado, estrellas, plazos en el escáner y aviso de resultados |
+
+El ranking muestra también cuántos valores tenía cada sector en el escáner la sesión anterior, para ver
+si se calienta o se enfría. Los perfiles de Yahoo se descargan poco a poco (700 por ejecución, con
+caché), así que las primeras sesiones algunos valores fuera del S&P aún no tienen sector.
 
 **Puntuación de acciones (fase 6).** Fuerza relativa 25, base y estructura 25, ruptura y volumen
 20, tendencia diaria y semanal 15, liquidez 10, catalizador 5. El riesgo se etiqueta aparte

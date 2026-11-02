@@ -25,6 +25,7 @@
   --ma50: #7A3EB1;
   --ma200: #8593A1;
   --star: #B7791F;
+  --hot: #C2410C;
   --radius-s: 4px;
   --radius-m: 10px;
   --w-cond: 72;
@@ -55,6 +56,7 @@
     --ma50: #B48AE8;
     --ma200: #7C8C9C;
     --star: #E8B34A;
+    --hot: #F08A4B;
     color-scheme: dark;
   }
 }
@@ -331,3 +333,25 @@ small.block { display: block; font-size: 11.5px; margin-top: 1px; padding: 0; wh
   .top { position: static; }
 }
 .lt tbody tr.detail, .lt tbody tr.detail:hover td { cursor: default; background: var(--paper); }
+
+/* ---------- sectores calientes ---------- */
+.qm-quote { margin: 0 0 10px; padding: 0 0 0 14px; border-left: 4px solid var(--hot); max-width: 78ch; }
+.qm-quote p { margin: 0; font-size: 21px; line-height: 1.25; font-weight: 700; font-variation-settings: "wdth" var(--w-cond); }
+.qm-quote cite { display: block; margin-top: 2px; font-style: normal; font-size: 13px; color: var(--muted); }
+#calientes .five-note { border-left-color: var(--hot); }
+.focus-table tr.grp th { text-align: left; padding: 14px 10px 6px; font-size: 15px; font-weight: 750; font-variation-settings: "wdth" var(--w-semi); color: var(--hot); background: transparent; border-bottom: 2px solid color-mix(in srgb, var(--hot) 35%, transparent); }
+.focus-table tr.grp th .dim { color: var(--muted); font-weight: 500; font-size: 13px; }
+.focus-table tbody:first-of-type tr.grp th { padding-top: 6px; }
+.focus-table td.in-scan { font-weight: 750; color: var(--ink); }
+.htf-tag { color: var(--star); border-color: color-mix(in srgb, var(--star) 50%, transparent); }
+.hot-tag { display: inline-block; margin-left: 4px; padding: 0 6px; border-radius: 999px; font-size: 11.5px; font-weight: 600; color: var(--hot); background: color-mix(in srgb, var(--hot) 12%, transparent); }
+.heat-more { margin-top: 14px; }
+.heat-more > summary { cursor: pointer; color: var(--pivot); font-size: 14px; padding: 6px 0; }
+.heat-table tbody tr { cursor: default; }
+.heat-table tr.cold td { color: var(--muted); }
+.heat-table tr.cold td strong { font-weight: 600; }
+.heat-cell { white-space: nowrap; }
+.heat-bar { display: inline-block; width: 56px; height: 6px; margin-right: 8px; vertical-align: 2px; border-radius: 3px; background: var(--soft); overflow: hidden; }
+.heat-bar i { display: block; height: 100%; background: var(--hot); }
+.heat-table tr.cold .heat-bar i { background: var(--muted); opacity: .5; }
+.tk-list a { margin-right: 6px; font-weight: 650; font-variation-settings: "wdth" var(--w-semi); }

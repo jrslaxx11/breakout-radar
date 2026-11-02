@@ -7,7 +7,7 @@ from datetime import date, datetime, timezone
 from zoneinfo import ZoneInfo
 
 from . import breakouts as bo
-from . import fundamentals, history, htf, qullamaggie as qm, regime, stars, themes
+from . import fundamentals, heat, history, htf, qullamaggie as qm, regime, stars, themes
 from .config import DOCS_DATA, Config
 from .metrics import compute, rel, rs_composite
 
@@ -150,12 +150,23 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
     perf_cut = qm.perf_cutoffs(us_liquid if len(us_liquid) >= 300 else [r["m"] for r in liquid], qcfg["top_pct"])
 
     # ---------- perfiles y temáticas ----------
-    need_prof = [r["sym"] for r in sorted(liquid, key=lambda x: -x["rsc"]) if not r["info"].get("gics_sub")]
+    # Perfiles de Yahoo (industria) de todos los líquidos, los de más fuerza relativa primero: la temática
+    # de los del S&P sigue saliendo de su GICS, pero los sectores calientes usan la industria de Yahoo.
+    need_prof = [r["sym"] for r in sorted(liquid, key=lambda x: -x["rsc"])]
     prof = (profiles_fn or fundamentals.profiles)(need_prof, S["run"]["max_profile_fetch"])
     lookup = themes.build_lookup(theme_defs)
     for r in rows.values():
         r["profile"] = prof.get(r["sym"], {})
         r["theme"] = themes.assign(r["sym"], r["info"], r["profile"], lookup)
+        r["group"] = heat.group_of(r["info"], r["profile"])
+
+    # ---------- sectores calientes: cuántos valores de cada industria están en sus escáneres ----------
+    heat_cfg = {**heat.DEFAULTS, **(S.get("heat") or {})}
+    scan_cut = qm.perf_cutoffs(us_liquid if len(us_liquid) >= 300 else [r["m"] for r in liquid], heat_cfg["scan_pct"])
+    for r in liquid:
+        r["scan"] = heat.scan_hits(r["m"], scan_cut)
+    groups = heat.hot_groups([r for r in liquid if not r["dup"]], heat_cfg, (prev or {}).get("hot"))
+    hot = {g["group"] for g in groups if g["hot"]}
 
     spy = bench.get("^GSPC", {})
     etf_cache = {e: themes.etf_stats(prices, e, spy, w) for e in etf_syms}
@@ -250,7 +261,7 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
                 "risk": rk_label, "risk_points": rk_pts, "confirm": conf, "invalidate": inval,
                 "qm": qm.evaluate(m, state, qm_market, perf_cut, qcfg),
                 "stars": stars.rate(m, theme_hot=True), "htf": htf.evaluate(m, hcfg),
-                "s10": m.s10, "adr_pct": m.adr_pct, **_level_fields(m),
+                "s10": m.s10, "adr_pct": m.adr_pct, **_level_fields(m), **_heat_fields(r, m),
             }
 
     # ---------- listas ----------
@@ -347,8 +358,8 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
             "mdv_usd": r["mdv_usd"], "catalyst": "", "risk": rk_label, "risk_points": rk_pts,
             "confirm": conf, "invalidate": inval, "mine": mine, "liquid": liq,
             "qm": qm.evaluate(m, ev["state"], qm_market, perf_cut, qcfg),
-            "stars": stars.rate(m, theme_hot=r["theme"] in selected), "htf": htf.evaluate(m, hcfg),
-            **_level_fields(m),
+            "stars": stars.rate(m, theme_hot=r["theme"] in selected or r.get("group") in hot),
+            "htf": htf.evaluate(m, hcfg), **_level_fields(m), **_heat_fields(r, m),
         })
     for c in search_view:
         if c["sym"] in candidates:
@@ -361,12 +372,20 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
 
     # Resultados próximos: él no entra si publican en pocos días. Las candidatas de la watchlist ya tienen
     # la fecha; se consulta para las del escáner y los high tight flags.
+    grank = {g["group"]: g for g in groups}
+
+    def in_focus(c: dict) -> bool:
+        """Valor rápido (ADR ≥ 5%) del escáner en un sector caliente."""
+        g = grank.get(c.get("group"))
+        return bool(g and g["hot"] and c.get("liquid") and not c.get("excluded") and c.get("scan")
+                    and (c.get("adr_pct") or 0) >= heat_cfg["fast_adr"])
+
     def scanned(c: dict) -> bool:
         if not c.get("liquid") or c.get("excluded"):
             return False
         q = c.get("qm") or {}
         return (q.get("verdict") not in (None, "No cumple") and c["state"] in order) or \
-            (bool(c.get("htf")) and c["state"] in htf_order)
+            (bool(c.get("htf")) and c["state"] in htf_order) or in_focus(c)
     extra = [c["sym"] for c in search_view if scanned(c) and c["sym"] not in candidates]
     extra_det = (details_fn or fundamentals.details)(extra) if extra else {}
     for c in search_view:
@@ -392,7 +411,7 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
             "score": c["score"], "presented": bool(c.get("presented")), "fails": fails,
             "qm": {"verdict": q["verdict"], "trigger": q["trigger"], "stop_max": q["stop_max"]},
             "stars": st.get("stars"), "chart_stars": st.get("chart_stars"), "star_points": st.get("points"),
-            "theme_bonus": bool(st.get("theme_bonus")), "hot_theme": c.get("theme") in selected,
+            "theme_bonus": bool(st.get("theme_bonus")), "hot_theme": c.get("theme") in selected or c.get("group") in hot,
             "next_earnings": c.get("next_earnings"), "earnings_days": q.get("earnings_days"),
         })
     # Primero las de más estrellas; a igualdad, las más avanzadas y las más cerca del nivel.
@@ -415,6 +434,29 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
             "next_earnings": c.get("next_earnings"), "earnings_days": q.get("earnings_days"),
         })
     htf_setups.sort(key=lambda x: (-(x["stars"] or 0), htf_order[x["state"]], -x["dist"]))
+
+    # ---------- foco: valores rápidos (ADR ≥ 5%) del escáner en los sectores calientes ----------
+    focus = []
+    for c in search_view:
+        if not in_focus(c):
+            continue
+        g = grank[c["group"]]
+        st, q, h = c.get("stars") or {}, c.get("qm") or {}, c.get("htf") or {}
+        focus.append({
+            "sym": c["sym"], "name": c["name"], "theme": c.get("theme"), "group": g["group"], "group_name": g["name"],
+            "group_rank": g["rank"], "state": c["state"], "why": c["why"], "date": c["date"], "close": c["close"],
+            "currency": c["currency"], "pivot": c["pivot"], "dist": c["dist"], "inv": c["inv"], "v20": c["v20"],
+            "level_kind": c["level_kind"], "adr_pct": c["adr_pct"],
+            "mom1": c.get("mom1"), "mom3": c.get("mom3"), "mom6": c.get("mom6"), "scan": c.get("scan"),
+            "stars": st.get("stars"), "star_points": st.get("points"), "theme_bonus": bool(st.get("theme_bonus")),
+            "qm_verdict": q.get("verdict"), "htf_kind": h.get("kind"), "presented": bool(c.get("presented")),
+            "next_earnings": c.get("next_earnings"),
+            "earnings_days": _days_ahead(c.get("next_earnings"), today),
+        })
+    focus.sort(key=lambda x: (x["group_rank"], -(x["stars"] or 0), -(x["mom3"] or 0)))
+    per: dict[str, int] = {}
+    focus = [x for x in focus if per.update({x["group"]: per.get(x["group"], 0) + 1}) or
+             per[x["group"]] <= heat_cfg["focus_per_group"]]
 
     # ---------- acciones líderes de cada temática: mayor fuerza relativa compuesta ----------
     view_by = {c["sym"]: c for c in search_view}
@@ -451,11 +493,12 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
         "lists": {"presented": presented, "global_top": global_top, "priority": priority,
                   "by_state": by_state, "others": others, "outside": outside[:15],
                   "pending": pending_list, "eliminated": eliminated, "qm_setups": qm_setups,
-                  "htf_setups": htf_setups},
+                  "htf_setups": htf_setups, "hot_groups": groups[:20], "focus": focus},
         "qm_market": qm_market,
         "qm_const": qm.constants(),
         "stars_const": stars.constants(),
         "htf_const": {**htf.constants(), **hcfg, "pole_days": w.get("pole_days", 40)},
+        "heat_const": {**heat_cfg, "scan_cut": scan_cut},
         "theme_weights": weights,
         "calendar": calendar,
         "web": {"worker_url": (S.get("web") or {}).get("worker_url") or ""},
@@ -489,6 +532,7 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
                 "regime": {"label": reg["label"], "score": reg["score"],
                            "p50_spx": (reg["breadth"].get("SPX", {}).get("now") or {}).get("p50")},
                 "themes": {t["key"]: round(t["score"]["total"], 1) for t in theme_rows},
+                "hot": {g["group"]: g["scan_n"] for g in groups[:40]},
                 "watchlist": {c["sym"]: {"score": round(c["score"], 2), "state": c["state"],
                                          "theme": c["theme"], "rs_pct": round(c["rs_pct"] or 0, 4)} for c in pres}}
         history.write_snapshot(session, _clean(snap))
@@ -511,6 +555,19 @@ def _truncate_to(prices: dict, session: str) -> int:
             prices[sym] = df[keep]
             n += 1
     return n
+
+
+def _days_ahead(iso: str | None, today) -> int | None:
+    """Días hasta una fecha futura (None si no hay fecha o ya pasó)."""
+    n = fundamentals.days_until(iso, today)
+    return n if n is not None and n >= 0 else None
+
+
+def _heat_fields(r: dict, m) -> dict:
+    """Industria, plazos en los que entra en el escáner y subida desde el mínimo (fórmula de sus escáneres)."""
+    g = r.get("group")
+    return {"group": g, "group_name": heat.name_es(g) if g else None, "scan": r.get("scan") or [],
+            "mom1": m.mom1, "mom3": m.mom3, "mom6": m.mom6}
 
 
 def _level_fields(m) -> dict:
