@@ -78,6 +78,9 @@ def test_pipeline_end_to_end(tmp_path, monkeypatch):
     pres = out["lists"]["presented"]
     assert len(pres) == len(set(pres))
     assert all(out["candidates"][0]["score"] >= c["score"] for c in out["candidates"])
+    # Foco de sectores calientes: solo EE. UU. y nunca valores descartados.
+    assert all(x["state"] != "DESCARTADA" and "." not in x["sym"] for x in out["lists"]["focus"])
+    assert out["heat_summary"]["hidden"] >= 0
     # La amplitud del S&P se calcula con los grupos SPX/MID/SML del universo.
     assert out["regime"]["breadth"]["SPX"]["now"]["n"] > 0
 

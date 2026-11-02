@@ -165,7 +165,12 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
     scan_cut = qm.perf_cutoffs(us_liquid if len(us_liquid) >= 300 else [r["m"] for r in liquid], heat_cfg["scan_pct"])
     for r in liquid:
         r["scan"] = heat.scan_hits(r["m"], scan_cut)
-    groups = heat.hot_groups([r for r in liquid if not r["dup"]], heat_cfg, (prev or {}).get("hot"))
+    # Solo EE. UU., como sus escáneres: es el único mercado con el universo líquido completo; los
+    # internacionales entran en el radar por ser líderes o ganadores y harían parecer calientes sus sectores.
+    def us(sym: str) -> bool:
+        return not cfg.suffix(sym) and not sym.startswith("^")
+    heat_rows = [r for r in liquid if not r["dup"] and (us(r["sym"]) or not heat_cfg["us_only"])]
+    groups = heat.hot_groups(heat_rows, heat_cfg, (prev or {}).get("hot_us"))
     hot = {g["group"] for g in groups if g["hot"]}
 
     spy = bench.get("^GSPC", {})
@@ -374,11 +379,15 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
     # la fecha; se consulta para las del escáner y los high tight flags.
     grank = {g["group"]: g for g in groups}
 
-    def in_focus(c: dict) -> bool:
+    def fast_hot(c: dict) -> bool:
         """Valor rápido (ADR ≥ 5%) del escáner en un sector caliente."""
         g = grank.get(c.get("group"))
         return bool(g and g["hot"] and c.get("liquid") and not c.get("excluded") and c.get("scan")
-                    and (c.get("adr_pct") or 0) >= heat_cfg["fast_adr"])
+                    and (c.get("adr_pct") or 0) >= heat_cfg["fast_adr"] and (us(c["sym"]) or not heat_cfg["us_only"]))
+
+    def in_focus(c: dict) -> bool:
+        """Y que siga en forma: fuera los descartados (bajo la SMA50, ruptura fallida o lejos del nivel)."""
+        return fast_hot(c) and c["state"] != bo.DISCARDED
 
     def scanned(c: dict) -> bool:
         if not c.get("liquid") or c.get("excluded"):
@@ -499,6 +508,7 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
         "stars_const": stars.constants(),
         "htf_const": {**htf.constants(), **hcfg, "pole_days": w.get("pole_days", 40)},
         "heat_const": {**heat_cfg, "scan_cut": scan_cut},
+        "heat_summary": {"hidden": sum(1 for c in search_view if fast_hot(c) and c["state"] == bo.DISCARDED)},
         "theme_weights": weights,
         "calendar": calendar,
         "web": {"worker_url": (S.get("web") or {}).get("worker_url") or ""},
@@ -532,7 +542,7 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
                 "regime": {"label": reg["label"], "score": reg["score"],
                            "p50_spx": (reg["breadth"].get("SPX", {}).get("now") or {}).get("p50")},
                 "themes": {t["key"]: round(t["score"]["total"], 1) for t in theme_rows},
-                "hot": {g["group"]: g["scan_n"] for g in groups[:40]},
+                "hot_us": {g["group"]: g["scan_n"] for g in groups[:40]},
                 "watchlist": {c["sym"]: {"score": round(c["score"], 2), "state": c["state"],
                                          "theme": c["theme"], "rs_pct": round(c["rs_pct"] or 0, 4)} for c in pres}}
         history.write_snapshot(session, _clean(snap))

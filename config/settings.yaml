@@ -65,6 +65,7 @@ htf:
 
 # Sectores calientes ("fast moving stocks in the hot sectors"): industrias con más valores en sus escáneres.
 heat:
+  us_only: true          # sectores y foco solo con valores de EE. UU., como sus escáneres
   scan_pct: 0.07         # escáner: el 7% de EE. UU. que más sube a 1, 3 o 6 meses (su "rank 93")
   hot_min: 3             # al menos 3 valores en el escáner
   hot_lift: 2.0          # y el doble de su cuota normal (14% del sector con un escáner del 7%)

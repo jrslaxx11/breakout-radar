@@ -197,10 +197,11 @@ cuando muchos de sus valores aparecen a la vez entre los que más suben a 1, 3 y
 | Paso | Criterio |
 | --- | --- |
 | Sector | Industria de Yahoo Finance (biotecnología, semiconductores, uranio, solar, transporte marítimo…); para los valores del S&P sin perfil, su subindustria GICS traducida a la industria equivalente |
-| Escáner | El 7% del mercado de EE. UU. que más sube a 1, 3 o 6 meses desde el mínimo del periodo (su "rank 93" de TC2000); internacionales con los mismos umbrales |
+| Universo | Solo EE. UU., como sus escáneres: es el único mercado con todo el universo líquido; los internacionales entran en el radar por ser líderes o ganadores y harían parecer calientes sus sectores (`us_only`) |
+| Escáner | El 7% del mercado de EE. UU. que más sube a 1, 3 o 6 meses desde el mínimo del periodo (su "rank 93" de TC2000) |
 | Calor | Valores del sector en el escáner × la parte del sector que suponen. Solo el número favorecería siempre a los sectores con cientos de valores; solo la proporción, a los de tres |
 | Caliente | ≥ 3 valores en el escáner, el doble de su cuota normal (≥ 14% del sector) y entre los 8 de más calor |
-| Valores rápidos | Los del escáner con ADR ≥ 5% de los sectores calientes, hasta 15 por sector, con estado, estrellas, plazos en el escáner y aviso de resultados |
+| Valores rápidos | Los del escáner con ADR ≥ 5% de los sectores calientes que siguen en forma (no descartados: ni bajo la SMA50, ni con la ruptura fallida, ni lejos del nivel), hasta 15 por sector, con estado, estrellas, plazos en el escáner y aviso de resultados |
 
 El ranking muestra también cuántos valores tenía cada sector en el escáner la sesión anterior, para ver
 si se calienta o se enfría. Los perfiles de Yahoo se descargan poco a poco (700 por ejecución, con

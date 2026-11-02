@@ -14,13 +14,16 @@ lot of 50-100% moves over the past few weeks, boom, that's the leading sector").
   siempre aportan alguno por azar); solo la proporción, a los de tres valores. El producto pide las dos cosas.
 - Caliente: al menos 3 valores en el escáner, el doble de su cuota normal (14% del sector con un escáner
   del 7%) y entre los 8 de más calor.
-- Valores rápidos: los del escáner con ADR ≥ 5%.
+- Valores rápidos: los del escáner con ADR ≥ 5% que siguen en forma (no descartados: ni bajo la SMA50,
+  ni con la ruptura fallida, ni lejos del nivel).
+- Solo EE. UU., como sus escáneres: es el único mercado con todo el universo líquido; los internacionales
+  entran en el radar por ser líderes o ganadores y harían parecer calientes sus sectores.
 """
 from __future__ import annotations
 
 import statistics
 
-DEFAULTS = {"scan_pct": 0.07, "hot_min": 3, "hot_lift": 2.0, "hot_top": 8, "fast_adr": 0.05, "focus_per_group": 15}
+DEFAULTS = {"us_only": True, "scan_pct": 0.07, "hot_min": 3, "hot_lift": 2.0, "hot_top": 8, "fast_adr": 0.05, "focus_per_group": 15}
 
 # Industrias de Yahoo Finance en español (las que no estén aquí se muestran en inglés).
 INDUSTRY_ES = {
