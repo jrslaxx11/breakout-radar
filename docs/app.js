@@ -323,8 +323,8 @@
         <div>
           <h3>Índices</h3>
           <div class="tbl-wrap"><table>
-            <thead><tr><th class="left">Índice</th><th>Cierre</th><th>Fecha</th><th>vs SMA20</th><th>vs SMA50</th><th>vs SMA200</th><th>1 m</th><th>3 m</th><th>Desde máx.</th></tr></thead>
-            <tbody>${idx.map((i) => `<tr><td class="left">${esc(i.name)}</td><td>${num(i.close, i.close > 1000 ? 0 : 2)}</td><td class="dim">${dateEs(i.date)}</td>
+            <thead><tr><th class="left">Índice</th><th>Cierre</th><th title="Cambio de la última sesión frente al cierre anterior">Día</th><th>Fecha</th><th>vs SMA20</th><th>vs SMA50</th><th>vs SMA200</th><th>1 m</th><th>3 m</th><th>Desde máx.</th></tr></thead>
+            <tbody>${idx.map((i) => `<tr><td class="left">${esc(i.name)}</td><td>${num(i.close, i.close > 1000 ? 0 : 2)}</td><td class="${cls(i.d1)}">${pct(i.d1)}</td><td class="dim">${dateEs(i.date)}</td>
               <td class="${cls(i.vs20)}">${pct(i.vs20)}</td><td class="${cls(i.vs50)}">${pct(i.vs50)}</td><td class="${cls(i.vs200)}">${pct(i.vs200)}</td>
               <td class="${cls(i.r1m)}">${pct(i.r1m)}</td><td class="${cls(i.r3m)}">${pct(i.r3m)}</td><td class="${cls(i.dhi)}">${pct(i.dhi)}</td></tr>`).join("")}</tbody>
           </table></div>
