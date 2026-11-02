@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import logging
 import sys
+import warnings
 
 from .pipeline import run
 
@@ -16,10 +17,12 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
     logging.getLogger("yfinance").setLevel(logging.CRITICAL)
+    # yfinance aún usa `inplace=`, que pandas 3.1 marca como obsoleto: miles de avisos que tapan el registro.
+    warnings.filterwarnings("ignore", message=r".*inplace keyword.*")
     if args.cmd == "run":
         out = run(force=args.force)
         if out.get("skipped"):
-            print(f"Sesión {out['session']} ya procesada.")
+            print(f"Sesión {out['session']} ya procesada: no hay datos nuevos que publicar.")
             return 0
         meta = out["meta"]
         print(f"Sesión {meta['session']} · régimen {out['regime']['label']} · "

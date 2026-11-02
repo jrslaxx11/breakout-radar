@@ -61,7 +61,11 @@ jobs:
         run: |
           # Si la sesión ya estaba procesada no se vuelve a publicar la web (se queda la versión vigente,
           # que incluye las fichas por valor que no se guardan en el repositorio).
-          if [ -f docs/data/.skipped ]; then echo "skipped=true" >> "$GITHUB_OUTPUT"; rm docs/data/.skipped; fi
+          if [ -f docs/data/.skipped ]; then
+            echo "skipped=true" >> "$GITHUB_OUTPUT"
+            echo "::notice title=Sin datos nuevos::La sesión $(cat docs/data/.skipped) ya estaba publicada, así que no se vuelve a desplegar la web (por eso 'deploy' aparece como omitido). Los datos nuevos llegan tras el cierre de EE. UU.; para recalcular igualmente, lanza el flujo marcando 'Recalcular aunque la sesión ya esté procesada'."
+            rm docs/data/.skipped
+          fi
 
       - name: Guardar datos e histórico en el repositorio
         if: always()
