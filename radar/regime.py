@@ -17,6 +17,7 @@ def index_rows(prices: dict[str, pd.DataFrame], indices: list[dict], w: dict) ->
             continue
         rows.append({
             **ix, "available": True, "date": m.date, "close": m.C, "d1": m.d1,
+            "vs10": m.C / m.s10 - 1 if m.s10 else None,
             "vs20": m.C / m.s20 - 1 if m.s20 else None,
             "vs50": m.C / m.s50 - 1 if m.s50 else None,
             "vs200": m.C / m.s200 - 1 if m.s200 else None,
