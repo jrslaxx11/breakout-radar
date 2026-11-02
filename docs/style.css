@@ -154,7 +154,7 @@ th, td { padding: 7px 10px; text-align: right; white-space: nowrap; border-botto
 th:first-child, td:first-child { text-align: left; }
 th { font-weight: 650; color: var(--muted); font-variation-settings: "wdth" var(--w-semi); background: var(--surface); position: sticky; top: 0; }
 th.left, td.left { text-align: left; }
-.idx-table th:not(:first-child) { text-align: center; }
+.idx-table th:not(:first-child), .idx-table td:not(:first-child) { text-align: center; }
 tbody tr:last-child td { border-bottom: 0; }
 .pos { color: var(--pos); }
 .neg { color: var(--neg); }
