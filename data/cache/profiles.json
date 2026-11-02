@@ -2675,6 +2675,14 @@
 "name": "",
 "sector": ""
 },
+"ACAD": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "ACGL": {
 "country": "",
 "industry": "",
@@ -3149,6 +3157,14 @@
 "name": "",
 "sector": ""
 },
+"ALLY": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "ALMR": {
 "country": "",
 "industry": "",
@@ -3389,6 +3405,14 @@
 "name": "",
 "sector": ""
 },
+"ANGO": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "ANIP": {
 "country": "United States",
 "industry": "Drug Manufacturers - Specialty & Generic",
@@ -3592,6 +3616,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"ARVN": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "ARW": {
 "country": "",
@@ -4703,6 +4735,14 @@
 "name": "",
 "sector": ""
 },
+"BOH": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "BOKF": {
 "country": "",
 "industry": "",
@@ -5513,6 +5553,14 @@
 "name": "",
 "sector": ""
 },
+"CLBT": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "CLF": {
 "country": "",
 "industry": "",
@@ -6251,6 +6299,14 @@
 "name": "",
 "sector": ""
 },
+"CVLG": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "CVLT": {
 "country": "",
 "industry": "",
@@ -6382,6 +6438,14 @@
 "industry": "Banks - Regional",
 "name": "Danske Bank A/S",
 "sector": "Financial Services"
+},
+"DAR": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "DASH": {
 "country": "",
@@ -6652,6 +6716,14 @@
 "industry": "Furnishings, Fixtures & Appliances",
 "name": "De'Longhi S.p.A.",
 "sector": "Consumer Cyclical"
+},
+"DLO": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "DLR": {
 "country": "",
@@ -7619,6 +7691,14 @@
 "name": "Exor N.V.",
 "sector": "Financial Services"
 },
+"EXP": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "EXPD": {
 "country": "",
 "industry": "",
@@ -7828,6 +7908,14 @@
 "industry": "Banks - Regional",
 "name": "First Financial Bankshares, Inc.",
 "sector": "Financial Services"
+},
+"FFIV": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "FGR.PA": {
 "country": "",
@@ -8519,6 +8607,14 @@
 "name": "",
 "sector": ""
 },
+"GLNG": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "GLOB": {
 "country": "",
 "industry": "",
@@ -8584,6 +8680,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"GOOD": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "GPC": {
 "country": "",
@@ -9371,6 +9475,14 @@
 "name": "iA Financial Corporation Inc.",
 "sector": "Financial Services"
 },
+"IART": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "IBCP": {
 "country": "",
 "industry": "",
@@ -9592,6 +9704,14 @@
 "industry": "Semiconductors",
 "name": "ChipMOS TECHNOLOGIES INC.",
 "sector": "Technology"
+},
+"IMVT": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "INCY": {
 "country": "",
@@ -11705,6 +11825,14 @@
 "name": "Münchener Rückversicherungs-Gesellschaft Aktiengesellschaft in München",
 "sector": "Financial Services"
 },
+"MWA": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "MX.TO": {
 "country": "Canada",
 "industry": "Chemicals",
@@ -11758,6 +11886,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"NAC": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "NAD": {
 "country": "",
@@ -12358,6 +12494,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"NVST": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "NWBI": {
 "country": "",
@@ -13181,6 +13325,14 @@
 "name": "Polaris Inc.",
 "sector": "Consumer Cyclical"
 },
+"PINS": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "PIRC.MI": {
 "country": "Italy",
 "industry": "Auto Parts",
@@ -13582,6 +13734,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"PTON": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "PTRN": {
 "country": "United States",
@@ -16043,6 +16203,14 @@
 "name": "Tieto Oyj",
 "sector": "Technology"
 },
+"TIGO": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "TIH.TO": {
 "country": "",
 "industry": "",
@@ -16090,6 +16258,14 @@
 "industry": "Copper",
 "name": "Trekor Metals Limited",
 "sector": "Basic Materials"
+},
+"TKR": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "TLN": {
 "country": "",
@@ -16367,6 +16543,14 @@
 "name": "Tenaris S.A.",
 "sector": "Energy"
 },
+"TSAT": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "TSCO": {
 "country": "",
 "industry": "",
@@ -16529,6 +16713,14 @@
 "name": "",
 "sector": ""
 },
+"UBER": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "UBS": {
 "country": "",
 "industry": "",
@@ -16600,6 +16792,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"UGP": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "UHAL": {
 "country": "",
