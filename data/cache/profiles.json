@@ -3043,6 +3043,14 @@
 "name": "Airbus SE",
 "sector": "Industrials"
 },
+"AIT": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "AIXA.DE": {
 "country": "",
 "industry": "",
@@ -3072,6 +3080,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"AKR": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "AKRBP.OL": {
 "country": "Norway",
@@ -3120,6 +3136,14 @@
 "industry": "Specialty Industrial Machinery",
 "name": "Alfa Laval AB (publ)",
 "sector": "Industrials"
+},
+"ALG": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "ALIV-SDB.ST": {
 "country": "Sweden",
@@ -3242,6 +3266,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"AMBQ": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "AMBU-B.CO": {
 "country": "Denmark",
@@ -3380,6 +3412,14 @@
 "industry": "Asset Management",
 "name": "Amundi S.A.",
 "sector": "Financial Services"
+},
+"AN": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "ANA.MC": {
 "country": "",
@@ -3610,6 +3650,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"AROC": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "ARQT": {
 "country": "",
@@ -6065,6 +6113,14 @@
 "name": "",
 "sector": ""
 },
+"CRNC": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "CROX": {
 "country": "",
 "industry": "",
@@ -7427,6 +7483,14 @@
 "name": "",
 "sector": ""
 },
+"EPRT": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "EQB.TO": {
 "country": "",
 "industry": "",
@@ -8681,6 +8745,22 @@
 "name": "",
 "sector": ""
 },
+"GOLD": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
+"GOLF": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "GOOD": {
 "country": "",
 "industry": "",
@@ -8796,6 +8876,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"GTES": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "GTLB": {
 "country": "United States",
@@ -9066,6 +9154,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"HGV": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "HHH": {
 "country": "",
@@ -9779,6 +9875,14 @@
 "name": "",
 "sector": ""
 },
+"INMD": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "INN": {
 "country": "",
 "industry": "",
@@ -10163,6 +10267,14 @@
 "name": "Jyske Bank A/S",
 "sector": "Financial Services"
 },
+"KAI": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "KB": {
 "country": "",
 "industry": "",
@@ -10234,6 +10346,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"KEYS": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "KFRC": {
 "country": "",
@@ -10919,6 +11039,14 @@
 "name": "Lundin Gold Inc.",
 "sector": "Basic Materials"
 },
+"LULU": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "LUMI.ST": {
 "country": "",
 "industry": "",
@@ -11345,6 +11473,14 @@
 "name": "",
 "sector": ""
 },
+"MGTX": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "MGY": {
 "country": "",
 "industry": "",
@@ -11597,6 +11733,14 @@
 "name": "",
 "sector": ""
 },
+"MRP": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "MRSH": {
 "country": "",
 "industry": "",
@@ -11838,6 +11982,14 @@
 "industry": "Chemicals",
 "name": "Methanex Corporation",
 "sector": "Basic Materials"
+},
+"MXL": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "MYCR.ST": {
 "country": "Sweden",
@@ -12219,6 +12371,14 @@
 "name": "NN Group N.V.",
 "sector": "Financial Services"
 },
+"NNI": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "NNN": {
 "country": "United States",
 "industry": "REIT - Retail",
@@ -12514,6 +12674,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"NWG": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "NWG.L": {
 "country": "United Kingdom",
@@ -14553,6 +14721,14 @@
 "name": "",
 "sector": ""
 },
+"SAIA": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "SAIC": {
 "country": "",
 "industry": "",
@@ -14738,6 +14914,14 @@
 "industry": "Specialty Industrial Machinery",
 "name": "Schindler Holding AG",
 "sector": "Industrials"
+},
+"SCHW": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "SCI": {
 "country": "United States",
@@ -15987,6 +16171,14 @@
 "name": "TD Power Systems Limited",
 "sector": "Industrials"
 },
+"TDS": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "TDW": {
 "country": "",
 "industry": "",
@@ -16118,6 +16310,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"TFIN": {
+"country": "",
+"industry": "",
+"last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "TFPM": {
 "country": "Canada",
