@@ -2525,6 +2525,12 @@
 "name": "Yum China Holdings, Inc.",
 "sector": "Consumer Cyclical"
 },
+"A": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "AAI.AX": {
 "country": "",
 "industry": "",
@@ -2537,7 +2543,19 @@
 "name": "Aalberts N.V.",
 "sector": "Industrials"
 },
+"AAMI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "AAOI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"AAPL": {
 "country": "",
 "industry": "",
 "name": "",
@@ -2561,17 +2579,35 @@
 "name": "",
 "sector": ""
 },
+"ABBV": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "ABCL": {
 "country": "Canada",
 "industry": "Biotechnology",
 "name": "AbCellera Biologics Inc.",
 "sector": "Healthcare"
 },
+"ABM": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "ABN.AS": {
 "country": "Netherlands",
 "industry": "Banks - Diversified",
 "name": "ABN AMRO Bank N.V.",
 "sector": "Financial Services"
+},
+"ABNB": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "ABRA.TO": {
 "country": "",
@@ -2584,6 +2620,12 @@
 "industry": "Biotechnology",
 "name": "Absci Corporation",
 "sector": "Healthcare"
+},
+"ABT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "ABVX": {
 "country": "",
@@ -2609,13 +2651,37 @@
 "name": "",
 "sector": ""
 },
+"ACGL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"ACHC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "ACHV": {
 "country": "",
 "industry": "",
 "name": "",
 "sector": ""
 },
+"ACIW": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "ACLN.SW": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"ACN": {
 "country": "",
 "industry": "",
 "name": "",
@@ -2628,6 +2694,12 @@
 "sector": "Utilities"
 },
 "ACS.MC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"ACT": {
 "country": "",
 "industry": "",
 "name": "",
@@ -2663,6 +2735,24 @@
 "name": "Adecco Group AG",
 "sector": "Industrials"
 },
+"ADI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"ADMA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"ADP": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "ADP.PA": {
 "country": "France",
 "industry": "Airports & Air Services",
@@ -2680,6 +2770,24 @@
 "industry": "Footwear & Accessories",
 "name": "adidas AG",
 "sector": "Consumer Cyclical"
+},
+"ADSK": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"ADT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"ADUS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "ADYEN.AS": {
 "country": "",
@@ -2699,6 +2807,12 @@
 "name": "Aena S.M.E., S.A.",
 "sector": "Industrials"
 },
+"AEO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "AER": {
 "country": "",
 "industry": "",
@@ -2712,6 +2826,18 @@
 "sector": "Basic Materials"
 },
 "AF.PA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"AFG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"AFL": {
 "country": "",
 "industry": "",
 "name": "",
@@ -2735,6 +2861,12 @@
 "name": "",
 "sector": ""
 },
+"AGIO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "AGL": {
 "country": "",
 "industry": "",
@@ -2753,6 +2885,18 @@
 "name": "",
 "sector": ""
 },
+"AGYS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"AHR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "AI": {
 "country": "",
 "industry": "",
@@ -2765,7 +2909,19 @@
 "name": "L'Air Liquide S.A.",
 "sector": "Basic Materials"
 },
+"AIG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "AII": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"AIN": {
 "country": "",
 "industry": "",
 "name": "",
@@ -2778,6 +2934,18 @@
 "sector": "Industrials"
 },
 "AIXA.DE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"AIZ": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"AJG": {
 "country": "",
 "industry": "",
 "name": "",
@@ -2819,6 +2987,12 @@
 "name": "Astera Labs, Inc.",
 "sector": "Technology"
 },
+"ALC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "ALC.SW": {
 "country": "Switzerland",
 "industry": "Medical Instruments & Supplies",
@@ -2849,11 +3023,29 @@
 "name": "ALK-Abelló A/S",
 "sector": "Healthcare"
 },
+"ALKS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"ALL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "ALL.AX": {
 "country": "Australia",
 "industry": "Gambling",
 "name": "Aristocrat Leisure Limited",
 "sector": "Consumer Cyclical"
+},
+"ALLE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "ALMR": {
 "country": "",
@@ -2868,6 +3060,12 @@
 "sector": ""
 },
 "ALQ.AX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"ALRM": {
 "country": "",
 "industry": "",
 "name": "",
@@ -2915,13 +3113,43 @@
 "name": "Amcor plc",
 "sector": "Consumer Cyclical"
 },
+"AMCR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"AMD": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "AMD.TO": {
 "country": "United States",
 "industry": "Semiconductors",
 "name": "Advanced Micro Devices, Inc.",
 "sector": "Technology"
 },
+"AMG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"AMGN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "AMLX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"AMN": {
 "country": "",
 "industry": "",
 "name": "",
@@ -2933,7 +3161,19 @@
 "name": "Amplifon S.p.A.",
 "sector": "Healthcare"
 },
+"AMPH": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "AMPL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"AMRX": {
 "country": "",
 "industry": "",
 "name": "",
@@ -2950,6 +3190,12 @@
 "industry": "Semiconductors",
 "name": "ams-OSRAM AG",
 "sector": "Technology"
+},
+"AMT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "AMTB": {
 "country": "",
@@ -2975,6 +3221,12 @@
 "name": "",
 "sector": ""
 },
+"ANF": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "ANN.AX": {
 "country": "Australia",
 "industry": "Medical Instruments & Supplies",
@@ -2986,6 +3238,18 @@
 "industry": "Banks - Diversified",
 "name": "ANZ Group Holdings Limited",
 "sector": "Financial Services"
+},
+"AOS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"APA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "APA.AX": {
 "country": "Australia",
@@ -3005,6 +3269,42 @@
 "name": "APAR Industries Limited",
 "sector": "Industrials"
 },
+"APD": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"APG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"APH": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"APLE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"APOG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"APPF": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "APPN": {
 "country": "",
 "industry": "",
@@ -3012,6 +3312,12 @@
 "sector": ""
 },
 "APPS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"AR": {
 "country": "",
 "industry": "",
 "name": "",
@@ -3035,6 +3341,12 @@
 "name": "Aecon Group Inc.",
 "sector": "Industrials"
 },
+"ARES": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "ARGX": {
 "country": "Netherlands",
 "industry": "Biotechnology",
@@ -3054,6 +3366,12 @@
 "sector": ""
 },
 "ARM": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"ARMK": {
 "country": "",
 "industry": "",
 "name": "",
@@ -3083,11 +3401,23 @@
 "name": "",
 "sector": ""
 },
+"ASB": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "ASC": {
 "country": "Bermuda",
 "industry": "Marine Shipping",
 "name": "Ardmore Shipping Corporation",
 "sector": "Industrials"
+},
+"ASH": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "ASM.AS": {
 "country": "",
@@ -3107,6 +3437,12 @@
 "name": "Ascendis Pharma A/S",
 "sector": "Healthcare"
 },
+"ASO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "ASRNL.AS": {
 "country": "Netherlands",
 "industry": "Insurance - Diversified",
@@ -3114,6 +3450,12 @@
 "sector": "Financial Services"
 },
 "ASST": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"ASTH": {
 "country": "",
 "industry": "",
 "name": "",
@@ -3179,6 +3521,12 @@
 "name": "",
 "sector": ""
 },
+"ATR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "ATRC": {
 "country": "",
 "industry": "",
@@ -3227,6 +3575,12 @@
 "name": "Avio S.p.A.",
 "sector": "Industrials"
 },
+"AVNT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "AVOL.SW": {
 "country": "Switzerland",
 "industry": "Specialty Retail",
@@ -3234,6 +3588,30 @@
 "sector": "Consumer Cyclical"
 },
 "AVPT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"AVTR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"AVY": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"AWK": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"AWR": {
 "country": "",
 "industry": "",
 "name": "",
@@ -3257,6 +3635,12 @@
 "name": "",
 "sector": ""
 },
+"AXTA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "AXTI": {
 "country": "",
 "industry": "",
@@ -3274,6 +3658,12 @@
 "industry": "Silver",
 "name": "Aya Gold & Silver Inc.",
 "sector": "Basic Materials"
+},
+"AYI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "AYV.PA": {
 "country": "",
@@ -3317,6 +3707,12 @@
 "name": "AstraZeneca PLC",
 "sector": "Healthcare"
 },
+"AZTA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "BA.L": {
 "country": "United Kingdom",
 "industry": "Aerospace & Defense",
@@ -3335,6 +3731,18 @@
 "name": "Julius Bär Gruppe AG",
 "sector": "Financial Services"
 },
+"BAH": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"BALL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "BAMI.MI": {
 "country": "",
 "industry": "",
@@ -3352,6 +3760,12 @@
 "industry": "Biotechnology",
 "name": "Bachem Holding AG",
 "sector": "Healthcare"
+},
+"BANR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "BARC.L": {
 "country": "",
@@ -3376,6 +3790,12 @@
 "industry": "Biotechnology",
 "name": "Bavarian Nordic A/S",
 "sector": "Healthcare"
+},
+"BAX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "BAYN.DE": {
 "country": "Germany",
@@ -3419,17 +3839,41 @@
 "name": "Black Box Limited",
 "sector": "Technology"
 },
+"BBT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "BBVA.MC": {
 "country": "Spain",
 "industry": "Banks - Diversified",
 "name": "Banco Bilbao Vizcaya Argentaria, S.A.",
 "sector": "Financial Services"
 },
+"BBWI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"BBY": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "BC.MI": {
 "country": "Italy",
 "industry": "Luxury Goods",
 "name": "Brunello Cucinelli S.p.A.",
 "sector": "Consumer Cyclical"
+},
+"BCPC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "BCVN.SW": {
 "country": "Switzerland",
@@ -3442,6 +3886,12 @@
 "industry": "Engineering & Construction",
 "name": "Bird Construction Inc.",
 "sector": "Industrials"
+},
+"BDX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "BEAN.SW": {
 "country": "Switzerland",
@@ -3474,6 +3924,18 @@
 "sector": ""
 },
 "BETA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"BF-B": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"BFH": {
 "country": "",
 "industry": "",
 "name": "",
@@ -3533,11 +3995,47 @@
 "name": "",
 "sector": ""
 },
+"BIIB": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"BILL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "BIM.PA": {
 "country": "France",
 "industry": "Diagnostics & Research",
 "name": "bioMérieux S.A.",
 "sector": "Healthcare"
+},
+"BIO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"BJ": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"BJRI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"BKH": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "BKT.MC": {
 "country": "",
@@ -3545,7 +4043,25 @@
 "name": "",
 "sector": ""
 },
+"BL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "BLCO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"BLK": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"BLKB": {
 "country": "",
 "industry": "",
 "name": "",
@@ -3575,6 +4091,12 @@
 "name": "Banca Mediolanum S.p.A.",
 "sector": "Financial Services"
 },
+"BMI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "BMO": {
 "country": "",
 "industry": "",
@@ -3592,6 +4114,12 @@
 "industry": "Banks - Regional",
 "name": "Banca Monte dei Paschi di Siena S.p.A.",
 "sector": "Financial Services"
+},
+"BMRN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "BMW.DE": {
 "country": "",
@@ -3635,6 +4163,12 @@
 "name": "",
 "sector": ""
 },
+"BNY": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "BOBS": {
 "country": "",
 "industry": "",
@@ -3659,6 +4193,12 @@
 "name": "",
 "sector": ""
 },
+"BOX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "BP": {
 "country": "",
 "industry": "",
@@ -3672,6 +4212,12 @@
 "sector": ""
 },
 "BPE.MI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"BR": {
 "country": "",
 "industry": "",
 "name": "",
@@ -3695,7 +4241,31 @@
 "name": "",
 "sector": ""
 },
+"BRK-B": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"BRKR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"BRO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "BRZE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"BSY": {
 "country": "",
 "industry": "",
 "name": "",
@@ -3714,6 +4284,12 @@
 "sector": "Energy"
 },
 "BTI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"BTSG": {
 "country": "",
 "industry": "",
 "name": "",
@@ -3803,13 +4379,37 @@
 "name": "",
 "sector": ""
 },
+"CACI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "CAE.TO": {
 "country": "Canada",
 "industry": "Aerospace & Defense",
 "name": "CAE Inc.",
 "sector": "Industrials"
 },
+"CAG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CAH": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "CAI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CAKE": {
 "country": "",
 "industry": "",
 "name": "",
@@ -3833,11 +4433,29 @@
 "name": "Capital Tankers Corp.",
 "sector": "Industrials"
 },
+"CART": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "CAST.ST": {
 "country": "Sweden",
 "industry": "Real Estate - Development",
 "name": "Castellum AB (publ)",
 "sector": "Real Estate"
+},
+"CATY": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CB": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "CBA.AX": {
 "country": "",
@@ -3869,6 +4487,18 @@
 "name": "",
 "sector": ""
 },
+"CBOE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CBRL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "CCC": {
 "country": "",
 "industry": "",
@@ -3876,6 +4506,24 @@
 "sector": ""
 },
 "CCEP": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CCI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CCK": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CCL": {
 "country": "",
 "industry": "",
 "name": "",
@@ -3899,13 +4547,43 @@
 "name": "",
 "sector": ""
 },
+"CDW": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CENTA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CERT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "CEU.TO": {
 "country": "Canada",
 "industry": "Oil & Gas Equipment & Services",
 "name": "CES Energy Solutions Corp.",
 "sector": "Energy"
 },
+"CF": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "CFFI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CFR": {
 "country": "",
 "industry": "",
 "name": "",
@@ -3953,6 +4631,36 @@
 "name": "",
 "sector": ""
 },
+"CHCO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CHD": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CHDN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CHE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CHEF": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "CHENNPETRO.NS": {
 "country": "India",
 "industry": "Oil & Gas Refining & Marketing",
@@ -3964,6 +4672,12 @@
 "industry": "Aerospace & Defense",
 "name": "Chemring Group PLC",
 "sector": "Industrials"
+},
+"CHH": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "CHKP": {
 "country": "Israel",
@@ -3983,6 +4697,12 @@
 "name": "",
 "sector": ""
 },
+"CHRD": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "CHT": {
 "country": "",
 "industry": "",
@@ -3995,13 +4715,37 @@
 "name": "",
 "sector": ""
 },
+"CI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CINF": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "CJ.TO": {
 "country": "Canada",
 "industry": "Oil & Gas E&P",
 "name": "Cardinal Energy Ltd.",
 "sector": "Energy"
 },
+"CL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "CLBK": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CLF": {
 "country": "",
 "industry": "",
 "name": "",
@@ -4020,6 +4764,12 @@
 "sector": "Basic Materials"
 },
 "CLNX.MC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CM": {
 "country": "",
 "industry": "",
 "name": "",
@@ -4049,6 +4799,12 @@
 "name": "Cmb.Tech NV",
 "sector": "Energy"
 },
+"CME": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "CMM.AX": {
 "country": "Australia",
 "industry": "Gold",
@@ -4067,7 +4823,25 @@
 "name": "",
 "sector": ""
 },
+"CNC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CNH": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "CNI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CNK": {
 "country": "",
 "industry": "",
 "name": "",
@@ -4079,7 +4853,19 @@
 "name": "",
 "sector": ""
 },
+"CNO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "CNOB": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CNP": {
 "country": "",
 "industry": "",
 "name": "",
@@ -4097,17 +4883,47 @@
 "name": "Canadian Natural Resources Limited",
 "sector": "Energy"
 },
+"CNR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "CNR.TO": {
 "country": "Canada",
 "industry": "Railroads",
 "name": "Canadian National Railway Company",
 "sector": "Industrials"
 },
+"CNX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CNXC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CNXN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "COH.AX": {
 "country": "Australia",
 "industry": "Medical Devices",
 "name": "Cochlear Limited",
 "sector": "Healthcare"
+},
+"COKE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "COL.AX": {
 "country": "",
@@ -4121,7 +4937,19 @@
 "name": "",
 "sector": ""
 },
+"COLB": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "COLD": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"COLM": {
 "country": "",
 "industry": "",
 "name": "",
@@ -4133,11 +4961,41 @@
 "name": "Coloplast A/S",
 "sector": "Healthcare"
 },
+"CON": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "CON.DE": {
 "country": "Germany",
 "industry": "Auto Parts",
 "name": "Continental Aktiengesellschaft",
 "sector": "Consumer Cyclical"
+},
+"COP": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"COR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CORT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"COST": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "COTN.SW": {
 "country": "Switzerland",
@@ -4152,6 +5010,24 @@
 "sector": ""
 },
 "CP": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CPAY": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CPF": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CPK": {
 "country": "",
 "industry": "",
 "name": "",
@@ -4187,7 +5063,55 @@
 "name": "",
 "sector": ""
 },
+"CRBG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "CRDO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CRGY": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CRL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CRM": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CROX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CRSR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CRVL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CRWD": {
 "country": "",
 "industry": "",
 "name": "",
@@ -4217,6 +5141,12 @@
 "name": "",
 "sector": ""
 },
+"CSL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "CSL.AX": {
 "country": "Australia",
 "industry": "Biotechnology",
@@ -4235,6 +5165,18 @@
 "name": "Constellation Software Inc.",
 "sector": "Technology"
 },
+"CSX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CTAS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "CTKB": {
 "country": "",
 "industry": "",
@@ -4247,13 +5189,49 @@
 "name": "",
 "sector": ""
 },
+"CTSH": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "CU.TO": {
 "country": "",
 "industry": "",
 "name": "",
 "sector": ""
 },
+"CUBE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CUBI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CUZ": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CVBF": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "CVC.AS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CVCO": {
 "country": "",
 "industry": "",
 "name": "",
@@ -4271,7 +5249,67 @@
 "name": "Cenovus Energy Inc.",
 "sector": "Energy"
 },
+"CVI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CVLT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CVSA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CVX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CWST": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CWT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CXM": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CXT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"CXW": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "CYRX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"D": {
 "country": "",
 "industry": "",
 "name": "",
@@ -4313,7 +5351,43 @@
 "name": "Deutsche Bank Aktiengesellschaft",
 "sector": "Financial Services"
 },
+"DBX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"DCOM": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"DD": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"DDOG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "DDS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"DE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"DELL": {
 "country": "",
 "industry": "",
 "name": "",
@@ -4331,13 +5405,37 @@
 "name": "",
 "sector": ""
 },
+"DFIN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "DFTX": {
 "country": "United States",
 "industry": "Biotechnology",
 "name": "Definium Therapeutics, Inc.",
 "sector": "Healthcare"
 },
+"DG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "DG.PA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"DGII": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"DGX": {
 "country": "",
 "industry": "",
 "name": "",
@@ -4354,6 +5452,12 @@
 "industry": "Integrated Freight & Logistics",
 "name": "DHL AG",
 "sector": "Industrials"
+},
+"DHR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "DHT": {
 "country": "Bermuda",
@@ -4374,6 +5478,18 @@
 "sector": "Healthcare"
 },
 "DIN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"DINO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"DIS": {
 "country": "",
 "industry": "",
 "name": "",
@@ -4403,11 +5519,23 @@
 "name": "DKSH Holding AG",
 "sector": "Industrials"
 },
+"DLB": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "DLG.MI": {
 "country": "Italy",
 "industry": "Furnishings, Fixtures & Appliances",
 "name": "De'Longhi S.p.A.",
 "sector": "Consumer Cyclical"
+},
+"DLTR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "DMP.AX": {
 "country": "Australia",
@@ -4427,13 +5555,43 @@
 "name": "DNB Bank ASA",
 "sector": "Financial Services"
 },
+"DNOW": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "DNTH": {
 "country": "",
 "industry": "",
 "name": "",
 "sector": ""
 },
+"DOCS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"DOCU": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "DOO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"DORM": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"DOW": {
 "country": "",
 "industry": "",
 "name": "",
@@ -4452,6 +5610,18 @@
 "sector": ""
 },
 "DPM.TO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"DRH": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"DRI": {
 "country": "",
 "industry": "",
 "name": "",
@@ -4505,7 +5675,61 @@
 "name": "Dassault Systèmes SE",
 "sector": "Technology"
 },
+"DT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "DTE.DE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"DUK": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"DUOL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"DV": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"DVA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"DVN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"DXC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"DXCM": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"DXPE": {
 "country": "",
 "industry": "",
 "name": "",
@@ -4523,7 +5747,31 @@
 "name": "E2E Networks Limited",
 "sector": "Technology"
 },
+"EAT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"EBAY": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"EBC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "EC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"ECL": {
 "country": "",
 "industry": "",
 "name": "",
@@ -4534,6 +5782,18 @@
 "industry": "Marine Shipping",
 "name": "Okeanis Eco Tankers Corp.",
 "sector": "Industrials"
+},
+"ECPG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"ED": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "EDEN.PA": {
 "country": "",
@@ -4547,13 +5807,43 @@
 "name": "",
 "sector": ""
 },
+"EFOR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"EFX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "EFX.TO": {
 "country": "Canada",
 "industry": "Oil & Gas Equipment & Services",
 "name": "Enerflex Ltd.",
 "sector": "Energy"
 },
+"EG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"EGBN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "EGY": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"EHC": {
 "country": "",
 "industry": "",
 "name": "",
@@ -4570,6 +5860,12 @@
 "industry": "Medical Devices",
 "name": "Elekta AB (publ)",
 "sector": "Healthcare"
+},
+"EL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "EL.PA": {
 "country": "France",
@@ -4589,6 +5885,12 @@
 "name": "Endesa, S.A.",
 "sector": "Utilities"
 },
+"ELF": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "ELIS.PA": {
 "country": "",
 "industry": "",
@@ -4607,6 +5909,12 @@
 "name": "",
 "sector": ""
 },
+"ELV": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "EMBC": {
 "country": "",
 "industry": "",
@@ -4614,6 +5922,12 @@
 "sector": ""
 },
 "EMBJ": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"EMR": {
 "country": "",
 "industry": "",
 "name": "",
@@ -4655,7 +5969,25 @@
 "name": "",
 "sector": ""
 },
+"ENR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "ENR.DE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"ENSG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"ENTG": {
 "country": "",
 "industry": "",
 "name": "",
@@ -4673,6 +6005,12 @@
 "name": "E.ON SE",
 "sector": "Utilities"
 },
+"EOG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "EOLS": {
 "country": "",
 "industry": "",
@@ -4684,6 +6022,30 @@
 "industry": "Aerospace & Defense",
 "name": "Electro Optic Systems Holdings Limited",
 "sector": "Industrials"
+},
+"EPAC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"EPAM": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"EPC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"EPD": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "EPI-A.ST": {
 "country": "",
@@ -4698,6 +6060,12 @@
 "sector": ""
 },
 "EQB.TO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"EQH": {
 "country": "",
 "industry": "",
 "name": "",
@@ -4745,6 +6113,12 @@
 "name": "Telefonaktiebolaget LM Ericsson (publ)",
 "sector": "Technology"
 },
+"ERIE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "ERO": {
 "country": "",
 "industry": "",
@@ -4756,6 +6130,12 @@
 "industry": "Copper",
 "name": "Ero Copper Corp.",
 "sector": "Basic Materials"
+},
+"ESNT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "ESQ": {
 "country": "",
@@ -4776,6 +6156,12 @@
 "sector": "Technology"
 },
 "ETON": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"ETSY": {
 "country": "",
 "industry": "",
 "name": "",
@@ -4805,7 +6191,37 @@
 "name": "Evolution AB (publ)",
 "sector": "Consumer Cyclical"
 },
+"EVRG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"EVTC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"EW": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"EWBC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "EWTX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"EXC": {
 "country": "",
 "industry": "",
 "name": "",
@@ -4817,13 +6233,91 @@
 "name": "",
 "sector": ""
 },
+"EXEL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"EXLS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "EXO.AS": {
 "country": "Netherlands",
 "industry": "Asset Management",
 "name": "Exor N.V.",
 "sector": "Financial Services"
 },
+"EXPD": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"EXPE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"EXPO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"EXR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"FA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"FANG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"FAST": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"FBIN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "FBK.MI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"FBNC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"FCF": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"FCN": {
 "country": "",
 "industry": "",
 "name": "",
@@ -4859,6 +6353,18 @@
 "name": "",
 "sector": ""
 },
+"FDS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"FDX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "FEIM": {
 "country": "",
 "industry": "",
@@ -4889,6 +6395,12 @@
 "name": "",
 "sector": ""
 },
+"FIBK": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "FIG": {
 "country": "United States",
 "industry": "Software - Application",
@@ -4901,6 +6413,30 @@
 "name": "FIGS, Inc.",
 "sector": "Consumer Cyclical"
 },
+"FITB": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"FIVE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"FIVN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"FIZZ": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "FLGT": {
 "country": "",
 "industry": "",
@@ -4908,6 +6444,12 @@
 "sector": ""
 },
 "FLNG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"FLS": {
 "country": "",
 "industry": "",
 "name": "",
@@ -4967,6 +6509,18 @@
 "name": "Fortum Oyj",
 "sector": "Utilities"
 },
+"FOX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"FOXA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "FPH.AX": {
 "country": "New Zealand",
 "industry": "Medical Instruments & Supplies",
@@ -5015,6 +6569,12 @@
 "name": "",
 "sector": ""
 },
+"FRPT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "FRSH": {
 "country": "",
 "industry": "",
@@ -5051,7 +6611,25 @@
 "name": "",
 "sector": ""
 },
+"FTDR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "FTK": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"FTNT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"FTRE": {
 "country": "",
 "industry": "",
 "name": "",
@@ -5069,6 +6647,18 @@
 "name": "Finning International Inc.",
 "sector": "Industrials"
 },
+"FTV": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"FULT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "FWDI": {
 "country": "",
 "industry": "",
@@ -5082,6 +6672,12 @@
 "sector": ""
 },
 "FWRG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"G": {
 "country": "",
 "industry": "",
 "name": "",
@@ -5129,6 +6725,18 @@
 "name": "",
 "sector": ""
 },
+"GD": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"GDDY": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "GDYN": {
 "country": "",
 "industry": "",
@@ -5141,7 +6749,19 @@
 "name": "Geberit AG",
 "sector": "Industrials"
 },
+"GEF": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "GEF-B": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"GEHC": {
 "country": "",
 "industry": "",
 "name": "",
@@ -5153,6 +6773,12 @@
 "name": "Gibson Energy Inc.",
 "sector": "Energy"
 },
+"GEN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "GENB": {
 "country": "",
 "industry": "",
@@ -5160,6 +6786,12 @@
 "sector": ""
 },
 "GENI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"GEO": {
 "country": "",
 "industry": "",
 "name": "",
@@ -5184,6 +6816,12 @@
 "sector": "Industrials"
 },
 "GFC.PA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"GFF": {
 "country": "",
 "industry": "",
 "name": "",
@@ -5225,11 +6863,23 @@
 "name": "",
 "sector": ""
 },
+"GILD": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "GIVN.SW": {
 "country": "Switzerland",
 "industry": "Specialty Chemicals",
 "name": "Givaudan SA",
 "sector": "Basic Materials"
+},
+"GKOS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "GLAND.NS": {
 "country": "India",
@@ -5255,6 +6905,12 @@
 "name": "",
 "sector": ""
 },
+"GM": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "GMAB": {
 "country": "",
 "industry": "",
@@ -5266,6 +6922,12 @@
 "industry": "Biotechnology",
 "name": "Genmab A/S",
 "sector": "Healthcare"
+},
+"GME": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "GMIN.TO": {
 "country": "",
@@ -5284,6 +6946,24 @@
 "industry": "Marine Shipping",
 "name": "Genco Shipping & Trading Limited",
 "sector": "Industrials"
+},
+"GO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"GPC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"GPN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "GPRK": {
 "country": "",
@@ -5351,6 +7031,18 @@
 "name": "Great-West Lifeco Inc.",
 "sector": "Financial Services"
 },
+"GWRE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"GWW": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "GXI.DE": {
 "country": "Germany",
 "industry": "Medical Instruments & Supplies",
@@ -5362,6 +7054,24 @@
 "industry": "Restaurants",
 "name": "Guzman y Gomez Limited",
 "sector": "Consumer Cyclical"
+},
+"H": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"HAE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"HAFC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "HAFN": {
 "country": "",
@@ -5381,11 +7091,35 @@
 "name": "Hensoldt AG",
 "sector": "Industrials"
 },
+"HAL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"HALO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"HAS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "HAUTO.OL": {
 "country": "Norway",
 "industry": "Marine Shipping",
 "name": "Höegh Autoliners ASA",
 "sector": "Industrials"
+},
+"HAYW": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "HBAN.SW": {
 "country": "Switzerland",
@@ -5405,11 +7139,41 @@
 "name": "",
 "sector": ""
 },
+"HCA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"HCC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"HCI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "HCLTECH.NS": {
 "country": "India",
 "industry": "Information Technology Services",
 "name": "HCL Technologies Limited",
 "sector": "Technology"
+},
+"HCSG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"HD": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "HDFCBANK.NS": {
 "country": "",
@@ -5501,6 +7265,24 @@
 "name": "",
 "sector": ""
 },
+"HIW": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"HLI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"HLT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "HLUN-B.CO": {
 "country": "Denmark",
 "industry": "Drug Manufacturers - Specialty & Generic",
@@ -5525,6 +7307,12 @@
 "name": "Hinge Health, Inc.",
 "sector": "Healthcare"
 },
+"HNI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "HNR1.DE": {
 "country": "Germany",
 "industry": "Insurance - Reinsurance",
@@ -5537,11 +7325,35 @@
 "name": "",
 "sector": ""
 },
+"HOG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "HOLN.SW": {
 "country": "Switzerland",
 "industry": "Building Materials",
 "name": "Holcim AG",
 "sector": "Basic Materials"
+},
+"HOMB": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"HP": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"HPE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "HPK": {
 "country": "",
@@ -5549,7 +7361,31 @@
 "name": "",
 "sector": ""
 },
+"HPQ": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"HQY": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"HRB": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "HRI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"HRMY": {
 "country": "",
 "industry": "",
 "name": "",
@@ -5572,6 +7408,24 @@
 "industry": "Marine Shipping",
 "name": "Himalaya Shipping Ltd.",
 "sector": "Industrials"
+},
+"HSIC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"HST": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"HSTM": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "HTFL": {
 "country": "",
@@ -5597,6 +7451,12 @@
 "name": "",
 "sector": ""
 },
+"HUM": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "HURN": {
 "country": "",
 "industry": "",
@@ -5609,11 +7469,23 @@
 "name": "",
 "sector": ""
 },
+"HWKN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "HWX.TO": {
 "country": "Canada",
 "industry": "Oil & Gas E&P",
 "name": "Headwater Exploration Inc.",
 "sector": "Energy"
+},
+"HZO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "IAG.AX": {
 "country": "",
@@ -5633,11 +7505,23 @@
 "name": "iA Financial Corporation Inc.",
 "sector": "Financial Services"
 },
+"IBCP": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "IBE.MC": {
 "country": "Spain",
 "industry": "Utilities - Diversified",
 "name": "Iberdrola, S.A.",
 "sector": "Utilities"
+},
+"IBM": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "IBN": {
 "country": "",
@@ -5652,6 +7536,12 @@
 "sector": "Healthcare"
 },
 "IBTA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"ICE": {
 "country": "",
 "industry": "",
 "name": "",
@@ -5675,6 +7565,18 @@
 "name": "",
 "sector": ""
 },
+"ICUI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"IDA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "IDR.MC": {
 "country": "Spain",
 "industry": "Information Technology Services",
@@ -5687,11 +7589,23 @@
 "name": "",
 "sector": ""
 },
+"IEX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "IFCN.SW": {
 "country": "Switzerland",
 "industry": "Scientific & Technical Instruments",
 "name": "INFICON Holding AG",
 "sector": "Technology"
+},
+"IFF": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "IFX.DE": {
 "country": "",
@@ -5712,6 +7626,12 @@
 "sector": "Financial Services"
 },
 "IHG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"ILMN": {
 "country": "",
 "industry": "",
 "name": "",
@@ -5753,6 +7673,18 @@
 "name": "ChipMOS TECHNOLOGIES INC.",
 "sector": "Technology"
 },
+"INCY": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"INDB": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "INDT.ST": {
 "country": "Sweden",
 "industry": "Industrial Distribution",
@@ -5783,6 +7715,12 @@
 "name": "ING Groep N.V.",
 "sector": "Financial Services"
 },
+"INGM": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "INN": {
 "country": "",
 "industry": "",
@@ -5790,6 +7728,18 @@
 "sector": ""
 },
 "INSM": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"INSP": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"INSW": {
 "country": "",
 "industry": "",
 "name": "",
@@ -5819,6 +7769,12 @@
 "name": "",
 "sector": ""
 },
+"IOSP": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "IOT": {
 "country": "United States",
 "industry": "Software - Infrastructure",
@@ -5831,11 +7787,23 @@
 "name": "Iovance Biotherapeutics, Inc.",
 "sector": "Healthcare"
 },
+"IP": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "IP.MI": {
 "country": "Italy",
 "industry": "Specialty Industrial Machinery",
 "name": "Interpump Group S.p.A.",
 "sector": "Industrials"
+},
+"IPAR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "IPCALAB.NS": {
 "country": "India",
@@ -5844,6 +7812,12 @@
 "sector": "Healthcare"
 },
 "IPN.PA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"IQV": {
 "country": "",
 "industry": "",
 "name": "",
@@ -5867,7 +7841,37 @@
 "name": "",
 "sector": ""
 },
+"ISRG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "ISS.CO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"IT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"ITGR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"ITRI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"ITW": {
 "country": "",
 "industry": "",
 "name": "",
@@ -5884,6 +7888,12 @@
 "industry": "Farm & Heavy Construction Machinery",
 "name": "Iveco Group N.V.",
 "sector": "Industrials"
+},
+"J": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "JANX": {
 "country": "",
@@ -5909,6 +7919,36 @@
 "name": "",
 "sector": ""
 },
+"JJSF": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"JKHY": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"JLL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"JNJ": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"JOE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "JOYY": {
 "country": "",
 "industry": "",
@@ -5920,6 +7960,12 @@
 "industry": "Packaged Foods",
 "name": "Jamieson Wellness Inc.",
 "sector": "Consumer Defensive"
+},
+"JXN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "JYSK.CO": {
 "country": "Denmark",
@@ -5933,7 +7979,19 @@
 "name": "",
 "sector": ""
 },
+"KBR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "KCR.HE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"KDP": {
 "country": "",
 "industry": "",
 "name": "",
@@ -5957,7 +8015,19 @@
 "name": "Kesko Oyj",
 "sector": "Consumer Defensive"
 },
+"KEX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "KFRC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"KFY": {
 "country": "",
 "industry": "",
 "name": "",
@@ -5975,6 +8045,12 @@
 "name": "",
 "sector": ""
 },
+"KIM": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "KIRLOSENG.NS": {
 "country": "India",
 "industry": "Specialty Industrial Machinery",
@@ -5987,7 +8063,31 @@
 "name": "",
 "sector": ""
 },
+"KMB": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"KMI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"KMPR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "KMTS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"KMX": {
 "country": "",
 "industry": "",
 "name": "",
@@ -6011,11 +8111,29 @@
 "name": "Kiniksa Pharmaceuticals International, plc",
 "sector": "Healthcare"
 },
+"KNSL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "KNT.TO": {
 "country": "Canada",
 "industry": "Gold",
 "name": "K92 Mining Inc.",
 "sector": "Basic Materials"
+},
+"KNTK": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"KO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "KOD": {
 "country": "United States",
@@ -6029,6 +8147,12 @@
 "name": "Kongsberg Gruppen ASA",
 "sector": "Industrials"
 },
+"KR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "KRNT": {
 "country": "",
 "industry": "",
@@ -6041,7 +8165,25 @@
 "name": "",
 "sector": ""
 },
+"KRYS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"KSS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "KURA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"KVUE": {
 "country": "",
 "industry": "",
 "name": "",
@@ -6060,6 +8202,12 @@
 "sector": "Technology"
 },
 "KYMR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"LAMR": {
 "country": "",
 "industry": "",
 "name": "",
@@ -6101,6 +8249,18 @@
 "name": "",
 "sector": ""
 },
+"LDOS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"LECO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "LEG.DE": {
 "country": "",
 "industry": "",
@@ -6124,6 +8284,24 @@
 "industry": "Medical Instruments & Supplies",
 "name": "Lenskart Solutions Limited",
 "sector": "Healthcare"
+},
+"LFST": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"LGND": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"LH": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "LHA.DE": {
 "country": "",
@@ -6155,13 +8333,31 @@
 "name": "",
 "sector": ""
 },
+"LIN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "LIND": {
 "country": "United States",
 "industry": "Travel Services",
 "name": "Lindblad Expeditions Holdings, Inc.",
 "sector": "Consumer Cyclical"
 },
+"LIVN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "LKFT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"LLY": {
 "country": "",
 "industry": "",
 "name": "",
@@ -6179,7 +8375,19 @@
 "name": "",
 "sector": ""
 },
+"LMT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "LNG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"LNTH": {
 "country": "",
 "industry": "",
 "name": "",
@@ -6215,6 +8423,24 @@
 "name": "Loomis AB (publ)",
 "sector": "Industrials"
 },
+"LPG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"LPX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"LQDT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "LR.PA": {
 "country": "",
 "industry": "",
@@ -6238,6 +8464,18 @@
 "industry": "Software - Application",
 "name": "Lightspeed Commerce Inc.",
 "sector": "Technology"
+},
+"LTC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"LTH": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "LTMC.MI": {
 "country": "Italy",
@@ -6269,7 +8507,19 @@
 "name": "L E Lundbergföretagen AB (publ)",
 "sector": "Industrials"
 },
+"LW": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "LXFR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"LXP": {
 "country": "",
 "industry": "",
 "name": "",
@@ -6281,7 +8531,43 @@
 "name": "",
 "sector": ""
 },
+"LYB": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "LYC.AX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"LYFT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"LYV": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"M": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"MA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"MAC": {
 "country": "",
 "industry": "",
 "name": "",
@@ -6305,11 +8591,23 @@
 "name": "",
 "sector": ""
 },
+"MAN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "MANE": {
 "country": "United States",
 "industry": "Biotechnology",
 "name": "Veradermics, Incorporated",
 "sector": "Healthcare"
+},
+"MANH": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "MANTA.HE": {
 "country": "",
@@ -6318,6 +8616,30 @@
 "sector": ""
 },
 "MANU": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"MAR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"MAS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"MAT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"MATX": {
 "country": "",
 "industry": "",
 "name": "",
@@ -6353,6 +8675,12 @@
 "name": "",
 "sector": ""
 },
+"MBIN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "MBWM": {
 "country": "",
 "industry": "",
@@ -6377,7 +8705,25 @@
 "name": "",
 "sector": ""
 },
+"MCK": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"MCO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "MCS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"MD": {
 "country": "",
 "industry": "",
 "name": "",
@@ -6401,6 +8747,24 @@
 "name": "",
 "sector": ""
 },
+"MDLZ": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"MDT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"MEDP": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "MEI": {
 "country": "",
 "industry": "",
@@ -6408,6 +8772,12 @@
 "sector": ""
 },
 "MEOH": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"MET": {
 "country": "",
 "industry": "",
 "name": "",
@@ -6461,6 +8831,12 @@
 "name": "",
 "sector": ""
 },
+"MHK": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "MICC": {
 "country": "",
 "industry": "",
@@ -6485,6 +8861,12 @@
 "name": "",
 "sector": ""
 },
+"MIR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "MITK": {
 "country": "",
 "industry": "",
@@ -6492,6 +8874,12 @@
 "sector": ""
 },
 "MKL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"MKTX": {
 "country": "",
 "industry": "",
 "name": "",
@@ -6509,7 +8897,31 @@
 "name": "",
 "sector": ""
 },
+"MLKN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "MMED": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"MMM": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"MMS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"MMSI": {
 "country": "",
 "industry": "",
 "name": "",
@@ -6521,7 +8933,31 @@
 "name": "monday.com Ltd.",
 "sector": "Technology"
 },
+"MNST": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"MO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"MOH": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "MONC.MI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"MORN": {
 "country": "",
 "industry": "",
 "name": "",
@@ -6539,6 +8975,12 @@
 "name": "Megaport Limited",
 "sector": "Technology"
 },
+"MPC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "MQ": {
 "country": "",
 "industry": "",
@@ -6549,6 +8991,12 @@
 "country": "",
 "industry": "",
 "name": "Macquarie Group Limited",
+"sector": ""
+},
+"MRK": {
+"country": "",
+"industry": "",
+"name": "",
 "sector": ""
 },
 "MRK.DE": {
@@ -6563,13 +9011,49 @@
 "name": "",
 "sector": ""
 },
+"MRNA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"MRSH": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "MRVI": {
 "country": "",
 "industry": "",
 "name": "",
 "sector": ""
 },
+"MRVL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "MRX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"MSCI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"MSEX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"MSFT": {
 "country": "",
 "industry": "",
 "name": "",
@@ -6587,6 +9071,18 @@
 "name": "",
 "sector": ""
 },
+"MSI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"MSM": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "MT.AS": {
 "country": "",
 "industry": "",
@@ -6599,11 +9095,47 @@
 "name": "MTAR Technologies Limited",
 "sector": "Industrials"
 },
+"MTCH": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"MTD": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"MTDR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"MTG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "MTL.TO": {
 "country": "Canada",
 "industry": "Trucking",
 "name": "Mullen Group Ltd.",
 "sector": "Industrials"
+},
+"MTN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"MTRN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "MTRS.ST": {
 "country": "",
@@ -6612,6 +9144,12 @@
 "sector": ""
 },
 "MTS.MC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"MTUS": {
 "country": "",
 "industry": "",
 "name": "",
@@ -6629,7 +9167,19 @@
 "name": "MTU Aero Engines AG",
 "sector": "Industrials"
 },
+"MU": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "MUFG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"MUR": {
 "country": "",
 "industry": "",
 "name": "",
@@ -6677,6 +9227,12 @@
 "name": "National Australia Bank Limited",
 "sector": "Financial Services"
 },
+"NABL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "NANO.PA": {
 "country": "France",
 "industry": "Biotechnology",
@@ -6688,6 +9244,12 @@
 "industry": "Oil & Gas Midstream",
 "name": "Nordic American Tankers Limited",
 "sector": "Energy"
+},
+"NAVI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "NAVINFLUOR.NS": {
 "country": "India",
@@ -6708,6 +9270,18 @@
 "sector": ""
 },
 "NBIS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"NBR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"NBTB": {
 "country": "",
 "industry": "",
 "name": "",
@@ -6737,7 +9311,31 @@
 "name": "",
 "sector": ""
 },
+"NDAQ": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"NDSN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "NDX1.DE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"NE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"NEM": {
 "country": "",
 "industry": "",
 "name": "",
@@ -6754,6 +9352,18 @@
 "industry": "Software - Application",
 "name": "Nemetschek SE",
 "sector": "Technology"
+},
+"NEO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"NEOG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "NESN.SW": {
 "country": "Switzerland",
@@ -6797,6 +9407,12 @@
 "name": "",
 "sector": ""
 },
+"NHC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "NHP": {
 "country": "",
 "industry": "",
@@ -6804,6 +9420,12 @@
 "sector": ""
 },
 "NHY.OL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"NIC": {
 "country": "",
 "industry": "",
 "name": "",
@@ -6827,6 +9449,12 @@
 "name": "",
 "sector": ""
 },
+"NMIH": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "NMR": {
 "country": "",
 "industry": "",
@@ -6839,11 +9467,23 @@
 "name": "NN Group N.V.",
 "sector": "Financial Services"
 },
+"NOC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "NOD.OL": {
 "country": "Norway",
 "industry": "Semiconductors",
 "name": "Nordic Semiconductor ASA",
 "sector": "Technology"
+},
+"NOG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "NOKIA-SEK.ST": {
 "country": "",
@@ -6881,7 +9521,19 @@
 "name": "",
 "sector": ""
 },
+"NOVT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "NP": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"NPK": {
 "country": "",
 "industry": "",
 "name": "",
@@ -6899,17 +9551,41 @@
 "name": "",
 "sector": ""
 },
+"NSC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "NSIS-B.CO": {
 "country": "Denmark",
 "industry": "Specialty Chemicals",
 "name": "Novozymes A/S",
 "sector": "Basic Materials"
 },
+"NSIT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"NSP": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "NST.AX": {
 "country": "Australia",
 "industry": "Gold",
 "name": "Northern Star Resources Limited",
 "sector": "Basic Materials"
+},
+"NTAP": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "NTGY.MC": {
 "country": "Spain",
@@ -6918,6 +9594,12 @@
 "sector": "Utilities"
 },
 "NTLA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"NTNX": {
 "country": "",
 "industry": "",
 "name": "",
@@ -6941,6 +9623,12 @@
 "name": "Netskope, Inc.",
 "sector": "Technology"
 },
+"NUE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "NUTX": {
 "country": "",
 "industry": "",
@@ -6959,17 +9647,53 @@
 "name": "",
 "sector": ""
 },
+"NWBI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"NWE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "NWG.L": {
 "country": "United Kingdom",
 "industry": "Banks - Regional",
 "name": "NatWest Group plc",
 "sector": "Financial Services"
 },
+"NWS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "NWS.AX": {
 "country": "United States",
 "industry": "Entertainment",
 "name": "News Corporation",
 "sector": "Communication Services"
+},
+"NWSA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"NX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"NXPI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "OABI": {
 "country": "",
@@ -7001,7 +9725,43 @@
 "name": "Okeanis Eco Tankers Corp.",
 "sector": "Industrials"
 },
+"OGE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"OGN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "OIS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"OKE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"OKTA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"OLLI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"OMC": {
 "country": "",
 "industry": "",
 "name": "",
@@ -7030,6 +9790,18 @@
 "industry": "Biotechnology",
 "name": "BeOne Medicines AG",
 "sector": "Healthcare"
+},
+"OPCH": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"OPLN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "OPRT": {
 "country": "",
@@ -7097,6 +9869,12 @@
 "name": "OneSpan Inc.",
 "sector": "Technology"
 },
+"OSW": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "OTEX": {
 "country": "",
 "industry": "",
@@ -7109,7 +9887,25 @@
 "name": "",
 "sector": ""
 },
+"OTIS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"OUT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "OUT1V.HE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"OVV": {
 "country": "",
 "industry": "",
 "name": "",
@@ -7120,6 +9916,24 @@
 "industry": "Oil & Gas E&P",
 "name": "Ovintiv Inc.",
 "sector": "Energy"
+},
+"OXY": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"OZK": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"P": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "P911.DE": {
 "country": "Germany",
@@ -7139,7 +9953,19 @@
 "name": "PACS Group, Inc.",
 "sector": "Healthcare"
 },
+"PAG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "PAGP": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"PANW": {
 "country": "",
 "industry": "",
 "name": "",
@@ -7157,13 +9983,37 @@
 "name": "Paras Defence and Space Technologies Limited",
 "sector": "Industrials"
 },
+"PATH": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "PAY": {
 "country": "",
 "industry": "",
 "name": "",
 "sector": ""
 },
+"PAYC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"PAYO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "PAYS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"PAYX": {
 "country": "",
 "industry": "",
 "name": "",
@@ -7181,6 +10031,12 @@
 "name": "",
 "sector": ""
 },
+"PBF": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "PBR": {
 "country": "",
 "industry": "",
@@ -7192,6 +10048,18 @@
 "industry": "Software - Application",
 "name": "Procore Technologies, Inc.",
 "sector": "Technology"
+},
+"PCRX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"PCTY": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "PCVX": {
 "country": "United States",
@@ -7223,7 +10091,19 @@
 "name": "",
 "sector": ""
 },
+"PEB": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "PEBO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"PENG": {
 "country": "",
 "industry": "",
 "name": "",
@@ -7235,7 +10115,43 @@
 "name": "",
 "sector": ""
 },
+"PFBC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"PFE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"PFG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"PG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "PGEN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"PGNY": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"PGR": {
 "country": "",
 "industry": "",
 "name": "",
@@ -7259,6 +10175,12 @@
 "name": "Koninklijke Philips N.V.",
 "sector": "Healthcare"
 },
+"PHM": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "PHR": {
 "country": "",
 "industry": "",
@@ -7271,11 +10193,29 @@
 "name": "",
 "sector": ""
 },
+"PI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "PIRC.MI": {
 "country": "Italy",
 "industry": "Auto Parts",
 "name": "Pirelli & C. S.p.A.",
 "sector": "Consumer Cyclical"
+},
+"PK": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"PKG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "PKN.WA": {
 "country": "Poland",
@@ -7289,11 +10229,35 @@
 "name": "",
 "sector": ""
 },
+"PLMR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "PLSE": {
 "country": "United States",
 "industry": "Medical Instruments & Supplies",
 "name": "Pulse Biosciences, Inc.",
 "sector": "Healthcare"
+},
+"PLTR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"PLUS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"PM": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "PME.AX": {
 "country": "Australia",
@@ -7319,6 +10283,18 @@
 "name": "",
 "sector": ""
 },
+"PNW": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"POOL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "POU.TO": {
 "country": "Canada",
 "industry": "Oil & Gas E&P",
@@ -7337,13 +10313,49 @@
 "name": "",
 "sector": ""
 },
+"PPG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "PPL.TO": {
 "country": "Canada",
 "industry": "Oil & Gas Midstream",
 "name": "Pembina Pipeline Corporation",
 "sector": "Energy"
 },
+"PR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "PRCH": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"PRGO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"PRGS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"PRSU": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"PRU": {
 "country": "",
 "industry": "",
 "name": "",
@@ -7361,6 +10373,12 @@
 "name": "",
 "sector": ""
 },
+"PSA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "PSIX": {
 "country": "",
 "industry": "",
@@ -7372,6 +10390,12 @@
 "industry": "Oil & Gas E&P",
 "name": "PrairieSky Royalty Ltd.",
 "sector": "Energy"
+},
+"PSN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "PSNL": {
 "country": "",
@@ -7397,6 +10421,30 @@
 "name": "Poste Italiane S.p.A.",
 "sector": "Industrials"
 },
+"PSX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"PTC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"PTEN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"PTGX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "PUBM": {
 "country": "",
 "industry": "",
@@ -7421,6 +10469,12 @@
 "name": "Hyperliquid Strategies Inc.",
 "sector": "Financial Services"
 },
+"PVH": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "PVLA": {
 "country": "",
 "industry": "",
@@ -7432,6 +10486,12 @@
 "industry": "Oil & Gas E&P",
 "name": "Parex Resources Inc.",
 "sector": "Energy"
+},
+"PYPL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "QBE.AX": {
 "country": "Australia",
@@ -7463,7 +10523,19 @@
 "name": "Qiagen N.V.",
 "sector": "Healthcare"
 },
+"QLYS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "QMCO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"QNST": {
 "country": "",
 "industry": "",
 "name": "",
@@ -7474,6 +10546,18 @@
 "industry": "Aerospace & Defense",
 "name": "QinetiQ Group plc",
 "sector": "Industrials"
+},
+"QTWO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"R": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "R3NK.DE": {
 "country": "",
@@ -7488,6 +10572,18 @@
 "sector": ""
 },
 "RACE.MI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"RAL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"RAMP": {
 "country": "",
 "industry": "",
 "name": "",
@@ -7529,6 +10625,18 @@
 "name": "",
 "sector": ""
 },
+"RCL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"RDNT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "RDVT": {
 "country": "",
 "industry": "",
@@ -7565,6 +10673,12 @@
 "name": "Redeia Corporación, S.A.",
 "sector": "Utilities"
 },
+"REGN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "REH.AX": {
 "country": "Australia",
 "industry": "Industrial Distribution",
@@ -7578,6 +10692,12 @@
 "sector": ""
 },
 "RELX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"RELY": {
 "country": "",
 "industry": "",
 "name": "",
@@ -7607,13 +10727,49 @@
 "name": "",
 "sector": ""
 },
+"REXR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "REY.MI": {
 "country": "Italy",
 "industry": "Information Technology Services",
 "name": "Reply S.p.A.",
 "sector": "Technology"
 },
+"REYN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"RGA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"RGEN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"RGLD": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "RGR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"RH": {
 "country": "",
 "industry": "",
 "name": "",
@@ -7625,7 +10781,19 @@
 "name": "Ramsay Health Care Limited",
 "sector": "Healthcare"
 },
+"RHI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "RHM.DE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"RHP": {
 "country": "",
 "industry": "",
 "name": "",
@@ -7667,13 +10835,31 @@
 "name": "",
 "sector": ""
 },
+"RL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "RLAY": {
 "country": "United States",
 "industry": "Biotechnology",
 "name": "Relay Therapeutics, Inc.",
 "sector": "Healthcare"
 },
+"RLI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "RLJ": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"RMD": {
 "country": "",
 "industry": "",
 "name": "",
@@ -7691,7 +10877,19 @@
 "name": "",
 "sector": ""
 },
+"RNG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "RNO.PA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"RNR": {
 "country": "",
 "industry": "",
 "name": "",
@@ -7714,6 +10912,24 @@
 "industry": "Building Products & Equipment",
 "name": "Rockwool A/S",
 "sector": "Industrials"
+},
+"ROIV": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"ROKU": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"ROP": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "ROP.SW": {
 "country": "Switzerland",
@@ -7745,13 +10961,37 @@
 "name": "",
 "sector": ""
 },
+"RRC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "RRKABEL.NS": {
 "country": "India",
 "industry": "Electrical Equipment & Parts",
 "name": "R R Kabel Limited",
 "sector": "Industrials"
 },
+"RS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"RSG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "RSKD": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"RTX": {
 "country": "",
 "industry": "",
 "name": "",
@@ -7775,6 +11015,12 @@
 "name": "Revolution Medicines, Inc.",
 "sector": "Healthcare"
 },
+"RVTY": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "RWE.DE": {
 "country": "Germany",
 "industry": "Utilities - Diversified",
@@ -7782,6 +11028,12 @@
 "sector": "Utilities"
 },
 "RXL.PA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"RXO": {
 "country": "",
 "industry": "",
 "name": "",
@@ -7798,6 +11050,12 @@
 "industry": "Banks - Diversified",
 "name": "Royal Bank of Canada",
 "sector": "Financial Services"
+},
+"RYAN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "RYZ": {
 "country": "",
@@ -7818,6 +11076,18 @@
 "sector": ""
 },
 "SAF.PA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"SAFT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"SAIC": {
 "country": "",
 "industry": "",
 "name": "",
@@ -7907,6 +11177,12 @@
 "name": "SpareBank 1 Sør-Norge ASA",
 "sector": "Financial Services"
 },
+"SBH": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "SBIN.NS": {
 "country": "",
 "industry": "",
@@ -7949,6 +11225,12 @@
 "name": "Schindler Holding AG",
 "sector": "Industrials"
 },
+"SCL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "SCMN.SW": {
 "country": "Switzerland",
 "industry": "Telecom Services",
@@ -7961,7 +11243,19 @@
 "name": "SCOR SE",
 "sector": "Financial Services"
 },
+"SCSC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "SDE.TO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"SDGR": {
 "country": "",
 "industry": "",
 "name": "",
@@ -7997,7 +11291,31 @@
 "name": "SEDEMAC Mechatronics Limited",
 "sector": "Consumer Cyclical"
 },
+"SEI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"SEIC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"SENEA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "SEPN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"SEZL": {
 "country": "",
 "industry": "",
 "name": "",
@@ -8008,6 +11326,12 @@
 "industry": "Marine Shipping",
 "name": "SFL Corporation Ltd.",
 "sector": "Industrials"
+},
+"SFNC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "SFR.AX": {
 "country": "Australia",
@@ -8075,6 +11399,18 @@
 "name": "Svenska Handelsbanken AB (publ)",
 "sector": "Financial Services"
 },
+"SHBI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"SHC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "SHEL": {
 "country": "",
 "industry": "",
@@ -8111,6 +11447,12 @@
 "name": "Siemens Healthineers AG",
 "sector": "Healthcare"
 },
+"SHO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "SHOP": {
 "country": "Canada",
 "industry": "Software - Application",
@@ -8135,6 +11477,18 @@
 "name": "",
 "sector": ""
 },
+"SIG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"SIGI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "SIGN.SW": {
 "country": "Switzerland",
 "industry": "Packaging & Containers",
@@ -8147,7 +11501,19 @@
 "name": "Sika AG",
 "sector": "Basic Materials"
 },
+"SIRI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "SITE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"SJM": {
 "country": "",
 "industry": "",
 "name": "",
@@ -8177,11 +11543,23 @@
 "name": "",
 "sector": ""
 },
+"SKY": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "SKYGOLD.NS": {
 "country": "India",
 "industry": "Luxury Goods",
 "name": "Sky Gold and Diamonds Limited",
 "sector": "Consumer Cyclical"
+},
+"SLB": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "SLDE": {
 "country": "",
@@ -8200,6 +11578,18 @@
 "industry": "Insurance - Diversified",
 "name": "Sun Life Financial Inc.",
 "sector": "Financial Services"
+},
+"SLG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"SLGN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "SLHN.SW": {
 "country": "Switzerland",
@@ -8225,13 +11615,31 @@
 "name": "SELLAS Life Sciences Group, Inc.",
 "sector": "Healthcare"
 },
+"SM": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "SMA": {
 "country": "",
 "industry": "",
 "name": "",
 "sector": ""
 },
+"SMCI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "SMFG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"SMG": {
 "country": "",
 "industry": "",
 "name": "",
@@ -8249,6 +11657,18 @@
 "name": "",
 "sector": ""
 },
+"SMTC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"SN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "SN.L": {
 "country": "United Kingdom",
 "industry": "Medical Devices",
@@ -8260,6 +11680,12 @@
 "industry": "Software - Application",
 "name": "Snowflake Inc.",
 "sector": "Technology"
+},
+"SNPS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "SOBI.ST": {
 "country": "Sweden",
@@ -8291,11 +11717,23 @@
 "name": "Washington H. Soul Pattinson and Company Limited",
 "sector": "Financial Services"
 },
+"SOLV": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "SONACOMS.NS": {
 "country": "India",
 "industry": "Auto Parts",
 "name": "Sona BLW Precision Forgings Limited",
 "sector": "Consumer Cyclical"
+},
+"SONO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "SONY": {
 "country": "",
@@ -8315,13 +11753,37 @@
 "name": "Sopra Steria Group SA",
 "sector": "Technology"
 },
+"SPG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"SPGI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "SPIE.PA": {
 "country": "",
 "industry": "",
 "name": "",
 "sector": ""
 },
+"SPNT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "SPOT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"SPSC": {
 "country": "",
 "industry": "",
 "name": "",
@@ -8334,6 +11796,12 @@
 "sector": "Real Estate"
 },
 "SPT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"SR": {
 "country": "",
 "industry": "",
 "name": "",
@@ -8369,6 +11837,12 @@
 "name": "",
 "sector": ""
 },
+"SRPT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "SRT3.DE": {
 "country": "Germany",
 "industry": "Medical Instruments & Supplies",
@@ -8376,6 +11850,18 @@
 "sector": "Healthcare"
 },
 "SRZN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"SSB": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"SSD": {
 "country": "",
 "industry": "",
 "name": "",
@@ -8411,6 +11897,18 @@
 "name": "Storebrand ASA",
 "sector": "Financial Services"
 },
+"STBA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"STE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "STERV.HE": {
 "country": "",
 "industry": "",
@@ -8418,6 +11916,12 @@
 "sector": ""
 },
 "STGW": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"STLD": {
 "country": "",
 "industry": "",
 "name": "",
@@ -8543,6 +12047,24 @@
 "name": "Swedbank AB (publ)",
 "sector": "Financial Services"
 },
+"SWK": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"SWKS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"SWX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "SXC": {
 "country": "",
 "industry": "",
@@ -8554,6 +12076,12 @@
 "industry": "Specialty Chemicals",
 "name": "Symrise AG",
 "sector": "Basic Materials"
+},
+"SYNA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "SYRE": {
 "country": "United States",
@@ -8567,6 +12095,12 @@
 "name": "Syrma SGS Technology Limited",
 "sector": "Technology"
 },
+"SYY": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "TAC": {
 "country": "",
 "industry": "",
@@ -8574,6 +12108,12 @@
 "sector": ""
 },
 "TAK": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"TALO": {
 "country": "",
 "industry": "",
 "name": "",
@@ -8592,6 +12132,12 @@
 "sector": ""
 },
 "TBCH": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"TCBI": {
 "country": "",
 "industry": "",
 "name": "",
@@ -8621,6 +12167,12 @@
 "name": "The Toronto-Dominion Bank",
 "sector": "Financial Services"
 },
+"TDC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "TDOC": {
 "country": "",
 "industry": "",
@@ -8632,6 +12184,18 @@
 "industry": "Specialty Industrial Machinery",
 "name": "TD Power Systems Limited",
 "sector": "Industrials"
+},
+"TDW": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"TDY": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "TE.PA": {
 "country": "France",
@@ -8645,6 +12209,12 @@
 "name": "Atlassian Corporation",
 "sector": "Technology"
 },
+"TECH": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "TECK-B.TO": {
 "country": "Canada",
 "industry": "Copper",
@@ -8656,6 +12226,12 @@
 "industry": "Medical Instruments & Supplies",
 "name": "Tecan Group AG",
 "sector": "Healthcare"
+},
+"TEL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "TEL.OL": {
 "country": "",
@@ -8723,13 +12299,43 @@
 "name": "",
 "sector": ""
 },
+"TFX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "TGS.OL": {
 "country": "Norway",
 "industry": "Oil & Gas Equipment & Services",
 "name": "TGS ASA",
 "sector": "Energy"
 },
+"TGT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"TGTX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"THC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "THFF": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"THG": {
 "country": "",
 "industry": "",
 "name": "",
@@ -8748,6 +12354,12 @@
 "sector": "Technology"
 },
 "TIH.TO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"TILE": {
 "country": "",
 "industry": "",
 "name": "",
@@ -8789,6 +12401,18 @@
 "name": "",
 "sector": ""
 },
+"TMO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"TMP": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "TNE.AX": {
 "country": "Australia",
 "industry": "Software - Application",
@@ -8813,7 +12437,25 @@
 "name": "Teekay Tankers Ltd.",
 "sector": "Energy"
 },
+"TNL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"TOL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "TOM.OL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"TOST": {
 "country": "",
 "industry": "",
 "name": "",
@@ -8849,6 +12491,18 @@
 "name": "",
 "sector": ""
 },
+"TREX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"TRGP": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "TRI": {
 "country": "",
 "industry": "",
@@ -8856,6 +12510,12 @@
 "sector": ""
 },
 "TRLV": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"TRMB": {
 "country": "",
 "industry": "",
 "name": "",
@@ -8885,6 +12545,30 @@
 "name": "",
 "sector": ""
 },
+"TRST": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"TRU": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"TRUP": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"TRV": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "TRYG.CO": {
 "country": "Denmark",
 "industry": "Insurance - Diversified",
@@ -8897,13 +12581,31 @@
 "name": "Tenaris S.A.",
 "sector": "Energy"
 },
+"TSCO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "TSEM": {
 "country": "",
 "industry": "",
 "name": "",
 "sector": ""
 },
+"TSLA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "TTAN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"TTC": {
 "country": "",
 "industry": "",
 "name": "",
@@ -8920,6 +12622,12 @@
 "industry": "Oil & Gas Integrated",
 "name": "TotalEnergies SE",
 "sector": "Energy"
+},
+"TTEK": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "TUI1.DE": {
 "country": "",
@@ -8957,6 +12665,24 @@
 "name": "10x Genomics, Inc.",
 "sector": "Healthcare"
 },
+"TXN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"TXRH": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"TYL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "TYRES.HE": {
 "country": "Finland",
 "industry": "Auto Parts",
@@ -8975,6 +12701,18 @@
 "name": "UBS Group AG",
 "sector": "Financial Services"
 },
+"UBSI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"UCB": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "UCB.BR": {
 "country": "Belgium",
 "industry": "Biotechnology",
@@ -8987,7 +12725,31 @@
 "name": "",
 "sector": ""
 },
+"UFCS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"UFPT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"UGI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "UHR.SW": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"UHS": {
 "country": "",
 "industry": "",
 "name": "",
@@ -9000,6 +12762,12 @@
 "sector": ""
 },
 "ULCC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"ULTA": {
 "country": "",
 "industry": "",
 "name": "",
@@ -9023,13 +12791,49 @@
 "name": "Unilever PLC",
 "sector": "Consumer Defensive"
 },
+"UNH": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "UNI.MI": {
 "country": "Italy",
 "industry": "Insurance - Property & Casualty",
 "name": "Unipol Assicurazioni S.p.A.",
 "sector": "Financial Services"
 },
+"UNM": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"UNP": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"UPBD": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "UPM.HE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"UPS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"URBN": {
 "country": "",
 "industry": "",
 "name": "",
@@ -9041,7 +12845,43 @@
 "name": "",
 "sector": ""
 },
+"URI": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "URW.PA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"USA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"USFD": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"USPH": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"UTHR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"UTL": {
 "country": "",
 "industry": "",
 "name": "",
@@ -9059,7 +12899,25 @@
 "name": "",
 "sector": ""
 },
+"V": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"VAC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "VACN.SW": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"VAL": {
 "country": "",
 "industry": "",
 "name": "",
@@ -9076,6 +12934,24 @@
 "industry": "Oil & Gas E&P",
 "name": "Vår Energi ASA",
 "sector": "Energy"
+},
+"VCTR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"VCYT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"VEEV": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "VEND.OL": {
 "country": "",
@@ -9113,6 +12989,12 @@
 "name": "Vanguard All-World ex-US Shares Index ETF",
 "sector": ""
 },
+"VFC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "VG": {
 "country": "",
 "industry": "",
@@ -9131,6 +13013,12 @@
 "name": "",
 "sector": ""
 },
+"VIR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "VIST": {
 "country": "",
 "industry": "",
@@ -9143,13 +13031,43 @@
 "name": "",
 "sector": ""
 },
+"VLO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"VLTO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"VLY": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "VNA.DE": {
 "country": "",
 "industry": "",
 "name": "",
 "sector": ""
 },
+"VNOM": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "VNP.TO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"VNT": {
 "country": "",
 "industry": "",
 "name": "",
@@ -9179,6 +13097,12 @@
 "name": "",
 "sector": ""
 },
+"VOYA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "VPK.AS": {
 "country": "Netherlands",
 "industry": "Oil & Gas Midstream",
@@ -9203,7 +13127,49 @@
 "name": "Varonis Systems, Inc.",
 "sector": "Technology"
 },
+"VRSK": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"VRSN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"VRTX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"VSAT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "VSTM": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"VSTS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"VSXY": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"VTRS": {
 "country": "",
 "industry": "",
 "name": "",
@@ -9215,11 +13181,23 @@
 "name": "",
 "sector": ""
 },
+"VVX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "VWS.CO": {
 "country": "Denmark",
 "industry": "Specialty Industrial Machinery",
 "name": "Vestas Wind Systems A/S",
 "sector": "Industrials"
+},
+"VYX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "VZN.SW": {
 "country": "Switzerland",
@@ -9233,11 +13211,29 @@
 "name": "",
 "sector": ""
 },
+"WABC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"WAT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "WAWI.OL": {
 "country": "Norway",
 "industry": "Marine Shipping",
 "name": "Wallenius Wilhelmsen ASA",
 "sector": "Industrials"
+},
+"WAY": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "WBC.AX": {
 "country": "Australia",
@@ -9257,6 +13253,18 @@
 "name": "Whitecap Resources Inc.",
 "sector": "Energy"
 },
+"WDAY": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"WDFC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "WDO.TO": {
 "country": "",
 "industry": "",
@@ -9275,13 +13283,37 @@
 "name": "Woodside Energy Group Ltd",
 "sector": "Energy"
 },
+"WEC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "WELCORP.NS": {
 "country": "India",
 "industry": "Steel",
 "name": "Welspun Corp Limited",
 "sector": "Basic Materials"
 },
+"WELL": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"WEN": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "WES.AX": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"WEX": {
 "country": "",
 "industry": "",
 "name": "",
@@ -9305,6 +13337,18 @@
 "name": "Whitehaven Coal Limited",
 "sector": "Energy"
 },
+"WHD": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"WING": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "WIX": {
 "country": "Israel",
 "industry": "Software - Infrastructure",
@@ -9317,11 +13361,47 @@
 "name": "",
 "sector": ""
 },
+"WKC": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "WKL.AS": {
 "country": "Netherlands",
 "industry": "Specialty Business Services",
 "name": "Wolters Kluwer N.V.",
 "sector": "Industrials"
+},
+"WLY": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"WM": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"WMB": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"WMG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"WMT": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "WNC": {
 "country": "",
@@ -9335,6 +13415,12 @@
 "name": "Wockhardt Limited",
 "sector": "Healthcare"
 },
+"WOR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "WPM.TO": {
 "country": "Canada",
 "industry": "Gold",
@@ -9347,7 +13433,43 @@
 "name": "",
 "sector": ""
 },
+"WRB": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "WRT1V.HE": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"WS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"WSFS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"WSM": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"WST": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"WT": {
 "country": "",
 "industry": "",
 "name": "",
@@ -9365,7 +13487,37 @@
 "name": "",
 "sector": ""
 },
+"WTRG": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"WTS": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "WTTR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"WTW": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"WWW": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"XEL": {
 "country": "",
 "industry": "",
 "name": "",
@@ -9377,7 +13529,25 @@
 "name": "",
 "sector": ""
 },
+"XHR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "XMTR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"XNCR": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"XOM": {
 "country": "",
 "industry": "",
 "name": "",
@@ -9425,13 +13595,37 @@
 "name": "",
 "sector": ""
 },
+"YUM": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "ZAL.DE": {
 "country": "Germany",
 "industry": "Internet Retail",
 "name": "Zalando SE",
 "sector": "Consumer Cyclical"
 },
+"ZBH": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
 "ZBIO": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"ZBRA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
+},
+"ZD": {
 "country": "",
 "industry": "",
 "name": "",
@@ -9478,6 +13672,12 @@
 "industry": "Insurance - Diversified",
 "name": "Zurich Insurance Group AG",
 "sector": "Financial Services"
+},
+"ZVRA": {
+"country": "",
+"industry": "",
+"name": "",
+"sector": ""
 },
 "ZYME": {
 "country": "",
