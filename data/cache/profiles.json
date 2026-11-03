@@ -3699,6 +3699,14 @@
 "name": "",
 "sector": ""
 },
+"ARIS": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "ARIS.TO": {
 "country": "",
 "industry": "",
@@ -4403,6 +4411,14 @@
 "name": "Banco Bilbao Vizcaya Argentaria, S.A.",
 "sector": "Financial Services"
 },
+"BBW": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "BBWI": {
 "country": "",
 "industry": "",
@@ -4468,6 +4484,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"BCS": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "BCVN.SW": {
 "country": "Switzerland",
@@ -5335,6 +5359,14 @@
 "name": "",
 "sector": ""
 },
+"CAVA": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "CB": {
 "country": "",
 "industry": "",
@@ -5831,6 +5863,14 @@
 "name": "",
 "sector": ""
 },
+"CMCO": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "CMCSA": {
 "country": "United States",
 "industry": "Telecom Services",
@@ -6238,6 +6278,14 @@
 "industry": "Building Materials",
 "name": "CRH plc",
 "sector": "Basic Materials"
+},
+"CRI": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "CRK": {
 "country": "",
@@ -6756,6 +6804,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"DECK": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "DEI": {
 "country": "United States",
@@ -7299,6 +7355,14 @@
 "name": "",
 "sector": ""
 },
+"EDU": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "EDV.TO": {
 "country": "",
 "industry": "",
@@ -7312,6 +7376,14 @@
 "sector": ""
 },
 "EEFT": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
+"EFC": {
 "country": "",
 "industry": "",
 "last": "2026-11-03",
@@ -7396,6 +7468,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"EIX": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "EKTA-B.ST": {
 "country": "Sweden",
@@ -7698,6 +7778,14 @@
 "industry": "Asset Management",
 "name": "EQT AB (publ)",
 "sector": "Financial Services"
+},
+"EQX": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "ERAS": {
 "country": "United States",
@@ -8274,6 +8362,14 @@
 "industry": "Travel Services",
 "name": "Flight Centre Travel Group Limited",
 "sector": "Consumer Cyclical"
+},
+"FLUT": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "FLYW": {
 "country": "",
@@ -8884,6 +8980,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"GLPI": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "GM": {
 "country": "",
@@ -9569,6 +9673,14 @@
 "name": "",
 "sector": ""
 },
+"HOV": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "HP": {
 "country": "",
 "industry": "",
@@ -9736,6 +9848,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"HUN": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "HURN": {
 "country": "",
@@ -10266,6 +10386,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"IRMD": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "IRON": {
 "country": "",
@@ -11231,6 +11359,14 @@
 "name": "",
 "sector": ""
 },
+"LPLA": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "LPX": {
 "country": "",
 "industry": "",
@@ -11290,6 +11426,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"LTM": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "LTMC.MI": {
 "country": "Italy",
@@ -12891,6 +13035,14 @@
 "name": "Netskope, Inc.",
 "sector": "Technology"
 },
+"NTST": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "NUE": {
 "country": "",
 "industry": "",
@@ -13033,6 +13185,14 @@
 "name": "Nexstar Media Group, Inc.",
 "sector": "Communication Services"
 },
+"NXT": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "NYT": {
 "country": "",
 "industry": "",
@@ -13116,6 +13276,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"OGC": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "OGE": {
 "country": "",
@@ -15823,6 +15991,14 @@
 "name": "",
 "sector": ""
 },
+"SNDR": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "SNN": {
 "country": "",
 "industry": "",
@@ -16146,6 +16322,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"STEP": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "STERV.HE": {
 "country": "",
@@ -17184,6 +17368,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"TU": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "TUI1.DE": {
 "country": "",
@@ -18374,6 +18566,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"WSO": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "WST": {
 "country": "",
