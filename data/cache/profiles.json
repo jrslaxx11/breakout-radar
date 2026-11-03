@@ -2561,6 +2561,14 @@
 "name": "",
 "sector": ""
 },
+"AAP": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "AAPL": {
 "country": "",
 "industry": "",
@@ -2995,6 +3003,14 @@
 "name": "",
 "sector": ""
 },
+"AGO": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "AGYS": {
 "country": "",
 "industry": "",
@@ -3153,6 +3169,14 @@
 "sector": "",
 "tries": 1
 },
+"ALGT": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "ALIV-SDB.ST": {
 "country": "Sweden",
 "industry": "Auto Parts",
@@ -3240,6 +3264,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"ALSN": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "ALSYDB.CO": {
 "country": "Denmark",
@@ -3393,6 +3425,14 @@
 "name": "",
 "sector": ""
 },
+"AMRZ": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "AMS.MC": {
 "country": "Spain",
 "industry": "Information Technology Services",
@@ -3428,6 +3468,14 @@
 "industry": "Asset Management",
 "name": "Amundi S.A.",
 "sector": "Financial Services"
+},
+"AMZN": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "AN": {
 "country": "",
@@ -4721,6 +4769,14 @@
 "name": "",
 "sector": ""
 },
+"BLX": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "BLZE": {
 "country": "",
 "industry": "",
@@ -5259,6 +5315,14 @@
 "name": "",
 "sector": ""
 },
+"CASH": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "CAST.ST": {
 "country": "Sweden",
 "industry": "Real Estate - Development",
@@ -5378,6 +5442,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"CCS": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "CDA.AX": {
 "country": "Australia",
@@ -7239,6 +7311,14 @@
 "name": "",
 "sector": ""
 },
+"EEFT": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "EFOR": {
 "country": "",
 "industry": "",
@@ -8267,6 +8347,14 @@
 "name": "Fortum Oyj",
 "sector": "Utilities"
 },
+"FOUR": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "FOX": {
 "country": "",
 "industry": "",
@@ -8454,6 +8542,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"FUL": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "FULT": {
 "country": "",
@@ -8878,6 +8974,22 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"GPI": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
+"GPK": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "GPN": {
 "country": "",
@@ -9734,6 +9846,14 @@
 "industry": "Banks - Regional",
 "name": "International Bancshares Corporation",
 "sector": "Financial Services"
+},
+"IBP": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "IBRX": {
 "country": "United States",
@@ -11539,6 +11659,14 @@
 "name": "",
 "sector": ""
 },
+"MELI": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "MEOH": {
 "country": "",
 "industry": "",
@@ -12238,6 +12366,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"NBHC": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "NBIS": {
 "country": "",
@@ -13227,6 +13363,14 @@
 "name": "",
 "sector": ""
 },
+"OTF": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "OTIS": {
 "country": "",
 "industry": "",
@@ -13467,6 +13611,14 @@
 "name": "Precision Drilling Corporation",
 "sector": "Energy"
 },
+"PDD": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "PDM": {
 "country": "",
 "industry": "",
@@ -13665,6 +13817,14 @@
 "country": "",
 "industry": "",
 "last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
+"PIPR": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
 "name": "",
 "sector": "",
 "tries": 1
@@ -14281,6 +14441,14 @@
 "name": "Randstad N.V.",
 "sector": "Industrials"
 },
+"RBA": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "RBCAA": {
 "country": "",
 "industry": "",
@@ -14760,6 +14928,14 @@
 "industry": "Electrical Equipment & Parts",
 "name": "R R Kabel Limited",
 "sector": "Industrials"
+},
+"RRR": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "RS": {
 "country": "",
@@ -16575,6 +16751,14 @@
 "name": "",
 "sector": ""
 },
+"THRM": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "TIC": {
 "country": "",
 "industry": "",
@@ -18251,6 +18435,14 @@
 "name": "",
 "sector": ""
 },
+"WY": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "XEL": {
 "country": "",
 "industry": "",
@@ -18358,6 +18550,14 @@
 "industry": "Software - Application",
 "name": "Full Truck Alliance Co. Ltd.",
 "sector": "Technology"
+},
+"YOU": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "YPF": {
 "country": "",
