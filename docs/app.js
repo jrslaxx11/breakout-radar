@@ -33,6 +33,8 @@
     return withDay ? `${["dom", "lun", "mar", "mié", "jue", "vie", "sáb"][d.getDay()]} ${s}` : s;
   };
   const stClass = (s) => "st-" + String(s).replace(/\s+/g, "-");
+  const ST_ALL = ["CONFIRMADA", "TEMPRANA", "RETEST", "PRE-BREAKOUT", "EN BASE", "EXTENDIDA", "DESCARTADA"];
+  const stOrd = (s) => { const i = ST_ALL.indexOf(s); return i < 0 ? ST_ALL.length : i; };
   const chip = (s) => `<span class="chip ${stClass(s)}">${esc(STATE_LABEL[s] || s)}</span>`;
   const store = {
     get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } },
@@ -284,6 +286,7 @@
 
   // ---------- plan según las reglas de Martin Luk (retroceso a la EMA 9/21 o el AVWAP) ----------
   const LUK_STATE = { "recupera": "Recupera", "en zona": "En zona", "acercándose": "Acercándose" };
+  const LUK_ORDER = Object.keys(LUK_STATE);
   const lukChip = (st) => `<span class="chip luk-${esc(st.replace(/[^a-zá]/g, ""))}">${esc(LUK_STATE[st] || st)}</span>`;
   const lukDots = (n) => `<span class="dots" role="img" aria-label="${n} de 5 criterios" title="${n} de 5 criterios de calidad">${[0, 1, 2, 3, 4].map((i) => `<i class="${i < n ? "on" : ""}"></i>`).join("")}</span>`;
   function lukBlock(c) {
@@ -414,7 +417,7 @@
       <div class="grid2">
         <div>
           <h3>Índices</h3>
-          <div class="tbl-wrap"><table class="idx-table">
+          <div class="tbl-wrap"><table class="idx-table sortable">
             <thead><tr><th class="left">Índice</th><th>Fecha</th><th title="Con la bolsa abierta, último precio de Yahoo Finance, actualizado cada minuto (algunos índices llegan con 15-20 minutos de retraso); si no, el último cierre">Precio</th><th title="Cambio frente al cierre anterior">Día</th><th>vs SMA10</th><th>vs SMA20</th><th>vs SMA50</th><th>vs SMA200</th><th>1 m</th><th>3 m</th><th>Desde máx.</th></tr></thead>
             <tbody>${idx.map((i) => `<tr data-idx="${esc(i.sym)}">${idxCells(i)}</tr>`).join("")}</tbody>
           </table></div>
@@ -458,15 +461,15 @@
     if (!top.length) return `<p class="leaders empty">Sin datos de líderes en esta publicación.</p>`;
     return `<div class="leaders">
       <p class="cap">Las ${top.length} acciones con más fuerza relativa de la temática (de ${t.n} valores líquidos). Pulsa una para abrir su ficha.</p>
-      <div class="tbl-wrap"><table class="lt">
+      <div class="tbl-wrap"><table class="lt sortable">
         <thead><tr><th class="left">Valor</th><th title="Percentil de fuerza relativa en todo el universo líquido">RS</th><th>1 m</th><th>3 m</th><th>6 m</th>
-          <th>Desde máx. 52s</th><th class="left">Estado</th><th>Punt.</th></tr></thead>
+          <th>Desde máx. 52s</th><th class="left" data-asc>Estado</th><th>Punt.</th></tr></thead>
         <tbody>${top.map((x) => `<tr data-sym="${esc(x.sym)}" tabindex="0">
           <td class="tk-cell"><a href="#valor=${encodeURIComponent(x.sym)}">${esc(x.sym)}</a><small>${esc(x.name && x.name !== x.sym ? x.name : "")}</small></td>
           <td><strong>${num((x.rs_pct || 0) * 100, 0)}</strong></td>
           <td class="${cls(x.r1m)}">${pct(x.r1m, 0)}</td><td class="${cls(x.r3m)}">${pct(x.r3m, 0)}</td><td class="${cls(x.r6m)}">${pct(x.r6m, 0)}</td>
           <td class="${x.dhi >= -0.05 ? "pos" : ""}">${pct(x.dhi, 1)}</td>
-          <td class="left">${x.state ? chip(x.state) : "—"}${x.watch ? ` <span class="wl-tag" title="Está en la watchlist de hoy">watchlist</span>` : ""}</td>
+          <td class="left" data-v="${x.state ? stOrd(x.state) : ""}">${x.state ? chip(x.state) : "—"}${x.watch ? ` <span class="wl-tag" title="Está en la watchlist de hoy">watchlist</span>` : ""}</td>
           <td>${isNum(x.score) ? num(x.score, 0) : "—"}</td></tr>`).join("")}</tbody>
       </table></div></div>`;
   }
@@ -726,19 +729,19 @@
       <p class="lead">Su entrada principal: dos de cada tres largos son retrocesos, no rupturas de base. Espera a que un líder demuestre su fuerza, lo deja corregir de 3 a 7 sesiones hasta la EMA 9 y la EMA 21 al alza o el AVWAP y entra en el gráfico de 1-5 minutos con un stop de ~1,5%, lo que le permite posiciones del 20-30% arriesgando el 0,3-0,5% de la cuenta. Aquí: valores de EE. UU. entre el 7% que más sube a 1, 3 o 6 meses, con ADR ≥ ${num((K.adr_min || 0.03) * 100, 0)}%, un tramo previo ≥ ${num((K.leg_min || 0.2) * 100, 0)}%, EMA 21 sobre la EMA 50 y ambas al alza, que corrigen ${K.pull_min || 2}-${K.pull_max || 8} sesiones (≤ ${num(K.depth_adr_max || 3.5, 1)} ADR y ≤ ${num((K.retrace_max || 0.62) * 100, 0)}% del tramo). <strong>Recupera</strong>: tocó la zona y hoy cierra sobre el máximo de ayer y la EMA 9, el día típico de su entrada. <strong>En zona</strong>: toca hoy o ayer la EMA 9 (desde la 3.ª sesión), la EMA 21 o el AVWAP. <strong>Acercándose</strong>: a menos de 1 ADR de la EMA 9. El gatillo es intradía y no lo ve el radar.</p>
       ${thermo}
       ${rows.length ? `<p class="five-note luk-note">${rec.length ? `<strong>Recuperan hoy:</strong> ${rec.slice(0, 15).map((x) => `${tk(x.sym)} ${lukDots(x.points)}`).join(" · ")}` : "<strong>Hoy ninguno recupera.</strong> Mira los que están en zona: la entrada llega cuando recuperan el VWAP o rompen el rango de apertura."}</p>
-      <div class="tbl-wrap"><table class="lt qm-table luk-table">
-        <thead><tr><th class="left">Valor</th><th class="left">Estado</th><th class="left">Zona</th><th>Retroceso</th><th>Tramo previo</th>
+      <div class="tbl-wrap"><table class="lt qm-table luk-table sortable">
+        <thead><tr><th class="left">Valor</th><th class="left" data-asc>Estado</th><th class="left">Zona</th><th>Retroceso</th><th>Tramo previo</th>
           <th title="Distancia del cierre a la EMA 9, en ADR">vs EMA 9</th><th title="Distancia del cierre a la EMA 21, en ADR">vs EMA 21</th><th>ADR</th><th>Ahora</th><th class="left" title="Criterios de calidad: 3-7 sesiones, EMA 9 > 21 > 50, volumen bajo, confluencia y corrección ≤ 2,5 ADR">Calidad</th></tr></thead>
         <tbody>${rows.map((x) => `<tr class="row${x.state === "recupera" ? " top5" : ""}" data-sym="${esc(x.sym)}" tabindex="0" aria-expanded="false">
           <td class="tk-cell"><a href="#valor=${encodeURIComponent(x.sym)}" title="Abrir la ficha completa">${esc(x.sym)}</a><small>${esc(x.name && x.name !== x.sym ? x.name : "")}${x.group_name ? " · " + esc(x.group_name) : ""}</small></td>
-          <td class="left">${lukChip(x.state)}${x.hot ? ` <span class="hot-tag">sector caliente</span>` : ""}${earnTag(x)}</td>
+          <td class="left" data-v="${LUK_ORDER.indexOf(x.state)}">${lukChip(x.state)}${x.hot ? ` <span class="hot-tag">sector caliente</span>` : ""}${earnTag(x)}</td>
           <td class="left">${x.levels.length ? esc(x.levels.join(", ")) : `<span class="dim">sobre la EMA 9</span>`}${x.undercut ? `<small class="dim block">sacudida bajo la EMA 21</small>` : ""}</td>
           <td>${x.days} ses.<small class="dim block">−${num(x.depth * 100, 0)}% · ${num(x.depth_adr, 1)} ADR</small></td>
           <td>+${num(x.leg * 100, 0)}%<small class="dim block">corrige el ${num(x.retrace * 100, 0)}%</small></td>
           <td class="${cls(x.d9)}">${num(x.d9, 1)}</td><td class="${cls(x.d21)}">${num(x.d21, 1)}</td>
           <td>${pct(x.adr_pct, 1, false)}</td>
           <td class="live-cell" data-live-luk="${esc(x.sym)}">${lukLive(x)}</td>
-          <td class="left">${lukDots(x.points)}</td>
+          <td class="left" data-v="${x.points}">${lukDots(x.points)}</td>
         </tr>`).join("")}</tbody></table></div>
       <p class="dim" style="font-size:13px;margin-top:6px">Distancias a las medias en ADR del propio valor. Pulsa una fila para ver el gráfico con la EMA 9/21/50 y el AVWAP, los niveles y el plan con sus reglas de tamaño y salida; el ticker abre la ficha completa. Orden: estado, calidad, sector caliente y subida a 3 meses (orientativo, no calibrado con sus operaciones).</p>`
       : `<p class="empty">Hoy ningún líder del escáner está en retroceso a la EMA 9/21 o el AVWAP. Con el mercado flojo, los líderes pierden las medias en vez de apoyarse en ellas.</p>`}`;
@@ -764,8 +767,8 @@
       return dlt > 0 ? `<span class="pos">+${dlt}</span>` : dlt < 0 ? `<span class="neg">${dlt}</span>` : `<span class="dim">=</span>`;
     };
     const tk = (s) => `<a href="#valor=${encodeURIComponent(s)}">${esc(s)}</a>`;
-    const groupsTbl = G.length ? `<div class="tbl-wrap"><table class="lt heat-table">
-        <thead><tr><th>N.º</th><th class="left">Sector</th><th class="left" title="Valores del sector entre el ${num(K.scan_pct * 100, 0)}% de EE. UU. que más sube a 1, 3 o 6 meses">En el escáner</th>
+    const groupsTbl = G.length ? `<div class="tbl-wrap"><table class="lt heat-table sortable">
+        <thead><tr><th data-asc>N.º</th><th class="left">Sector</th><th class="left" title="Valores del sector entre el ${num(K.scan_pct * 100, 0)}% de EE. UU. que más sube a 1, 3 o 6 meses">En el escáner</th>
           <th title="Valores del escáner con ADR ≥ ${num(K.fast_adr * 100, 0)}%">Rápidos</th><th title="Mediana de la subida desde el mínimo de 1 mes de los valores del escáner">1 m</th>
           <th title="Mediana de la subida desde el mínimo de 3 meses de los valores del escáner">3 m</th><th title="Valores en el escáner frente a la sesión anterior">vs ayer</th>
           <th class="left">Los que más suben</th></tr></thead>
@@ -786,16 +789,16 @@
     ].join(" ") + earnTag(x);
     const byG = {};
     F.forEach((x) => (byG[x.group] = byG[x.group] || []).push(x));
-    const focusTbl = F.length ? `<div class="tbl-wrap"><table class="lt qm-table focus-table">
-        <thead><tr><th class="left">Valor</th><th class="left">Estrellas</th><th class="left">Estado</th><th>ADR</th>
+    const focusTbl = F.length ? `<div class="tbl-wrap"><table class="lt qm-table focus-table sortable">
+        <thead><tr><th class="left">Valor</th><th class="left">Estrellas</th><th class="left" data-asc>Estado</th><th>ADR</th>
           <th title="Subida desde el mínimo de 22 sesiones">1 m</th><th title="Subida desde el mínimo de 67 sesiones">3 m</th><th title="Subida desde el mínimo de 126 sesiones">6 m</th>
           <th>Nivel de ruptura</th><th>Distancia</th><th>Ahora</th></tr></thead>
         ${hot.filter((g) => byG[g.group]).map((g) => `<tbody>
           <tr class="grp"><th colspan="10" scope="colgroup">${esc(g.name)} <span class="dim">· sector n.º ${g.rank} · ${g.scan_n} en el escáner, ${byG[g.group].length} rápido${byG[g.group].length === 1 ? "" : "s"}</span></th></tr>
           ${byG[g.group].map((x) => `<tr class="row${(x.stars || 0) >= 4.5 && STATE_ORDER.includes(x.state) ? " top5" : ""}" data-sym="${esc(x.sym)}" tabindex="0" aria-expanded="false">
             <td class="tk-cell"><a href="#valor=${encodeURIComponent(x.sym)}" title="Abrir la ficha completa">${esc(x.sym)}</a><small>${esc(x.name && x.name !== x.sym ? x.name : "")}</small></td>
-            <td class="left star-cell">${starsHTML(x.stars)}<small>${isNum(x.star_points) ? `${x.star_points}/66 pts` : ""}${x.theme_bonus ? " · +½ sector caliente" : ""}</small></td>
-            <td class="left">${chip(x.state)} ${tags(x)}</td>
+            <td class="left star-cell" data-v="${isNum(x.stars) ? x.stars : ""}">${starsHTML(x.stars)}<small>${isNum(x.star_points) ? `${x.star_points}/66 pts` : ""}${x.theme_bonus ? " · +½ sector caliente" : ""}</small></td>
+            <td class="left" data-v="${stOrd(x.state)}">${chip(x.state)} ${tags(x)}</td>
             <td>${pct(x.adr_pct, 1, false)}</td>
             ${mom(x, "1 m", x.mom1)}${mom(x, "3 m", x.mom3)}${mom(x, "6 m", x.mom6)}
             <td title="${esc(LEVEL_KIND[x.level_kind] || "")}">${price(x.pivot, x.currency)}</td>
@@ -832,18 +835,18 @@
       ${rows.length ? `<p class="five-note">${top.length
         ? `<strong>Candidatas de 5 estrellas hoy:</strong> ${top.map((x) => `<a href="#valor=${encodeURIComponent(x.sym)}">${esc(x.sym)}</a> ${starsHTML(x.stars, true)}`).join(" · ")}<span class="dim"> (${n5} con 5 y ${top.length - n5} con 4,5)</span>`
         : `<strong>Hoy ninguna llega a 4,5 estrellas.</strong> <span class="dim">Las 5 estrellas son raras: el 1-3% de las rupturas. Qullamaggie espera a que aparezcan.</span>`}</p>` : ""}
-      ${rows.length ? `<div class="tbl-wrap"><table class="lt qm-table">
-        <thead><tr><th class="left">Valor</th><th class="left">Estrellas</th><th class="left">Estado</th><th>Nivel de ruptura</th><th>Distancia</th><th>Ahora</th>
-          <th>ADR</th><th>Subida previa</th><th>Base</th><th class="left">Veredicto</th></tr></thead>
+      ${rows.length ? `<div class="tbl-wrap"><table class="lt qm-table sortable">
+        <thead><tr><th class="left">Valor</th><th class="left">Estrellas</th><th class="left" data-asc>Estado</th><th>Nivel de ruptura</th><th>Distancia</th><th>Ahora</th>
+          <th>ADR</th><th>Subida previa</th><th>Base</th><th class="left" data-asc>Veredicto</th></tr></thead>
         <tbody>${rows.map((x) => `<tr class="row${(x.stars || 0) >= 4.5 ? " top5" : ""}" data-sym="${esc(x.sym)}" tabindex="0" aria-expanded="false">
           <td class="tk-cell"><a href="#valor=${encodeURIComponent(x.sym)}" title="Abrir la ficha completa">${esc(x.sym)}</a><small>${esc(x.name && x.name !== x.sym ? x.name : "")}${x.theme ? " · " + esc(themeName(d, x.theme)) : ""}</small></td>
-          <td class="left star-cell">${starsHTML(x.stars)}<small>${isNum(x.star_points) ? `${x.star_points}/66 pts` : ""}${x.theme_bonus ? " · +½ sector caliente" : ""}</small></td>
-          <td class="left">${chip(x.state)}${x.presented ? ` <span class="wl-tag" title="Está en la watchlist de hoy">watchlist</span>` : ""}${earnTag(x)}</td>
+          <td class="left star-cell" data-v="${isNum(x.stars) ? x.stars : ""}">${starsHTML(x.stars)}<small>${isNum(x.star_points) ? `${x.star_points}/66 pts` : ""}${x.theme_bonus ? " · +½ sector caliente" : ""}</small></td>
+          <td class="left" data-v="${stOrd(x.state)}">${chip(x.state)}${x.presented ? ` <span class="wl-tag" title="Está en la watchlist de hoy">watchlist</span>` : ""}${earnTag(x)}</td>
           <td>${price(x.pivot, x.currency)}<small class="dim block">${esc(LEVEL_KIND[x.level_kind] || "")}</small></td>
           <td class="${cls(x.dist)}">${pct(x.dist)}</td>
           <td class="live-cell" data-live="${esc(x.sym)}">${liveCell(x)}</td>
           <td>${pct(x.adr_pct, 1, false)}</td><td>${pct(x.prior_move, 0)}</td><td>${x.base_len} ses.</td>
-          <td class="left"><span class="qmv qmv-${esc(x.qm.verdict.replace(/\s+/g, "-"))}">${esc(x.qm.verdict)}</span>${x.fails.length ? `<small class="dim block">falla: ${esc(x.fails.join("; ").toLowerCase())}</small>` : ""}</td>
+          <td class="left" data-v="${["Cumple", "Con reservas", "No cumple"].indexOf(x.qm.verdict)}"><span class="qmv qmv-${esc(x.qm.verdict.replace(/\s+/g, "-"))}">${esc(x.qm.verdict)}</span>${x.fails.length ? `<small class="dim block">falla: ${esc(x.fails.join("; ").toLowerCase())}</small>` : ""}</td>
         </tr>`).join("")}</tbody></table></div>` : `<p class="empty">Hoy ningún valor del universo cumple los requisitos obligatorios y está en ruptura o a punto. Es normal en mercados flojos: Qullamaggie espera.</p>`}
       ${rows.length ? `<p class="dim" style="font-size:13px;margin-top:6px">Pulsa una fila para ver el gráfico, el desglose de las estrellas y el plan; el ticker abre la ficha completa.</p>` : ""}`;
     const toggle = (tr) => toggleRow(tr, 10, () => loadTicker(tr.dataset.sym).then((x) => ({ rec: BYS[tr.dataset.sym] || x.rec, k: x.k })));
@@ -863,13 +866,13 @@
     $("#htf").innerHTML = `<h2>High tight flags</h2>
       <p class="lead">El setup favorito de Qullamaggie ("high tide flag" en sus directos): un mástil de al menos +${num(K.pole_min * 100, 0)}% en ${K.pole_days} sesiones o menos y una bandera corta que se apoya en las medias de 10 y 20 y se estrecha antes de romper. No hace falta que esté en máximos históricos; importa el impulso reciente. Escáner de todo el universo líquido: banderas de ${K.flag_min} a ${K.flag_max} sesiones (de 3-4, en formación) que corrigen como mucho un ${num(K.depth_max * 100, 0)}% desde el máximo (hasta ${num(K.depth_classic * 100, 0)}%, clásica; más, profunda) y que hoy rompen o siguen en la base. Ordenadas por estrellas.</p>
       ${rows.length ? `<p class="five-note"><strong>${rows.length} high tight flag${rows.length === 1 ? "" : "s"} hoy:</strong> ${by("clásica")} clásica${by("clásica") === 1 ? "" : "s"}, ${by("profunda")} profunda${by("profunda") === 1 ? "" : "s"} y ${by("en formación")} en formación${top.length ? `. Con 4,5-5 estrellas: ${top.map((x) => `<a href="#valor=${encodeURIComponent(x.sym)}">${esc(x.sym)}</a> ${starsHTML(x.stars, true)}`).join(" · ")}` : ""}.</p>
-      <div class="tbl-wrap"><table class="lt qm-table htf-table">
-        <thead><tr><th class="left">Valor</th><th class="left">Estrellas</th><th class="left">Estado</th><th>Mástil</th><th>Bandera</th>
+      <div class="tbl-wrap"><table class="lt qm-table htf-table sortable">
+        <thead><tr><th class="left">Valor</th><th class="left">Estrellas</th><th class="left" data-asc>Estado</th><th>Mástil</th><th>Bandera</th>
           <th>Nivel de ruptura</th><th>Distancia</th><th>Ahora</th><th>ADR</th></tr></thead>
         <tbody>${rows.map((x) => `<tr class="row${(x.stars || 0) >= 4.5 ? " top5" : ""}" data-sym="${esc(x.sym)}" tabindex="0" aria-expanded="false">
           <td class="tk-cell"><a href="#valor=${encodeURIComponent(x.sym)}" title="Abrir la ficha completa">${esc(x.sym)}</a><small>${esc(x.name && x.name !== x.sym ? x.name : "")}${x.theme ? " · " + esc(themeName(d, x.theme)) : ""}</small></td>
-          <td class="left star-cell">${starsHTML(x.stars)}<small>${isNum(x.star_points) ? `${x.star_points}/66 pts` : ""}${x.qm_verdict && x.qm_verdict !== "No cumple" ? " · " + esc(x.qm_verdict.toLowerCase()) : ""}</small></td>
-          <td class="left">${chip(x.state)}${x.presented ? ` <span class="wl-tag" title="Está en la watchlist de hoy">watchlist</span>` : ""}${earnTag(x)}</td>
+          <td class="left star-cell" data-v="${isNum(x.stars) ? x.stars : ""}">${starsHTML(x.stars)}<small>${isNum(x.star_points) ? `${x.star_points}/66 pts` : ""}${x.qm_verdict && x.qm_verdict !== "No cumple" ? " · " + esc(x.qm_verdict.toLowerCase()) : ""}</small></td>
+          <td class="left" data-v="${stOrd(x.state)}">${chip(x.state)}${x.presented ? ` <span class="wl-tag" title="Está en la watchlist de hoy">watchlist</span>` : ""}${earnTag(x)}</td>
           <td><strong>+${num(x.pole * 100, 0)}%</strong><small class="dim block">en ${x.pole_len} ses.</small></td>
           <td>${x.flag_len} ses. · −${num(x.depth * 100, 0)}%<small class="dim block">${esc(x.kind)}</small></td>
           <td>${price(x.pivot, x.currency)}<small class="dim block">${esc(LEVEL_KIND[x.level_kind] || "")}</small></td>
@@ -1200,7 +1203,7 @@
   function idxCells(i) {
     const v = idxView(i), c = (x) => `<td class="${cls(x)}">${pct(x)}</td>`;
     const tip = v.live ? (v.open ? `En vivo · ${hhmm(v.time)}` : `Cierre del ${dateEs(v.date)} (Yahoo Finance)`) : "Cierre del informe";
-    return `<td class="left">${esc(i.name)}</td><td class="dim">${dateEs(v.date)}</td>
+    return `<td class="left">${esc(i.name)}</td><td class="dim" data-v="${esc(v.date || "")}">${dateEs(v.date)}</td>
       <td class="idx-price" title="${esc(tip)}">${v.live && v.open ? `<span class="live-dot on"></span>` : ""}${num(v.close, v.close > 1000 ? 0 : 2)}</td>
       ${c(v.d1)}${c(v.vs10)}${c(v.vs20)}${c(v.vs50)}${c(v.vs200)}${c(v.r1m)}${c(v.r3m)}${c(v.dhi)}`;
   }
@@ -1296,6 +1299,67 @@
     LIVE.timer = setTimeout(liveTick, !LIVE.error && anyOpen ? 60000 : 300000);
   }
 
+  // ---------- tablas ordenables: clic (o Intro) en el nombre de una columna ----------
+  // Ordena las filas por el valor de la celda: data-v si lo tiene (estrellas, estados, fechas) o el primer
+  // número del texto en formato español; si no hay número, el texto. Los vacíos ("—") van siempre al final.
+  // Primera pulsación: de mayor a menor en columnas numéricas (de menor a mayor en texto o con data-asc);
+  // la segunda invierte. Las fichas abiertas viajan con su fila y los grupos (sectores) se ordenan por dentro.
+  function cellValue(tr, col) {
+    const td = tr.cells[col];
+    if (!td || td.colSpan > 1) return null;
+    if (td.dataset.v !== undefined) {
+      if (td.dataset.v === "") return null;
+      const n = Number(td.dataset.v);
+      return isNaN(n) ? td.dataset.v.toLowerCase() : n;
+    }
+    const txt = (td.innerText || "").trim().replace(/\u2212/g, "-");
+    const m = txt.match(/^[+-]?\d[\d.]*(,\d+)?/);
+    if (m) return parseFloat(m[0].replace(/\./g, "").replace(",", "."));
+    if (!txt || /^[—-]$/.test(txt)) return null;
+    return txt.toLowerCase();
+  }
+  function sortTable(th) {
+    const table = th.closest("table"), col = [...th.parentNode.children].indexOf(th);
+    const bodies = [...table.tBodies];
+    const rows = bodies.flatMap((tb) => [...tb.rows].filter((r) => !r.classList.contains("grp") && !r.classList.contains("detail")));
+    const sample = rows.map((r) => cellValue(r, col)).find((v) => v !== null);
+    const cur = th.getAttribute("aria-sort");
+    const dir = cur === "descending" ? 1 : cur === "ascending" ? -1 : (typeof sample === "number" && !th.hasAttribute("data-asc") ? -1 : 1);
+    const cmp = (a, b) => {
+      if (a === b) return 0;
+      if (a === null) return 1;
+      if (b === null) return -1;
+      if (typeof a !== typeof b) return typeof a === "number" ? -1 : 1;
+      return (typeof a === "number" ? a - b : a.localeCompare(b, "es")) * dir;
+    };
+    bodies.forEach((tb) => {
+      const fixed = [], groups = [];
+      [...tb.rows].forEach((r) => {
+        if (r.classList.contains("grp")) fixed.push(r);
+        else if (r.classList.contains("detail") && groups.length) groups[groups.length - 1].push(r);
+        else groups.push([r]);
+      });
+      groups.sort((a, b) => cmp(cellValue(a[0], col), cellValue(b[0], col)));
+      [...fixed, ...groups.flat()].forEach((r) => tb.appendChild(r));
+    });
+    table.querySelectorAll(":scope > thead th").forEach((x) => x.setAttribute("aria-sort", x === th ? (dir > 0 ? "ascending" : "descending") : "none"));
+  }
+  function initSortable() {
+    document.querySelectorAll("table.sortable > thead th").forEach((th) => {
+      th.tabIndex = 0;
+      if (!th.hasAttribute("aria-sort")) th.setAttribute("aria-sort", "none");
+      if (!th.title) th.title = "Pulsa para ordenar";
+    });
+  }
+  document.addEventListener("click", (e) => {
+    const th = e.target.closest("table.sortable > thead th");
+    if (th && !e.target.closest("a, input, select, label")) sortTable(th);
+  });
+  document.addEventListener("keydown", (e) => {
+    const th = e.target.closest && e.target.closest("table.sortable > thead th");
+    if (th && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); sortTable(th); }
+  });
+
   // ---------- arranque ----------
   async function main() {
     try {
@@ -1322,6 +1386,7 @@
       renderHTF(d);
       renderAgenda(d, byS);
       renderMethod(d);
+      initSortable();
       initFinder();
       // La dirección manda: #valor=XXX abre esa ficha; sin él, no hay ficha (botón Atrás incluido).
       const syncFromUrl = () => {
