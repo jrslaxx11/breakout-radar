@@ -332,10 +332,8 @@
         <div>
           <h3>Índices</h3>
           <div class="tbl-wrap"><table class="idx-table">
-            <thead><tr><th class="left">Índice</th><th>Fecha</th><th>Cierre</th><th title="Cambio de la última sesión frente al cierre anterior">Día</th><th title="Último precio de Yahoo Finance con la sesión abierta y su cambio frente al cierre anterior; se actualiza cada minuto (algunos índices llegan con 15-20 minutos de retraso)">Ahora</th><th>vs SMA10</th><th>vs SMA20</th><th>vs SMA50</th><th>vs SMA200</th><th>1 m</th><th>3 m</th><th>Desde máx.</th></tr></thead>
-            <tbody>${idx.map((i) => `<tr><td class="left">${esc(i.name)}</td><td class="dim">${dateEs(i.date)}</td><td>${num(i.close, i.close > 1000 ? 0 : 2)}</td><td class="${cls(i.d1)}">${pct(i.d1)}</td><td class="live-idx" data-idx="${esc(i.sym)}">${idxLive(i)}</td>
-              <td class="${cls(i.vs10)}">${pct(i.vs10)}</td><td class="${cls(i.vs20)}">${pct(i.vs20)}</td><td class="${cls(i.vs50)}">${pct(i.vs50)}</td><td class="${cls(i.vs200)}">${pct(i.vs200)}</td>
-              <td class="${cls(i.r1m)}">${pct(i.r1m)}</td><td class="${cls(i.r3m)}">${pct(i.r3m)}</td><td class="${cls(i.dhi)}">${pct(i.dhi)}</td></tr>`).join("")}</tbody>
+            <thead><tr><th class="left">Índice</th><th>Fecha</th><th title="Con la bolsa abierta, último precio de Yahoo Finance, actualizado cada minuto (algunos índices llegan con 15-20 minutos de retraso); si no, el último cierre">Precio</th><th title="Cambio frente al cierre anterior">Día</th><th>vs SMA10</th><th>vs SMA20</th><th>vs SMA50</th><th>vs SMA200</th><th>1 m</th><th>3 m</th><th>Desde máx.</th></tr></thead>
+            <tbody>${idx.map((i) => `<tr data-idx="${esc(i.sym)}">${idxCells(i)}</tr>`).join("")}</tbody>
           </table></div>
         </div>
         <div>
@@ -1028,15 +1026,28 @@
     return { q, p, chg, dist, txt, kind, rv, proj, open: q.isOpen };
   }
 
-  // Índices: último precio con la sesión abierta (o un cierre posterior al de la tabla).
+  // Índices: con la bolsa abierta (o con un cierre posterior al del informe) la fila pasa al último precio
+  // de Yahoo; las distancias a las medias, los plazos y el máximo se recalculan con ese precio frente a los
+  // valores del último cierre del informe (p / x − 1 = (1 + dist. al cierre) × p / cierre − 1).
   let IDX = {};
-  function idxLive(i) {
-    const q = LIVE.q[i.sym];
-    if (!q || !isNum(q.price)) return `<span class="dim">—</span>`;
-    const day = qDay(q);
-    if (!q.isOpen && !(day && i.date && day > i.date)) return `<span class="dim" title="Mercado cerrado: su último cierre ya está en la tabla">cerrado</span>`;
-    const chg = isNum(q.prevClose) && q.prevClose > 0 ? q.price / q.prevClose - 1 : null;
-    return `<span class="live-dot ${q.isOpen ? "on" : ""}" title="${q.isOpen ? "Sesión abierta" : "Cierre posterior al de la tabla"} · ${hhmm(q.time)}"></span>${num(q.price, q.price > 1000 ? 0 : 2)} <span class="${cls(chg)}">${pct(chg)}</span>`;
+  function idxView(i) {
+    const q = LIVE.q[i.sym], day = qDay(q);
+    const fresh = q && isNum(q.price) && i.close > 0 && (q.isOpen || (day && i.date && day > i.date));
+    if (!fresh) return { ...i, live: false };
+    const k = q.price / i.close, adj = (v) => (isNum(v) ? (1 + v) * k - 1 : v);
+    return {
+      ...i, live: true, open: q.isOpen, time: q.time, date: day || i.date, close: q.price,
+      d1: isNum(q.prevClose) && q.prevClose > 0 ? q.price / q.prevClose - 1 : null,
+      vs10: adj(i.vs10), vs20: adj(i.vs20), vs50: adj(i.vs50), vs200: adj(i.vs200), r1m: adj(i.r1m), r3m: adj(i.r3m),
+      dhi: isNum(i.dhi) ? Math.min(0, adj(i.dhi)) : i.dhi,
+    };
+  }
+  function idxCells(i) {
+    const v = idxView(i), c = (x) => `<td class="${cls(x)}">${pct(x)}</td>`;
+    const tip = v.live ? (v.open ? `En vivo · ${hhmm(v.time)}` : `Cierre del ${dateEs(v.date)} (Yahoo Finance)`) : "Cierre del informe";
+    return `<td class="left">${esc(i.name)}</td><td class="dim">${dateEs(v.date)}</td>
+      <td class="idx-price" title="${esc(tip)}">${v.live && v.open ? `<span class="live-dot on"></span>` : ""}${num(v.close, v.close > 1000 ? 0 : 2)}</td>
+      ${c(v.d1)}${c(v.vs10)}${c(v.vs20)}${c(v.vs50)}${c(v.vs200)}${c(v.r1m)}${c(v.r3m)}${c(v.dhi)}`;
   }
   // Semáforo de Qullamaggie con el Nasdaq 100 en vivo frente a las SMA10 y SMA20 del último cierre.
   function qmLive() {
@@ -1082,7 +1093,7 @@
   function renderLive() {
     Object.values(BYS).forEach((c) => { const L = liveInfo(c); c.live_dist = L && !L.stale ? L.dist : null; });
     document.querySelectorAll("td[data-live]").forEach((td) => { const c = BYS[td.dataset.live] || ROWS[td.dataset.live]; if (c) td.innerHTML = liveCell(c); });
-    document.querySelectorAll("td[data-idx]").forEach((td) => { const i = IDX[td.dataset.idx]; if (i) td.innerHTML = idxLive(i); });
+    document.querySelectorAll("tr[data-idx]").forEach((tr) => { const i = IDX[tr.dataset.idx]; if (i) tr.innerHTML = idxCells(i); });
     const qmEl = document.querySelector("[data-live-qm]");
     if (qmEl) qmEl.innerHTML = qmLive();
     const f = document.querySelector("[data-live-ficha]");

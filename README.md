@@ -65,8 +65,9 @@ tiempo real en EE. UU. y con 15-20 minutos de retraso en la mayoría de bolsas d
 invalidación) y estima el volumen del día al cierre. Los estados y las puntuaciones siguen siendo los
 del cierre: una ruptura no se confirma hasta que cierra la sesión.
 
-La tabla de índices también tiene columna "Ahora" (último precio y cambio frente al cierre anterior
-mientras su bolsa está abierta) y el filtro de mercado de Qullamaggie añade el semáforo orientativo con
+En la tabla de índices, con su bolsa abierta (o con un cierre más reciente que el del informe, como Asia
+por la mañana), cada fila pasa al último precio: fecha, precio y cambio del día, y las distancias a las
+medias, los plazos y el máximo recalculados con ese precio frente a los valores del último cierre. El filtro de mercado de Qullamaggie añade el semáforo orientativo con
 el Nasdaq 100 en vivo frente a sus SMA10 y SMA20 del último cierre. Los índices se consultan cada
 minuto; las acciones, mientras alguna cotiza o cada 15 minutos, para no pedir cientos de valores al
 Worker cuando solo están abiertas Europa o Asia. Los valores calculados al momento no tienen temática,
