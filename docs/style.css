@@ -206,15 +206,15 @@ tbody tr:last-child td { border-bottom: 0; }
 .leaders { margin: 4px 0 14px 50px; }
 .leaders .tbl-wrap { max-width: 920px; }
 .leaders .cap { margin: 4px 0 8px; font-size: 13px; color: var(--muted); }
-.lt tbody tr { cursor: pointer; }
-.lt tbody tr:hover td { background: var(--soft); }
+.lt > tbody > tr { cursor: pointer; }
+.lt > tbody > tr:hover > td { background: var(--soft); }
 .lt .tk-cell a { color: inherit; text-decoration: none; }
 .lt .tk-cell a:hover { color: var(--pivot); text-decoration: underline; }
 small.block { display: block; font-size: 11.5px; margin-top: 1px; padding: 0; white-space: normal; }
 .legend i.dash { width: 16px; height: 0; border-top: 2px dashed var(--pivot); border-radius: 0; vertical-align: 3px; }
-.qm-table td { vertical-align: top; }
+.qm-table > tbody > tr > td { vertical-align: top; }
 .qm-table tr.row { cursor: pointer; }
-.qm-table tr.row:hover td { background: var(--soft); }
+.qm-table > tbody > tr.row:hover > td { background: var(--soft); }
 .earn-tag { display: inline-block; margin-left: 4px; padding: 0 6px; border-radius: 999px; font-size: 11.5px; color: var(--s-pre); border: 1px solid color-mix(in srgb, var(--s-pre) 50%, transparent); white-space: nowrap; }
 .wl-tag { display: inline-block; margin-left: 4px; padding: 0 6px; border-radius: 999px; font-size: 11.5px; color: var(--pivot); border: 1px solid color-mix(in srgb, var(--pivot) 45%, transparent); }
 .more { margin-top: 6px; }
@@ -233,7 +233,7 @@ small.block { display: block; font-size: 11.5px; margin-top: 1px; padding: 0; wh
 #wl th[aria-sort="ascending"]::after { content: " ↑"; }
 #wl th[aria-sort="descending"]::after { content: " ↓"; }
 #wl tbody tr.row { cursor: pointer; }
-#wl tbody tr.row:hover td { background: var(--soft); }
+#wl > tbody > tr.row:hover > td { background: var(--soft); }
 .tk-cell { font-weight: 750; font-variation-settings: "wdth" var(--w-semi); }
 .th-cell { max-width: 170px; overflow: hidden; text-overflow: ellipsis; }
 .tk-cell small { display: block; font-weight: 400; color: var(--muted); font-size: 12px; max-width: 180px; overflow: hidden; text-overflow: ellipsis; }
@@ -337,7 +337,7 @@ small.block { display: block; font-size: 11.5px; margin-top: 1px; padding: 0; wh
 @media (max-width: 520px) {
   .top { position: static; }
 }
-.lt tbody tr.detail, .lt tbody tr.detail:hover td { cursor: default; background: var(--paper); }
+.lt > tbody > tr.detail, .lt > tbody > tr.detail:hover > td { cursor: default; background: var(--paper); }
 
 /* ---------- sectores calientes ---------- */
 .qm-quote { margin: 0 0 10px; padding: 0 0 0 14px; border-left: 4px solid var(--hot); max-width: 78ch; }
@@ -348,7 +348,7 @@ small.block { display: block; font-size: 11.5px; margin-top: 1px; padding: 0; wh
 .focus-table tr.grp th .dim { color: var(--muted); font-weight: 500; font-size: 13px; }
 .focus-table tbody:first-of-type tr.grp th { padding-top: 6px; }
 .focus-table td.in-scan { font-weight: 750; color: var(--ink); }
-.focus-table td:nth-child(3) { min-width: 150px; max-width: 250px; white-space: normal; line-height: 1.9; }
+.focus-table > tbody > tr.row > td:nth-child(3) { min-width: 150px; max-width: 250px; white-space: normal; line-height: 1.9; }
 .htf-tag { color: var(--star); border-color: color-mix(in srgb, var(--star) 50%, transparent); }
 .hot-tag { display: inline-block; margin-left: 4px; padding: 0 6px; border-radius: 999px; font-size: 11.5px; font-weight: 600; color: var(--hot); background: color-mix(in srgb, var(--hot) 12%, transparent); }
 .heat-more { margin-top: 14px; }
@@ -372,8 +372,8 @@ small.block { display: block; font-size: 11.5px; margin-top: 1px; padding: 0; wh
 .dots { display: inline-flex; gap: 3px; vertical-align: 1px; }
 .dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--soft); border: 1px solid var(--rule); }
 .dots i.on { background: var(--luk); border-color: var(--luk); }
-.luk-table td { vertical-align: top; }
-.luk-table td:nth-child(2) { min-width: 120px; max-width: 220px; white-space: normal; line-height: 1.9; }
+.luk-table > tbody > tr > td { vertical-align: top; }
+.luk-table > tbody > tr.row > td:nth-child(2) { min-width: 120px; max-width: 220px; white-space: normal; line-height: 1.9; }
 .luk-box { border-top: 1px solid var(--rule); margin-top: 10px; padding-top: 6px; }
 .luk-box h3 { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .luk-box .checks { margin-top: 4px; }
