@@ -26,6 +26,8 @@
   --ma200: #8593A1;
   --star: #B7791F;
   --hot: #C2410C;
+  --avwap: #C2185B;
+  --luk: #0F766E;
   --radius-s: 4px;
   --radius-m: 10px;
   --w-cond: 72;
@@ -57,6 +59,8 @@
     --ma200: #7C8C9C;
     --star: #E8B34A;
     --hot: #F08A4B;
+    --avwap: #F06292;
+    --luk: #2DD4BF;
     color-scheme: dark;
   }
 }
@@ -357,3 +361,29 @@ small.block { display: block; font-size: 11.5px; margin-top: 1px; padding: 0; wh
 .heat-bar i { display: block; height: 100%; background: var(--hot); }
 .heat-table tr.cold .heat-bar i { background: var(--muted); opacity: .5; }
 .tk-list a { margin-right: 6px; font-weight: 650; font-variation-settings: "wdth" var(--w-semi); }
+
+/* ---------- retrocesos de Martin Luk ---------- */
+.luk-quote { border-left-color: var(--luk); }
+#luk .five-note { border-left-color: var(--luk); }
+.chip.luk-recupera { --st: var(--pos); }
+.chip.luk-enzona { --st: var(--luk); }
+.chip.luk-acercándose { --st: var(--s-pre); }
+.chip[class*="luk-"] { color: var(--st); background: color-mix(in srgb, var(--st) 13%, transparent); }
+.dots { display: inline-flex; gap: 3px; vertical-align: 1px; }
+.dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--soft); border: 1px solid var(--rule); }
+.dots i.on { background: var(--luk); border-color: var(--luk); }
+.luk-table td { vertical-align: top; }
+.luk-table td:nth-child(2) { min-width: 120px; max-width: 220px; white-space: normal; line-height: 1.9; }
+.luk-box { border-top: 1px solid var(--rule); margin-top: 10px; padding-top: 6px; }
+.luk-box h3 { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.luk-box .checks { margin-top: 4px; }
+.thermo { max-width: 720px; margin: 0 0 14px; padding: 10px 12px; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius-s); }
+.thermo .cap { margin: 0 0 6px; font-size: 13px; color: var(--muted); }
+.thermo-bar { display: flex; height: 10px; border-radius: 5px; overflow: hidden; background: var(--soft); }
+.thermo-bar i { display: block; height: 100%; }
+.thermo-bar .good { background: var(--pos); }
+.thermo-bar .mixed { background: var(--rule); }
+.thermo-bar .bad { background: var(--neg); }
+.thermo-legend { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 6px 0 0; font-size: 13px; color: var(--muted); }
+.thermo-legend strong { color: var(--ink); }
+.legend select.ma-set { font: inherit; font-size: 12.5px; color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius-s); padding: 1px 4px; margin-left: 4px; }

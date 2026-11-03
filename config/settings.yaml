@@ -79,6 +79,18 @@ heat:
     pause_s: 0.5
     min_total: 1500      # si salen menos acciones, se conserva la caché anterior
 
+# Retrocesos de Martin Luk: líderes del escáner que corrigen 2-8 sesiones a la EMA 9/21 o el AVWAP.
+luk:
+  us_only: true
+  adr_min: 0.03          # ADR ≥ 3% (opera también líderes líquidos como DELL, MU o PANW)
+  leg_min: 0.20          # tramo previo ≥ 20% y ≥ 4 ADR desde el mínimo de las 40 sesiones anteriores
+  pull_min: 2            # sesiones desde el máximo de las 10 últimas
+  pull_max: 8
+  depth_adr_max: 3.5     # corrección ≤ 3,5 ADR
+  retrace_max: 0.62      # y ≤ 62% del tramo
+  health_top: 100        # termómetro: los 100 valores de EE. UU. con más fuerza relativa
+  max_list: 60
+
 # Puntuación de temáticas (suma 100). Fuerza relativa: posición frente a las demás temáticas.
 theme_score:
   rs: 45

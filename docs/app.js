@@ -132,8 +132,32 @@
     return out;
   };
 
-  // Medias del gráfico: las que usa Qullamaggie (10, 20 y 50) y la de 200 a demanda.
-  const MAS = [[10, "--ma10", 1.5], [20, "--ma20", 1.5], [50, "--ma50", 2], [200, "--ma200", 1.5]];
+  const emaSeries = (t, c, n) => {
+    const a = 2 / (n + 1), out = []; let acc = c[0];
+    for (let i = 0; i < c.length; i++) {
+      acc = i ? a * c[i] + (1 - a) * acc : c[0];
+      if (i >= n - 1) out.push({ time: t[i], value: acc });
+    }
+    return out;
+  };
+  // AVWAP diario (precio típico × volumen) desde la vela del ancla.
+  const avwapSeries = (k, from) => {
+    const out = []; let pv = 0, vv = 0;
+    for (let i = 0; i < k.t.length; i++) {
+      if (k.t[i] < from) continue;
+      const tp = (k.h[i] + k.l[i] + k.c[i]) / 3, v = k.v ? k.v[i] || 0 : 1;
+      pv += tp * v; vv += v;
+      out.push({ time: k.t[i], value: vv > 0 ? pv / vv : tp });
+    }
+    return out;
+  };
+
+  // Medias del gráfico: EMA 9, 21 y 50 (Martin Luk) o SMA 10, 20 y 50 (Qullamaggie); la SMA 200, a demanda.
+  const MA_SETS = {
+    ema: { label: "EMA 9/21/50 (Luk)", lines: [[9, "--ma10", 1.5, "EMA 9"], [21, "--ma20", 1.5, "EMA 21"], [50, "--ma50", 2, "EMA 50"]], fn: emaSeries },
+    sma: { label: "SMA 10/20/50 (Qullamaggie)", lines: [[10, "--ma10", 1.5, "SMA 10"], [20, "--ma20", 1.5, "SMA 20"], [50, "--ma50", 2, "SMA 50"]], fn: smaSeries },
+  };
+  const maSet = () => MA_SETS[store.get("radar.ma", "ema")] || MA_SETS.ema;
 
   async function drawChart(el, c, kPromise) {
     try {
@@ -162,13 +186,24 @@
       }
       const show200 = store.get("radar.sma200", false);
       el._sma = {};
-      MAS.forEach(([n, v, w]) => {
+      const lineOpt = { priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false };
+      const MS = maSet();
+      MS.lines.forEach(([n, v, w]) => {
         if (k.c.length < n) return;
-        const line = chart.addLineSeries({ color: cssVar(v), lineWidth: w, visible: n !== 200 || show200,
-          priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false });
-        line.setData(smaSeries(k.t, k.c, n));
+        const line = chart.addLineSeries({ ...lineOpt, color: cssVar(v), lineWidth: w });
+        line.setData(MS.fn(k.t, k.c, n));
         el._sma[n] = line;
       });
+      if (k.c.length >= 200) {
+        el._sma[200] = chart.addLineSeries({ ...lineOpt, color: cssVar("--ma200"), lineWidth: 1.5, visible: show200 });
+        el._sma[200].setData(smaSeries(k.t, k.c, 200));
+      }
+      const L = c.luk;
+      if (L && L.anchor_date) {
+        // Retroceso de Luk: AVWAP anclado en el mínimo del tramo y mínimo del retroceso.
+        chart.addLineSeries({ ...lineOpt, color: cssVar("--avwap"), lineWidth: 2, lineStyle: 0 }).setData(avwapSeries(k, L.anchor_date));
+        if (isNum(L.pull_lo)) candles.createPriceLine({ price: L.pull_lo, color: cssVar("--avwap"), lineWidth: 1, lineStyle: 2, axisLabelVisible: true, title: "Mín. retroceso" });
+      }
       candles.createPriceLine({ price: c.pivot, color: col.pivot, lineWidth: 2, lineStyle: 0, axisLabelVisible: true, title: "Ruptura" });
       if (Array.isArray(c.line) && c.line.length === 2 && c.line[1][0] > c.line[0][0]) {
         // Borde superior de la consolidación desde el máximo de la base (plano o descendente).
@@ -206,10 +241,11 @@
     return `<p class="legend"><span><i style="background:var(--pivot)"></i>Ruptura ${price(c.pivot, c.currency)}${c.level_kind ? ` (${esc(LEVEL_KIND[c.level_kind] || c.level_kind)})` : ""}</span>
       <span><i class="dash"></i>Borde de la consolidación</span>
       <span><i style="background:var(--neg)"></i>Invalidación ${price(c.inv, c.currency)}</span>
-      <span><i style="background:var(--ma10)"></i>SMA10</span><span><i style="background:var(--ma20)"></i>SMA20</span>
-      <span><i style="background:var(--ma50)"></i>SMA50</span>
+      ${maSet().lines.map(([, v, , name]) => `<span><i style="background:var(${v})"></i>${name}</span>`).join("")}
+      ${c.luk && c.luk.anchor_date ? `<span><i style="background:var(--avwap)"></i>AVWAP desde el ${dateEs(c.luk.anchor_date)}</span>` : ""}
       ${c.htf ? `<span><i style="background:var(--star)"></i>Mástil y suelo de la bandera (high tight flag)</span>` : ""}
-      <label class="ma-toggle"><input type="checkbox" class="sma200" ${on ? "checked" : ""}><i style="background:var(--ma200)"></i>SMA200</label></p>`;
+      <label class="ma-toggle"><input type="checkbox" class="sma200" ${on ? "checked" : ""}><i style="background:var(--ma200)"></i>SMA200</label>
+      <label class="ma-toggle">Medias <select class="ma-set">${Object.entries(MA_SETS).map(([k2, m]) => `<option value="${k2}" ${maSet() === m ? "selected" : ""}>${esc(m.label)}</option>`).join("")}</select></label></p>`;
   }
 
   // Aviso de resultados próximos (Qullamaggie no entra con resultados en pocos días).
@@ -244,6 +280,53 @@
       <details><summary>Ver los criterios y sus puntos</summary><ul class="checks">${li}</ul></details>
       <p class="dim" style="margin:6px 0 0">Puntuación calibrada con 704 rupturas que operó Qullamaggie: 5 estrellas las tiene el 23% de las suyas y el 2,6% de las rupturas normales. Se mide el último día de la base.</p>
     </div>`;
+  }
+
+  // ---------- plan según las reglas de Martin Luk (retroceso a la EMA 9/21 o el AVWAP) ----------
+  const LUK_STATE = { "recupera": "Recupera", "en zona": "En zona", "acercándose": "Acercándose" };
+  const lukChip = (st) => `<span class="chip luk-${esc(st.replace(/[^a-zá]/g, ""))}">${esc(LUK_STATE[st] || st)}</span>`;
+  const lukDots = (n) => `<span class="dots" role="img" aria-label="${n} de 5 criterios" title="${n} de 5 criterios de calidad">${[0, 1, 2, 3, 4].map((i) => `<i class="${i < n ? "on" : ""}"></i>`).join("")}</span>`;
+  function lukBlock(c) {
+    const L = c.luk, cur = c.currency, K = (D && D.luk_const) || {};
+    const acct = store.get("radar.luk.account", 10000), risk = store.get("radar.luk.risk", 0.5), stop = store.get("radar.luk.stop", 1.5);
+    const checks = L.checks.map((k) => `<li class="${k.ok ? "pos" : "dim"}"><span aria-hidden="true">${k.ok ? "✓" : "·"}</span> ${esc(k.label)}: <strong>${esc(k.value)}</strong></li>`).join("");
+    return `<div class="luk-box">
+      <h3>Retroceso al estilo Martin Luk · ${lukChip(L.state)} ${lukDots(L.points)}</h3>
+      <div class="qm-grid">
+        <div><dl>
+          <dt>Zona</dt><dd>${L.levels.length ? esc(L.levels.join(", ")) : "aún sobre la EMA 9"}${L.undercut ? " · perforó la EMA 21 y la recupera (sacudida)" : ""}</dd>
+          <dt>Retroceso</dt><dd>${L.days} sesiones desde el máximo del ${dateEs(L.peak_date)} (${price(L.peak, cur)}); corrige un ${pct(L.depth, 0, false)} (${num(L.depth_adr, 1)} ADR), el ${num(L.retrace * 100, 0)}% del tramo de +${num(L.leg * 100, 0)}%</dd>
+          <dt>EMA 9 · EMA 21 · EMA 50</dt><dd>${price(L.ema9, cur)} · ${price(L.ema21, cur)} · ${price(L.ema50, cur)}</dd>
+          <dt>AVWAP</dt><dd>${price(L.avwap, cur)} <span class="dim">(anclado en el mínimo del ${dateEs(L.anchor_date)})</span></dd>
+          <dt>Mínimo del retroceso</dt><dd>${price(L.pull_lo, cur)}</dd>
+        </dl><p class="dim">Calidad</p><ul class="checks">${checks}</ul></div>
+        <div><dl>
+          <dt>Entrada</dt><dd>${esc(K.entry_rule || "")}</dd>
+          <dt>Stop</dt><dd>${esc(K.stop_rule || "")}</dd>
+          <dt>Salidas</dt><dd><ol class="sells">${(K.sell_plan || []).map((x) => `<li>${esc(x)}</li>`).join("")}</ol>
+            <span class="dim">Para este valor (ADR ${pct(L.adr, 1, false)}): ${esc(L.trail)}, hoy en ${price(L.trail_value, cur)}</span></dd>
+          <dt>Invalidación diaria</dt><dd>Cierre bajo la EMA 50 (${price(L.ema50, cur)}) o bajo el mínimo del retroceso</dd>
+        </dl></div>
+        <div class="calc"><p><strong>Tamaño de la posición</strong> <span class="dim">(${esc(K.risk_rule || "")})</span></p>
+          <label>Cuenta (${esc(cur === "GBp" ? "GBP" : cur)})<input type="number" min="0" step="100" class="luk-acct" value="${esc(acct)}"></label>
+          <label>Riesgo por operación (%)<input type="number" min="0.05" max="1.5" step="0.05" class="luk-risk" value="${esc(risk)}"></label>
+          <label>Stop intradía (%)<input type="number" min="0.3" max="5" step="0.1" class="luk-stop" value="${esc(stop)}"></label>
+          <p class="luk-out" aria-live="polite"></p></div>
+      </div></div>`;
+  }
+  function lukCalc(box, c) {
+    if (!box || !c.luk) return;
+    const out = box.querySelector(".luk-out"), cap = ((D && D.luk_const && D.luk_const.max_position) || 0.35) * 100;
+    const upd = () => {
+      const acct = parseFloat(box.querySelector(".luk-acct").value) || 0, risk = parseFloat(box.querySelector(".luk-risk").value) || 0,
+        stop = parseFloat(box.querySelector(".luk-stop").value) || 0;
+      store.set("radar.luk.account", acct); store.set("radar.luk.risk", risk); store.set("radar.luk.stop", stop);
+      if (!(stop > 0) || !(acct > 0)) { out.textContent = "Indica la cuenta y el stop."; return; }
+      const posPct = Math.min(cap, risk / stop * 100), px = c.currency === "GBp" ? c.close / 100 : c.close;
+      const value = acct * posPct / 100, shares = px > 0 ? Math.floor(value / px) : 0;
+      out.innerHTML = `Posición = riesgo / stop = ${num(risk / stop * 100, 1)}% de la cuenta${risk / stop * 100 > cap ? ` → limitada al ${num(cap, 0)}%` : ""}: <strong>${num(value, 0)}</strong> (unas ${shares.toLocaleString("es-ES")} acciones al cierre de ${price(c.close, c.currency)}), riesgo ${num(acct * Math.min(risk, cap * stop / 100) / 100, 0)}. Un +3R son ${num(3 * stop, 1)}% de subida desde la entrada.`;
+    };
+    box.addEventListener("input", upd); upd();
   }
 
   // ---------- plan según las reglas de Qullamaggie ----------
@@ -471,6 +554,7 @@
           ${h.length > 1 ? `<dt>Histórico</dt><dd>${spark(h, 120, 24)}</dd>` : ""}
         </dl></div>
       </div>
+      ${c.luk ? lukBlock(c) : ""}
       ${c.qm ? qmBlock(c) : ""}`;
   }
 
@@ -511,10 +595,23 @@
     const el = root.querySelector(".chart");
     drawChart(el, c, kPromise);
     qmCalc(root.querySelector(".qm-box"), c);
+    lukCalc(root.querySelector(".luk-box"), c);
+    mountLegend(root, el, c, kPromise);
+  }
+  // Leyenda del gráfico: SMA 200 a demanda y juego de medias (EMA de Luk o SMA de Qullamaggie).
+  function mountLegend(root, el, c, kPromise) {
     const box = root.querySelector(".sma200");
     if (box) box.addEventListener("change", () => {
       store.set("radar.sma200", box.checked);
       if (el._sma && el._sma[200]) el._sma[200].applyOptions({ visible: box.checked });
+    });
+    const sel = root.querySelector(".ma-set");
+    if (sel) sel.addEventListener("change", () => {
+      store.set("radar.ma", sel.value);
+      (el._dispose || (() => {}))();
+      drawChart(el, c, kPromise);
+      const leg = root.querySelector(".legend");
+      if (leg) { leg.outerHTML = chartLegend(c); mountLegend(root, el, c, kPromise); }
     });
   }
 
@@ -594,6 +691,63 @@
   // Filas de las tablas del escáner (QM, high tight flags y foco) para refrescar su precio en vivo.
   const ROWS = {};
   const keepRows = (rows) => rows.forEach((x) => { if (!ROWS[x.sym] || x.qm) ROWS[x.sym] = x; });
+
+  // ---------- retrocesos de Martin Luk ----------
+  function lukLive(x) {
+    const q = LIVE.q[x.sym];
+    if (!q || !isNum(q.price)) return `<span class="dim">—</span>`;
+    const day = qDay(q);
+    if (!q.isOpen && !(day && x.date && day > x.date)) return `<span class="dim" title="Sin cotizaciones nuevas desde el cierre que usa el radar">sin cambios</span>`;
+    const p = q.price, chg = isNum(q.prevClose) && q.prevClose > 0 ? p / q.prevClose - 1 : null;
+    const d21 = p / x.ema21 - 1;
+    const txt = p < x.ema50 ? ["neg", "bajo la EMA 50"] : p < x.ema21 ? ["near", `${pct(d21)} bajo la EMA 21`] : p < x.ema9 ? ["near", "entre la EMA 21 y la 9"] : ["pos", `${pct(p / x.ema9 - 1)} sobre la EMA 9`];
+    return `<span class="lp">${price(p, x.currency)}</span> <span class="${cls(chg)}">${pct(chg)}</span><small class="ls-${txt[0]}">${esc(txt[1])}</small>`;
+  }
+  let LUKS = {};
+  function renderLuk(d) {
+    const rows = d.lists.luk || [], H = d.luk_health, K = d.luk_const || {};
+    LUKS = Object.fromEntries(rows.map((x) => [x.sym, x]));
+    const tk = (s) => `<a href="#valor=${encodeURIComponent(s)}">${esc(s)}</a>`;
+    let thermo = "";
+    if (H && H.n) {
+      const g = H.good / H.n, b = H.bad / H.n;
+      const read = b >= 0.6 ? ["neg", "Mayoría rota: es su señal para dejar de forzar largos (él pasa a cortos)."]
+        : g >= 0.6 ? ["pos", "Lista sana: el entorno en el que funcionan sus retrocesos."]
+          : ["dim", "Lista mixta: retrocesos solo en los líderes más limpios y con menos riesgo."];
+      thermo = `<div class="thermo"><p class="cap">Su termómetro: los ${H.n} valores de EE. UU. con más fuerza relativa</p>
+        <div class="thermo-bar" role="img" aria-label="${H.good} sanos, ${H.mixed} mixtos y ${H.bad} rotos">
+          <i class="good" style="width:${g * 100}%"></i><i class="mixed" style="width:${H.mixed / H.n * 100}%"></i><i class="bad" style="width:${b * 100}%"></i></div>
+        <p class="thermo-legend"><span><strong>${H.good}</strong> sanos (sobre la EMA 21 al alza)</span><span><strong>${H.mixed}</strong> mixtos</span><span><strong>${H.bad}</strong> rotos (bajo la EMA 9 y la 21, ambas a la baja)</span></p>
+        <p class="${read[0]}" style="margin:4px 0 0;font-size:14px">${read[1]}</p></div>`;
+    }
+    const rec = rows.filter((x) => x.state === "recupera");
+    $("#luk").innerHTML = `<h2>Retrocesos de Martin Luk</h2>
+      <blockquote class="qm-quote luk-quote"><p lang="en">“I like having tight stops so that I can build a larger position size.”</p><cite>Martin Luk, campeón del USIC 2025</cite></blockquote>
+      <p class="lead">Su entrada principal: dos de cada tres largos son retrocesos, no rupturas de base. Espera a que un líder demuestre su fuerza, lo deja corregir de 3 a 7 sesiones hasta la EMA 9 y la EMA 21 al alza o el AVWAP y entra en el gráfico de 1-5 minutos con un stop de ~1,5%, lo que le permite posiciones del 20-30% arriesgando el 0,3-0,5% de la cuenta. Aquí: valores de EE. UU. entre el 7% que más sube a 1, 3 o 6 meses, con ADR ≥ ${num((K.adr_min || 0.03) * 100, 0)}%, un tramo previo ≥ ${num((K.leg_min || 0.2) * 100, 0)}%, EMA 21 sobre la EMA 50 y ambas al alza, que corrigen ${K.pull_min || 2}-${K.pull_max || 8} sesiones (≤ ${num(K.depth_adr_max || 3.5, 1)} ADR y ≤ ${num((K.retrace_max || 0.62) * 100, 0)}% del tramo). <strong>Recupera</strong>: tocó la zona y hoy cierra sobre el máximo de ayer y la EMA 9, el día típico de su entrada. <strong>En zona</strong>: toca hoy o ayer la EMA 9 (desde la 3.ª sesión), la EMA 21 o el AVWAP. <strong>Acercándose</strong>: a menos de 1 ADR de la EMA 9. El gatillo es intradía y no lo ve el radar.</p>
+      ${thermo}
+      ${rows.length ? `<p class="five-note luk-note">${rec.length ? `<strong>Recuperan hoy:</strong> ${rec.slice(0, 15).map((x) => `${tk(x.sym)} ${lukDots(x.points)}`).join(" · ")}` : "<strong>Hoy ninguno recupera.</strong> Mira los que están en zona: la entrada llega cuando recuperan el VWAP o rompen el rango de apertura."}</p>
+      <div class="tbl-wrap"><table class="lt qm-table luk-table">
+        <thead><tr><th class="left">Valor</th><th class="left">Estado</th><th class="left">Zona</th><th>Retroceso</th><th>Tramo previo</th>
+          <th title="Distancia del cierre a la EMA 9, en ADR">vs EMA 9</th><th title="Distancia del cierre a la EMA 21, en ADR">vs EMA 21</th><th>ADR</th><th>Ahora</th><th class="left" title="Criterios de calidad: 3-7 sesiones, EMA 9 > 21 > 50, volumen bajo, confluencia y corrección ≤ 2,5 ADR">Calidad</th></tr></thead>
+        <tbody>${rows.map((x) => `<tr class="row${x.state === "recupera" ? " top5" : ""}" data-sym="${esc(x.sym)}" tabindex="0" aria-expanded="false">
+          <td class="tk-cell"><a href="#valor=${encodeURIComponent(x.sym)}" title="Abrir la ficha completa">${esc(x.sym)}</a><small>${esc(x.name && x.name !== x.sym ? x.name : "")}${x.group_name ? " · " + esc(x.group_name) : ""}</small></td>
+          <td class="left">${lukChip(x.state)}${x.hot ? ` <span class="hot-tag">sector caliente</span>` : ""}${earnTag(x)}</td>
+          <td class="left">${x.levels.length ? esc(x.levels.join(", ")) : `<span class="dim">sobre la EMA 9</span>`}${x.undercut ? `<small class="dim block">sacudida bajo la EMA 21</small>` : ""}</td>
+          <td>${x.days} ses.<small class="dim block">−${num(x.depth * 100, 0)}% · ${num(x.depth_adr, 1)} ADR</small></td>
+          <td>+${num(x.leg * 100, 0)}%<small class="dim block">corrige el ${num(x.retrace * 100, 0)}%</small></td>
+          <td class="${cls(x.d9)}">${num(x.d9, 1)}</td><td class="${cls(x.d21)}">${num(x.d21, 1)}</td>
+          <td>${pct(x.adr_pct, 1, false)}</td>
+          <td class="live-cell" data-live-luk="${esc(x.sym)}">${lukLive(x)}</td>
+          <td class="left">${lukDots(x.points)}</td>
+        </tr>`).join("")}</tbody></table></div>
+      <p class="dim" style="font-size:13px;margin-top:6px">Distancias a las medias en ADR del propio valor. Pulsa una fila para ver el gráfico con la EMA 9/21/50 y el AVWAP, los niveles y el plan con sus reglas de tamaño y salida; el ticker abre la ficha completa. Orden: estado, calidad, sector caliente y subida a 3 meses (orientativo, no calibrado con sus operaciones).</p>`
+      : `<p class="empty">Hoy ningún líder del escáner está en retroceso a la EMA 9/21 o el AVWAP. Con el mercado flojo, los líderes pierden las medias en vez de apoyarse en ellas.</p>`}`;
+    const toggle = (tr) => toggleRow(tr, 10, () => loadTicker(tr.dataset.sym).then((x) => ({ rec: BYS[tr.dataset.sym] || x.rec, k: x.k })));
+    $("#luk").addEventListener("click", (e) => { const tr = e.target.closest("tr[data-sym]"); if (tr && !e.target.closest("a")) toggle(tr); });
+    $("#luk").addEventListener("keydown", (e) => {
+      if ((e.key === "Enter" || e.key === " ") && e.target.matches("tr[data-sym]")) { e.preventDefault(); toggle(e.target); }
+    });
+  }
 
   // ---------- sectores calientes y sus valores rápidos ----------
   function renderHot(d) {
@@ -768,6 +922,7 @@
         <p><strong>Puntuación de acciones.</strong> Fuerza relativa 25, base y estructura 25, ruptura y volumen 20, tendencia diaria y semanal 15, liquidez 10, catalizador 5. Es una clasificación, no una probabilidad. El riesgo se etiqueta aparte: volatilidad, resultados próximos, distancia a la invalidación y liquidez.</p>
         <p><strong>Qullamaggie (solo rupturas).</strong> Reglas de su artículo "3 timeless setups" y de sus directos, con umbrales objetivos. Obligatorias: estar entre el 2% que más sube a 1, 3 o 6 meses (cierre frente al mínimo del periodo, la fórmula de sus escáneres), ADR ≥ 5%, subida previa ≥ 30% en 1-3 meses y consolidación de 5 a 60 sesiones. Secundarias: mínimos crecientes (el último tercio de la base sobre su mínimo), rango que se estrecha (últimas 5 sesiones ≤ 50% del rango de la base) y precio surfeando las SMA10/SMA20 (o SMA50) ascendentes. Entrada en el máximo de la primera vela de 1, 5 o 60 minutos; stop en el mínimo del día y nunca más ancho que el ADR; venta de 1/3-1/2 a los 3-5 días, stop a la entrada y el resto al primer cierre bajo la SMA10 o SMA20. Posición habitual 10-20%, nunca más del 30%. Filtro de mercado: Nasdaq 100 frente a sus SMA10 y SMA20. Son niveles orientativos para estudiar el gráfico, no órdenes ni recomendaciones.</p>
         <p><strong>Estrellas (1-5).</strong> Qullamaggie califica sus setups con estrellas ("five star setup") y solo opera fuerte los de 4-5. Aquí se puntúan sobre 66 con los rasgos que distinguen sus operaciones, medidos con datos diarios en 704 de las 1.212 rupturas de su archivo de capturas (el resto son valores que ya no cotizan) frente a 141.000 rupturas normales de los mismos valores: gran subida previa (20), valor rápido por ADR (12), tendencia limpia con la SMA20 holgadamente sobre la SMA50 y una subida lineal (14), medias de 10 y 20 que alcanzan al precio y mínimos que se apoyan en la de 10 (12) y compresión en las últimas sesiones con volumen seco (8); resta si ya lleva 4 bases o la consolidación tiene menos de 5 sesiones. 50 puntos son 5 estrellas y cada 5 puntos menos, media estrella. En una temática líder o un sector caliente (ver Sectores calientes) suma media estrella: él da más nota al mismo gráfico si su sector está caliente. Distancias y rangos en ADR del propio valor, el último día de la base. Resultado del estudio: 5 estrellas las tiene el 23% de sus setups en tendencia y el 2,6% de las rupturas normales; y en rupturas normales, ajenas a él, las de 5 estrellas subieron más de un 50% en 20 sesiones el 10,8% de las veces frente al 0,6% de las de 1 estrella. El retroceso de la base no los distinguía, por eso ya no es obligatorio. Es una medida de calidad del gráfico, no una probabilidad de acierto.</p>
+        <p><strong>Retrocesos de Martin Luk.</strong> Campeón del USIC 2025 (+969,8%). Según el estudio de 112 de sus directos de 2026 (James Muninn), el 65,9% de sus largos son retrocesos y solo el 2,3% rupturas de base: deja que un líder corrija de 3 a 7 sesiones hasta la EMA 9 y la EMA 21 al alza y el AVWAP y entra en el gráfico de 1-5 minutos (recuperar el VWAP o el AVWAP, romper una cuña o el rango de apertura, o perforar la apertura y recuperarla). Arriesga el 0,3-0,5% con stops de ~1,3%, lo que da posiciones del 20-30% (máximo 35%); vende el 10-15% a +3-5R y el resto al primer cierre bajo la EMA 9 o la EMA 21. El radar detecta la parte diaria con estas reglas: líder del escáner de momentum, ADR ≥ 3%, tramo previo ≥ 20% y ≥ 4 ADR, EMA 21 sobre la EMA 50 y ambas al alza, corrección de 2 a 8 sesiones desde el máximo de las 10 últimas (≤ 3,5 ADR y ≤ 62% del tramo) y cierre no más de 0,75 ADR bajo la EMA 21. AVWAP diario (precio típico por volumen) anclado en el mínimo del tramo. Comprobado con sus operaciones del estudio: marca MRVL en zona el 30-mar-2026 (perforó la EMA 21 y el AVWAP) y "recupera" el 31-mar, su día de entrada, e IONQ el 29-30 de abril y el 19-20 de mayo. Termómetro: de los 100 valores de EE. UU. con más fuerza relativa, cuántos cierran sobre la EMA 21 al alza y cuántos bajo la EMA 9 y la 21 bajistas (él deja de forzar largos cuando "90 de 100 tienen mala pinta"). Los gráficos muestran por defecto sus medias, EMA 9, 21 y 50; en la leyenda se puede volver a las SMA 10, 20 y 50 de Qullamaggie.</p>
         <p><strong>Sectores calientes.</strong> "I wanna focus on the fast moving stocks in the hot sectors." Sector: la industria de Yahoo Finance de cada acción, sacada de su screener una vez por semana (si falta, la del perfil o la subindustria GICS traducida). Escáner: el ${num(((d.heat_const || {}).scan_pct || 0.07) * 100, 0)}% del mercado de EE. UU. que más sube a 1, 3 o 6 meses desde el mínimo del periodo, equivalente a sus escáneres de TC2000; los internacionales se miden con los mismos umbrales. Calor: valores del sector en el escáner multiplicados por la parte del sector que suponen. Solo el número favorecería siempre a los sectores con cientos de valores, que siempre aportan alguno por azar; solo la proporción, a los de tres valores. Caliente: al menos ${(d.heat_const || {}).hot_min || 3} valores en el escáner, el doble de su cuota normal y entre los ${(d.heat_const || {}).hot_top || 8} de más calor. Solo EE. UU., como sus escáneres: es el único mercado con todo el universo líquido, y los internacionales del radar entran por ser líderes o ganadores, lo que haría parecer calientes sus sectores. Valores rápidos: los del escáner con ADR ≥ 5% que siguen en forma (ni bajo la SMA50, ni con la ruptura fallida, ni lejos del nivel), como mucho ${(d.heat_const || {}).focus_per_group || 15} por sector. Es un filtro para saber dónde mirar; el setup lo dan el estado, las estrellas y el plan.</p>
         <p><strong>High tight flags.</strong> Mástil: subida ≥ 90% desde el mínimo de las 40 sesiones anteriores al máximo de la consolidación. Bandera: de 5 a 30 sesiones desde ese máximo (3-4, en formación) con una corrección ≤ 35% (≤ 25%, clásica). Los umbrales salen de sus propias rupturas (mediana de su bandera: 13 sesiones y 22%). Medido con este código la víspera de cada ruptura, el 19,5% de las suyas tiene esta forma frente al 2,2% de las rupturas normales; y en rupturas normales con esta forma, el 34% subió más de un 20% en 20 sesiones y el 7% más de un 50% (13% y 1,5% en las demás). En el gráfico, el mástil va en trazo grueso y el suelo de la bandera en punteado.</p>
         <p><strong>Gráficos y buscador.</strong> Velas diarias con las medias de 10, 20 y 50 sesiones que usa Qullamaggie (la de 200, opcional). El buscador de la cabecera abre la ficha de cualquier valor del universo diario${d.web && d.web.worker_url ? " y, para el resto del mercado, la calcula al momento en el navegador con los mismos umbrales a partir de los datos de Yahoo Finance (sin temática, catalizador ni fechas de resultados)" : ""}.</p>
@@ -1094,6 +1249,7 @@
     Object.values(BYS).forEach((c) => { const L = liveInfo(c); c.live_dist = L && !L.stale ? L.dist : null; });
     document.querySelectorAll("td[data-live]").forEach((td) => { const c = BYS[td.dataset.live] || ROWS[td.dataset.live]; if (c) td.innerHTML = liveCell(c); });
     document.querySelectorAll("tr[data-idx]").forEach((tr) => { const i = IDX[tr.dataset.idx]; if (i) tr.innerHTML = idxCells(i); });
+    document.querySelectorAll("td[data-live-luk]").forEach((td) => { const x = LUKS[td.dataset.liveLuk]; if (x) td.innerHTML = lukLive(x); });
     const qmEl = document.querySelector("[data-live-qm]");
     if (qmEl) qmEl.innerHTML = qmLive();
     const f = document.querySelector("[data-live-ficha]");
@@ -1119,7 +1275,7 @@
     // cientos de valores cada minuto cuando solo están abiertas Europa o Asia).
     const idxSyms = ((D.regime && D.regime.indices) || []).filter((i) => i.available).map((i) => i.sym);
     const stockSyms = [...new Set([...(D.lists.presented || []), ...(D.lists.qm_setups || []).map((x) => x.sym), ...(D.lists.htf_setups || []).map((x) => x.sym),
-      ...(D.lists.focus || []).map((x) => x.sym), ...(currentSym ? [currentSym] : [])])].sort();
+      ...(D.lists.focus || []).map((x) => x.sym), ...(D.lists.luk || []).map((x) => x.sym), ...(currentSym ? [currentSym] : [])])].sort();
     const full = !LIVE.fullAt || Date.now() - LIVE.fullAt > 15 * 60000 || stockSyms.some((s) => LIVE.q[s] && LIVE.q[s].isOpen)
       || (currentSym && !LIVE.q[currentSym]);
     const syms = [...new Set([...idxSyms, ...(full ? stockSyms : [])])];
@@ -1156,6 +1312,7 @@
       D = d; BYS = byS; SCORE_HIST = scoreHist;
       renderHeader(d);
       renderRegime(d, hist);
+      renderLuk(d);
       renderPriority(d, byS);
       renderThemes(d, hist);
       bindLeaders();

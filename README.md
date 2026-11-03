@@ -1,7 +1,8 @@
 # Radar de rupturas
 
-Watchlist diaria de acciones con las mejores estructuras de ruptura dentro de las temáticas
-que lideran el mercado mundial. Se calcula sola cada día laborable tras el cierre de EE. UU.
+Radar diario de los líderes del mercado: retrocesos a la EMA 9/21 al estilo de Martin Luk, sectores
+calientes, setups de Qullamaggie y una watchlist de rupturas dentro de las temáticas que lideran el
+mercado mundial. Se calcula sola cada día laborable tras el cierre de EE. UU.
 y se publica como una web en GitHub Pages.
 
 - **Motor:** Python (`radar/`), datos diarios de Yahoo Finance vía `yfinance`.
@@ -195,6 +196,31 @@ de cada ruptura, el 19,5% de las suyas tiene esta forma frente al 2,2% de las ru
 rupturas normales con esta forma, el 34% subió más de un 20% en 20 sesiones y el 7% más de un 50%
 (13% y 1,5% en las demás). Se muestran las que rompen hoy o siguen en la base, ordenadas por estrellas,
 y el gráfico marca el mástil y el suelo de la bandera.
+
+**Retrocesos de Martin Luk (`radar/luk.py`).** El radar está orientado al método de Martin Luk,
+campeón del USIC 2025 (+969,8%). Según el estudio de 112 de sus directos de 2026 (James Muninn), el 65,9%
+de sus largos son retrocesos y solo el 2,3% rupturas de base: deja que un líder corrija de 3 a 7 sesiones
+hasta la EMA 9 y la EMA 21 al alza y el AVWAP, y entra en el gráfico de 1-5 minutos con un stop de ~1,3%,
+lo que con un riesgo del 0,3-0,5% da posiciones del 20-30% (máximo 35%). La sección "Retrocesos de Martin
+Luk", la primera tras el régimen, detecta la parte diaria del setup (`config/settings.yaml` → `luk`):
+
+| Paso | Criterio |
+| --- | --- |
+| Líder | Acción de EE. UU. del escáner de momentum (7% que más sube a 1, 3 o 6 meses), ADR ≥ 3%, tramo previo ≥ 20% y ≥ 4 ADR desde el mínimo de las 40 sesiones anteriores al máximo |
+| Tendencia | EMA 21 sobre la EMA 50, ambas al alza, y cierre sobre la EMA 50 |
+| Retroceso | El máximo de las 10 últimas sesiones quedó hace 2-8 sesiones; corrección ≤ 3,5 ADR y ≤ 62% del tramo; cierre no más de 0,75 ADR bajo la EMA 21 |
+| Zona | El mínimo de hoy o de ayer toca la EMA 9 (desde la 3.ª sesión), la EMA 21 o el AVWAP anclado en el mínimo del tramo, con 0,2 ADR de margen |
+| Estado | Recupera (tocó la zona y hoy cierra sobre el máximo de ayer y la EMA 9: su día típico de entrada) · En zona · Acercándose (a ≤ 1 ADR de la EMA 9) |
+| Calidad (0-5) | 3-7 sesiones · EMA 9 > 21 > 50 · retroceso con volumen ≤ 85% de la media · confluencia de soportes · corrección ≤ 2,5 ADR (orden orientativo, no calibrado) |
+
+Comprobado con las operaciones del estudio: marca MRVL en zona el 30-mar-2026 (perforó la EMA 21 y el
+AVWAP) y "recupera" el 31-mar, su día de entrada, e IONQ el 29-30 de abril y el 19-20 de mayo. La ficha
+añade el plan con sus reglas (gatillo intradía, stop en el mínimo de la vela de entrada, venta del 10-15%
+a +3-5R y el resto al primer cierre bajo la EMA 9 o la EMA 21) y una calculadora de tamaño (posición =
+riesgo / stop, con el límite del 35%). Su termómetro mide, de los 100 valores de EE. UU. con más fuerza
+relativa, cuántos cierran sobre la EMA 21 al alza y cuántos bajo la EMA 9 y la 21 bajistas: él deja de
+forzar largos cuando "90 de 100 tienen mala pinta". Los gráficos muestran por defecto sus medias (EMA 9, 21
+y 50) y el AVWAP; la leyenda permite volver a las SMA 10, 20 y 50 de Qullamaggie.
 
 **Sectores calientes (`radar/heat.py`).** "I wanna focus on the fast moving stocks in the hot
 sectors." Qullamaggie no mide los sectores con índices sino con sus escáneres: un sector está caliente
