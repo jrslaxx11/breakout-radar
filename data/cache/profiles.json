@@ -3069,6 +3069,14 @@
 "name": "",
 "sector": ""
 },
+"AIR": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "AIR.PA": {
 "country": "Netherlands",
 "industry": "Aerospace & Defense",
@@ -3662,6 +3670,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"APTV": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "AQN": {
 "country": "",
@@ -4265,6 +4281,14 @@
 "name": "",
 "sector": ""
 },
+"BAC": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "BAER.SW": {
 "country": "Switzerland",
 "industry": "Asset Management",
@@ -4772,6 +4796,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"BKNG": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "BKT.MC": {
 "country": "",
@@ -5406,6 +5438,14 @@
 "industry": "Internet Content & Information",
 "name": "CarGurus, Inc.",
 "sector": "Communication Services"
+},
+"CARR": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "CARS": {
 "country": "",
@@ -8533,6 +8573,14 @@
 "name": "Floor & Decor Holdings, Inc.",
 "sector": "Consumer Cyclical"
 },
+"FNF": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "FNGD": {
 "country": "",
 "industry": "",
@@ -9181,6 +9229,14 @@
 "name": "Genco Shipping & Trading Limited",
 "sector": "Industrials"
 },
+"GNRC": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "GNTX": {
 "country": "",
 "industry": "",
@@ -9482,6 +9538,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"HAPN": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "HAS": {
 "country": "",
@@ -10739,6 +10803,14 @@
 "name": "",
 "sector": ""
 },
+"JD": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "JEF": {
 "country": "United States",
 "industry": "Capital Markets",
@@ -11883,6 +11955,14 @@
 "name": "Mediobanca Banca di Credito Finanziario S.p.A.",
 "sector": "Financial Services"
 },
+"MBC": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "MBG.DE": {
 "country": "",
 "industry": "",
@@ -12259,6 +12339,14 @@
 "name": "",
 "sector": ""
 },
+"MMYT": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "MNDY": {
 "country": "Israel",
 "industry": "Software - Application",
@@ -12566,6 +12654,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"MTX": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "MTX.DE": {
 "country": "Germany",
@@ -13016,6 +13112,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"NMCO": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "NMIH": {
 "country": "",
@@ -15551,6 +15655,14 @@
 "name": "SentinelOne, Inc.",
 "sector": "Technology"
 },
+"SA": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "SAAB-B.ST": {
 "country": "",
 "industry": "",
@@ -15881,6 +15993,14 @@
 "name": "",
 "sector": ""
 },
+"SF": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "SFBS": {
 "country": "",
 "industry": "",
@@ -16030,6 +16150,14 @@
 "industry": "Medical Devices",
 "name": "Siemens Healthineers AG",
 "sector": "Healthcare"
+},
+"SHLS": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "SHO": {
 "country": "",
@@ -16967,6 +17095,14 @@
 "name": "",
 "sector": ""
 },
+"T": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "TAC": {
 "country": "",
 "industry": "",
@@ -16978,6 +17114,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"TAL": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "TALO": {
 "country": "",
@@ -17032,6 +17176,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"TCOM": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "TCS.NS": {
 "country": "",
@@ -17843,6 +17995,14 @@
 "name": "Unity Software Inc.",
 "sector": "Technology"
 },
+"UAA": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "UAL": {
 "country": "",
 "industry": "",
@@ -18136,6 +18296,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"UTG": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "UTHR": {
 "country": "",
@@ -18492,6 +18660,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"VSNT": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "VST": {
 "country": "United States",
@@ -19081,6 +19257,14 @@
 "name": "",
 "sector": ""
 },
+"XRN": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "XRO.AX": {
 "country": "",
 "industry": "",
@@ -19261,6 +19445,14 @@
 "name": "Zscaler, Inc.",
 "sector": "Technology"
 },
+"ZTO": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "ZTS": {
 "country": "United States",
 "industry": "Drug Manufacturers - Specialty & Generic",
@@ -19278,6 +19470,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"ZWS": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "ZYME": {
 "country": "",
