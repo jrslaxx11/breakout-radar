@@ -2581,6 +2581,14 @@
 "name": "",
 "sector": ""
 },
+"AAUC": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "ABB.ST": {
 "country": "",
 "industry": "",
@@ -2726,6 +2734,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"ACM": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "ACN": {
 "country": "",
@@ -3170,6 +3186,14 @@
 "tries": 1
 },
 "ALGT": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
+"ALH": {
 "country": "",
 "industry": "",
 "last": "2026-11-03",
@@ -4041,6 +4065,14 @@
 "name": "",
 "sector": ""
 },
+"AVO": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "AVOL.SW": {
 "country": "Switzerland",
 "industry": "Specialty Retail",
@@ -4893,6 +4925,14 @@
 "name": "",
 "sector": ""
 },
+"BNL": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "BNOR.OL": {
 "country": "Norway",
 "industry": "Oil & Gas E&P",
@@ -5059,6 +5099,14 @@
 "name": "",
 "sector": ""
 },
+"BRSL": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "BRX": {
 "country": "",
 "industry": "",
@@ -5076,6 +5124,14 @@
 "industry": "Banks - Regional",
 "name": "Banco Santander-Chile",
 "sector": "Financial Services"
+},
+"BSX": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "BSY": {
 "country": "",
@@ -5918,6 +5974,14 @@
 "industry": "Gold",
 "name": "Capricorn Metals Ltd",
 "sector": "Basic Materials"
+},
+"CMP": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "CMPS": {
 "country": "",
@@ -7295,6 +7359,14 @@
 "name": "",
 "sector": ""
 },
+"DYN": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "E": {
 "country": "",
 "industry": "",
@@ -8511,11 +8583,27 @@
 "name": "",
 "sector": ""
 },
+"FOXF": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "FPH.AX": {
 "country": "New Zealand",
 "industry": "Medical Instruments & Supplies",
 "name": "Fisher & Paykel Healthcare Corporation Limited",
 "sector": "Healthcare"
+},
+"FR": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "FR.PA": {
 "country": "",
@@ -8796,6 +8884,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"GBX": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "GCT": {
 "country": "",
@@ -9830,6 +9926,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"HSBC": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "HSHP": {
 "country": "Bermuda",
@@ -11022,6 +11126,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"KT": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "KTB": {
 "country": "",
@@ -12917,6 +13029,14 @@
 "name": "",
 "sector": ""
 },
+"NMZ": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "NN.AS": {
 "country": "Netherlands",
 "industry": "Insurance - Diversified",
@@ -13371,6 +13491,14 @@
 "name": "",
 "sector": ""
 },
+"ODFL": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "OET.OL": {
 "country": "Greece",
 "industry": "Marine Shipping",
@@ -13552,6 +13680,14 @@
 "industry": "Household & Personal Products",
 "name": "L'Oréal S.A.",
 "sector": "Consumer Defensive"
+},
+"ORA": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "ORA.PA": {
 "country": "",
@@ -14403,6 +14539,14 @@
 "name": "Park National Corporation",
 "sector": "Financial Services"
 },
+"PRKS": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "PRLB": {
 "country": "United States",
 "industry": "Metal Fabrication",
@@ -14582,6 +14726,14 @@
 "industry": "Household & Personal Products",
 "name": "Puig Brands, S.A.",
 "sector": "Consumer Defensive"
+},
+"PUK": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "PUM.DE": {
 "country": "Germany",
@@ -15029,6 +15181,14 @@
 "name": "",
 "sector": ""
 },
+"RIVN": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "RJF": {
 "country": "",
 "industry": "",
@@ -15124,6 +15284,14 @@
 "industry": "Drug Manufacturers - General",
 "name": "Roche Holding AG",
 "sector": "Healthcare"
+},
+"ROAD": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "ROCK": {
 "country": "",
@@ -15291,6 +15459,14 @@
 "name": "Russel Metals Inc.",
 "sector": "Industrials"
 },
+"RUSHA": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "RVLV": {
 "country": "United States",
 "industry": "Internet Retail",
@@ -15436,6 +15612,14 @@
 "industry": "Insurance - Diversified",
 "name": "Sampo Oyj",
 "sector": "Financial Services"
+},
+"SAN": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "SAN.MC": {
 "country": "",
@@ -15912,6 +16096,14 @@
 "industry": "Packaging & Containers",
 "name": "SIG Group AG",
 "sector": "Consumer Cyclical"
+},
+"SII": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "SIKA.SW": {
 "country": "Switzerland",
@@ -17222,6 +17414,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"TMUS": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "TNDM": {
 "country": "",

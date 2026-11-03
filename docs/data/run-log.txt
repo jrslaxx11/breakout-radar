@@ -1,11 +1,11 @@
-2026-11-03 15:20:34,721 INFO radar.prices: precios: 4794 de 4796 tickers
-2026-11-03 15:20:34,899 WARNING radar.prices: cotizaciones por lotes no disponibles (HTTP Error 401: ); se usan los metadatos del gráfico
-2026-11-03 15:20:37,239 INFO radar.prices: cotizaciones por gráfico: 341 de 341
-2026-11-03 15:20:37,312 INFO radar.pipeline: última sesión: 341 valores sin ella en la serie diaria, 341 cotizaciones, 155 completados
-2026-11-03 15:20:37,660 INFO radar.pipeline: barras parciales descartadas: 3832
-2026-11-03 15:20:39,196 INFO radar.prices: última sesión: 14 valores atrasados, 0 completados, 14 siguen atrasados
-2026-11-03 15:20:39,232 INFO radar.pipeline: última barra por mercado: AS 2026-11-02 (56/57); AX 2026-11-03 (157/159); BR 2026-11-02 (2/2); CO 2026-11-02 (44/44); DE 2026-11-02 (68/68); HE 2026-11-02 (44/44); HK 2026-11-03 (155/156); KQ 2026-11-03 (37/37); KS 2026-11-03 (117/117); L 2026-11-02 (97/97); LS 2026-11-02 (1/1); MC 2026-11-02 (81/81); MI 2026-11-02 (88/88); NS 2026-11-03 (84/84); OL 2026-11-02 (69/69); PA 2026-11-02 (147/147); ST 2026-11-02 (150/150); SW 2026-11-02 (150/150); T 2026-11-02 (171/171); TO 2026-11-02 (122/123); TW 2026-11-03 (123/123); TWO 2026-11-03 (35/35); US 2026-11-02 (2745/2754); VI 2026-11-02 (1/1); WA 2026-11-02 (1/1)
-2026-11-03 15:20:39,448 INFO radar.pipeline: sesión 2026-11-02: 727 series recortadas a esa fecha (mercados que ya cotizaron el día siguiente)
-2026-11-03 15:20:59,084 WARNING radar.fundamentals: perfiles: Yahoo devuelve vacío (25 seguidos); se reintenta en la próxima ejecución
-2026-11-03 15:20:59,087 INFO radar.fundamentals: perfiles: 25 consultados (25 nuevos, 0 reintentos), 0 con industria
+2026-11-03 15:33:13,576 INFO radar.prices: precios: 4794 de 4796 tickers
+2026-11-03 15:33:13,825 WARNING radar.prices: cotizaciones por lotes no disponibles (HTTP Error 401: ); se usan los metadatos del gráfico
+2026-11-03 15:33:17,224 INFO radar.prices: cotizaciones por gráfico: 341 de 341
+2026-11-03 15:33:17,295 INFO radar.pipeline: última sesión: 341 valores sin ella en la serie diaria, 341 cotizaciones, 155 completados
+2026-11-03 15:33:17,676 INFO radar.pipeline: barras parciales descartadas: 3833
+2026-11-03 15:33:19,162 INFO radar.prices: última sesión: 14 valores atrasados, 0 completados, 14 siguen atrasados
+2026-11-03 15:33:19,198 INFO radar.pipeline: última barra por mercado: AS 2026-11-02 (56/57); AX 2026-11-03 (157/159); BR 2026-11-02 (2/2); CO 2026-11-02 (44/44); DE 2026-11-02 (68/68); HE 2026-11-02 (44/44); HK 2026-11-03 (155/156); KQ 2026-11-03 (37/37); KS 2026-11-03 (117/117); L 2026-11-02 (97/97); LS 2026-11-02 (1/1); MC 2026-11-02 (81/81); MI 2026-11-02 (88/88); NS 2026-11-03 (84/84); OL 2026-11-02 (69/69); PA 2026-11-02 (147/147); ST 2026-11-02 (150/150); SW 2026-11-02 (150/150); T 2026-11-02 (171/171); TO 2026-11-02 (122/123); TW 2026-11-03 (123/123); TWO 2026-11-03 (35/35); US 2026-11-02 (2745/2754); VI 2026-11-02 (1/1); WA 2026-11-02 (1/1)
+2026-11-03 15:33:19,420 INFO radar.pipeline: sesión 2026-11-02: 727 series recortadas a esa fecha (mercados que ya cotizaron el día siguiente)
+2026-11-03 15:33:42,243 WARNING radar.fundamentals: perfiles: Yahoo devuelve vacío (25 seguidos); se reintenta en la próxima ejecución
+2026-11-03 15:33:42,245 INFO radar.fundamentals: perfiles: 25 consultados (25 nuevos, 0 reintentos), 0 con industria
 Sesión 2026-11-02 · régimen DESFAVORABLE · 3696 valores líquidos · temáticas LST, ITS, CYB, STAP, HCM, BIO · 24 candidatas
