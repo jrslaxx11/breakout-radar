@@ -53,5 +53,6 @@ def test_avwap_and_health():
     av = luk.avwap(h, l, c, v, 100)
     assert np.isnan(av[99]) and abs(av[100] - (h[100] + l[100] + c[100]) / 3) < 1e-9
     up, down = _df(_trend_then([])), _df(list(100 * np.cumprod(np.full(140, 0.99))))
-    hh = luk.health({"A": up, "B": down, "C": up})
-    assert (hh["n"], hh["good"], hh["bad"], hh["mixed"], hh["bad_syms"]) == (3, 2, 1, 0, ["B"])
+    dip = _df(_trend_then([-0.06] * 3))        # en tendencia pero hoy bajo la EMA 21, que aún sube a 5 sesiones
+    hh = luk.health({"A": up, "B": down, "C": up, "D": dip})
+    assert (hh["n"], hh["good"], hh["bad"], hh["mixed"], hh["bad_syms"]) == (4, 2, 1, 1, ["B"])

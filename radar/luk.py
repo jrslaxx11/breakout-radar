@@ -165,7 +165,8 @@ def _d(df: pd.DataFrame, i: int) -> str:
 
 def health(frames: dict[str, pd.DataFrame]) -> dict:
     """Su termómetro: "cuando 90 de los 100 valores de mi lista tienen mala pinta, paso a cortos". Sanos:
-    cierre sobre la EMA 21 al alza. Rotos: cierre bajo la EMA 9 y la EMA 21, ambas a la baja."""
+    cierre sobre la EMA 21 al alza. Rotos: cierre bajo la EMA 9 y la EMA 21, ambas a la baja. La pendiente se
+    mide a 5 sesiones: a 1 sesión es redundante (un cierre sobre la EMA siempre la hace subir ese día)."""
     good, bad = [], []
     n = 0
     for sym, df in frames.items():
@@ -175,9 +176,9 @@ def health(frames: dict[str, pd.DataFrame]) -> dict:
         n += 1
         e9, e21 = ema(c, 9), ema(c, 21)
         s = len(c) - 1
-        if c[s] > e21[s] and e21[s] > e21[s - 1]:
+        if c[s] > e21[s] and e21[s] > e21[s - 5]:
             good.append(sym)
-        elif c[s] < e9[s] and c[s] < e21[s] and e9[s] < e9[s - 1] and e21[s] < e21[s - 1]:
+        elif c[s] < e9[s] and c[s] < e21[s] and e9[s] < e9[s - 5] and e21[s] < e21[s - 5]:
             bad.append(sym)
     return {"n": n, "good": len(good), "bad": len(bad), "mixed": n - len(good) - len(bad), "bad_syms": bad[:40]}
 

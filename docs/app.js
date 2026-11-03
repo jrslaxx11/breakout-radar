@@ -717,7 +717,7 @@
       thermo = `<div class="thermo"><p class="cap">Su termómetro: los ${H.n} valores de EE. UU. con más fuerza relativa</p>
         <div class="thermo-bar" role="img" aria-label="${H.good} sanos, ${H.mixed} mixtos y ${H.bad} rotos">
           <i class="good" style="width:${g * 100}%"></i><i class="mixed" style="width:${H.mixed / H.n * 100}%"></i><i class="bad" style="width:${b * 100}%"></i></div>
-        <p class="thermo-legend"><span><strong>${H.good}</strong> sanos (sobre la EMA 21 al alza)</span><span><strong>${H.mixed}</strong> mixtos</span><span><strong>${H.bad}</strong> rotos (bajo la EMA 9 y la 21, ambas a la baja)</span></p>
+        <p class="thermo-legend"><span><strong>${H.good}</strong> sanos (sobre la EMA 21, que sube frente a hace 5 sesiones)</span><span><strong>${H.mixed}</strong> mixtos (corrigen bajo la EMA 21 sin haberla girado)</span><span><strong>${H.bad}</strong> rotos (bajo la EMA 9 y la 21, ambas a la baja frente a hace 5 sesiones)</span></p>
         <p class="${read[0]}" style="margin:4px 0 0;font-size:14px">${read[1]}</p></div>`;
     }
     const rec = rows.filter((x) => x.state === "recupera");
