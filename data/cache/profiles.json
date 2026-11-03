@@ -2827,6 +2827,14 @@
 "name": "",
 "sector": ""
 },
+"ADNT": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "ADP": {
 "country": "",
 "industry": "",
@@ -3020,6 +3028,14 @@
 "sector": ""
 },
 "AGO": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
+"AGRO": {
 "country": "",
 "industry": "",
 "last": "2026-11-03",
@@ -4823,6 +4839,14 @@
 "name": "",
 "sector": ""
 },
+"BLBD": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "BLCO": {
 "country": "",
 "industry": "",
@@ -5231,6 +5255,14 @@
 "name": "",
 "sector": ""
 },
+"BWA": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "BWIN": {
 "country": "",
 "industry": "",
@@ -5394,6 +5426,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"CALM": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "CALX": {
 "country": "",
@@ -7979,6 +8019,14 @@
 "name": "",
 "sector": ""
 },
+"ESAB": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "ESLT": {
 "country": "",
 "industry": "",
@@ -8837,6 +8885,14 @@
 "name": "",
 "sector": ""
 },
+"FVRR": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "FWDI": {
 "country": "",
 "industry": "",
@@ -9075,6 +9131,14 @@
 "name": "",
 "sector": ""
 },
+"GGG": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "GGP.AX": {
 "country": "",
 "industry": "",
@@ -9158,6 +9222,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"GLIBK": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "GLNG": {
 "country": "",
@@ -9256,6 +9328,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"GOF": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "GOLD": {
 "country": "",
@@ -10065,6 +10145,14 @@
 "name": "",
 "sector": ""
 },
+"HUBB": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "HUBN.SW": {
 "country": "",
 "industry": "",
@@ -10597,6 +10685,14 @@
 "name": "Ipca Laboratories Limited",
 "sector": "Healthcare"
 },
+"IPI": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "IPN.PA": {
 "country": "",
 "industry": "",
@@ -11066,6 +11162,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"KMT": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "KMTS": {
 "country": "",
@@ -12359,6 +12463,14 @@
 "name": "",
 "sector": ""
 },
+"MNSO": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "MNST": {
 "country": "",
 "industry": "",
@@ -12418,6 +12530,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"MPWR": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "MQ": {
 "country": "",
@@ -13485,6 +13605,14 @@
 "name": "",
 "sector": ""
 },
+"NWPX": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "NWS": {
 "country": "",
 "industry": "",
@@ -13688,6 +13816,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"OLN": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "OMAB": {
 "country": "",
@@ -14862,6 +14998,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"PWR": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "PXT.TO": {
 "country": "Canada",
@@ -17487,6 +17631,14 @@
 "name": "",
 "sector": ""
 },
+"TIMB": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "TIT.MI": {
 "country": "",
 "industry": "",
@@ -17811,6 +17963,14 @@
 "name": "",
 "sector": ""
 },
+"TRVI": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "TRYG.CO": {
 "country": "Denmark",
 "industry": "Insurance - Diversified",
@@ -17866,6 +18026,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"TT": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "TTAN": {
 "country": "",
@@ -17994,6 +18162,14 @@
 "industry": "Software - Application",
 "name": "Unity Software Inc.",
 "sector": "Technology"
+},
+"UA": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "UAA": {
 "country": "",
@@ -18661,6 +18837,14 @@
 "name": "",
 "sector": ""
 },
+"VSEC": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "VSNT": {
 "country": "",
 "industry": "",
@@ -18770,6 +18954,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"WAFD": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "WAL": {
 "country": "",
@@ -19106,6 +19298,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"WSC": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "WSFS": {
 "country": "",
