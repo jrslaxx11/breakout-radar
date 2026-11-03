@@ -3183,6 +3183,14 @@
 "name": "Autoliv, Inc.",
 "sector": "Consumer Cyclical"
 },
+"ALK": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "ALK-B.CO": {
 "country": "Denmark",
 "industry": "Biotechnology",
@@ -4953,6 +4961,14 @@
 "name": "Bonesupport Holding AB (publ)",
 "sector": "Healthcare"
 },
+"BOOT": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "BOQ.AX": {
 "country": "",
 "industry": "",
@@ -5228,6 +5244,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"CACC": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "CACI": {
 "country": "",
@@ -7651,6 +7675,14 @@
 "name": "",
 "sector": ""
 },
+"ENVA": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "ENX.PA": {
 "country": "Netherlands",
 "industry": "Financial Data & Stock Exchanges",
@@ -8113,6 +8145,14 @@
 "name": "",
 "sector": ""
 },
+"FCFS": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "FCN": {
 "country": "",
 "industry": "",
@@ -8190,6 +8230,14 @@
 "industry": "Specialty Industrial Machinery",
 "name": "Franklin Electric Co., Inc.",
 "sector": "Industrials"
+},
+"FER": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "FER.MC": {
 "country": "",
@@ -9037,6 +9085,14 @@
 "name": "Genco Shipping & Trading Limited",
 "sector": "Industrials"
 },
+"GNTX": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "GNW": {
 "country": "",
 "industry": "",
@@ -9069,6 +9125,14 @@
 "country": "",
 "industry": "",
 "last": "2026-11-02",
+"name": "",
+"sector": "",
+"tries": 1
+},
+"GOOS": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
 "name": "",
 "sector": "",
 "tries": 1
@@ -9224,6 +9288,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"GTY": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "GVA": {
 "country": "",
@@ -10535,6 +10607,14 @@
 "sector": "",
 "tries": 1
 },
+"JBHT": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "JBS": {
 "country": "Netherlands",
 "industry": "Packaged Foods",
@@ -11311,6 +11391,14 @@
 "name": "",
 "sector": ""
 },
+"LOB": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "LOG.MC": {
 "country": "Spain",
 "industry": "Integrated Freight & Logistics",
@@ -11521,6 +11609,22 @@
 "name": "",
 "sector": ""
 },
+"LYG": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
+"LYTS": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "LYV": {
 "country": "",
 "industry": "",
@@ -11532,6 +11636,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"LZB": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "M": {
 "country": "",
@@ -13787,6 +13899,14 @@
 "sector": "",
 "tries": 1
 },
+"PDI": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "PDM": {
 "country": "",
 "industry": "",
@@ -13888,6 +14008,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"PFLT": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "PFS": {
 "country": "",
@@ -14026,6 +14154,14 @@
 "industry": "Oil & Gas Integrated",
 "name": "Orlen S.A.",
 "sector": "Energy"
+},
+"PLAY": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "PLD": {
 "country": "United States",
@@ -15025,6 +15161,14 @@
 "name": "",
 "sector": ""
 },
+"ROL": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "ROOT": {
 "country": "",
 "industry": "",
@@ -15991,6 +16135,14 @@
 "name": "",
 "sector": ""
 },
+"SNDA": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "SNDR": {
 "country": "",
 "industry": "",
@@ -16523,6 +16675,14 @@
 "name": "Sodexo S.A.",
 "sector": "Industrials"
 },
+"SWBI": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "SWED-A.ST": {
 "country": "Sweden",
 "industry": "Banks - Regional",
@@ -16552,6 +16712,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"SXI": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "SXT": {
 "country": "",
@@ -17264,6 +17432,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"TRTX": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "TRU": {
 "country": "",
@@ -18629,6 +18805,14 @@
 "name": "",
 "sector": ""
 },
+"WWD": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "WWW": {
 "country": "",
 "industry": "",
@@ -18783,6 +18967,14 @@
 "name": "",
 "sector": ""
 },
+"Z": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "ZAL.DE": {
 "country": "Germany",
 "industry": "Internet Retail",
@@ -18824,6 +19016,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"ZG": {
+"country": "",
+"industry": "",
+"last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "ZGN": {
 "country": "",
