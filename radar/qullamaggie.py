@@ -57,12 +57,12 @@ def market_filter(m: Metrics | None) -> dict:
     rising = bool(m.s10up) and bool(m.s20up)
     if above10 and above20 and rising:
         return {"light": "verde", "text": "Nasdaq 100 sobre SMA10 y SMA20 ascendentes: operar rupturas con normalidad",
-                "s10": m.s10, "s20": m.s20, "close": m.C}
+                "s10": m.s10, "s20": m.s20, "close": m.C, "rising": rising}
     if above20:
         return {"light": "ámbar", "text": "Nasdaq 100 sobre la SMA20 pero sin tendencia clara en las cortas: tamaño reducido",
-                "s10": m.s10, "s20": m.s20, "close": m.C}
+                "s10": m.s10, "s20": m.s20, "close": m.C, "rising": rising}
     return {"light": "rojo", "text": "Nasdaq 100 bajo SMA10 y SMA20: no abrir rupturas nuevas o hacerlo con tamaño mínimo",
-            "s10": m.s10, "s20": m.s20, "close": m.C}
+            "s10": m.s10, "s20": m.s20, "close": m.C, "rising": rising}
 
 
 def evaluate(m: Metrics, state: str, market: dict, perf_cut: dict | None = None, qcfg: dict | None = None) -> dict:

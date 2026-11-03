@@ -63,7 +63,13 @@ cada minuto (cada 5 si no hay ningún mercado abierto) con el último precio de 
 tiempo real en EE. UU. y con 15-20 minutos de retraso en la mayoría de bolsas de fuera. La columna
 "Ahora" compara ese precio con los niveles del cierre (pivote, entrada del plan Qullamaggie,
 invalidación) y estima el volumen del día al cierre. Los estados y las puntuaciones siguen siendo los
-del cierre: una ruptura no se confirma hasta que cierra la sesión. Los valores calculados al momento no tienen temática,
+del cierre: una ruptura no se confirma hasta que cierra la sesión.
+
+La tabla de índices también tiene columna "Ahora" (último precio y cambio frente al cierre anterior
+mientras su bolsa está abierta) y el filtro de mercado de Qullamaggie añade el semáforo orientativo con
+el Nasdaq 100 en vivo frente a sus SMA10 y SMA20 del último cierre. Los índices se consultan cada
+minuto; las acciones, mientras alguna cotiza o cada 15 minutos, para no pedir cientos de valores al
+Worker cuando solo están abiertas Europa o Asia. Los valores calculados al momento no tienen temática,
   catalizador ni fechas de resultados (su peso se redistribuye, como en el motor diario).
 
 ## Método

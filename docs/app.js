@@ -307,6 +307,7 @@
           : "El contexto penaliza las rupturas: conviene exigir más confirmación o esperar.");
     const label = { FAVORABLE: "Favorable", MIXTO: "Mixto", DESFAVORABLE: "Desfavorable" }[r.label] || r.label;
     const idx = r.indices.filter((i) => i.available);
+    IDX = Object.fromEntries(idx.map((i) => [i.sym, i]));
     const br = r.breadth || {};
     const bCell = (k, name) => {
       const b = br[k] || {}; const now = b.now, was = b.t21;
@@ -331,8 +332,8 @@
         <div>
           <h3>Índices</h3>
           <div class="tbl-wrap"><table class="idx-table">
-            <thead><tr><th class="left">Índice</th><th>Fecha</th><th>Cierre</th><th title="Cambio de la última sesión frente al cierre anterior">Día</th><th>vs SMA10</th><th>vs SMA20</th><th>vs SMA50</th><th>vs SMA200</th><th>1 m</th><th>3 m</th><th>Desde máx.</th></tr></thead>
-            <tbody>${idx.map((i) => `<tr><td class="left">${esc(i.name)}</td><td class="dim">${dateEs(i.date)}</td><td>${num(i.close, i.close > 1000 ? 0 : 2)}</td><td class="${cls(i.d1)}">${pct(i.d1)}</td>
+            <thead><tr><th class="left">Índice</th><th>Fecha</th><th>Cierre</th><th title="Cambio de la última sesión frente al cierre anterior">Día</th><th title="Último precio de Yahoo Finance con la sesión abierta y su cambio frente al cierre anterior; se actualiza cada minuto (algunos índices llegan con 15-20 minutos de retraso)">Ahora</th><th>vs SMA10</th><th>vs SMA20</th><th>vs SMA50</th><th>vs SMA200</th><th>1 m</th><th>3 m</th><th>Desde máx.</th></tr></thead>
+            <tbody>${idx.map((i) => `<tr><td class="left">${esc(i.name)}</td><td class="dim">${dateEs(i.date)}</td><td>${num(i.close, i.close > 1000 ? 0 : 2)}</td><td class="${cls(i.d1)}">${pct(i.d1)}</td><td class="live-idx" data-idx="${esc(i.sym)}">${idxLive(i)}</td>
               <td class="${cls(i.vs10)}">${pct(i.vs10)}</td><td class="${cls(i.vs20)}">${pct(i.vs20)}</td><td class="${cls(i.vs50)}">${pct(i.vs50)}</td><td class="${cls(i.vs200)}">${pct(i.vs200)}</td>
               <td class="${cls(i.r1m)}">${pct(i.r1m)}</td><td class="${cls(i.r3m)}">${pct(i.r3m)}</td><td class="${cls(i.dhi)}">${pct(i.dhi)}</td></tr>`).join("")}</tbody>
           </table></div>
@@ -341,7 +342,7 @@
           <h3>Amplitud en EE. UU.</h3>
           <div class="breadth">${bCell("SPX", "S&P 500")}${bCell("MID", "S&P 400")}${bCell("SML", "S&P 600")}</div>
           ${p50hist.filter(isNum).length > 1 ? `<p class="lead" style="margin-top:10px">Evolución de la amplitud del S&P 500 en el histórico: ${spark(p50hist, 140, 26)}</p>` : ""}
-          ${d.qm_market ? `<p class="qm-light qm-${esc((d.qm_market.light || "").replace("á", "a"))}"><strong>Filtro de mercado Qullamaggie:</strong> ${esc(d.qm_market.text)}${isNum(d.qm_market.close) ? ` (cierre ${num(d.qm_market.close, 0)}; SMA10 ${num(d.qm_market.s10, 0)}; SMA20 ${num(d.qm_market.s20, 0)})` : ""}.</p>` : ""}
+          ${d.qm_market ? `<p class="qm-light qm-${esc((d.qm_market.light || "").replace("á", "a"))}"><strong>Filtro de mercado Qullamaggie:</strong> ${esc(d.qm_market.text)}${isNum(d.qm_market.close) ? ` (cierre ${num(d.qm_market.close, 0)}; SMA10 ${num(d.qm_market.s10, 0)}; SMA20 ${num(d.qm_market.s20, 0)})` : ""}.<span data-live-qm>${qmLive()}</span></p>` : ""}
           <p class="lead" style="margin-top:10px">VIX ${num(r.vix.vix, 1)} · VIX 3 meses ${num(r.vix.vix3m, 1)}${isNum(r.vix.vix) && isNum(r.vix.vix3m) ? (r.vix.vix < r.vix.vix3m ? " (contango: sin estrés agudo)" : " (invertida: estrés)") : ""}.</p>
         </div>
       </div>`;
@@ -1027,6 +1028,26 @@
     return { q, p, chg, dist, txt, kind, rv, proj, open: q.isOpen };
   }
 
+  // Índices: último precio con la sesión abierta (o un cierre posterior al de la tabla).
+  let IDX = {};
+  function idxLive(i) {
+    const q = LIVE.q[i.sym];
+    if (!q || !isNum(q.price)) return `<span class="dim">—</span>`;
+    const day = qDay(q);
+    if (!q.isOpen && !(day && i.date && day > i.date)) return `<span class="dim" title="Mercado cerrado: su último cierre ya está en la tabla">cerrado</span>`;
+    const chg = isNum(q.prevClose) && q.prevClose > 0 ? q.price / q.prevClose - 1 : null;
+    return `<span class="live-dot ${q.isOpen ? "on" : ""}" title="${q.isOpen ? "Sesión abierta" : "Cierre posterior al de la tabla"} · ${hhmm(q.time)}"></span>${num(q.price, q.price > 1000 ? 0 : 2)} <span class="${cls(chg)}">${pct(chg)}</span>`;
+  }
+  // Semáforo de Qullamaggie con el Nasdaq 100 en vivo frente a las SMA10 y SMA20 del último cierre.
+  function qmLive() {
+    const m = D && D.qm_market, q = LIVE.q["^NDX"];
+    if (!m || !isNum(m.s10) || !isNum(m.s20) || !q || !isNum(q.price) || !q.isOpen) return "";
+    const p = q.price, a10 = p > m.s10, a20 = p > m.s20;
+    const rising = typeof m.rising === "boolean" ? m.rising : m.light === "verde";
+    const light = a10 && a20 && rising ? "verde" : a20 ? "ámbar" : "rojo";
+    return `<br><span class="live-dot on"></span>Ahora ${num(p, 0)}: ${a10 ? "sobre" : "bajo"} la SMA10 y ${a20 ? "sobre" : "bajo"} la SMA20, semáforo <strong>${light}</strong> <span class="dim">(orientativo: se confirma al cierre)</span>`;
+  }
+
   function liveCell(c) {
     const L = liveInfo(c);
     if (!L) return `<span class="dim">—</span>`;
@@ -1061,6 +1082,9 @@
   function renderLive() {
     Object.values(BYS).forEach((c) => { const L = liveInfo(c); c.live_dist = L && !L.stale ? L.dist : null; });
     document.querySelectorAll("td[data-live]").forEach((td) => { const c = BYS[td.dataset.live] || ROWS[td.dataset.live]; if (c) td.innerHTML = liveCell(c); });
+    document.querySelectorAll("td[data-idx]").forEach((td) => { const i = IDX[td.dataset.idx]; if (i) td.innerHTML = idxLive(i); });
+    const qmEl = document.querySelector("[data-live-qm]");
+    if (qmEl) qmEl.innerHTML = qmLive();
     const f = document.querySelector("[data-live-ficha]");
     if (f && LIVE.ficha) f.innerHTML = fichaLive(LIVE.ficha);
     updateLiveCharts();
@@ -1072,7 +1096,7 @@
       return;
     }
     if (LIVE.error) { st.innerHTML = `<span class="live-dot"></span>Precios en vivo no disponibles ahora; se reintenta en 5 minutos`; return; }
-    const us = Object.entries(LIVE.q).find(([sym]) => !sym.includes("."));
+    const us = Object.entries(LIVE.q).find(([sym]) => sym === "^GSPC") || Object.entries(LIVE.q).find(([sym]) => !sym.includes(".") && !sym.startsWith("^"));
     const open = !!(us && us[1].isOpen);
     st.innerHTML = `<span class="live-dot ${open ? "on" : ""}"></span>${open ? "Precios en vivo" : "Mercado de EE. UU. cerrado"} · actualizado ${hhmm(LIVE.at / 1000)}`;
   }
@@ -1080,8 +1104,14 @@
   async function liveTick() {
     clearTimeout(LIVE.timer);
     if (!workerUrl() || document.hidden || !D) return;
-    const syms = [...new Set([...(D.lists.presented || []), ...(D.lists.qm_setups || []).map((x) => x.sym), ...(D.lists.htf_setups || []).map((x) => x.sym),
+    // Índices en cada vuelta; las acciones, mientras alguna cotiza o cada 15 minutos (para no consultar
+    // cientos de valores cada minuto cuando solo están abiertas Europa o Asia).
+    const idxSyms = ((D.regime && D.regime.indices) || []).filter((i) => i.available).map((i) => i.sym);
+    const stockSyms = [...new Set([...(D.lists.presented || []), ...(D.lists.qm_setups || []).map((x) => x.sym), ...(D.lists.htf_setups || []).map((x) => x.sym),
       ...(D.lists.focus || []).map((x) => x.sym), ...(currentSym ? [currentSym] : [])])].sort();
+    const full = !LIVE.fullAt || Date.now() - LIVE.fullAt > 15 * 60000 || stockSyms.some((s) => LIVE.q[s] && LIVE.q[s].isOpen)
+      || (currentSym && !LIVE.q[currentSym]);
+    const syms = [...new Set([...idxSyms, ...(full ? stockSyms : [])])];
     try {
       for (let i = 0; i < syms.length; i += 40) {
         const r = await getWorker(`/quote?symbols=${encodeURIComponent(syms.slice(i, i + 40).join(","))}`);
@@ -1089,6 +1119,7 @@
         Object.assign(LIVE.q, r.quotes);
       }
       LIVE.error = ""; LIVE.at = Date.now();
+      if (full) LIVE.fullAt = LIVE.at;
     } catch (e) {
       LIVE.error = e.old ? "update" : "fail";
     }
