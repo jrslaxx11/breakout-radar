@@ -268,7 +268,6 @@ J,Jacobs Solutions,Industrials,Construction & Engineering,SPX
 JNJ,Johnson & Johnson,Health Care,Pharmaceuticals,SPX
 JCI,Johnson Controls,Industrials,Building Products,SPX
 JPM,JPMorgan Chase,Financials,Diversified Banks,SPX
-KVUE,Kenvue,Consumer Staples,Personal Care Products,SPX
 KDP,Keurig Dr Pepper,Consumer Staples,Soft Drinks & Non-alcoholic Beverages,SPX
 KEY,KeyCorp,Financials,Regional Banks,SPX
 KEYS,Keysight Technologies,Information Technology,Electronic Equipment & Instruments,SPX
@@ -346,6 +345,7 @@ NVR,"NVR, Inc.",Consumer Discretionary,Homebuilding,SPX
 NXPI,NXP Semiconductors,Information Technology,Semiconductors,SPX
 ORLY,O'Reilly Automotive,Consumer Discretionary,Automotive Retail,SPX
 OXY,Occidental Petroleum,Energy,Oil & Gas Exploration & Production,SPX
+OKTA,"Okta, Inc.",Information Technology,Application Software,SPX
 ODFL,Old Dominion,Industrials,Cargo Ground Transportation,SPX
 OMC,Omnicom Group,Communication Services,Advertising,SPX
 ON,ON Semiconductor,Information Technology,Semiconductors,SPX
@@ -663,6 +663,7 @@ GBCI,Glacier Bancorp,Financials,Regional Banks,MID
 GEF,"Greif, Inc.",Materials,"Metal, Glass & Plastic Containers",MID
 GGG,Graco Inc.,Industrials,Industrial Machinery & Supplies & Components,MID
 GHC,Graham Holdings,Consumer Discretionary,Education Services,MID
+GKOS,Glaukos,Health Care,Health Care Equipment,MID
 GLPI,Gaming and Leisure Properties,Real Estate,Other Specialized REITs,MID
 GME,GameStop,Consumer Discretionary,Computer & Electronics Retail,MID
 GMED,Globus Medical,Health Care,Health Care Equipment,MID
@@ -760,7 +761,6 @@ OC,Owens Corning,Industrials,Building Products,MID
 OGE,OGE Energy,Utilities,Multi-Utilities,MID
 OGS,One Gas,Utilities,Gas Utilities,MID
 OHI,Omega Healthcare Investors,Real Estate,Health Care REITs,MID
-OKTA,"Okta, Inc.",Information Technology,Application Software,MID
 OLED,Universal Display,Information Technology,Semiconductors,MID
 OLLI,Ollie's Bargain Outlet,Consumer Discretionary,Broadline Retail,MID
 ONB,Old National Bank,Financials,Regional Banks,MID
@@ -1122,7 +1122,6 @@ GBX,"The Greenbrier Companies, Inc.",Industrials,Construction Machinery & Heavy 
 GEO,"GEO Group, Inc.",Industrials,Environmental & Facilities Services,SML
 GFF,Griffon Corporation,Industrials,Building Products,SML
 GIII,"G-III Apparel Group, Ltd.",Consumer Discretionary,"Apparel, Accessories & Luxury Goods",SML
-GKOS,Glaukos Corp.,Health Care,Health Care Equipment,SML
 GNL,"Global Net Lease, Inc.",Real Estate,Diversified REITs,SML
 GNW,"Genworth Financial, Inc.",Financials,Multi-line Insurance,SML
 GO,Grocery Outlet,Consumer Staples,Food Retail,SML

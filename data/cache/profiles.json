@@ -1031,6 +1031,14 @@
 "name": "",
 "sector": ""
 },
+"2805.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-04",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "2810.T": {
 "country": "Japan",
 "industry": "Packaged Foods",
@@ -2489,6 +2497,14 @@
 "name": "Kawasaki Kisen Kaisha, Ltd.",
 "sector": "Industrials"
 },
+"9110.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-04",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "9147.T": {
 "country": "Japan",
 "industry": "Integrated Freight & Logistics",
@@ -3049,6 +3065,14 @@
 "name": "",
 "sector": ""
 },
+"AHCO": {
+"country": "",
+"industry": "",
+"last": "2026-11-04",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "AHR": {
 "country": "",
 "industry": "",
@@ -3553,6 +3577,14 @@
 "name": "",
 "sector": ""
 },
+"ANE.MC": {
+"country": "",
+"industry": "",
+"last": "2026-11-04",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "ANET": {
 "country": "United States",
 "industry": "Computer Hardware",
@@ -3596,6 +3628,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"AORT": {
+"country": "",
+"industry": "",
+"last": "2026-11-04",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "AOS": {
 "country": "",
@@ -3962,6 +4002,14 @@
 "industry": "Information Technology Services",
 "name": "Alten S.A.",
 "sector": "Technology"
+},
+"ATEC": {
+"country": "",
+"industry": "",
+"last": "2026-11-04",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "ATEX": {
 "country": "",
@@ -6211,6 +6259,14 @@
 "name": "",
 "sector": ""
 },
+"COAG": {
+"country": "",
+"industry": "",
+"last": "2026-11-04",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "COCO": {
 "country": "United States",
 "industry": "Beverages - Non-Alcoholic",
@@ -7029,6 +7085,14 @@
 "name": "",
 "sector": ""
 },
+"DFH": {
+"country": "",
+"industry": "",
+"last": "2026-11-04",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "DFIN": {
 "country": "",
 "industry": "",
@@ -7192,6 +7256,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"DLX": {
+"country": "",
+"industry": "",
+"last": "2026-11-04",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "DMP.AX": {
 "country": "Australia",
@@ -7834,6 +7906,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"ENOV": {
+"country": "",
+"industry": "",
+"last": "2026-11-04",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "ENR": {
 "country": "",
@@ -9502,6 +9582,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"GRND": {
+"country": "",
+"industry": "",
+"last": "2026-11-04",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "GRNT": {
 "country": "",
@@ -11433,6 +11521,14 @@
 "name": "",
 "sector": ""
 },
+"LAGR-B.ST": {
+"country": "",
+"industry": "",
+"last": "2026-11-04",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "LAMR": {
 "country": "",
 "industry": "",
@@ -11691,6 +11787,14 @@
 "country": "",
 "industry": "",
 "last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
+"LMB": {
+"country": "",
+"industry": "",
+"last": "2026-11-04",
 "name": "",
 "sector": "",
 "tries": 1
@@ -12245,6 +12349,14 @@
 "name": "",
 "sector": ""
 },
+"MDLN": {
+"country": "",
+"industry": "",
+"last": "2026-11-04",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "MDLZ": {
 "country": "",
 "industry": "",
@@ -12435,6 +12547,14 @@
 "name": "",
 "sector": ""
 },
+"MIRM": {
+"country": "",
+"industry": "",
+"last": "2026-11-04",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "MITK": {
 "country": "",
 "industry": "",
@@ -12576,6 +12696,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"MOS": {
+"country": "",
+"industry": "",
+"last": "2026-11-04",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "MOWI.OL": {
 "country": "Norway",
@@ -13603,6 +13731,14 @@
 "name": "",
 "sector": ""
 },
+"NVCR": {
+"country": "",
+"industry": "",
+"last": "2026-11-04",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "NVDA": {
 "country": "",
 "industry": "",
@@ -13973,6 +14109,14 @@
 "name": "",
 "sector": ""
 },
+"ONT": {
+"country": "",
+"industry": "",
+"last": "2026-11-04",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "OOMA": {
 "country": "",
 "industry": "",
@@ -14272,6 +14416,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"PAYP": {
+"country": "",
+"industry": "",
+"last": "2026-11-04",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "PAYS": {
 "country": "",
@@ -15306,6 +15458,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"RCO.PA": {
+"country": "",
+"industry": "",
+"last": "2026-11-04",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "RDN": {
 "country": "",
@@ -17869,6 +18029,14 @@
 "name": "",
 "sector": ""
 },
+"TMDX": {
+"country": "",
+"industry": "",
+"last": "2026-11-04",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "TME": {
 "country": "China",
 "industry": "Internet Content & Information",
@@ -18013,6 +18181,14 @@
 "name": "",
 "sector": ""
 },
+"TREE": {
+"country": "",
+"industry": "",
+"last": "2026-11-04",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "TREL-B.ST": {
 "country": "",
 "industry": "",
@@ -18042,6 +18218,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"TRIP": {
+"country": "",
+"industry": "",
+"last": "2026-11-04",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "TRLV": {
 "country": "",
@@ -18248,6 +18432,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"TTWO": {
+"country": "",
+"industry": "",
+"last": "2026-11-04",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "TU": {
 "country": "",
@@ -19656,6 +19848,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"XRAY": {
+"country": "",
+"industry": "",
+"last": "2026-11-04",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "XRN": {
 "country": "",
