@@ -7,7 +7,7 @@ from datetime import date, datetime, timezone
 from zoneinfo import ZoneInfo
 
 from . import breakouts as bo
-from . import fundamentals, heat, history, htf, luk, qullamaggie as qm, regime, stars, themes
+from . import fundamentals, heat, history, htf, luk, luk_run, qullamaggie as qm, regime, stars, themes
 from .config import DOCS_DATA, Config
 from .metrics import compute, rel, rs_composite
 
@@ -49,7 +49,8 @@ def _stock_catalyst(sym: str, react: dict | None, has_earn_data: bool, overrides
 
 
 def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict | None = None,
-        details_fn=None, profiles_fn=None, industries_fn=None, today: date | None = None, write: bool = True,
+        details_fn=None, profiles_fn=None, industries_fn=None, mcaps_fn=None, today: date | None = None,
+        write: bool = True,
         force: bool = False) -> dict:
     cfg = cfg or Config.load()
     S = cfg.settings
@@ -372,14 +373,12 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
             c["mine"] = bool(rows[c["sym"]]["info"].get("mine"))
             c["liquid"] = True
 
-    # ---------- retrocesos de Martin Luk: líderes del escáner que corrigen a la EMA 9/21 o el AVWAP ----------
-    lcfg = {**luk.DEFAULTS, **(S.get("luk") or {})}
+    # ---------- sistema de Martin Luk: universo, líderes, setups y termómetro (radar/luk.py) ----------
+    lst = luk_run.screen(liquid, prices, S, (mcaps_fn or fundamentals.us_mcaps)(), us)
     for c in search_view:
-        if c.get("liquid") and not c.get("excluded") and c.get("scan") and (us(c["sym"]) or not lcfg.get("us_only", True)):
-            c["luk"] = luk.evaluate(prices.get(c["sym"]), lcfg)
-    # Su termómetro: los 100 valores de EE. UU. con más momentum, sanos o rotos.
-    mom_top = sorted((r for r in liquid if not r["dup"] and us(r["sym"])), key=lambda r: -r["rsc"])[:lcfg["health_top"]]
-    luk_health = luk.health({r["sym"]: prices[r["sym"]] for r in mom_top if r["sym"] in prices})
+        a = lst["analyses"].get(c["sym"])
+        if a and (a["setup"] or a["ep_today"]):
+            c["luk"] = a
 
     # ---------- escáner Qullamaggie: todo el universo líquido, solo rupturas ----------
     order = {bo.CONFIRMED: 0, bo.EARLY: 1, bo.RETEST: 2, bo.PRE: 3}
@@ -477,30 +476,10 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
     focus = [x for x in focus if per.update({x["group"]: per.get(x["group"], 0) + 1}) or
              per[x["group"]] <= heat_cfg["focus_per_group"]]
 
-    # ---------- lista de retrocesos de Luk ----------
-    luk_order = {st: i for i, st in enumerate(luk.STATES)}
-    luk_setups = []
-    for c in search_view:
-        L = c.get("luk")
-        if not L:
-            continue
-        q = c.get("qm") or {}
-        luk_setups.append({
-            "sym": c["sym"], "name": c["name"], "theme": c.get("theme"), "group": c.get("group"),
-            "group_name": c.get("group_name"), "hot": c.get("group") in hot, "date": c["date"],
-            "close": c["close"], "currency": c["currency"], "adr_pct": c["adr_pct"], "v20": c["v20"],
-            "mom1": c.get("mom1"), "mom3": c.get("mom3"), "mom6": c.get("mom6"), "scan": c.get("scan"),
-            "presented": bool(c.get("presented")), "qm_verdict": q.get("verdict"),
-            "stars": (c.get("stars") or {}).get("stars"), "next_earnings": c.get("next_earnings"),
-            "earnings_days": _days_ahead(c.get("next_earnings"), today),
-            **{k: L[k] for k in ("state", "levels", "undercut", "days", "peak", "peak_date", "leg", "pull_lo",
-                                 "depth", "depth_adr", "retrace", "ema9", "ema21", "ema50", "avwap", "d9", "d21",
-                                 "vdry", "trail", "trail_value", "points", "anchor_date")},
-            # Para el precio en vivo: el "nivel" de referencia es la EMA 21 y la invalidación, la EMA 50.
-            "pivot": L["ema21"], "inv": L["ema50"],
-        })
-    luk_setups.sort(key=lambda x: (luk_order[x["state"]], -x["points"], not x["hot"], -(x["mom3"] or 0)))
-    luk_setups = luk_setups[:lcfg.get("max_list", 60)]
+    # ---------- Luk: ranking con resultados, niveles y control de calidad ----------
+    lfin = luk_run.finalize(lst, {c["sym"]: c for c in search_view}, today, hot)
+    lstats = luk_run.stats(lst, liquid, prices, us, heat_cfg["scan_pct"],
+                           {"min_mdv": flt["min_mdv_usd"], "min_price": flt["min_price_usd"]})
 
     # ---------- acciones líderes de cada temática: mayor fuerza relativa compuesta ----------
     view_by = {c["sym"]: c for c in search_view}
@@ -537,15 +516,18 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
         "lists": {"presented": presented, "global_top": global_top, "priority": priority,
                   "by_state": by_state, "others": others, "outside": outside[:15],
                   "pending": pending_list, "eliminated": eliminated, "qm_setups": qm_setups,
-                  "htf_setups": htf_setups, "hot_groups": groups[:20], "focus": focus, "luk": luk_setups},
+                  "htf_setups": htf_setups, "hot_groups": groups[:20], "focus": focus, "luk": lfin["setups"],
+                  "luk_l3": lfin["l3"], "luk_ep": lfin["ep"]},
         "qm_market": qm_market,
         "qm_const": qm.constants(),
         "stars_const": stars.constants(),
         "htf_const": {**htf.constants(), **hcfg, "pole_days": w.get("pole_days", 40)},
         "heat_const": {**heat_cfg, "scan_cut": scan_cut},
         "heat_summary": {"hidden": sum(1 for c in search_view if fast_hot(c) and c["state"] == bo.DISCARDED)},
-        "luk_const": luk.constants(),
-        "luk_health": luk_health,
+        "luk_const": luk.constants(lst["cfg"]),
+        "luk_regime": lst["regime"],
+        "luk_universe": {**lst["universe"], "n_l1": lfin["n_l1"], "n_l1b": lfin["n_l1b"]},
+        "luk_stats": lstats,
         "theme_weights": weights,
         "calendar": calendar,
         "web": {"worker_url": (S.get("web") or {}).get("worker_url") or ""},

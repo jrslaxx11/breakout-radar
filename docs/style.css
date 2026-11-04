@@ -365,15 +365,11 @@ small.block { display: block; font-size: 11.5px; margin-top: 1px; padding: 0; wh
 /* ---------- retrocesos de Martin Luk ---------- */
 .luk-quote { border-left-color: var(--luk); }
 #luk .five-note { border-left-color: var(--luk); }
-.chip.luk-recupera { --st: var(--pos); }
-.chip.luk-enzona { --st: var(--luk); }
-.chip.luk-acercándose { --st: var(--s-pre); }
-.chip[class*="luk-"] { color: var(--st); background: color-mix(in srgb, var(--st) 13%, transparent); }
 .dots { display: inline-flex; gap: 3px; vertical-align: 1px; }
 .dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--soft); border: 1px solid var(--rule); }
 .dots i.on { background: var(--luk); border-color: var(--luk); }
 .luk-table > tbody > tr > td { vertical-align: top; }
-.luk-table > tbody > tr.row > td:nth-child(2) { min-width: 120px; max-width: 220px; white-space: normal; line-height: 1.9; }
+.luk-table > tbody > tr.row > td.flags-cell { min-width: 140px; max-width: 250px; white-space: normal; line-height: 1.9; }
 .luk-box { border-top: 1px solid var(--rule); margin-top: 10px; padding-top: 6px; }
 .luk-box h3 { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .luk-box .checks { margin-top: 4px; }
@@ -393,3 +389,46 @@ table.sortable > thead th { cursor: pointer; user-select: none; }
 table.sortable > thead th:hover { color: var(--ink); }
 table.sortable > thead th[aria-sort="ascending"]::after { content: " ↑"; color: var(--pivot); }
 table.sortable > thead th[aria-sort="descending"]::after { content: " ↓"; color: var(--pivot); }
+
+/* ---------- sistema de Martin Luk: modo sugerido, setups y flags ---------- */
+.verdict-word[data-v="LARGO"] { color: var(--pos); }
+.verdict-word[data-v="CORTO"] { color: var(--neg); }
+.verdict-word[data-v="NEUTRO"], .verdict-word[data-v="SIN DATOS"] { color: var(--ink); }
+.verdict-word.small { font-size: clamp(36px, 6vw, 56px); }
+.mode-cap { margin: 0 0 2px; font-size: 13px; color: var(--muted); }
+.verdict .thermo-bar { max-width: 520px; margin-top: 12px; }
+.thermo-list { margin-top: 8px; font-size: 13px; }
+.thermo-list summary, details.classic > summary, .luk-all > summary { cursor: pointer; color: var(--pivot); }
+.thermo-list p { margin: 4px 0; line-height: 1.7; }
+.thermo-list a { margin-right: 6px; font-weight: 650; }
+details.classic { margin: 14px 0 6px; padding: 8px 12px; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius-s); }
+details.classic > summary { font-size: 14px; }
+details.classic[open] > summary { margin-bottom: 8px; }
+.ctx-table td.pos, .ctx-table td.neg { font-weight: 650; }
+.mode-line { margin: 0 0 12px; font-size: 14px; }
+.mode-tag { display: inline-block; padding: 1px 10px; border-radius: 999px; font-weight: 700; text-decoration: none; color: var(--ink); background: var(--soft); }
+.mode-tag.mode-largo { color: var(--pos); background: color-mix(in srgb, var(--pos) 13%, transparent); }
+.mode-tag.mode-corto { color: var(--neg); background: color-mix(in srgb, var(--neg) 13%, transparent); }
+.setup-chip { --st: var(--luk); font-variation-settings: "wdth" var(--w-semi); }
+.setup-chip.setup-L1b { --st: var(--s-pre); }
+.setup-chip.setup-L3 { --st: var(--s-retest); }
+.flag-tag { display: inline-block; margin: 0 2px 2px 0; padding: 0 6px; border-radius: 999px; font-size: 11.5px; color: var(--muted); border: 1px solid var(--rule); white-space: nowrap; }
+.flag-tag.verify { color: var(--s-retest); border-color: color-mix(in srgb, var(--s-retest) 45%, transparent); }
+.flag-tag.earn { color: var(--s-pre); border-color: color-mix(in srgb, var(--s-pre) 50%, transparent); }
+.score-pill { display: inline-block; min-width: 2.2em; padding: 0 8px; border-radius: 999px; text-align: center; color: var(--surface); background: var(--luk); font-weight: 750; }
+.lead-tag { display: block; margin-top: 2px; font-size: 11px; font-weight: 600; color: var(--luk); }
+.luk-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin: 18px 0 8px; }
+.luk-head h3 { margin: 0; }
+.copy-btn { font: inherit; font-size: 13.5px; font-weight: 650; color: var(--surface); background: var(--luk); border: 0; border-radius: var(--radius-s); padding: 6px 12px; cursor: pointer; }
+.copy-btn:hover { filter: brightness(1.08); }
+.copy-btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.copy-status { font-size: 13px; color: var(--pos); }
+.luk-all { margin-top: 10px; }
+.luk-all > summary { padding: 6px 0; font-size: 14px; }
+.h-note { font-size: 13px; font-weight: 500; margin-left: 4px; }
+.warn-box { margin: 0 0 12px; padding: 8px 12px; border-left: 4px solid var(--neg); background: var(--surface); border-radius: var(--radius-s); font-size: 14px; max-width: 95ch; }
+.warn-box.soft { border-left-color: var(--s-pre); }
+.small-list { font-size: 13px; }
+.small-list li { padding: 4px 0; }
+.ctx-table th, .ctx-table td { padding: 7px 6px; }
+.ctx-table td:nth-child(7) { white-space: nowrap; }

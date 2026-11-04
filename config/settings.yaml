@@ -2,7 +2,7 @@
 # para que el cálculo sea reproducible de un día a otro.
 
 run:
-  history_days: 400          # sesiones descargadas (≥ 252 para máximos de 52 semanas y SMA200)
+  history_days: 600          # sesiones descargadas (≥ 252 para máximos de 52 semanas; 600 para que la EMA 150 converja)
   download_chunk: 80          # tickers por petición a Yahoo
   download_pause_s: 2.0       # pausa entre bloques (evita bloqueos por exceso de peticiones)
   max_profile_fetch: 700      # perfiles (sector/industria) nuevos por ejecución; el resto queda en caché
@@ -79,17 +79,72 @@ heat:
     pause_s: 0.5
     min_total: 1500      # si salen menos acciones, se conserva la caché anterior
 
-# Retrocesos de Martin Luk: líderes del escáner que corrigen 2-8 sesiones a la EMA 9/21 o el AVWAP.
+# Sistema de Martin Luk (radar/luk.py). Todos sus parámetros están aquí.
 luk:
-  us_only: true
-  adr_min: 0.03          # ADR ≥ 3% (opera también líderes líquidos como DELL, MU o PANW)
-  leg_min: 0.20          # tramo previo ≥ 20% y ≥ 4 ADR desde el mínimo de las 40 sesiones anteriores
-  pull_min: 2            # sesiones desde el máximo de las 10 últimas
+  # Universo: acciones ordinarias de EE. UU. (sin ETF, fondos, SPAC, warrants ni preferentes)
+  include_adrs: false            # ADR de empresas extranjeras
+  min_market_cap: 300000000      # capitalización (screener de Yahoo; sin dato: pasa con "verificar")
+  min_price: 5
+  min_dollar_vol_20d: 10000000   # mediana del valor negociado de 20 sesiones
+  min_adr_pct_20d: 0.04
+  # Líder: escáner de momentum (el 7% de heat.scan_pct) + tramo previo + medias + máximo de 52 semanas
+  leg_min: 0.20                  # tramo previo ≥ 20% y ≥ 4 ADR desde el mínimo de las 40 sesiones previas al máximo
+  leg_adr_min: 4.0
+  leg_lookback: 40
+  max_dist_52w_high: 0.25        # salvo EP en las últimas 60 sesiones
+  ema_rise: 3                    # EMA ascendente: hoy > hace 3 sesiones
+  # EP, ruptura y ancla del AVWAP
+  ep_gap: 0.10                   # hueco ≥ 10%
+  ep_vol_mult: 3.0               # volumen ≥ 3 × media de 50 sesiones (sin la del día)
+  breakout_lookback: 50          # ruptura: cierre sobre el máximo de las 50 sesiones previas
+  breakout_vol_mult: 1.5
+  catalyst_window: 60            # ventana del catalizador (EP o ruptura) en sesiones
+  # L1 (retroceso) y L1b (perforación)
+  high_window: 20
+  pull_min: 2                    # sesiones desde el máximo de 20: filtro 2-8
   pull_max: 8
-  depth_adr_max: 3.5     # corrección ≤ 3,5 ADR
-  retrace_max: 0.62      # y ≤ 62% del tramo
-  health_top: 100        # termómetro: los 100 valores de EE. UU. con más fuerza relativa
+  pull_best_min: 3               # 3-7 puntúa más
+  pull_best_max: 7
+  depth_adr_min: 1.0             # del máximo de 20 al mínimo del retroceso: 1-3 ADR
+  depth_adr_max: 3.0
+  retrace_max: 0.62              # y ≤ 62% del tramo
+  touch_adr: 0.2                 # zona: mínimo de hoy o ayer a ≤ 0,2 ADR de EMA 9/21 o AVWAP
+  support_adr: 1.0               # o cierre a ≤ 1 ADR del soporte más cercano
+  below21_adr: 0.75              # L1b: cierre hasta 0,75 ADR bajo la EMA 21 (y sobre la EMA 50)
+  # L3 (base, solo watchlist)
+  l3_range_sessions: 10
+  l3_range_adr: 2.0
+  l3_near_high: 0.03
+  # Ranking 0-100
+  w_rs: 0.30
+  w_pull: 0.30
+  w_theme: 0.20
+  w_catalyst: 0.20
+  bonus: 0.10                    # inside day/NR7, EMA 9 al alza y 3-7 sesiones: +0,1 cada uno (tope 1)
+  theme_cap: 4
+  earnings_window: 5             # resultados en ≤ 5 sesiones de EE. UU. → ×0,8
+  earnings_mult: 0.8
+  wide_day_pct: 0.03             # (cierre − mínimo)/cierre > 3% → ×0,9 y "requiere gatillo intradía"
+  wide_day_mult: 0.9
+  # Niveles
+  risk_pct: 0.25
+  stop_target_pct: 1.5
+  stop_max_pct: 3.0
+  # Salida
+  top_n: 5
   max_list: 60
+  max_l3: 30
+  max_ep: 30
+  # Régimen: termómetro de los 100 líderes por fuerza relativa
+  health_top: 100
+  long_healthy: 0.50             # LARGO si > 50% sanos
+  short_damaged: 0.90            # CORTO si ≥ 90% dañados
+  gap_days: 5                    # hueco bajista ≥ 1 ADR en las 5 últimas sesiones → dañado
+  # Control de calidad
+  backtest_days: 120             # sesiones para medir el tamaño de la lista diaria
+  empty_warn_days: 3             # aviso si la lista lleva ≥ 3 sesiones vacía
+  list_target: 15
+  coverage_target: 0.70
 
 # Puntuación de temáticas (suma 100). Fuerza relativa: posición frente a las demás temáticas.
 theme_score:

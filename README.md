@@ -197,30 +197,30 @@ rupturas normales con esta forma, el 34% subió más de un 20% en 20 sesiones y 
 (13% y 1,5% en las demás). Se muestran las que rompen hoy o siguen en la base, ordenadas por estrellas,
 y el gráfico marca el mástil y el suelo de la bandera.
 
-**Retrocesos de Martin Luk (`radar/luk.py`).** El radar está orientado al método de Martin Luk,
-campeón del USIC 2025 (+969,8%). Según el estudio de 112 de sus directos de 2026 (James Muninn), el 65,9%
-de sus largos son retrocesos y solo el 2,3% rupturas de base: deja que un líder corrija de 3 a 7 sesiones
-hasta la EMA 9 y la EMA 21 al alza y el AVWAP, y entra en el gráfico de 1-5 minutos con un stop de ~1,3%,
-lo que con un riesgo del 0,3-0,5% da posiciones del 20-30% (máximo 35%). La sección "Retrocesos de Martin
-Luk", la primera tras el régimen, detecta la parte diaria del setup (`config/settings.yaml` → `luk`):
+**Sistema de Martin Luk (`radar/luk.py`, `radar/luk_run.py`).** El radar está orientado al método de
+Martin Luk, campeón del USIC 2025 (+969,8%). Según el estudio de 112 de sus directos de 2026 (James
+Muninn), dos de cada tres de sus largos son retrocesos y solo el 2,3% rupturas de base. Todos los
+parámetros están en `config/settings.yaml` → `luk`.
 
-| Paso | Criterio |
+| Bloque | Criterio |
 | --- | --- |
-| Líder | Acción de EE. UU. del escáner de momentum (7% que más sube a 1, 3 o 6 meses), ADR ≥ 3%, tramo previo ≥ 20% y ≥ 4 ADR desde el mínimo de las 40 sesiones anteriores al máximo |
-| Tendencia | EMA 21 sobre la EMA 50, ambas al alza, y cierre sobre la EMA 50 |
-| Retroceso | El máximo de las 10 últimas sesiones quedó hace 2-8 sesiones; corrección ≤ 3,5 ADR y ≤ 62% del tramo; cierre no más de 0,75 ADR bajo la EMA 21 |
-| Zona | El mínimo de hoy o de ayer toca la EMA 9 (desde la 3.ª sesión), la EMA 21 o el AVWAP anclado en el mínimo del tramo, con 0,2 ADR de margen |
-| Estado | Recupera (tocó la zona y hoy cierra sobre el máximo de ayer y la EMA 9: su día típico de entrada) · En zona · Acercándose (a ≤ 1 ADR de la EMA 9) |
-| Calidad (0-5) | 3-7 sesiones · EMA 9 > 21 > 50 · retroceso con volumen ≤ 85% de la media · confluencia de soportes · corrección ≤ 2,5 ADR (orden orientativo, no calibrado) |
+| Universo | Acciones ordinarias de EE. UU. sin ETF, fondos, SPAC (industria "Shell Companies"), warrants ni preferentes; ADR extranjeros excluidos por defecto (`include_adrs`); capitalización ≥ 300 M (screener de Yahoo; sin dato, pasa con el flag "verificar"); precio ≥ 5; mediana del valor negociado de 20 sesiones ≥ 10 M; ADR(20) ≥ 4% |
+| Líder | Escáner de momentum (el 7% de EE. UU. que más sube a 1, 3 o 6 meses desde el mínimo), tramo previo ≥ 20% y ≥ 4 ADR, EMA 21 > EMA 50 con ambas al alza (hoy > hace 3 sesiones), cierre > EMA 50 y a ≤ 25% del máximo de 52 semanas salvo EP en 60 sesiones. La EMA 150 es informativa |
+| Definiciones | EMA(n) con alfa 2/(n+1) sembrada con SMA(n) (9, 21, 50, 150) · ADR%(20) = media(High/Low, 20) − 1 · media50 de volumen sin el día evaluado · EP: hueco ≥ 10% y volumen ≥ 3 × media50 · ruptura: cierre sobre el máximo de las 50 sesiones previas con volumen ≥ 1,5 × media50 · AVWAP desde el ancla (incluida): último EP de ≤ 60 sesiones > última ruptura de ≤ 60 sesiones > mínimo de 20 sesiones |
+| L1 · retroceso | 2-8 sesiones desde el máximo de 20 (3-7 puntúa más); del máximo al mínimo del retroceso, 1-3 ADR y ≤ 62% del tramo; EMA 21 al alza; cierre ≥ EMA 21; zona: el mínimo de hoy o de ayer a ≤ 0,2 ADR de EMA 9 (desde la 3.ª sesión), EMA 21 o AVWAP, o el cierre a ≤ 1 ADR del soporte más cercano |
+| L1b · perforación | Igual, con el cierre hasta 0,75 ADR bajo la EMA 21 y sobre la EMA 50. Se marca esa noche con gatillo "reclaim de la EMA 21"; si al día siguiente cierra sobre ella, pasa a L1 |
+| L3 · base | Rango de 10 sesiones ≤ 2 ADR y cierre a ≤ 3% del máximo. Solo watchlist |
+| EP de hoy | Lista aparte, a vigilar para L1 |
+| Puntuación 0-100 | 30% fuerza relativa (media de los percentiles de la subida a 3 y 6 meses en el universo) · 30% retroceso (media del secado de volumen y la cercanía al soporte, +0,1 por inside day o NR7, por EMA 9 al alza y por 3-7 sesiones, tope 1; el volumen, solo en los días de retroceso y sin el de recuperación) · 20% temática (líderes en su industria, tope 4) · 20% catalizador (1 − sesiones desde el EP o la ruptura / 60). ×0,8 con resultados en ≤ 5 sesiones de EE. UU. (con festivos de la NYSE); ×0,9 y "requiere gatillo intradía" si el cierre está > 3% sobre el mínimo |
+| Niveles | Entrada = máximo + 0,01 (L1), EMA 21 + 0,01 (L1b) o máximo de la base + 0,01 (L3); stop −1,5% (máximo −3%); tamaño = 0,25% / 1,5% = 16,7%; +3R y +5R |
+| Régimen | Modo sugerido con los 100 valores del universo con más fuerza relativa: LARGO si > 50% sanos (cierre sobre EMA 9 y 21, ambas al alza), CORTO si ≥ 90% dañados (bajo las dos, ambas a la baja, o hueco bajista ≥ 1 ADR propio en 5 sesiones), NEUTRO si no. SPY, QQQ e IWM, como contexto. Las 9 señales anteriores quedan en un desplegable |
 
-Comprobado con las operaciones del estudio: marca MRVL en zona el 30-mar-2026 (perforó la EMA 21 y el
-AVWAP) y "recupera" el 31-mar, su día de entrada, e IONQ el 29-30 de abril y el 19-20 de mayo. La ficha
-añade el plan con sus reglas (gatillo intradía, stop en el mínimo de la vela de entrada, venta del 10-15%
-a +3-5R y el resto al primer cierre bajo la EMA 9 o la EMA 21) y una calculadora de tamaño (posición =
-riesgo / stop, con el límite del 35%). Su termómetro mide, de los 100 valores de EE. UU. con más fuerza
-relativa, cuántos cierran sobre la EMA 21 al alza y cuántos bajo la EMA 9 y la 21 bajistas: él deja de
-forzar largos cuando "90 de 100 tienen mala pinta". Los gráficos muestran por defecto sus medias (EMA 9, 21
-y 50) y el AVWAP; la leyenda permite volver a las SMA 10, 20 y 50 de Qullamaggie.
+La sección muestra el top 5, la lista completa de L1 y L1b (hasta 60) en un desplegable, las bases L3 y
+los EP del día, con un botón que copia en texto plano `Ticker | Setup | Nivel diario | Gatillo | Entrada
+est. | Stop est. | Stop % | Tamaño % | Prioridad`. Cada ejecución recalcula la lista de las últimas 120
+sesiones con los datos de cada día (media, máximo, días vacíos) y la cobertura de las entradas de Luk de
+`config/luk_trades.csv` (detectadas ese día o el anterior); si la lista lleva 3 sesiones vacía, la web y el
+registro de Actions lo avisan, sin relajar umbrales. Fuera de alcance: cortos, EP en preapertura y órdenes.
 
 **Sectores calientes (`radar/heat.py`).** "I wanna focus on the fast moving stocks in the hot
 sectors." Qullamaggie no mide los sectores con índices sino con sus escáneres: un sector está caliente

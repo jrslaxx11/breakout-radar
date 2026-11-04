@@ -1,0 +1,4 @@
+sym,date,setup,verified,source,note
+MRVL,2026-03-31,L1,true,"James Muninn, X, 3-nov-2026","Entrada en el retroceso del 31-mar (fecha explícita en la fuente); +57% / +25R"
+IONQ,2026-04-29,L1,false,"James Muninn, X, 3-nov-2026","La fuente solo dice mayo de 2026 (+30%, 25R); fecha deducida del gráfico: verificar"
+IONQ,2026-05-20,L1,false,"James Muninn, X, 3-nov-2026","La fuente solo dice mayo de 2026 (+30%, 25R); fecha deducida del gráfico: verificar"

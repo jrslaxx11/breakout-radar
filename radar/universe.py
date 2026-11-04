@@ -34,6 +34,8 @@ UA = {"User-Agent": "breakout-radar/1.0 (personal research; github actions)"}
 NASDAQ_TRADER = ("https://www.nasdaqtrader.com/dynamic/SymDir/nasdaqlisted.txt",
                  "https://www.nasdaqtrader.com/dynamic/SymDir/otherlisted.txt")
 # Instrumentos que no son acciones ordinarias (los ADR/ADS sí se mantienen: Qullamaggie también los opera).
+# ADR/ADS de empresas extranjeras: el directorio de Nasdaq lo indica en el nombre del valor.
+ADR_NAME = re.compile(r"depositary|\bADS\b|\bADR\b", re.I)
 NOT_COMMON = re.compile(r"\b(warrants?|rights?|units?|preferred|preference|notes? due|debentures?|"
                         r"subordinated|perpetual|% (series|fixed|senior))\b", re.I)
 
@@ -175,7 +177,8 @@ def parse_symbol_directory(text: str, kind: str) -> list[dict]:
             continue
         exch = "Nasdaq" if kind == "nasdaq" else {"N": "NYSE", "A": "NYSE American", "P": "NYSE Arca",
                                                    "Z": "Cboe", "V": "IEX"}.get(row.get("Exchange", ""), "")
-        out.append({"symbol": sym.replace(".", "-"), "name": name.split(" - ")[0].strip(), "exchange": exch})
+        out.append({"symbol": sym.replace(".", "-"), "name": name.split(" - ")[0].strip(), "exchange": exch,
+                    "adr": bool(ADR_NAME.search(name))})
     return out
 
 
@@ -260,11 +263,22 @@ def build_universe(cfg: Config) -> dict[str, dict]:
             if sym not in uni:
                 uni[sym] = {"source": "INTL", "name": "", "gics_sector": "", "gics_sub": "",
                             "hint": key, "unbiased": True}
-    for q in us_liquid(cfg):
+    us_rows = us_liquid(cfg)
+    if us_rows and any("adr" not in q for q in us_rows):
+        # Caché anterior al campo "adr": se toma del directorio de Nasdaq (dos descargas pequeñas).
+        try:
+            flags = {x["symbol"]: x["adr"] for x in us_listed()}
+            us_rows = [{**q, "adr": flags.get(q["symbol"])} for q in us_rows]
+        except Exception as exc:  # noqa: BLE001
+            log.warning("directorio de Nasdaq no disponible para marcar ADR (%s)", exc)
+    for q in us_rows:
         sym = q["symbol"]
         if sym not in uni:
             uni[sym] = {"source": "USA", "name": q.get("name", ""), "gics_sector": "", "gics_sub": "",
-                        "hint": "", "unbiased": False}
+                        "hint": "", "unbiased": False, "adr": q.get("adr")}
+    for sym, info in uni.items():
+        if info["source"] in ("SPX", "MID", "SML"):
+            info.setdefault("adr", False)
     for q in discovery(cfg):
         sym = q.get("symbol")
         if sym and sym not in uni:

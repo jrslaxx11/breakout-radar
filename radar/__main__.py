@@ -36,6 +36,18 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Sesión {meta['session']} · régimen {out['regime']['label']} · "
               f"{meta['coverage']['liquid']} valores líquidos · temáticas {', '.join(out['selected_themes'])} · "
               f"{len(out['lists']['presented'])} candidatas")
+        lu, st = out.get("luk_universe") or {}, out.get("luk_stats") or {}
+        print(f"Luk · modo sugerido {(out.get('luk_regime') or {}).get('mode')} · L1 {lu.get('n_l1')} · L1b {lu.get('n_l1b')} · "
+              f"universo {lu.get('n')} · líderes {lu.get('leaders')}")
+        # Avisos en el registro de GitHub Actions (anotaciones): la lista no se relaja sola.
+        warn = (out.get("luk_const") or {}).get("empty_warn_days", 3)
+        if not (lu.get("n_l1") or lu.get("n_l1b")):
+            print("::notice title=Retrocesos Luk::Hoy no hay ningún L1 ni L1b.")
+        if (st.get("empty_streak") or 0) >= warn:
+            print(f"::warning title=Retrocesos Luk::La lista de L1 y L1b lleva {st['empty_streak']} sesiones vacía. "
+                  "Revisa qué filtro la vacía antes de tocar umbrales.")
+        if st.get("avg") is not None and st["avg"] > (out.get("luk_const") or {}).get("list_target", 15):
+            print(f"::notice title=Retrocesos Luk::Media de {st['avg']:.1f} valores al día en las últimas {st['days']} sesiones.")
     return 0
 
 

@@ -284,33 +284,53 @@
     </div>`;
   }
 
-  // ---------- plan según las reglas de Martin Luk (retroceso a la EMA 9/21 o el AVWAP) ----------
-  const LUK_STATE = { "recupera": "Recupera", "en zona": "En zona", "acercándose": "Acercándose" };
-  const LUK_ORDER = Object.keys(LUK_STATE);
-  const lukChip = (st) => `<span class="chip luk-${esc(st.replace(/[^a-zá]/g, ""))}">${esc(LUK_STATE[st] || st)}</span>`;
-  const lukDots = (n) => `<span class="dots" role="img" aria-label="${n} de 5 criterios" title="${n} de 5 criterios de calidad">${[0, 1, 2, 3, 4].map((i) => `<i class="${i < n ? "on" : ""}"></i>`).join("")}</span>`;
+  // ---------- sistema de Martin Luk: ficha (setup, niveles, puntuación y tamaño) ----------
+  const SETUP_LABEL = { L1: "L1 · Retroceso", L1b: "L1b · Perforación", L3: "L3 · Base" };
+  const SETUP_ORDER = ["L1", "L1b", "L3"];
+  const setupChip = (s) => `<span class="chip setup-chip setup-${esc(s)}" title="${esc(SETUP_LABEL[s] || s)}">${esc(s)}</span>`;
+  const flagTags = (fl) => (fl || []).map((f) => `<span class="flag-tag${/verificar/.test(f) ? " verify" : /resultados/.test(f) ? " earn" : ""}">${esc(f)}</span>`).join(" ");
+  const ANCHOR_LABEL = { "EP": "EP", "ruptura": "ruptura", "mínimo 20": "mínimo de 20 sesiones" };
+  const p2 = (x) => (isNum(x) ? x.toFixed(2) : "");
   function lukBlock(c) {
     const L = c.luk, cur = c.currency, K = (D && D.luk_const) || {};
-    const acct = store.get("radar.luk.account", 10000), risk = store.get("radar.luk.risk", 0.5), stop = store.get("radar.luk.stop", 1.5);
-    const checks = L.checks.map((k) => `<li class="${k.ok ? "pos" : "dim"}"><span aria-hidden="true">${k.ok ? "✓" : "·"}</span> ${esc(k.label)}: <strong>${esc(k.value)}</strong></li>`).join("");
+    if (!L.setup && L.ep_today) {
+      return `<div class="luk-box"><h3>Martin Luk · EP de hoy</h3>
+        <p>Hueco de ${pct(L.gap, 1)} con ${num(L.vol_x, 1)} veces el volumen medio de 50 sesiones. A vigilar para un L1 cuando retroceda a la EMA 9/21 o al AVWAP anclado en este día.${L.leader ? "" : ` <span class="dim">Aún no cumple las reglas de líder (${esc(L.why || "")}).</span>`}</p></div>`;
+    }
+    const acct = store.get("radar.luk.account", 10000), risk = store.get("radar.luk.risk2", K.risk_pct || 0.25), stop = store.get("radar.luk.stop2", K.stop_target_pct || 1.5);
+    const P = L.parts || {};
+    const parts = L.setup === "L3" ? "" : `<p class="dim" style="margin:8px 0 4px">Puntuación ${num(L.score, 0)} de 100${L.mult < 1 ? ` (${num(L.base, 0)} × ${num(L.mult, 2)})` : ""}</p>
+      <ul class="checks">
+        <li><span aria-hidden="true">·</span> Fuerza relativa (30%): <strong>${isNum(P.rs) ? `percentil ${num(P.rs * 100, 0)}` : "verificar"}</strong> <span class="dim">(media de 3 y 6 meses en el universo)</span></li>
+        <li><span aria-hidden="true">·</span> Retroceso (30%): <strong>${num((P.pull || 0) * 100, 0)}/100</strong> <span class="dim">(secado ${num((P.dry || 0) * 100, 0)}, cercanía ${num((P.prox || 0) * 100, 0)}, extras +${num((P.bonus || 0) * 100, 0)})</span></li>
+        <li><span aria-hidden="true">·</span> Temática (20%): <strong>${num((P.theme || 0) * 100, 0)}/100</strong> <span class="dim">(${isNum(L.theme_n) ? `${L.theme_n} líder${L.theme_n === 1 ? "" : "es"} en su industria` : "líderes en su industria"}, tope 4)</span></li>
+        <li><span aria-hidden="true">·</span> Catalizador (20%): <strong>${num((P.cat || 0) * 100, 0)}/100</strong> <span class="dim">(${L.anchor === "mínimo 20" ? "sin EP ni ruptura en 60 sesiones" : `${esc(L.anchor)} hace ${L.anchor_since} sesiones`})</span></li>
+      </ul>`;
+    const extras = [L.inside ? "inside day" : "", L.nr7 ? "NR7" : "", L.e9up ? "EMA 9 al alza" : "EMA 9 a la baja"].filter(Boolean).join(" · ");
     return `<div class="luk-box">
-      <h3>Retroceso al estilo Martin Luk · ${lukChip(L.state)} ${lukDots(L.points)}</h3>
+      <h3>Martin Luk · ${setupChip(L.setup)} ${esc((SETUP_LABEL[L.setup] || "").split(" · ")[1] || "")}${isNum(L.score) ? ` · <span class="score-pill">${num(L.score, 0)}</span>` : ""}</h3>
+      ${(L.flags || []).length ? `<p>${flagTags(L.flags)}</p>` : ""}
       <div class="qm-grid">
         <div><dl>
-          <dt>Zona</dt><dd>${L.levels.length ? esc(L.levels.join(", ")) : "aún sobre la EMA 9"}${L.undercut ? " · perforó la EMA 21 y la recupera (sacudida)" : ""}</dd>
-          <dt>Retroceso</dt><dd>${L.days} sesiones desde el máximo del ${dateEs(L.peak_date)} (${price(L.peak, cur)}); corrige un ${pct(L.depth, 0, false)} (${num(L.depth_adr, 1)} ADR), el ${num(L.retrace * 100, 0)}% del tramo de +${num(L.leg * 100, 0)}%</dd>
-          <dt>EMA 9 · EMA 21 · EMA 50</dt><dd>${price(L.ema9, cur)} · ${price(L.ema21, cur)} · ${price(L.ema50, cur)}</dd>
-          <dt>AVWAP</dt><dd>${price(L.avwap, cur)} <span class="dim">(anclado en el mínimo del ${dateEs(L.anchor_date)})</span></dd>
-          <dt>Mínimo del retroceso</dt><dd>${price(L.pull_lo, cur)}</dd>
-        </dl><p class="dim">Calidad</p><ul class="checks">${checks}</ul></div>
+          <dt>Gatillo</dt><dd>${esc(L.trigger || "")}</dd>
+          <dt>Nivel diario</dt><dd>${L.setup === "L1" ? `${esc(L.support)} ${price(L.support_value, cur)}` : L.setup === "L1b" ? `EMA 21 ${price(L.ema21, cur)}` : `Máx. base ${price(L.base_hi, cur)}`}</dd>
+          ${L.setup === "L3" ? `<dt>Base</dt><dd>rango de 10 sesiones de ${num(L.base_range_adr, 1)} ADR; máximo ${price(L.base_hi, cur)}</dd>` : `
+          <dt>Soporte</dt><dd>${esc(L.support)} ${price(L.support_value, cur)} <span class="dim">(cierre a ${num(L.dist_adr, 2)} ADR${(L.touch || []).length ? `; tocó ${esc(L.touch.join(", "))}` : ""})</span></dd>
+          <dt>Retroceso</dt><dd>${L.days} sesiones desde el máximo del ${dateEs(L.high_date)} (${price(L.high20, cur)}); hasta el mínimo de ${price(L.pull_lo, cur)}: ${num(L.depth_adr, 2)} ADR, el ${num(L.retrace * 100, 0)}% del tramo de +${num(L.leg * 100, 0)}%</dd>
+          <dt>Volumen</dt><dd>${isNum(L.vol_ratio) ? `${num(L.vol_ratio, 2)}× la media de 50 sesiones en los días de retroceso${L.recovery ? " (sin contar el de recuperación)" : ""}` : "—"}</dd>
+          <dt>Vela de hoy</dt><dd>${esc(extras)}</dd>`}
+          <dt>AVWAP</dt><dd>${price(L.avwap, cur)} <span class="dim">(ancla: ${esc(ANCHOR_LABEL[L.anchor] || L.anchor)} del ${dateEs(L.anchor_date)})</span></dd>
+          <dt>EMA 9 · 21 · 50 · 150</dt><dd>${price(L.ema9, cur)} · ${price(L.ema21, cur)} · ${price(L.ema50, cur)} · ${isNum(L.ema150) ? price(L.ema150, cur) : "—"}</dd>
+          <dt>Máx. 52 semanas</dt><dd>a ${pct(L.dist52, 0, false)}${L.ep60 ? " (con EP en 60 sesiones no se exige)" : ""}</dd>
+        </dl>${parts}</div>
         <div><dl>
-          <dt>Entrada</dt><dd>${esc(K.entry_rule || "")}</dd>
-          <dt>Stop</dt><dd>${esc(K.stop_rule || "")}</dd>
-          <dt>Salidas</dt><dd><ol class="sells">${(K.sell_plan || []).map((x) => `<li>${esc(x)}</li>`).join("")}</ol>
-            <span class="dim">Para este valor (ADR ${pct(L.adr, 1, false)}): ${esc(L.trail)}, hoy en ${price(L.trail_value, cur)}</span></dd>
-          <dt>Invalidación diaria</dt><dd>Cierre bajo la EMA 50 (${price(L.ema50, cur)}) o bajo el mínimo del retroceso</dd>
-        </dl></div>
-        <div class="calc"><p><strong>Tamaño de la posición</strong> <span class="dim">(${esc(K.risk_rule || "")})</span></p>
+          <dt>Entrada est.</dt><dd><strong>${price(L.entry, cur)}</strong></dd>
+          <dt>Stop est.</dt><dd>${price(L.stop, cur)} (−${num(L.stop_pct, 1)}%) · como máximo ${price(L.stop_min, cur)} (−${num(K.stop_max_pct || 3, 1)}%)</dd>
+          <dt>Tamaño</dt><dd>${num(L.size_pct, 1)}% de la cuenta (riesgo ${num(K.risk_pct, 2)}% / stop ${num(L.stop_pct, 1)}%)</dd>
+          <dt>+3R · +5R</dt><dd>${price(L.r3, cur)} · ${price(L.r5, cur)}</dd>
+          <dt>Salidas</dt><dd><ol class="sells">${(K.sell_plan || []).map((x) => `<li>${esc(x)}</li>`).join("")}</ol></dd>
+        </dl><p class="dim">Niveles estimados con el cierre diario: el gatillo real es intradía (1-5 minutos) y el stop, el mínimo de la vela de entrada.</p></div>
+        <div class="calc"><p><strong>Tamaño de la posición</strong></p>
           <label>Cuenta (${esc(cur === "GBp" ? "GBP" : cur)})<input type="number" min="0" step="100" class="luk-acct" value="${esc(acct)}"></label>
           <label>Riesgo por operación (%)<input type="number" min="0.05" max="1.5" step="0.05" class="luk-risk" value="${esc(risk)}"></label>
           <label>Stop intradía (%)<input type="number" min="0.3" max="5" step="0.1" class="luk-stop" value="${esc(stop)}"></label>
@@ -318,16 +338,16 @@
       </div></div>`;
   }
   function lukCalc(box, c) {
-    if (!box || !c.luk) return;
-    const out = box.querySelector(".luk-out"), cap = ((D && D.luk_const && D.luk_const.max_position) || 0.35) * 100;
+    if (!box || !c.luk || !box.querySelector(".luk-acct")) return;
+    const out = box.querySelector(".luk-out");
     const upd = () => {
       const acct = parseFloat(box.querySelector(".luk-acct").value) || 0, risk = parseFloat(box.querySelector(".luk-risk").value) || 0,
         stop = parseFloat(box.querySelector(".luk-stop").value) || 0;
-      store.set("radar.luk.account", acct); store.set("radar.luk.risk", risk); store.set("radar.luk.stop", stop);
+      store.set("radar.luk.account", acct); store.set("radar.luk.risk2", risk); store.set("radar.luk.stop2", stop);
       if (!(stop > 0) || !(acct > 0)) { out.textContent = "Indica la cuenta y el stop."; return; }
-      const posPct = Math.min(cap, risk / stop * 100), px = c.currency === "GBp" ? c.close / 100 : c.close;
-      const value = acct * posPct / 100, shares = px > 0 ? Math.floor(value / px) : 0;
-      out.innerHTML = `Posición = riesgo / stop = ${num(risk / stop * 100, 1)}% de la cuenta${risk / stop * 100 > cap ? ` → limitada al ${num(cap, 0)}%` : ""}: <strong>${num(value, 0)}</strong> (unas ${shares.toLocaleString("es-ES")} acciones al cierre de ${price(c.close, c.currency)}), riesgo ${num(acct * Math.min(risk, cap * stop / 100) / 100, 0)}. Un +3R son ${num(3 * stop, 1)}% de subida desde la entrada.`;
+      const entry = isNum(c.luk.entry) ? c.luk.entry : c.close, px = c.currency === "GBp" ? entry / 100 : entry;
+      const posPct = risk / stop * 100, value = acct * posPct / 100, shares = px > 0 ? Math.floor(value / px) : 0;
+      out.innerHTML = `Posición = riesgo / stop = <strong>${num(posPct, 1)}%</strong> de la cuenta: ${num(value, 0)} (unas ${shares.toLocaleString("es-ES")} acciones a ${price(entry, c.currency)}), riesgo ${num(acct * risk / 100, 0)}. +3R = ${num(3 * stop, 1)}% sobre la entrada.${stop > ((D && D.luk_const && D.luk_const.stop_max_pct) || 3) ? ` <span class="neg">Stop mayor que el máximo (${num((D.luk_const || {}).stop_max_pct || 3, 1)}%): Luk no entra.</span>` : ""}`;
     };
     box.addEventListener("input", upd); upd();
   }
@@ -383,6 +403,37 @@
     document.title = `Radar de rupturas · ${dateEs(m.session)}`;
   }
 
+  // Modo sugerido de Luk: termómetro de los 100 líderes por fuerza relativa y SPY, QQQ e IWM como contexto.
+  const MODE_TXT = { LARGO: "Largo", NEUTRO: "Neutro", CORTO: "Corto", "SIN DATOS": "Sin datos" };
+  const HEALTH_CLS = { "sano": "pos", "dañado": "neg", "mixto": "dim" };
+  function lukRegimeHTML(d) {
+    const LR = d.luk_regime, H = LR.counts, K = d.luk_const || {}, n = H.n || 1;
+    const tks = (xs) => (xs || []).map((s) => `<a href="#valor=${encodeURIComponent(s)}">${esc(s)}</a>`).join(" ");
+    const sub = `De los ${H.n} valores del universo de Luk con más fuerza relativa: ${H.good} sanos (${num(H.good / n * 100, 0)}%), ${H.mixed} mixtos y ${H.bad} dañados (${num(H.bad / n * 100, 0)}%). LARGO si más del ${num((K.long_healthy || 0.5) * 100, 0)}% están sanos; CORTO si el ${num((K.short_damaged || 0.9) * 100, 0)}% o más están dañados; si no, NEUTRO. Es una sugerencia, no una orden.`;
+    const ctx = Object.entries(LR.context || {});
+    return `<div class="verdict">
+        <div>
+          <p class="cap mode-cap">Modo sugerido · termómetro de Martin Luk</p>
+          <p class="verdict-word" data-v="${esc(LR.mode)}">${esc(MODE_TXT[LR.mode] || LR.mode)}</p>
+          <p class="verdict-sub">${esc(sub)}</p>
+          <div class="thermo-bar" role="img" aria-label="${H.good} sanos, ${H.mixed} mixtos y ${H.bad} dañados">
+            <i class="good" style="width:${H.good / n * 100}%"></i><i class="mixed" style="width:${H.mixed / n * 100}%"></i><i class="bad" style="width:${H.bad / n * 100}%"></i></div>
+          <p class="thermo-legend"><span>Sano: cierre sobre la EMA 9 y la EMA 21, ambas al alza</span><span>Dañado: cierre bajo las dos, ambas a la baja, o hueco bajista ≥ 1 ADR en 5 sesiones</span></p>
+          <details class="thermo-list"><summary>Ver los valores</summary>
+            <p><strong>Sanos:</strong> ${tks(H.good_syms) || "—"}</p><p><strong>Mixtos:</strong> ${tks(H.mixed_syms) || "—"}</p><p><strong>Dañados:</strong> ${tks(H.bad_syms) || "—"}</p></details>
+        </div>
+        <div>
+          <h3 style="margin-top:4px">Contexto: SPY, QQQ e IWM</h3>
+          ${ctx.length ? `<div class="tbl-wrap"><table class="idx-table ctx-table">
+            <thead><tr><th class="left">ETF</th><th>Cierre</th><th>vs EMA 9</th><th>vs EMA 21</th><th>vs EMA 50</th><th>vs EMA 150</th><th class="left">Orden de medias</th><th class="left">Estado</th></tr></thead>
+            <tbody>${ctx.map(([k, x]) => `<tr><td class="left"><strong>${esc(k)}</strong></td><td>${num(x.close, 2)}</td>
+              <td class="${cls(x.vs9)}">${pct(x.vs9)}</td><td class="${cls(x.vs21)}">${pct(x.vs21)}</td><td class="${cls(x.vs50)}">${pct(x.vs50)}</td><td class="${cls(x.vs150)}">${pct(x.vs150)}</td>
+              <td class="left">${esc(x.order)}${x.aligned ? ` <span class="dim">(alineadas)</span>` : ""}</td><td class="left ${HEALTH_CLS[x.status] || ""}">${esc(x.status)}</td></tr>`).join("")}</tbody></table></div>` : `<p class="empty">Sin datos de los ETF.</p>`}
+          <p class="dim" style="font-size:13px">Medias exponenciales sembradas con la media simple; mismo criterio de sano y dañado que en el termómetro.</p>
+        </div>
+      </div>`;
+  }
+
   function renderRegime(d, hist) {
     const r = d.regime;
     const ups = r.rules.filter((x) => x.points > 0).map((x) => x.signal.toLowerCase());
@@ -403,17 +454,17 @@
         <div class="was">Hace 21 sesiones: ${was ? num(was.p50 * 100, 0) + "%" : "—"} · sobre SMA200: ${num(now.p200 * 100, 0)}% · máx./mín. 52s: ${now.nh}/${now.nl}</div></div>`;
     };
     const p50hist = hist.map((h) => h.regime && h.regime.p50_spx);
-    $("#regimen").innerHTML = `
-      <div class="verdict">
+    const classic = `<div class="verdict">
         <div>
-          <h2 class="sr">Régimen de mercado</h2>
-          <p class="verdict-word" data-v="${esc(r.label)}">${esc(label)}</p>
+          <p class="verdict-word${d.luk_regime ? " small" : ""}" data-v="${esc(r.label)}">${esc(label)}</p>
           <p class="verdict-sub">${esc(sub)}</p>
         </div>
         <ul class="signals" aria-label="Señales del régimen">
           ${r.rules.map((x) => `<li><span class="sig ${x.points > 0 ? "up" : "down"}" aria-hidden="true">${x.points > 0 ? "+" : "−"}</span><span>${esc(x.signal)}${x.points > 0 ? "" : ": no"}</span></li>`).join("")}
         </ul>
-      </div>
+      </div>`;
+    $("#regimen").innerHTML = `<h2 class="sr">Régimen de mercado</h2>
+      ${d.luk_regime ? lukRegimeHTML(d) + `<details class="classic"><summary>Régimen clásico: ${esc(label)} (${r.score > 0 ? "+" : ""}${r.score} sobre ${r.rules.length} señales)</summary>${classic}</details>` : classic}
       <div class="grid2">
         <div>
           <h3>Índices</h3>
@@ -695,58 +746,93 @@
   const ROWS = {};
   const keepRows = (rows) => rows.forEach((x) => { if (!ROWS[x.sym] || x.qm) ROWS[x.sym] = x; });
 
-  // ---------- retrocesos de Martin Luk ----------
+  // ---------- sistema de Martin Luk: sección principal ----------
   function lukLive(x) {
     const q = LIVE.q[x.sym];
     if (!q || !isNum(q.price)) return `<span class="dim">—</span>`;
     const day = qDay(q);
     if (!q.isOpen && !(day && x.date && day > x.date)) return `<span class="dim" title="Sin cotizaciones nuevas desde el cierre que usa el radar">sin cambios</span>`;
     const p = q.price, chg = isNum(q.prevClose) && q.prevClose > 0 ? p / q.prevClose - 1 : null;
-    const d21 = p / x.ema21 - 1;
-    const txt = p < x.ema50 ? ["neg", "bajo la EMA 50"] : p < x.ema21 ? ["near", `${pct(d21)} bajo la EMA 21`] : p < x.ema9 ? ["near", "entre la EMA 21 y la 9"] : ["pos", `${pct(p / x.ema9 - 1)} sobre la EMA 9`];
+    const txt = isNum(x.entry) && p >= x.entry ? ["hit", "supera la entrada"] : p < x.ema50 ? ["neg", "bajo la EMA 50"]
+      : p < x.ema21 ? ["near", `${pct(p / x.ema21 - 1)} bajo la EMA 21`] : isNum(x.entry) ? ["near", `a ${num((x.entry / p - 1) * 100, 1)}% de la entrada`] : ["pos", ""];
     return `<span class="lp">${price(p, x.currency)}</span> <span class="${cls(chg)}">${pct(chg)}</span><small class="ls-${txt[0]}">${esc(txt[1])}</small>`;
   }
   let LUKS = {};
+  const tickCell = (x) => `<td class="tk-cell left"><a href="#valor=${encodeURIComponent(x.sym)}" title="Abrir la ficha completa">${esc(x.sym)}</a><small>${esc(x.name && x.name !== x.sym ? x.name : "")}${x.group_name ? " · " + esc(x.group_name) : ""}</small>${x.lead_group ? `<small class="lead-tag" title="${x.theme_n} líderes en su industria">grupo líder (${x.theme_n})</small>` : ""}</td>`;
+  function lukSetupTable(rows, cls2) {
+    return `<div class="tbl-wrap"><table class="lt qm-table luk-table sortable ${cls2 || ""}">
+      <thead><tr><th data-asc>N.º</th><th class="left">Valor</th><th class="left" data-asc>Setup</th><th class="left">Soporte</th><th class="left">Ancla AVWAP</th>
+        <th title="Sesiones desde el máximo de 20 (3-7 puntúa más)">Días</th><th title="Volumen medio de los días de retroceso (sin el de recuperación) frente a la media de 50 sesiones">Vol. retroceso</th>
+        <th title="0-100: fuerza relativa 30%, retroceso 30%, temática 20%, catalizador 20%; ×0,8 con resultados en ≤ 5 sesiones, ×0,9 si el cierre está > 3% sobre el mínimo">Puntos</th>
+        <th class="left">Flags</th><th title="Entrada estimada (máximo de hoy + 0,01; en L1b, EMA 21 + 0,01) y stop al 1,5%">Entrada · stop</th><th>Ahora</th></tr></thead>
+      <tbody>${rows.map((x) => `<tr class="row${x.rank <= 5 ? " top5" : ""}" data-sym="${esc(x.sym)}" tabindex="0" aria-expanded="false">
+        <td data-v="${x.rank}">${x.rank}</td>
+        ${tickCell(x)}
+        <td class="left" data-v="${SETUP_ORDER.indexOf(x.setup)}">${setupChip(x.setup)}</td>
+        <td class="left" data-v="${x.dist_adr}">${esc(x.support)} ${price(x.support_value, x.currency)}<small class="dim block">a ${num(x.dist_adr, 2)} ADR${(x.touch || []).length ? ` · tocó ${esc(x.touch.join(", "))}` : ""}</small></td>
+        <td class="left" data-v="${x.anchor_since}">${esc(ANCHOR_LABEL[x.anchor] || x.anchor)}<small class="dim block">${dateEs(x.anchor_date)}${x.anchor !== "mínimo 20" ? ` · hace ${x.anchor_since} ses.` : ""}</small></td>
+        <td>${x.days}</td>
+        <td data-v="${isNum(x.vol_ratio) ? x.vol_ratio : ""}">${isNum(x.vol_ratio) ? num(x.vol_ratio, 2) + "×" : "—"}</td>
+        <td data-v="${x.score}"><strong>${num(x.score, 0)}</strong></td>
+        <td class="left flags-cell">${flagTags(x.flags)}</td>
+        <td data-v="${x.entry}">${price(x.entry, x.currency)}<small class="dim block">stop ${price(x.stop, x.currency)} · ${num(x.size_pct, 1)}%</small></td>
+        <td class="live-cell" data-live-luk="${esc(x.sym)}">${lukLive(x)}</td>
+      </tr>`).join("")}</tbody></table></div>`;
+  }
+  // Tabla en texto plano para pegar: top 5 y bases L3.
+  function lukCopyText(top, l3) {
+    const head = "Ticker | Setup | Nivel diario | Gatillo | Entrada est. | Stop est. | Stop % | Tamaño % | Prioridad";
+    const line = (x, prio) => [x.sym, x.setup, x.level, x.trigger, p2(x.entry), p2(x.stop), x.stop_pct.toFixed(1), x.size_pct.toFixed(1), prio].join(" | ");
+    return [head, ...top.map((x) => line(x, String(x.rank))), ...l3.map((x) => line(x, "watchlist"))].join("\n");
+  }
   function renderLuk(d) {
-    const rows = d.lists.luk || [], H = d.luk_health, K = d.luk_const || {};
-    LUKS = Object.fromEntries(rows.map((x) => [x.sym, x]));
-    const tk = (s) => `<a href="#valor=${encodeURIComponent(s)}">${esc(s)}</a>`;
-    let thermo = "";
-    if (H && H.n) {
-      const g = H.good / H.n, b = H.bad / H.n;
-      const read = b >= 0.6 ? ["neg", "Mayoría rota: es su señal para dejar de forzar largos (él pasa a cortos)."]
-        : g >= 0.6 ? ["pos", "Lista sana: el entorno en el que funcionan sus retrocesos."]
-          : ["dim", "Lista mixta: retrocesos solo en los líderes más limpios y con menos riesgo."];
-      thermo = `<div class="thermo"><p class="cap">Su termómetro: los ${H.n} valores de EE. UU. con más fuerza relativa</p>
-        <div class="thermo-bar" role="img" aria-label="${H.good} sanos, ${H.mixed} mixtos y ${H.bad} rotos">
-          <i class="good" style="width:${g * 100}%"></i><i class="mixed" style="width:${H.mixed / H.n * 100}%"></i><i class="bad" style="width:${b * 100}%"></i></div>
-        <p class="thermo-legend"><span><strong>${H.good}</strong> sanos (sobre la EMA 21, que sube frente a hace 5 sesiones)</span><span><strong>${H.mixed}</strong> mixtos (corrigen bajo la EMA 21 sin haberla girado)</span><span><strong>${H.bad}</strong> rotos (bajo la EMA 9 y la 21, ambas a la baja frente a hace 5 sesiones)</span></p>
-        <p class="${read[0]}" style="margin:4px 0 0;font-size:14px">${read[1]}</p></div>`;
-    }
-    const rec = rows.filter((x) => x.state === "recupera");
+    const all = d.lists.luk || [], L3 = d.lists.luk_l3 || [], EP = d.lists.luk_ep || [];
+    const K = d.luk_const || {}, U = d.luk_universe || {}, ST = d.luk_stats, LR = d.luk_regime;
+    LUKS = Object.fromEntries([...all, ...L3].map((x) => [x.sym, x]));
+    const topN = K.top_n || 5, top = all.slice(0, topN);
+    const MODE = { LARGO: "largo", NEUTRO: "neutro", CORTO: "corto" };
+    const warn = [];
+    if (ST && ST.empty_streak >= (K.empty_warn_days || 3)) warn.push(`<p class="warn-box"><strong>La lista de L1 y L1b lleva ${ST.empty_streak} sesiones vacía.</strong> Revisa qué filtro la vacía antes de tocar umbrales.</p>`);
+    else if (!all.length) warn.push(`<p class="warn-box soft"><strong>Hoy no hay ningún L1 ni L1b.</strong> Con los líderes perdiendo las medias no hay retrocesos que comprar; las bases L3 y los EP de hoy siguen abajo.</p>`);
+    const cov = ST && ST.coverage;
+    const statsTxt = ST ? `Lista diaria de L1 y L1b en las últimas ${ST.days} sesiones: media ${num(ST.avg, 1)}, mediana ${num(ST.median, 0)}, máximo ${ST.max}; ${ST.over_target} días con más de ${K.list_target || 15} y ${ST.empty_days} vacíos.${cov && cov.n ? ` Entradas documentadas de Luk detectadas ese día o el anterior: ${cov.hit} de ${cov.n}.` : ""} <a href="#metodo">Detalle en Método</a>.` : "";
     $("#luk").innerHTML = `<h2>Retrocesos de Martin Luk</h2>
       <blockquote class="qm-quote luk-quote"><p lang="en">“I like having tight stops so that I can build a larger position size.”</p><cite>Martin Luk, campeón del USIC 2025</cite></blockquote>
-      <p class="lead">Su entrada principal: dos de cada tres largos son retrocesos, no rupturas de base. Espera a que un líder demuestre su fuerza, lo deja corregir de 3 a 7 sesiones hasta la EMA 9 y la EMA 21 al alza o el AVWAP y entra en el gráfico de 1-5 minutos con un stop de ~1,5%, lo que le permite posiciones del 20-30% arriesgando el 0,3-0,5% de la cuenta. Aquí: valores de EE. UU. entre el 7% que más sube a 1, 3 o 6 meses, con ADR ≥ ${num((K.adr_min || 0.03) * 100, 0)}%, un tramo previo ≥ ${num((K.leg_min || 0.2) * 100, 0)}%, EMA 21 sobre la EMA 50 y ambas al alza, que corrigen ${K.pull_min || 2}-${K.pull_max || 8} sesiones (≤ ${num(K.depth_adr_max || 3.5, 1)} ADR y ≤ ${num((K.retrace_max || 0.62) * 100, 0)}% del tramo). <strong>Recupera</strong>: tocó la zona y hoy cierra sobre el máximo de ayer y la EMA 9, el día típico de su entrada. <strong>En zona</strong>: toca hoy o ayer la EMA 9 (desde la 3.ª sesión), la EMA 21 o el AVWAP. <strong>Acercándose</strong>: a menos de 1 ADR de la EMA 9. El gatillo es intradía y no lo ve el radar.</p>
-      ${thermo}
-      ${rows.length ? `<p class="five-note luk-note">${rec.length ? `<strong>Recuperan hoy:</strong> ${rec.slice(0, 15).map((x) => `${tk(x.sym)} ${lukDots(x.points)}`).join(" · ")}` : "<strong>Hoy ninguno recupera.</strong> Mira los que están en zona: la entrada llega cuando recuperan el VWAP o rompen el rango de apertura."}</p>
-      <div class="tbl-wrap"><table class="lt qm-table luk-table sortable">
-        <thead><tr><th class="left">Valor</th><th class="left" data-asc>Estado</th><th class="left">Zona</th><th>Retroceso</th><th>Tramo previo</th>
-          <th title="Distancia del cierre a la EMA 9, en ADR">vs EMA 9</th><th title="Distancia del cierre a la EMA 21, en ADR">vs EMA 21</th><th>ADR</th><th>Ahora</th><th class="left" title="Criterios de calidad: 3-7 sesiones, EMA 9 > 21 > 50, volumen bajo, confluencia y corrección ≤ 2,5 ADR">Calidad</th></tr></thead>
-        <tbody>${rows.map((x) => `<tr class="row${x.state === "recupera" ? " top5" : ""}" data-sym="${esc(x.sym)}" tabindex="0" aria-expanded="false">
-          <td class="tk-cell"><a href="#valor=${encodeURIComponent(x.sym)}" title="Abrir la ficha completa">${esc(x.sym)}</a><small>${esc(x.name && x.name !== x.sym ? x.name : "")}${x.group_name ? " · " + esc(x.group_name) : ""}</small></td>
-          <td class="left" data-v="${LUK_ORDER.indexOf(x.state)}">${lukChip(x.state)}${x.hot ? ` <span class="hot-tag">sector caliente</span>` : ""}${earnTag(x)}</td>
-          <td class="left">${x.levels.length ? esc(x.levels.join(", ")) : `<span class="dim">sobre la EMA 9</span>`}${x.undercut ? `<small class="dim block">sacudida bajo la EMA 21</small>` : ""}</td>
-          <td>${x.days} ses.<small class="dim block">−${num(x.depth * 100, 0)}% · ${num(x.depth_adr, 1)} ADR</small></td>
-          <td>+${num(x.leg * 100, 0)}%<small class="dim block">corrige el ${num(x.retrace * 100, 0)}%</small></td>
-          <td class="${cls(x.d9)}">${num(x.d9, 1)}</td><td class="${cls(x.d21)}">${num(x.d21, 1)}</td>
-          <td>${pct(x.adr_pct, 1, false)}</td>
-          <td class="live-cell" data-live-luk="${esc(x.sym)}">${lukLive(x)}</td>
-          <td class="left" data-v="${x.points}">${lukDots(x.points)}</td>
-        </tr>`).join("")}</tbody></table></div>
-      <p class="dim" style="font-size:13px;margin-top:6px">Distancias a las medias en ADR del propio valor. Pulsa una fila para ver el gráfico con la EMA 9/21/50 y el AVWAP, los niveles y el plan con sus reglas de tamaño y salida; el ticker abre la ficha completa. Orden: estado, calidad, sector caliente y subida a 3 meses (orientativo, no calibrado con sus operaciones).</p>`
-      : `<p class="empty">Hoy ningún líder del escáner está en retroceso a la EMA 9/21 o el AVWAP. Con el mercado flojo, los líderes pierden las medias en vez de apoyarse en ellas.</p>`}`;
-    const toggle = (tr) => toggleRow(tr, 10, () => loadTicker(tr.dataset.sym).then((x) => ({ rec: BYS[tr.dataset.sym] || x.rec, k: x.k })));
-    $("#luk").addEventListener("click", (e) => { const tr = e.target.closest("tr[data-sym]"); if (tr && !e.target.closest("a")) toggle(tr); });
+      <p class="lead">Su entrada principal: dejar que un líder corrija de 2 a 8 sesiones (mejor 3-7) hasta la EMA 9, la EMA 21 o el AVWAP y entrar con un gatillo intradía y un stop de ~1,5%. <strong>L1</strong>: retroceso con cierre sobre la EMA 21. <strong>L1b</strong>: perforación, cierre hasta 0,75 ADR bajo la EMA 21; se marca esa misma noche y el gatillo es recuperar la EMA 21. Universo: ${num(U.n, 0)} acciones de EE. UU. (${num(U.leaders, 0)} líderes). Reglas completas en <a href="#metodo">Método</a>.</p>
+      ${LR ? `<p class="mode-line">Modo sugerido: <a href="#regimen" class="mode-tag mode-${esc((LR.mode || "").toLowerCase().replace(/\s+/g, "-"))}">${esc(MODE[LR.mode] || LR.mode)}</a> <span class="dim">(${LR.counts.good} de ${LR.counts.n} líderes sanos y ${LR.counts.bad} dañados)</span></p>` : ""}
+      ${warn.join("")}
+      ${top.length ? `<div class="luk-head"><h3>Top ${topN}</h3><button type="button" class="copy-btn">Copiar tabla</button><span class="copy-status" aria-live="polite"></span></div>
+        ${lukSetupTable(top, "luk-top")}` : ""}
+      ${all.length > topN ? `<details class="luk-all"><summary>Lista completa: ${U.n_l1 || 0} L1 y ${U.n_l1b || 0} L1b</summary>${lukSetupTable(all)}</details>` : ""}
+      <h3>L3 · Bases <span class="dim h-note">solo watchlist</span></h3>
+      ${L3.length ? `<div class="tbl-wrap"><table class="lt qm-table luk-table sortable">
+        <thead><tr><th class="left">Valor</th><th title="Rango de las últimas 10 sesiones en ADR (≤ 2)">Rango 10 ses.</th><th>Máx. base</th><th>Distancia</th><th class="left">Gatillo</th><th>Entrada · stop</th><th class="left">Flags</th><th>Ahora</th></tr></thead>
+        <tbody>${L3.map((x) => `<tr class="row" data-sym="${esc(x.sym)}" tabindex="0" aria-expanded="false">${tickCell(x)}
+          <td>${num(x.base_range_adr, 1)} ADR</td><td>${price(x.base_hi, x.currency)}</td><td class="${cls(x.close / x.base_hi - 1)}">${pct(x.close / x.base_hi - 1)}</td>
+          <td class="left">${esc(x.trigger)}</td><td>${price(x.entry, x.currency)}<small class="dim block">stop ${price(x.stop, x.currency)}</small></td>
+          <td class="left flags-cell">${flagTags(x.flags)}</td><td class="live-cell" data-live-luk="${esc(x.sym)}">${lukLive(x)}</td></tr>`).join("")}</tbody></table></div>`
+        : `<p class="empty">Hoy ningún líder forma una base de 10 sesiones de ≤ 2 ADR cerca del máximo.</p>`}
+      <h3>EP de hoy <span class="dim h-note">a vigilar para L1</span></h3>
+      ${EP.length ? `<div class="tbl-wrap"><table class="lt qm-table luk-table sortable">
+        <thead><tr><th class="left">Valor</th><th>Hueco</th><th title="Volumen frente a la media de 50 sesiones">Volumen</th><th>Cierre</th><th class="left">Líder</th></tr></thead>
+        <tbody>${EP.map((x) => `<tr class="row" data-sym="${esc(x.sym)}" tabindex="0" aria-expanded="false">${tickCell(x)}
+          <td class="pos">${pct(x.gap, 1)}</td><td>${num(x.vol_x, 1)}×</td><td>${price(x.close, x.currency)}</td>
+          <td class="left">${x.leader ? "sí" : `<span class="dim">${esc(x.why || "no")}</span>`}</td></tr>`).join("")}</tbody></table></div>`
+        : `<p class="empty">Hoy no hay EP en el universo (hueco ≥ ${num((K.ep_gap || 0.1) * 100, 0)}% con ≥ ${num(K.ep_vol_mult || 3, 0)} veces el volumen).</p>`}
+      ${statsTxt ? `<p class="dim" style="font-size:13px;margin-top:10px">${statsTxt}</p>` : ""}`;
+    const btn = $("#luk .copy-btn");
+    if (btn) btn.addEventListener("click", async () => {
+      const txt = lukCopyText(top, L3), st = $("#luk .copy-status");
+      try { await navigator.clipboard.writeText(txt); st.textContent = "Copiada"; }
+      catch {
+        const ta = document.createElement("textarea"); ta.value = txt; document.body.appendChild(ta); ta.select();
+        try { document.execCommand("copy"); st.textContent = "Copiada"; } catch { st.textContent = "No se pudo copiar"; }
+        ta.remove();
+      }
+      setTimeout(() => { st.textContent = ""; }, 2500);
+    });
+    const toggle = (tr) => toggleRow(tr, tr.cells.length, () => loadTicker(tr.dataset.sym).then((x) => ({ rec: BYS[tr.dataset.sym] || x.rec, k: x.k })));
+    $("#luk").addEventListener("click", (e) => { const tr = e.target.closest("tr[data-sym]"); if (tr && !e.target.closest("a, button")) toggle(tr); });
     $("#luk").addEventListener("keydown", (e) => {
       if ((e.key === "Enter" || e.key === " ") && e.target.matches("tr[data-sym]")) { e.preventDefault(); toggle(e.target); }
     });
@@ -914,6 +1000,16 @@
       </div>`;
   }
 
+  // Control de calidad del sistema de Luk: tamaño de la lista diaria y cobertura de sus entradas documentadas.
+  function lukQualityHTML(d) {
+    const ST = d.luk_stats, K = d.luk_const || {};
+    if (!ST) return "";
+    const cov = ST.coverage || {};
+    const rows = (cov.rows || []).map((r) => `<li>${esc(r.sym)} ${r.date ? dateEs(r.date) + " " + r.date.slice(0, 4) : "(sin fecha)"}${r.verified ? "" : " <span class=\"flag-tag verify\">verificar fecha</span>"}: ${r.hit === true ? `<span class="pos">detectada (${esc(r.seen)})</span>` : r.hit === false ? `<span class="neg">no detectada</span> <span class="dim">${esc(r.why)}</span>` : `<span class="dim">${esc(r.why)}</span>`}</li>`).join("");
+    return `<p><strong>Control de calidad de Luk.</strong> Lista diaria de L1 y L1b recalculada en las últimas ${ST.days} sesiones con los datos de cada día: media ${num(ST.avg, 1)} valores (mediana ${num(ST.median, 0)}, máximo ${ST.max}), ${ST.over_target} días por encima de ${K.list_target || 15} y ${ST.empty_days} días vacíos${ST.empty_streak ? `; lleva ${ST.empty_streak} sesiones seguidas vacía` : ""}. Objetivo orientativo: ≤ ${K.list_target || 15} valores al día y cobertura ≥ ${num((K.coverage_target || 0.7) * 100, 0)}% de sus entradas documentadas (detectadas ese día o el anterior)${isNum(cov.pct) ? `; hoy ${cov.hit} de ${cov.n} (${num(cov.pct * 100, 0)}%)` : ""}. Solo hay ${cov.n || 0} entrada${cov.n === 1 ? "" : "s"} con fecha verificada en <code>config/luk_trades.csv</code>: la cobertura no es estadística hasta tener más. ${esc(ST.note || "")}</p>
+      ${rows ? `<ul class="plain small-list">${rows}</ul>` : ""}`;
+  }
+
   function renderMethod(d) {
     const cv = d.meta.coverage;
     const W = d.theme_weights || { rs: 45, consistency: 15, breadth: 20, highs: 10, volume: 10 };
@@ -925,7 +1021,8 @@
         <p><strong>Puntuación de acciones.</strong> Fuerza relativa 25, base y estructura 25, ruptura y volumen 20, tendencia diaria y semanal 15, liquidez 10, catalizador 5. Es una clasificación, no una probabilidad. El riesgo se etiqueta aparte: volatilidad, resultados próximos, distancia a la invalidación y liquidez.</p>
         <p><strong>Qullamaggie (solo rupturas).</strong> Reglas de su artículo "3 timeless setups" y de sus directos, con umbrales objetivos. Obligatorias: estar entre el 2% que más sube a 1, 3 o 6 meses (cierre frente al mínimo del periodo, la fórmula de sus escáneres), ADR ≥ 5%, subida previa ≥ 30% en 1-3 meses y consolidación de 5 a 60 sesiones. Secundarias: mínimos crecientes (el último tercio de la base sobre su mínimo), rango que se estrecha (últimas 5 sesiones ≤ 50% del rango de la base) y precio surfeando las SMA10/SMA20 (o SMA50) ascendentes. Entrada en el máximo de la primera vela de 1, 5 o 60 minutos; stop en el mínimo del día y nunca más ancho que el ADR; venta de 1/3-1/2 a los 3-5 días, stop a la entrada y el resto al primer cierre bajo la SMA10 o SMA20. Posición habitual 10-20%, nunca más del 30%. Filtro de mercado: Nasdaq 100 frente a sus SMA10 y SMA20. Son niveles orientativos para estudiar el gráfico, no órdenes ni recomendaciones.</p>
         <p><strong>Estrellas (1-5).</strong> Qullamaggie califica sus setups con estrellas ("five star setup") y solo opera fuerte los de 4-5. Aquí se puntúan sobre 66 con los rasgos que distinguen sus operaciones, medidos con datos diarios en 704 de las 1.212 rupturas de su archivo de capturas (el resto son valores que ya no cotizan) frente a 141.000 rupturas normales de los mismos valores: gran subida previa (20), valor rápido por ADR (12), tendencia limpia con la SMA20 holgadamente sobre la SMA50 y una subida lineal (14), medias de 10 y 20 que alcanzan al precio y mínimos que se apoyan en la de 10 (12) y compresión en las últimas sesiones con volumen seco (8); resta si ya lleva 4 bases o la consolidación tiene menos de 5 sesiones. 50 puntos son 5 estrellas y cada 5 puntos menos, media estrella. En una temática líder o un sector caliente (ver Sectores calientes) suma media estrella: él da más nota al mismo gráfico si su sector está caliente. Distancias y rangos en ADR del propio valor, el último día de la base. Resultado del estudio: 5 estrellas las tiene el 23% de sus setups en tendencia y el 2,6% de las rupturas normales; y en rupturas normales, ajenas a él, las de 5 estrellas subieron más de un 50% en 20 sesiones el 10,8% de las veces frente al 0,6% de las de 1 estrella. El retroceso de la base no los distinguía, por eso ya no es obligatorio. Es una medida de calidad del gráfico, no una probabilidad de acierto.</p>
-        <p><strong>Retrocesos de Martin Luk.</strong> Campeón del USIC 2025 (+969,8%). Según el estudio de 112 de sus directos de 2026 (James Muninn), el 65,9% de sus largos son retrocesos y solo el 2,3% rupturas de base: deja que un líder corrija de 3 a 7 sesiones hasta la EMA 9 y la EMA 21 al alza y el AVWAP y entra en el gráfico de 1-5 minutos (recuperar el VWAP o el AVWAP, romper una cuña o el rango de apertura, o perforar la apertura y recuperarla). Arriesga el 0,3-0,5% con stops de ~1,3%, lo que da posiciones del 20-30% (máximo 35%); vende el 10-15% a +3-5R y el resto al primer cierre bajo la EMA 9 o la EMA 21. El radar detecta la parte diaria con estas reglas: líder del escáner de momentum, ADR ≥ 3%, tramo previo ≥ 20% y ≥ 4 ADR, EMA 21 sobre la EMA 50 y ambas al alza, corrección de 2 a 8 sesiones desde el máximo de las 10 últimas (≤ 3,5 ADR y ≤ 62% del tramo) y cierre no más de 0,75 ADR bajo la EMA 21. AVWAP diario (precio típico por volumen) anclado en el mínimo del tramo. Comprobado con sus operaciones del estudio: marca MRVL en zona el 30-mar-2026 (perforó la EMA 21 y el AVWAP) y "recupera" el 31-mar, su día de entrada, e IONQ el 29-30 de abril y el 19-20 de mayo. Termómetro: de los 100 valores de EE. UU. con más fuerza relativa, cuántos cierran sobre la EMA 21 al alza y cuántos bajo la EMA 9 y la 21 bajistas (él deja de forzar largos cuando "90 de 100 tienen mala pinta"). Los gráficos muestran por defecto sus medias, EMA 9, 21 y 50; en la leyenda se puede volver a las SMA 10, 20 y 50 de Qullamaggie.</p>
+        <p><strong>Sistema de Martin Luk.</strong> Campeón del USIC 2025 (+969,8%); según el estudio de 112 de sus directos de 2026 (James Muninn), dos de cada tres de sus largos son retrocesos y solo el 2,3% rupturas de base. <em>Universo</em>: acciones ordinarias de EE. UU. sin ETF, fondos, SPAC, warrants ni preferentes; ADR extranjeros ${(d.luk_const || {}).include_adrs ? "incluidos" : "excluidos"}; capitalización ≥ ${num(((d.luk_const || {}).min_market_cap || 3e8) / 1e6, 0)} M USD (del screener de Yahoo; sin dato, pasa con "verificar"), precio ≥ ${num((d.luk_const || {}).min_price || 5, 0)}, mediana del valor negociado de 20 sesiones ≥ ${num(((d.luk_const || {}).min_dollar_vol_20d || 1e7) / 1e6, 0)} M y ADR(20) ≥ ${num(((d.luk_const || {}).min_adr_pct_20d || 0.04) * 100, 0)}%. <em>Líder</em>: en el escáner de momentum (el 7% de EE. UU. que más sube a 1, 3 o 6 meses), tramo previo ≥ 20% y ≥ 4 ADR, EMA 21 > EMA 50 con ambas al alza (hoy sobre hace 3 sesiones), cierre > EMA 50 y a ≤ 25% del máximo de 52 semanas salvo EP en 60 sesiones; la EMA 150 es informativa. <em>Definiciones</em>: EMA con alfa 2/(n+1) sembrada con la media simple de n; ADR(20) = media(máximo/mínimo, 20) − 1; media de volumen de 50 sesiones sin el día evaluado; EP = hueco ≥ 10% con volumen ≥ 3 veces esa media; ruptura = cierre sobre el máximo de las 50 sesiones previas con volumen ≥ 1,5 veces; AVWAP = Σ(precio típico × volumen)/Σvolumen desde el ancla: el último EP de ≤ 60 sesiones, si no la última ruptura de ≤ 60 sesiones y si no el mínimo de 20 sesiones. <em>L1 · retroceso</em>: 2-8 sesiones desde el máximo de 20 (3-7 puntúa más); del máximo al mínimo del retroceso, 1-3 ADR y ≤ 62% del tramo; EMA 21 al alza; cierre ≥ EMA 21; zona: el mínimo de hoy o de ayer a ≤ 0,2 ADR de la EMA 9 (desde la 3.ª sesión), la EMA 21 o el AVWAP, o el cierre a ≤ 1 ADR del soporte más cercano. <em>L1b · perforación</em>: lo mismo con el cierre hasta 0,75 ADR bajo la EMA 21 y sobre la EMA 50; se marca esa noche con gatillo "reclaim de la EMA 21" y, si al día siguiente cierra sobre ella, pasa a L1. <em>L3 · base</em> (solo watchlist): rango de 10 sesiones ≤ 2 ADR y cierre a ≤ 3% del máximo. <em>EP de hoy</em>: lista aparte, a vigilar para L1. <em>Puntuación 0-100</em>: 30% fuerza relativa (media de los percentiles de la subida a 3 y 6 meses en el universo), 30% retroceso (media del secado de volumen, clamp((1 − ratio)/0,5), y la cercanía al soporte, 1 − distancia en ADR, más +0,1 por inside day o NR7, +0,1 por EMA 9 al alza y +0,1 por 3-7 sesiones, con tope 1; el volumen se mide solo en los días de retroceso, sin el de recuperación), 20% temática (líderes en su industria, tope 4) y 20% catalizador (1 − sesiones desde el EP o la ruptura / 60); ×0,8 con resultados en ≤ 5 sesiones de EE. UU. y ×0,9 si el cierre está más de un 3% sobre el mínimo del día ("requiere gatillo intradía"). <em>Niveles</em>: entrada = máximo del día + 0,01 (L1), EMA 21 + 0,01 (L1b) o máximo de la base + 0,01 (L3); stop al 1,5% (como máximo, 3%); tamaño = riesgo ${num((d.luk_const || {}).risk_pct || 0.25, 2)}% / stop. <em>Régimen</em>: de los 100 valores del universo con más fuerza relativa, LARGO si más del 50% están sanos (cierre sobre la EMA 9 y la 21, ambas al alza), CORTO si el 90% o más están dañados (cierre bajo las dos, ambas a la baja, o hueco bajista ≥ 1 ADR propio en 5 sesiones) y NEUTRO en otro caso; SPY, QQQ e IWM se muestran como contexto. Fuera de alcance: cortos, EP en preapertura y órdenes.</p>
+        ${lukQualityHTML(d)}
         <p><strong>Sectores calientes.</strong> "I wanna focus on the fast moving stocks in the hot sectors." Sector: la industria de Yahoo Finance de cada acción, sacada de su screener una vez por semana (si falta, la del perfil o la subindustria GICS traducida). Escáner: el ${num(((d.heat_const || {}).scan_pct || 0.07) * 100, 0)}% del mercado de EE. UU. que más sube a 1, 3 o 6 meses desde el mínimo del periodo, equivalente a sus escáneres de TC2000; los internacionales se miden con los mismos umbrales. Calor: valores del sector en el escáner multiplicados por la parte del sector que suponen. Solo el número favorecería siempre a los sectores con cientos de valores, que siempre aportan alguno por azar; solo la proporción, a los de tres valores. Caliente: al menos ${(d.heat_const || {}).hot_min || 3} valores en el escáner, el doble de su cuota normal y entre los ${(d.heat_const || {}).hot_top || 8} de más calor. Solo EE. UU., como sus escáneres: es el único mercado con todo el universo líquido, y los internacionales del radar entran por ser líderes o ganadores, lo que haría parecer calientes sus sectores. Valores rápidos: los del escáner con ADR ≥ 5% que siguen en forma (ni bajo la SMA50, ni con la ruptura fallida, ni lejos del nivel), como mucho ${(d.heat_const || {}).focus_per_group || 15} por sector. Es un filtro para saber dónde mirar; el setup lo dan el estado, las estrellas y el plan.</p>
         <p><strong>High tight flags.</strong> Mástil: subida ≥ 90% desde el mínimo de las 40 sesiones anteriores al máximo de la consolidación. Bandera: de 5 a 30 sesiones desde ese máximo (3-4, en formación) con una corrección ≤ 35% (≤ 25%, clásica). Los umbrales salen de sus propias rupturas (mediana de su bandera: 13 sesiones y 22%). Medido con este código la víspera de cada ruptura, el 19,5% de las suyas tiene esta forma frente al 2,2% de las rupturas normales; y en rupturas normales con esta forma, el 34% subió más de un 20% en 20 sesiones y el 7% más de un 50% (13% y 1,5% en las demás). En el gráfico, el mástil va en trazo grueso y el suelo de la bandera en punteado.</p>
         <p><strong>Gráficos y buscador.</strong> Velas diarias con las medias de 10, 20 y 50 sesiones que usa Qullamaggie (la de 200, opcional). El buscador de la cabecera abre la ficha de cualquier valor del universo diario${d.web && d.web.worker_url ? " y, para el resto del mercado, la calcula al momento en el navegador con los mismos umbrales a partir de los datos de Yahoo Finance (sin temática, catalizador ni fechas de resultados)" : ""}.</p>
@@ -1278,7 +1375,7 @@
     // cientos de valores cada minuto cuando solo están abiertas Europa o Asia).
     const idxSyms = ((D.regime && D.regime.indices) || []).filter((i) => i.available).map((i) => i.sym);
     const stockSyms = [...new Set([...(D.lists.presented || []), ...(D.lists.qm_setups || []).map((x) => x.sym), ...(D.lists.htf_setups || []).map((x) => x.sym),
-      ...(D.lists.focus || []).map((x) => x.sym), ...(D.lists.luk || []).map((x) => x.sym), ...(currentSym ? [currentSym] : [])])].sort();
+      ...(D.lists.focus || []).map((x) => x.sym), ...(D.lists.luk || []).map((x) => x.sym), ...(D.lists.luk_l3 || []).map((x) => x.sym), ...(currentSym ? [currentSym] : [])])].sort();
     const full = !LIVE.fullAt || Date.now() - LIVE.fullAt > 15 * 60000 || stockSyms.some((s) => LIVE.q[s] && LIVE.q[s].isOpen)
       || (currentSym && !LIVE.q[currentSym]);
     const syms = [...new Set([...idxSyms, ...(full ? stockSyms : [])])];

@@ -79,6 +79,11 @@ def profiles(symbols: list[str], limit: int, today: date | None = None, fetch=No
     return cache
 
 
+def us_mcaps() -> dict[str, float]:
+    """Capitalización (USD) de las acciones de EE. UU. que devolvió el screener de industrias."""
+    return _load(INDUSTRY_CACHE).get("mcap") or {}
+
+
 def us_industries(cfg: dict | None = None, screen=None, industries=None, now: datetime | None = None) -> dict[str, str]:
     """Industria de Yahoo de todas las acciones de EE. UU., consultando el screener de Yahoo industria por
     industria (funciona desde GitHub Actions, al contrario que el perfil de cada valor). Caché semanal."""
@@ -87,7 +92,8 @@ def us_industries(cfg: dict | None = None, screen=None, industries=None, now: da
         return {}
     now = now or datetime.now(timezone.utc)
     cache = _load(INDUSTRY_CACHE)
-    if cache.get("map") and now - datetime.fromisoformat(cache["fetched"]) < timedelta(days=c["refresh_days"]):
+    if cache.get("map") and "mcap" in cache and \
+            now - datetime.fromisoformat(cache["fetched"]) < timedelta(days=c["refresh_days"]):
         return cache["map"]
     if screen is None or industries is None:
         try:
@@ -105,6 +111,7 @@ def us_industries(cfg: dict | None = None, screen=None, industries=None, now: da
             r = yf.screen(q, offset=offset, size=250)
             return r.get("quotes", []) if isinstance(r, dict) else []
     out: dict[str, str] = {}
+    caps: dict[str, float] = {}
     fails = 0
     for ind in industries:
         if fails >= 5:
@@ -116,6 +123,8 @@ def us_industries(cfg: dict | None = None, screen=None, industries=None, now: da
                 for q in batch:
                     if q.get("symbol"):
                         out[q["symbol"]] = ind.replace("—", " - ")  # mismo nombre que en el perfil
+                        if isinstance(q.get("marketCap"), (int, float)):
+                            caps[q["symbol"]] = float(q["marketCap"])
                 if len(batch) < 250:
                     break
                 time.sleep(c["pause_s"])
@@ -126,7 +135,7 @@ def us_industries(cfg: dict | None = None, screen=None, industries=None, now: da
         time.sleep(c["pause_s"])
     if len(out) >= c["min_total"]:
         log.info("industrias: %d acciones de EE. UU. en %d industrias", len(out), len(set(out.values())))
-        _save(INDUSTRY_CACHE, {"fetched": now.isoformat(), "map": out})
+        _save(INDUSTRY_CACHE, {"fetched": now.isoformat(), "map": out, "mcap": caps})
         return out
     log.warning("industrias: solo %d acciones; se conserva la caché anterior", len(out))
     return cache.get("map") or out
