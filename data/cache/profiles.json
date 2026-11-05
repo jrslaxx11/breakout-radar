@@ -3043,6 +3043,14 @@
 "name": "",
 "sector": ""
 },
+"AGNC": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "AGO": {
 "country": "",
 "industry": "",
@@ -4015,6 +4023,14 @@
 "country": "",
 "industry": "",
 "last": "2026-11-04",
+"name": "",
+"sector": "",
+"tries": 1
+},
+"ATEN": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
 "name": "",
 "sector": "",
 "tries": 1
@@ -5329,6 +5345,14 @@
 "name": "Bureau Veritas SA",
 "sector": "Industrials"
 },
+"BVN": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "BVS": {
 "country": "",
 "industry": "",
@@ -5684,6 +5708,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"CCB": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "CCC": {
 "country": "",
@@ -6903,6 +6935,14 @@
 "name": "Clearway Energy, Inc.",
 "sector": "Utilities"
 },
+"CWH": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "CWK": {
 "country": "",
 "industry": "",
@@ -7588,6 +7628,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"DX": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "DXC": {
 "country": "",
@@ -8391,6 +8439,14 @@
 "name": "",
 "sector": ""
 },
+"EXK": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "EXLS": {
 "country": "",
 "industry": "",
@@ -8901,6 +8957,14 @@
 "name": "Fisher & Paykel Healthcare Corporation Limited",
 "sector": "Healthcare"
 },
+"FPI": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "FR": {
 "country": "",
 "industry": "",
@@ -9086,6 +9150,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"FUBO": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "FUL": {
 "country": "",
@@ -9627,6 +9699,14 @@
 "name": "",
 "sector": ""
 },
+"GPRE": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "GPRK": {
 "country": "",
 "industry": "",
@@ -10117,6 +10197,14 @@
 "name": "Helios Technologies, Inc.",
 "sector": "Industrials"
 },
+"HLIT": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "HLMN": {
 "country": "",
 "industry": "",
@@ -10387,6 +10475,14 @@
 "name": "",
 "sector": ""
 },
+"HTLD": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "HTO": {
 "country": "",
 "industry": "",
@@ -10462,6 +10558,14 @@
 "industry": "Oil & Gas E&P",
 "name": "Headwater Exploration Inc.",
 "sector": "Energy"
+},
+"HXL": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "HYT": {
 "country": "",
@@ -11393,6 +11497,14 @@
 "name": "KKR & Co. Inc.",
 "sector": "Financial Services"
 },
+"KLAR": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "KMB": {
 "country": "",
 "industry": "",
@@ -11690,6 +11802,14 @@
 "sector": ""
 },
 "LBTYA": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
+"LBTYK": {
 "country": "",
 "industry": "",
 "last": "2026-11-05",
@@ -13571,6 +13691,14 @@
 "name": "NIKE, Inc.",
 "sector": "Consumer Cyclical"
 },
+"NLY": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "NMAX": {
 "country": "",
 "industry": "",
@@ -14807,6 +14935,14 @@
 "name": "",
 "sector": ""
 },
+"PFSI": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "PG": {
 "country": "",
 "industry": "",
@@ -15012,6 +15148,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"PMT": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "PMZ-UN.TO": {
 "country": "",
@@ -15663,6 +15807,14 @@
 "name": "",
 "sector": ""
 },
+"REAX": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "REC.MI": {
 "country": "Italy",
 "industry": "Drug Manufacturers - General",
@@ -15740,6 +15892,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"REX": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "REXR": {
 "country": "",
@@ -16889,6 +17049,14 @@
 "name": "",
 "sector": ""
 },
+"SKM": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "SKT": {
 "country": "",
 "industry": "",
@@ -16978,6 +17146,14 @@
 "industry": "Biotechnology",
 "name": "SELLAS Life Sciences Group, Inc.",
 "sector": "Healthcare"
+},
+"SLVM": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "SM": {
 "country": "",
@@ -17510,6 +17686,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"STUB": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "STVN": {
 "country": "",
@@ -19393,6 +19577,14 @@
 "name": "",
 "sector": ""
 },
+"VRTS": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "VRTX": {
 "country": "",
 "industry": "",
@@ -20074,6 +20266,14 @@
 "industry": "Education & Training Services",
 "name": "Twenty One Capital, Inc.",
 "sector": "Consumer Defensive"
+},
+"XYL": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "XYZ": {
 "country": "",
