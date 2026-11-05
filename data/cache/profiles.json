@@ -3013,6 +3013,14 @@
 "name": "",
 "sector": ""
 },
+"AGI": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "AGIO": {
 "country": "",
 "industry": "",
@@ -5251,6 +5259,14 @@
 "name": "",
 "sector": ""
 },
+"BROS": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "BRSL": {
 "country": "",
 "industry": "",
@@ -5577,6 +5593,14 @@
 "name": "Capital Tankers Corp.",
 "sector": "Industrials"
 },
+"CAR": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "CARG": {
 "country": "United States",
 "industry": "Internet Content & Information",
@@ -5616,6 +5640,14 @@
 "industry": "Real Estate - Development",
 "name": "Castellum AB (publ)",
 "sector": "Real Estate"
+},
+"CASY": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "CATY": {
 "country": "",
@@ -5768,6 +5800,14 @@
 "industry": "Scientific & Technical Instruments",
 "name": "Codan Limited",
 "sector": "Technology"
+},
+"CDE": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "CDNA": {
 "country": "United States",
@@ -6357,6 +6397,14 @@
 "name": "",
 "sector": ""
 },
+"COGT": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "COH.AX": {
 "country": "Australia",
 "industry": "Medical Devices",
@@ -6658,6 +6706,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"CRUS": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "CRVL": {
 "country": "",
@@ -7907,6 +7963,14 @@
 "name": "",
 "sector": ""
 },
+"ELE": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "ELE.MC": {
 "country": "Spain",
 "industry": "Utilities - Regulated Electric",
@@ -7936,6 +8000,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"ELPC": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "ELS": {
 "country": "United States",
@@ -8031,6 +8103,14 @@
 "country": "",
 "industry": "",
 "last": "2026-11-04",
+"name": "",
+"sector": "",
+"tries": 1
+},
+"ENPH": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
 "name": "",
 "sector": "",
 "tries": 1
@@ -8496,6 +8576,14 @@
 "industry": "Communication Equipment",
 "name": "Extreme Networks, Inc.",
 "sector": "Technology"
+},
+"EYE": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "EZPW": {
 "country": "United States",
@@ -11411,6 +11499,14 @@
 "name": "Kelt Exploration Ltd.",
 "sector": "Energy"
 },
+"KEP": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "KER.PA": {
 "country": "",
 "industry": "",
@@ -12207,6 +12303,14 @@
 "name": "Lightspeed Commerce Inc.",
 "sector": "Technology"
 },
+"LSTR": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "LTC": {
 "country": "",
 "industry": "",
@@ -12725,6 +12829,14 @@
 "name": "",
 "sector": ""
 },
+"MGM": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "MGNI": {
 "country": "",
 "industry": "",
@@ -13058,6 +13170,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"MRTN": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "MRVI": {
 "country": "",
@@ -13612,6 +13732,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"NFLX": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "NGG": {
 "country": "",
@@ -14413,6 +14541,14 @@
 "name": "",
 "sector": ""
 },
+"OPY": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "OR": {
 "country": "",
 "industry": "",
@@ -14760,6 +14896,14 @@
 "sector": ""
 },
 "PCAR": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
+"PCG": {
 "country": "",
 "industry": "",
 "last": "2026-11-05",
@@ -15586,6 +15730,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"Q": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "QBE.AX": {
 "country": "Australia",
@@ -16599,6 +16751,14 @@
 "name": "",
 "sector": ""
 },
+"SBSW": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "SBUX": {
 "country": "",
 "industry": "",
@@ -17075,6 +17235,14 @@
 "name": "",
 "sector": ""
 },
+"SKYD": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "SKYGOLD.NS": {
 "country": "India",
 "industry": "Luxury Goods",
@@ -17092,6 +17260,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"SLDB": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "SLDE": {
 "country": "",
@@ -18515,6 +18691,14 @@
 "name": "",
 "sector": ""
 },
+"TPR": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "TPRO.MI": {
 "country": "Italy",
 "industry": "Semiconductors",
@@ -19773,6 +19957,14 @@
 "name": "",
 "sector": ""
 },
+"WCH.DE": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "WCN": {
 "country": "",
 "industry": "",
@@ -19784,6 +19976,14 @@
 "industry": "Oil & Gas E&P",
 "name": "Whitecap Resources Inc.",
 "sector": "Energy"
+},
+"WD": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "WDAY": {
 "country": "",
