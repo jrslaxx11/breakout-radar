@@ -81,3 +81,21 @@ def test_profiles_retry_empty(tmp_path, monkeypatch):
     seen = []
     f.profiles([f"Z{i}" for i in range(40)], 100, today=date(2026, 11, 10), fetch=lambda s: seen.append(s) or {})
     assert len(seen) == 25
+
+
+def test_build_universe_marks_adr_for_us_discovery(monkeypatch):
+    """Los valores de EE. UU. que entran por el descubrimiento toman la marca de ADR del directorio de Nasdaq."""
+    import pandas as pd
+    import radar.universe as u
+    from radar.config import Config
+    monkeypatch.setattr(u, "sp_constituents", lambda: pd.DataFrame(columns=["symbol", "index", "name", "sector", "sub"]))
+    monkeypatch.setattr(u, "us_liquid", lambda cfg: [{"symbol": "AAA", "name": "A", "adr": False}])
+    monkeypatch.setattr(u, "discovery", lambda cfg: [{"symbol": "BBB", "name": "B ADR"}, {"symbol": "CCC", "name": "C"},
+                                                     {"symbol": "DDD.L", "name": "D"}])
+    calls = []
+    monkeypatch.setattr(u, "us_listed", lambda: calls.append(1) or [{"symbol": "BBB", "adr": True}, {"symbol": "CCC", "adr": False}])
+    cfg = Config.load()
+    uni = u.build_universe(cfg)
+    assert uni["BBB"]["adr"] is True and uni["CCC"]["adr"] is False
+    assert "adr" not in uni["DDD.L"]
+    assert len(calls) == 1  # una sola descarga del directorio

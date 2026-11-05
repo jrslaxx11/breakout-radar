@@ -1404,7 +1404,7 @@
   // el modo sugerido y el termómetro de Luk, SPY/QQQ/IWM, los retrocesos (L1, L1b, L3 y EP) y las listas de
   // Qullamaggie (setups, high tight flags y foco de sectores calientes). El volumen del día se proyecta al
   // cierre para compararlo con medias de días completos; el AVWAP usa el volumen real.
-  const LV = { kit: null, cand: {}, candLoading: false, epAt: 0, on: false, time: null, closedDay: false, paused: {} };
+  const LV = { kit: null, cand: {}, candLoading: false, epAt: 0, on: false, st: {}, paused: {} };
   async function loadLiveKit() { try { LV.kit = await getJSON("data/live.json"); } catch { LV.kit = null; } }
   const liveSession = () => (D && D.meta && D.meta.session) || "";
 
@@ -1420,10 +1420,15 @@
     return { t: day, o, h: Math.max(isNum(q.high) ? q.high : q.price, q.price, o), l: Math.min(isNum(q.low) ? q.low : q.price, q.price, o),
       c: q.price, v, vp: v / Math.pow(frac, 0.8), open: !!q.isOpen, time: q.time || 0 };
   }
+  // Sello por bloque: Luk y el foco de sectores calientes (solo EE. UU.) y Qullamaggie (incluye Europa y Asia) tienen
+  // su propio estado, para que un valor asiático cotizando antes de la apertura americana no marque como «en vivo»
+  // un bloque que sigue con los datos del cierre.
+  const liveGroup = (id) => (id === "#luk" || id === "#luk-regime" ? "luk" : id === "#calientes" ? "hot" : "qm");
   function liveBadge(id) {
     if (!D) return "";
-    if (LV.on && LV.paused[id]) return `<p class="live-badge on" data-badge>En vivo · actualización en pausa mientras hay una ficha abierta</p>`;
-    if (LV.on) return `<p class="live-badge on" data-badge><span class="live-dot on"></span>${LV.closedDay ? `Con el cierre de hoy · ${hhmm(LV.time)} (el radar lo procesa esta noche)` : `En vivo · ${hhmm(LV.time)} · con la vela de hoy, aún abierta`}</p>`;
+    const g = LV.st[liveGroup(id)];
+    if (g && g.on && LV.paused[id]) return `<p class="live-badge on" data-badge>En vivo · actualización en pausa mientras hay una ficha abierta</p>`;
+    if (g && g.on) return `<p class="live-badge on" data-badge><span class="live-dot on"></span>${g.closedDay ? `Con el cierre de hoy · ${hhmm(g.time)} (el radar lo procesa esta noche)` : `En vivo · ${hhmm(g.time)} · con la vela de hoy, aún abierta`}</p>`;
     return `<p class="live-badge" data-badge>Datos del cierre del ${dateEs(liveSession())}</p>`;
   }
 
@@ -1589,11 +1594,17 @@
   }
   function applyLive() {
     if (!D || !LV.kit || !window.LukEngine) return;
-    const bars = Object.keys(LIVE.q).map(liveBar).filter(Boolean);
-    LV.on = bars.length > 0;
+    const K = LV.kit;
+    const lukSyms = new Set([...Object.keys(K.leaders || {}), ...Object.keys(K.health || {}), ...Object.keys(K.ctx || {}), ...Object.keys(K.eps || {})]);
+    const qmSyms = new Set([...(D.lists.qm_watch || []), ...(D.lists.focus || []).map((x) => x.sym),
+      ...(D.lists.qm_setups || []).map((x) => x.sym), ...(D.lists.htf_setups || []).map((x) => x.sym)]);
+    const state = (syms) => {
+      const bars = [...syms].map(liveBar).filter(Boolean);
+      return bars.length ? { on: true, time: Math.max(...bars.map((b) => b.time || 0)), closedDay: !bars.some((b) => b.open) } : { on: false };
+    };
+    LV.st = { luk: state(lukSyms), qm: state(qmSyms), hot: state((D.lists.focus || []).map((x) => x.sym)) };
+    LV.on = LV.st.luk.on || LV.st.qm.on;
     if (!LV.on) return;
-    LV.time = Math.max(...bars.map((b) => b.time || 0));
-    LV.closedDay = !bars.some((b) => b.open);
     if (!Object.keys(LV.cand).length && !LV.candLoading) loadQmCandles().then(applyLive);
     const L = lukLive_compute();
     const Q = qmLive_compute();

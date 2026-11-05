@@ -264,13 +264,24 @@ def build_universe(cfg: Config) -> dict[str, dict]:
                 uni[sym] = {"source": "INTL", "name": "", "gics_sector": "", "gics_sub": "",
                             "hint": key, "unbiased": True}
     us_rows = us_liquid(cfg)
+    adr_flags: dict | None = None
+
+    def nasdaq_adr() -> dict:
+        # Marca de ADR del directorio de Nasdaq (dos descargas pequeñas, una sola vez por ejecución).
+        nonlocal adr_flags
+        if adr_flags is None:
+            try:
+                adr_flags = {x["symbol"]: x["adr"] for x in us_listed()}
+            except Exception as exc:  # noqa: BLE001
+                log.warning("directorio de Nasdaq no disponible para marcar ADR (%s)", exc)
+                adr_flags = {}
+        return adr_flags
+
     if us_rows and any("adr" not in q for q in us_rows):
-        # Caché anterior al campo "adr": se toma del directorio de Nasdaq (dos descargas pequeñas).
-        try:
-            flags = {x["symbol"]: x["adr"] for x in us_listed()}
+        # Caché anterior al campo "adr": se toma del directorio de Nasdaq.
+        flags = nasdaq_adr()
+        if flags:
             us_rows = [{**q, "adr": flags.get(q["symbol"])} for q in us_rows]
-        except Exception as exc:  # noqa: BLE001
-            log.warning("directorio de Nasdaq no disponible para marcar ADR (%s)", exc)
     for q in us_rows:
         sym = q["symbol"]
         if sym not in uni:
@@ -284,6 +295,10 @@ def build_universe(cfg: Config) -> dict[str, dict]:
         if sym and sym not in uni:
             uni[sym] = {"source": "DISC", "name": q.get("name", ""), "gics_sector": "", "gics_sub": "",
                         "hint": "", "unbiased": False, "region": q.get("region")}
+            if "." not in sym:  # descubrimiento en EE. UU.: marca de ADR del directorio de Nasdaq
+                flag = nasdaq_adr().get(sym)
+                if flag is not None:
+                    uni[sym]["adr"] = flag
     for sym in cfg.mine:
         if sym in uni:
             uni[sym]["mine"] = True

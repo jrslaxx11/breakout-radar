@@ -185,7 +185,7 @@ def test_universe_check():
     ok2, _, flags2 = luk.universe_check({"name": "NoCap", "adr": False}, None, None, 50, 50e6, 0.05)
     assert ok2 and flags2 == ["verificar capitalización"]
     assert luk.universe_check({"name": "Illiquid", "adr": False}, None, 5e9, 50, 9e6, 0.05)[1] == "valor negociado"
-    assert luk.universe_check({"name": "Slow", "adr": False}, None, 5e9, 50, 50e6, 0.03)[1] == "ADR"
+    assert luk.universe_check({"name": "Slow", "adr": False}, None, 5e9, 50, 50e6, 0.03)[1] == "ADR(20) < 4%"
 
 
 def test_us_calendar():

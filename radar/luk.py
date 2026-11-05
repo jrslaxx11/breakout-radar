@@ -236,7 +236,7 @@ def universe_check(info: dict, industry: str | None, mcap: float | None, price: 
     if (mdv or 0) < q["min_dollar_vol_20d"]:
         return False, "valor negociado", flags
     if (adr or 0) < q["min_adr_pct_20d"]:
-        return False, "ADR", flags
+        return False, f"ADR(20) < {q['min_adr_pct_20d'] * 100:g}%", flags
     return True, "", flags
 
 
