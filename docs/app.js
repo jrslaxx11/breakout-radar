@@ -414,6 +414,7 @@
     return `<div class="verdict">
         <div>
           <p class="cap mode-cap">Modo sugerido · termómetro de Martin Luk</p>
+          ${liveBadge("#luk-regime")}
           <p class="verdict-word" data-v="${esc(LR.mode)}">${esc(MODE_TXT[LR.mode] || LR.mode)}</p>
           <p class="verdict-sub">${esc(sub)}</p>
           <div class="thermo-bar" role="img" aria-label="${H.good} sanos, ${H.mixed} mixtos y ${H.bad} dañados">
@@ -464,7 +465,7 @@
         </ul>
       </div>`;
     $("#regimen").innerHTML = `<h2 class="sr">Régimen de mercado</h2>
-      ${d.luk_regime ? lukRegimeHTML(d) + `<details class="classic"><summary>Régimen clásico: ${esc(label)} (${r.score > 0 ? "+" : ""}${r.score} sobre ${r.rules.length} señales)</summary>${classic}</details>` : classic}
+      ${d.luk_regime ? `<div id="luk-regime">${lukRegimeHTML(d)}</div>` + `<details class="classic"><summary>Régimen clásico: ${esc(label)} (${r.score > 0 ? "+" : ""}${r.score} sobre ${r.rules.length} señales)</summary>${classic}</details>` : classic}
       <div class="grid2">
         <div>
           <h3>Índices</h3>
@@ -744,7 +745,19 @@
 
   // Filas de las tablas del escáner (QM, high tight flags y foco) para refrescar su precio en vivo.
   const ROWS = {};
-  const keepRows = (rows) => rows.forEach((x) => { if (!ROWS[x.sym] || x.qm) ROWS[x.sym] = x; });
+  const keepRows = (rows) => rows.forEach((x) => { if (!ROWS[x.sym] || x.qm || (x.live && !ROWS[x.sym].qm)) ROWS[x.sym] = x; });
+
+  // Despliega la ficha al pulsar una fila; se enlaza una sola vez por sección (el directo repinta las tablas).
+  function bindRowToggle(id) {
+    const sec = $(id);
+    if (!sec || sec.dataset.bound) return;
+    sec.dataset.bound = "1";
+    const toggle = (tr) => toggleRow(tr, tr.cells.length, () => loadTicker(tr.dataset.sym).then((x) => ({ rec: BYS[tr.dataset.sym] || x.rec, k: x.k })));
+    sec.addEventListener("click", (e) => { const tr = e.target.closest("tbody tr[data-sym]"); if (tr && !e.target.closest("a, button")) toggle(tr); });
+    sec.addEventListener("keydown", (e) => {
+      if ((e.key === "Enter" || e.key === " ") && e.target.matches("tbody tr[data-sym]")) { e.preventDefault(); toggle(e.target); }
+    });
+  }
 
   // ---------- sistema de Martin Luk: sección principal ----------
   function lukLive(x) {
@@ -796,7 +809,7 @@
     else if (!all.length) warn.push(`<p class="warn-box soft"><strong>Hoy no hay ningún L1 ni L1b.</strong> Con los líderes perdiendo las medias no hay retrocesos que comprar; las bases L3 y los EP de hoy siguen abajo.</p>`);
     const cov = ST && ST.coverage;
     const statsTxt = ST ? `Lista diaria de L1 y L1b en las últimas ${ST.days} sesiones: media ${num(ST.avg, 1)}, mediana ${num(ST.median, 0)}, máximo ${ST.max}; ${ST.over_target} días con más de ${K.list_target || 15} y ${ST.empty_days} vacíos.${cov && cov.n ? ` Entradas documentadas de Luk detectadas ese día o el anterior: ${cov.hit} de ${cov.n}.` : ""} <a href="#metodo">Detalle en Método</a>.` : "";
-    $("#luk").innerHTML = `<h2>Retrocesos de Martin Luk</h2>
+    $("#luk").innerHTML = `<h2>Retrocesos de Martin Luk</h2>${liveBadge("#luk")}
       <blockquote class="qm-quote luk-quote"><p lang="en">“I like having tight stops so that I can build a larger position size.”</p><cite>Martin Luk, campeón del USIC 2025</cite></blockquote>
       <p class="lead">Su entrada principal: dejar que un líder corrija de 2 a 8 sesiones (mejor 3-7) hasta la EMA 9, la EMA 21 o el AVWAP y entrar con un gatillo intradía y un stop de ~1,5%. <strong>L1</strong>: retroceso con cierre sobre la EMA 21. <strong>L1b</strong>: perforación, cierre hasta 0,75 ADR bajo la EMA 21; se marca esa misma noche y el gatillo es recuperar la EMA 21. Universo: ${num(U.n, 0)} acciones de EE. UU. (${num(U.leaders, 0)} líderes). Reglas completas en <a href="#metodo">Método</a>.</p>
       ${LR ? `<p class="mode-line">Modo sugerido: <a href="#regimen" class="mode-tag mode-${esc((LR.mode || "").toLowerCase().replace(/\s+/g, "-"))}">${esc(MODE[LR.mode] || LR.mode)}</a> <span class="dim">(${LR.counts.good} de ${LR.counts.n} líderes sanos y ${LR.counts.bad} dañados)</span></p>` : ""}
@@ -831,11 +844,7 @@
       }
       setTimeout(() => { st.textContent = ""; }, 2500);
     });
-    const toggle = (tr) => toggleRow(tr, tr.cells.length, () => loadTicker(tr.dataset.sym).then((x) => ({ rec: BYS[tr.dataset.sym] || x.rec, k: x.k })));
-    $("#luk").addEventListener("click", (e) => { const tr = e.target.closest("tr[data-sym]"); if (tr && !e.target.closest("a, button")) toggle(tr); });
-    $("#luk").addEventListener("keydown", (e) => {
-      if ((e.key === "Enter" || e.key === " ") && e.target.matches("tr[data-sym]")) { e.preventDefault(); toggle(e.target); }
-    });
+    bindRowToggle("#luk");
   }
 
   // ---------- sectores calientes y sus valores rápidos ----------
@@ -893,7 +902,7 @@
           </tr>`).join("")}</tbody>`).join("")}</table></div>
       <p class="dim" style="font-size:13px;margin-top:6px">En negrita, los plazos en los que entra en el escáner.${hidden ? ` No se muestran ${hidden} valor${hidden === 1 ? "" : "es"} rápido${hidden === 1 ? "" : "s"} de estos sectores que ya no están en forma (bajo la SMA50, con la ruptura fallida o lejos del nivel).` : ""} Pulsa una fila para ver el gráfico, las estrellas y el plan; el ticker abre la ficha completa.</p>` : "";
     const ready = F.filter((x) => STATE_ORDER.includes(x.state)).sort((a, b) => (b.stars || 0) - (a.stars || 0));
-    $("#calientes").innerHTML = `<h2>Sectores calientes</h2>
+    $("#calientes").innerHTML = `<h2>Sectores calientes</h2>${liveBadge("#calientes")}
       <blockquote class="qm-quote"><p lang="en">“I wanna focus on the fast moving stocks in the hot sectors.”</p><cite>Qullamaggie</cite></blockquote>
       <p class="lead">Él no mide los sectores con índices sino con sus escáneres: un sector está caliente cuando muchos de sus valores aparecen a la vez entre los que más suben, y ahí "hasta las peores acciones se mueven más que las mejores de un sector frío". Escáner: el ${num(K.scan_pct * 100, 0)}% del mercado de EE. UU. que más sube a 1, 3 o 6 meses desde el mínimo del periodo. Sector: la industria de Yahoo Finance. Caliente: al menos ${K.hot_min} valores en el escáner, el doble de su cuota normal (${num(K.hot_lift * K.scan_pct * 100, 0)}% del sector) y entre los ${K.hot_top} de más calor (valores en el escáner × parte del sector que suponen). Debajo, sus valores rápidos (ADR ≥ ${num(K.fast_adr * 100, 0)}%) que siguen en forma: la lista donde él busca los setups.${K.us_only === false ? "" : " Solo acciones de EE. UU., como sus escáneres."}</p>
       ${G.length ? (hot.length
@@ -902,11 +911,7 @@
         : `<p class="empty">Sin datos de sectores en este informe. Aparecerán en la próxima actualización.</p>`}
       ${focusTbl ? `<h3>Valores rápidos de los sectores calientes</h3>${focusTbl}` : ""}
       ${G.length ? `<details class="heat-more"${F.length ? "" : " open"}><summary>Ranking de sectores por calor (${G.length})</summary>${groupsTbl}</details>` : ""}`;
-    const toggle = (tr) => toggleRow(tr, 10, () => loadTicker(tr.dataset.sym).then((x) => ({ rec: BYS[tr.dataset.sym] || x.rec, k: x.k })));
-    $("#calientes").addEventListener("click", (e) => { const tr = e.target.closest("tr[data-sym]"); if (tr && !e.target.closest("a")) toggle(tr); });
-    $("#calientes").addEventListener("keydown", (e) => {
-      if ((e.key === "Enter" || e.key === " ") && e.target.matches("tr[data-sym]")) { e.preventDefault(); toggle(e.target); }
-    });
+    bindRowToggle("#calientes");
   }
 
   // Escáner Qullamaggie: todo el universo, rupturas que cumplen los requisitos obligatorios.
@@ -916,7 +921,7 @@
     const m = d.qm_market || {};
     const top = rows.filter((x) => (x.stars || 0) >= 4.5);
     const n5 = top.filter((x) => x.stars >= 5).length;
-    $("#qullamaggie").innerHTML = `<h2>Setups Qullamaggie</h2>
+    $("#qullamaggie").innerHTML = `<h2>Setups Qullamaggie</h2>${liveBadge("#qullamaggie")}
       <p class="lead">Escáner de todo el universo, no solo de las temáticas: todas las acciones de EE. UU. con liquidez suficiente más las internacionales del radar. Valores entre el 2% del mercado de EE. UU. que más sube a 1, 3 o 6 meses (desde el mínimo del periodo, como en sus escáneres), con ADR ≥ 5%, subida previa ≥ 30% y una consolidación de 5 a 60 sesiones, que hoy rompen o están a ≤ 5% del nivel de ruptura. Ordenados por estrellas: la calidad del setup puntuada con los rasgos que distinguen sus propias operaciones. "Con reservas": falla alguna regla secundaria, publica resultados en ${earnDays()} días o menos (él no entra)${m.light && m.light !== "verde" ? " o el filtro de mercado no está en verde (hoy: " + esc(m.light) + ")" : ""}.</p>
       ${rows.length ? `<p class="five-note">${top.length
         ? `<strong>Candidatas de 5 estrellas hoy:</strong> ${top.map((x) => `<a href="#valor=${encodeURIComponent(x.sym)}">${esc(x.sym)}</a> ${starsHTML(x.stars, true)}`).join(" · ")}<span class="dim"> (${n5} con 5 y ${top.length - n5} con 4,5)</span>`
@@ -935,11 +940,7 @@
           <td class="left" data-v="${["Cumple", "Con reservas", "No cumple"].indexOf(x.qm.verdict)}"><span class="qmv qmv-${esc(x.qm.verdict.replace(/\s+/g, "-"))}">${esc(x.qm.verdict)}</span>${x.fails.length ? `<small class="dim block">falla: ${esc(x.fails.join("; ").toLowerCase())}</small>` : ""}</td>
         </tr>`).join("")}</tbody></table></div>` : `<p class="empty">Hoy ningún valor del universo cumple los requisitos obligatorios y está en ruptura o a punto. Es normal en mercados flojos: Qullamaggie espera.</p>`}
       ${rows.length ? `<p class="dim" style="font-size:13px;margin-top:6px">Pulsa una fila para ver el gráfico, el desglose de las estrellas y el plan; el ticker abre la ficha completa.</p>` : ""}`;
-    const toggle = (tr) => toggleRow(tr, 10, () => loadTicker(tr.dataset.sym).then((x) => ({ rec: BYS[tr.dataset.sym] || x.rec, k: x.k })));
-    $("#qullamaggie").addEventListener("click", (e) => { const tr = e.target.closest("tr[data-sym]"); if (tr && !e.target.closest("a")) toggle(tr); });
-    $("#qullamaggie").addEventListener("keydown", (e) => {
-      if ((e.key === "Enter" || e.key === " ") && e.target.matches("tr[data-sym]")) { e.preventDefault(); toggle(e.target); }
-    });
+    bindRowToggle("#qullamaggie");
   }
 
   // High tight flags: mástil ≥ 90% en ≤ 40 sesiones y bandera corta, en todo el universo líquido.
@@ -949,7 +950,7 @@
     const K = d.htf_const || { pole_min: 0.9, pole_days: 40, flag_min: 5, flag_max: 30, depth_max: 0.35, depth_classic: 0.25 };
     const by = (k) => rows.filter((x) => x.kind === k).length;
     const top = rows.filter((x) => (x.stars || 0) >= 4.5);
-    $("#htf").innerHTML = `<h2>High tight flags</h2>
+    $("#htf").innerHTML = `<h2>High tight flags</h2>${liveBadge("#htf")}
       <p class="lead">El setup favorito de Qullamaggie ("high tide flag" en sus directos): un mástil de al menos +${num(K.pole_min * 100, 0)}% en ${K.pole_days} sesiones o menos y una bandera corta que se apoya en las medias de 10 y 20 y se estrecha antes de romper. No hace falta que esté en máximos históricos; importa el impulso reciente. Escáner de todo el universo líquido: banderas de ${K.flag_min} a ${K.flag_max} sesiones (de 3-4, en formación) que corrigen como mucho un ${num(K.depth_max * 100, 0)}% desde el máximo (hasta ${num(K.depth_classic * 100, 0)}%, clásica; más, profunda) y que hoy rompen o siguen en la base. Ordenadas por estrellas.</p>
       ${rows.length ? `<p class="five-note"><strong>${rows.length} high tight flag${rows.length === 1 ? "" : "s"} hoy:</strong> ${by("clásica")} clásica${by("clásica") === 1 ? "" : "s"}, ${by("profunda")} profunda${by("profunda") === 1 ? "" : "s"} y ${by("en formación")} en formación${top.length ? `. Con 4,5-5 estrellas: ${top.map((x) => `<a href="#valor=${encodeURIComponent(x.sym)}">${esc(x.sym)}</a> ${starsHTML(x.stars, true)}`).join(" · ")}` : ""}.</p>
       <div class="tbl-wrap"><table class="lt qm-table htf-table sortable">
@@ -968,11 +969,7 @@
         </tr>`).join("")}</tbody></table></div>
       <p class="dim" style="font-size:13px;margin-top:6px">Pulsa una fila para ver el gráfico con el mástil y la bandera marcados, las estrellas y el plan; el ticker abre la ficha completa.</p>`
       : `<p class="empty">Hoy no hay ningún high tight flag en el universo. Son raros (el 2% de las rupturas) y aparecen sobre todo en mercados fuertes y temáticas calientes.</p>`}`;
-    const toggle = (tr) => toggleRow(tr, 9, () => loadTicker(tr.dataset.sym).then((x) => ({ rec: BYS[tr.dataset.sym] || x.rec, k: x.k })));
-    $("#htf").addEventListener("click", (e) => { const tr = e.target.closest("tr[data-sym]"); if (tr && !e.target.closest("a")) toggle(tr); });
-    $("#htf").addEventListener("keydown", (e) => {
-      if ((e.key === "Enter" || e.key === " ") && e.target.matches("tr[data-sym]")) { e.preventDefault(); toggle(e.target); }
-    });
+    bindRowToggle("#htf");
   }
 
   function renderAgenda(d, byS) {
@@ -1374,8 +1371,11 @@
     // Índices en cada vuelta; las acciones, mientras alguna cotiza o cada 15 minutos (para no consultar
     // cientos de valores cada minuto cuando solo están abiertas Europa o Asia).
     const idxSyms = ((D.regime && D.regime.indices) || []).filter((i) => i.available).map((i) => i.sym);
+    const kit = LV.kit || {};
     const stockSyms = [...new Set([...(D.lists.presented || []), ...(D.lists.qm_setups || []).map((x) => x.sym), ...(D.lists.htf_setups || []).map((x) => x.sym),
-      ...(D.lists.focus || []).map((x) => x.sym), ...(D.lists.luk || []).map((x) => x.sym), ...(D.lists.luk_l3 || []).map((x) => x.sym), ...(currentSym ? [currentSym] : [])])].sort();
+      ...(D.lists.focus || []).map((x) => x.sym), ...(D.lists.luk || []).map((x) => x.sym), ...(D.lists.luk_l3 || []).map((x) => x.sym),
+      ...(D.lists.qm_watch || []), ...Object.keys(kit.leaders || {}), ...Object.keys(kit.health || {}), ...Object.keys(kit.ctx || {}),
+      ...(currentSym ? [currentSym] : [])])].sort();
     const full = !LIVE.fullAt || Date.now() - LIVE.fullAt > 15 * 60000 || stockSyms.some((s) => LIVE.q[s] && LIVE.q[s].isOpen)
       || (currentSym && !LIVE.q[currentSym]);
     const syms = [...new Set([...idxSyms, ...(full ? stockSyms : [])])];
@@ -1391,9 +1391,235 @@
       LIVE.error = e.old ? "update" : "fail";
     }
     renderLive();
+    applyLive();
+    if (!LIVE.error && Object.values(LIVE.q).some((q) => q.isOpen)) epSweep();
     if (LIVE.error === "update") return;
     const anyOpen = Object.values(LIVE.q).some((q) => q.isOpen);
     LIVE.timer = setTimeout(liveTick, !LIVE.error && anyOpen ? 60000 : 300000);
+  }
+
+  // ---------- directo: Luk y Qullamaggie recalculados con la vela de hoy ----------
+  // Con la sesión abierta (o con el cierre de hoy aún sin procesar por el radar) se añade a cada valor una
+  // vela de hoy con el último precio de Yahoo y se recalculan, con las mismas reglas que el motor diario:
+  // el modo sugerido y el termómetro de Luk, SPY/QQQ/IWM, los retrocesos (L1, L1b, L3 y EP) y las listas de
+  // Qullamaggie (setups, high tight flags y foco de sectores calientes). El volumen del día se proyecta al
+  // cierre para compararlo con medias de días completos; el AVWAP usa el volumen real.
+  const LV = { kit: null, cand: {}, candLoading: false, epAt: 0, on: false, time: null, closedDay: false, paused: {} };
+  async function loadLiveKit() { try { LV.kit = await getJSON("data/live.json"); } catch { LV.kit = null; } }
+  const liveSession = () => (D && D.meta && D.meta.session) || "";
+
+  function liveBar(sym) {
+    const q = LIVE.q[sym];
+    if (!q || !isNum(q.price)) return null;
+    const day = qDay(q);
+    if (!day || day <= liveSession()) return null;
+    const o = isNum(q.open) && q.open > 0 ? q.open : q.price;
+    let frac = 1;
+    if (q.isOpen && q.start && q.end) frac = Math.min(1, Math.max(0.03, (Date.now() / 1000 - q.start) / (q.end - q.start)));
+    const v = isNum(q.volume) ? q.volume : 0;
+    return { t: day, o, h: Math.max(isNum(q.high) ? q.high : q.price, q.price, o), l: Math.min(isNum(q.low) ? q.low : q.price, q.price, o),
+      c: q.price, v, vp: v / Math.pow(frac, 0.8), open: !!q.isOpen, time: q.time || 0 };
+  }
+  function liveBadge(id) {
+    if (!D) return "";
+    if (LV.on && LV.paused[id]) return `<p class="live-badge on" data-badge>En vivo · actualización en pausa mientras hay una ficha abierta</p>`;
+    if (LV.on) return `<p class="live-badge on" data-badge><span class="live-dot on"></span>${LV.closedDay ? `Con el cierre de hoy · ${hhmm(LV.time)} (el radar lo procesa esta noche)` : `En vivo · ${hhmm(LV.time)} · con la vela de hoy, aún abierta`}</p>`;
+    return `<p class="live-badge" data-badge>Datos del cierre del ${dateEs(liveSession())}</p>`;
+  }
+
+  // Semáforo de Qullamaggie con el Nasdaq 100 en vivo (mismas reglas que el del cierre).
+  function liveQmMarket() {
+    const m = D.qm_market || {}, q = LIVE.q["^NDX"];
+    if (!isNum(m.s10) || !isNum(m.s20) || !q || !isNum(q.price) || !(qDay(q) > liveSession())) return m;
+    const p = q.price, a10 = p > m.s10, a20 = p > m.s20;
+    const rising = typeof m.rising === "boolean" ? m.rising : m.light === "verde";
+    return { ...m, light: a10 && a20 && rising ? "verde" : a20 ? "ámbar" : "rojo", close: p };
+  }
+
+  function lukLive_compute() {
+    const K = LV.kit, q = K.cfg, LE = window.LukEngine;
+    const counts = { n: 0, good: 0, bad: 0, mixed: 0, good_syms: [], bad_syms: [], mixed_syms: [] };
+    for (const [sym, kh] of Object.entries(K.health)) {
+      const st = LE.health(kh, liveBar(sym), q);
+      if (!["sano", "dañado", "mixto"].includes(st)) continue;
+      counts.n++;
+      const key = st === "sano" ? "good" : st === "dañado" ? "bad" : "mixed";
+      counts[key]++; if (counts[`${key}_syms`].length < 40) counts[`${key}_syms`].push(sym);
+    }
+    const context = {};
+    for (const [etf, kh] of Object.entries(K.ctx)) { const bar = liveBar(etf); context[etf] = LE.context(kh, bar, q); if (!bar) context[etf].date = liveSession(); }
+    const hotG = new Set((D.lists.hot_groups || []).filter((g) => g.hot).map((g) => g.group));
+    const pres = new Set(D.lists.presented || []);
+    const an = [];
+    for (const [sym, kit] of Object.entries(K.leaders)) {
+      const bar = liveBar(sym);
+      const a = LE.analyze(kit, bar, q, true);
+      if (a) an.push({ sym, kit, a, bar });
+    }
+    const groups = {};
+    an.forEach(({ kit, a }) => { if (a.leader && kit.group) groups[kit.group] = (groups[kit.group] || 0) + 1; });
+    const setups = [], l3 = [], eps = [];
+    for (const { sym, kit, a, bar } of an) {
+      const today = bar ? bar.t : liveSession();
+      const es = LE.sessionsUntil(today, kit.next_earnings, K.holidays);
+      const themeN = kit.group ? groups[kit.group] || 0 : 0;
+      const base = { sym, name: kit.name || sym, currency: "USD", group: kit.group, group_name: kit.group_name, theme_n: themeN,
+        lead_group: themeN >= 2, hot: hotG.has(kit.group), mcap: kit.mcap, presented: pres.has(sym), next_earnings: kit.next_earnings,
+        earn_sessions: es, rs: kit.rs, live: !!bar };
+      if (LE.SETUPS.includes(a.setup)) {
+        const sc = LE.score(a, kit.rs, themeN, es, kit.earn_known, q), lv = LE.levels(a, q);
+        setups.push({ ...base, ...a, ...sc, ...lv, flags: [...(kit.uflags || []), ...sc.flags, ...(a.setup === "L1b" ? ["perforación: gatillo reclaim de la EMA 21"] : [])] });
+      } else if (a.setup === "L3") {
+        const lv = LE.levels(a, q);
+        l3.push({ ...base, ...a, ...lv, flags: [...(kit.uflags || []), ...(isNum(es) && es <= q.earnings_window ? [`resultados en ${es} sesiones`] : [])] });
+      }
+      if (a.ep_today && bar) eps.push({ ...base, close: a.close, gap: a.gap, vol_x: a.vol_x, leader: a.leader, why: a.why });
+    }
+    // EP de hoy en el resto del universo (barrido cada 15 minutos).
+    for (const [sym, [pc, m50, , name]] of Object.entries(K.eps || {})) {
+      const bar = liveBar(sym);
+      if (!bar || !(pc > 0) || !(m50 > 0)) continue;
+      const gap = bar.o / pc - 1;
+      if (gap >= q.ep_gap && bar.vp >= q.ep_vol_mult * m50) eps.push({ sym, name, currency: "USD", close: bar.c, gap, vol_x: bar.vp / m50, leader: false, why: "aún no es líder", live: true });
+    }
+    setups.sort((x, y) => y.score - x.score);
+    setups.forEach((x, i) => { x.rank = i + 1; });
+    l3.sort((x, y) => y.close / y.base_hi - x.close / x.base_hi);
+    eps.sort((x, y) => (y.gap || 0) - (x.gap || 0));
+    const maxList = q.max_list || 60;
+    return {
+      lists: { luk: setups.slice(0, maxList), luk_l3: l3.slice(0, q.max_l3 || 30), luk_ep: eps.slice(0, q.max_ep || 30) },
+      regime: { mode: LE.mode(counts, q), counts, context },
+      universe: { ...(D.luk_universe || {}), leaders: an.filter((x) => x.a.leader).length,
+        n_l1: setups.filter((x) => x.setup === "L1").length, n_l1b: setups.filter((x) => x.setup === "L1b").length },
+    };
+  }
+
+  // Qullamaggie: velas de los valores a vigilar (se cargan una vez al empezar el directo).
+  async function loadQmCandles() {
+    if (LV.candLoading) return;
+    LV.candLoading = true;
+    const syms = [...new Set([...(D.lists.qm_watch || []), ...(D.lists.focus || []).map((x) => x.sym)])].filter((s) => !LV.cand[s]);
+    let i = 0;
+    const worker = async () => {
+      while (i < syms.length) {
+        const s = syms[i++];
+        try { const x = await loadTicker(s); if (x && x.k && x.rec) LV.cand[s] = x; } catch { /* sin velas: queda al cierre */ }
+      }
+    };
+    await Promise.all(Array.from({ length: 6 }, worker));
+    LV.candLoading = false;
+  }
+  function addEarnings(q, nextIso, est, todayIso, daysMax) {
+    if (!q || !nextIso) return;
+    const days = Math.round((Date.parse(nextIso + "T12:00:00Z") - Date.parse(todayIso + "T12:00:00Z")) / 864e5);
+    if (days < 0) return;
+    const ok = days > daysMax;
+    q.checks.push({ key: "earnings", ok, hard: false, label: `Sin resultados en los próximos ${daysMax} días`,
+      value: `${dateEs(nextIso)} (en ${days} día${days === 1 ? "" : "s"}${est ? ", fecha estimada" : ""})` });
+    q.earnings_days = days;
+    if (!ok && q.verdict === "Cumple") q.verdict = "Con reservas";
+  }
+  const QM_ORDER = { "CONFIRMADA": 0, "TEMPRANA": 1, "RETEST": 2, "PRE-BREAKOUT": 3 };
+  const HTF_ORDER = { ...QM_ORDER, "EN BASE": 4 };
+  function qmLive_compute() {
+    const E = window.RadarEngine, ctx = { ...D.engine, qm_market: liveQmMarket() };
+    const hotG = new Set((D.lists.hot_groups || []).filter((g) => g.hot).map((g) => g.group));
+    const sel = new Set(D.selected_themes || []);
+    const daysMax = (D.engine.qullamaggie || {}).earnings_days || 7;
+    const ev = {};
+    for (const [sym, { rec, k }] of Object.entries(LV.cand)) {
+      const bar = liveBar(sym);
+      if (!bar || !k || !k.t || !k.t.length || bar.t <= k.t[k.t.length - 1]) continue;
+      const k2 = { symbol: sym, meta: { currency: rec.currency, name: rec.name }, t: [...k.t, bar.t], o: [...k.o, bar.o], h: [...k.h, bar.h],
+        l: [...k.l, bar.l], c: [...k.c, bar.c], v: [...k.v, bar.vp] };
+      let e;
+      try { e = E.evaluateTicker(k2, ctx); } catch { e = null; }
+      if (!e) continue;
+      const hot = sel.has(rec.theme) || hotG.has(rec.group);
+      const st = e.stars || {};
+      const stars = isNum(st.chart_stars) ? Math.min(5, st.chart_stars + (hot && st.chart_stars < 5 ? 0.5 : 0)) : st.stars;
+      addEarnings(e.qm, rec.next_earnings, rec.next_earnings_est, bar.t, daysMax);
+      ev[sym] = { e, rec, hot, stars, bonus: hot && st.chart_stars < 5 };
+    }
+    const base = (sym, x) => ({ sym, name: x.rec.name, theme: x.rec.theme, state: x.e.state, why: x.e.why, date: x.e.date, close: x.e.close,
+      currency: x.rec.currency, pivot: x.e.pivot, dist: x.e.dist, inv: x.e.inv, v20: x.e.v20, peak: x.e.peak, level_kind: x.e.level_kind,
+      adr_pct: x.e.adr_pct, presented: (D.lists.presented || []).includes(sym), stars: x.stars, chart_stars: (x.e.stars || {}).chart_stars,
+      star_points: (x.e.stars || {}).points, theme_bonus: x.bonus, next_earnings: x.rec.next_earnings, earnings_days: (x.e.qm || {}).earnings_days, live: true });
+    const qmRows = [], htfRows = [];
+    for (const [sym, x] of Object.entries(ev)) {
+      const q = x.e.qm || {};
+      if (q.verdict && q.verdict !== "No cumple" && x.e.state in QM_ORDER) {
+        qmRows.push({ ...base(sym, x), prior_move: x.e.prior_move, base_len: x.e.base_len, score: x.e.score, hot_theme: x.hot,
+          fails: (q.checks || []).filter((c) => c.ok === false).map((c) => c.label), qm: { verdict: q.verdict, trigger: q.trigger, stop_max: q.stop_max } });
+      }
+      if (x.e.htf && x.e.state in HTF_ORDER) {
+        const h = x.e.htf;
+        htfRows.push({ ...base(sym, x), qm_verdict: q.verdict, kind: h.kind, pole: h.pole, pole_len: h.pole_len, flag_len: h.flag_len, depth: h.depth });
+      }
+    }
+    // Los valores sin vela de hoy (sin cotización) se quedan como al cierre.
+    for (const r of D.lists.qm_setups || []) if (!ev[r.sym]) qmRows.push(r);
+    for (const r of D.lists.htf_setups || []) if (!ev[r.sym]) htfRows.push(r);
+    qmRows.sort((a, b) => (b.stars || 0) - (a.stars || 0) || QM_ORDER[a.state] - QM_ORDER[b.state] || b.dist - a.dist);
+    htfRows.sort((a, b) => (b.stars || 0) - (a.stars || 0) || HTF_ORDER[a.state] - HTF_ORDER[b.state] || b.dist - a.dist);
+    const focus = (D.lists.focus || []).map((r) => {
+      const x = ev[r.sym];
+      if (!x) return r;
+      return { ...r, state: x.e.state, why: x.e.why, date: x.e.date, close: x.e.close, pivot: x.e.pivot, dist: x.e.dist, level_kind: x.e.level_kind,
+        inv: x.e.inv, v20: x.e.v20, adr_pct: x.e.adr_pct, stars: x.stars, star_points: (x.e.stars || {}).points, theme_bonus: x.bonus,
+        qm_verdict: (x.e.qm || {}).verdict, htf_kind: (x.e.htf || {}).kind || null, earnings_days: (x.e.qm || {}).earnings_days ?? r.earnings_days, live: true };
+    }).filter((r) => r.state !== "DESCARTADA");
+    return { qm_setups: qmRows, htf_setups: htfRows, focus, qm_market: ctx.qm_market };
+  }
+
+  // Repinta una sección salvo que tenga una ficha abierta (se avisa en su sello y se repinta al cerrarla).
+  function repaint(id, fn) {
+    const sec = $(id);
+    if (!sec) return;
+    if (sec.querySelector("tr.detail")) {
+      LV.paused[id] = true;
+      const b = sec.querySelector("[data-badge]");
+      if (b) b.outerHTML = liveBadge(id);
+      return;
+    }
+    LV.paused[id] = false;
+    fn();
+    reapplySorts(sec);
+  }
+  function applyLive() {
+    if (!D || !LV.kit || !window.LukEngine) return;
+    const bars = Object.keys(LIVE.q).map(liveBar).filter(Boolean);
+    LV.on = bars.length > 0;
+    if (!LV.on) return;
+    LV.time = Math.max(...bars.map((b) => b.time || 0));
+    LV.closedDay = !bars.some((b) => b.open);
+    if (!Object.keys(LV.cand).length && !LV.candLoading) loadQmCandles().then(applyLive);
+    const L = lukLive_compute();
+    const Q = qmLive_compute();
+    const Dl = { ...D, lists: { ...D.lists, ...L.lists, qm_setups: Q.qm_setups, htf_setups: Q.htf_setups, focus: Q.focus },
+      luk_regime: L.regime, luk_universe: L.universe, qm_market: Q.qm_market };
+    repaint("#luk", () => renderLuk(Dl));
+    repaint("#calientes", () => renderHot(Dl));
+    repaint("#qullamaggie", () => renderQM(Dl));
+    repaint("#htf", () => renderHTF(Dl));
+    const reg = $("#luk-regime");
+    if (reg) reg.innerHTML = lukRegimeHTML(Dl);
+    initSortable();
+    renderLive();
+  }
+  // Barrido del universo de Luk cada 15 minutos para detectar EP de hoy fuera de los líderes.
+  async function epSweep() {
+    if (!LV.kit || !LV.kit.eps || Date.now() - LV.epAt < 15 * 60000) return;
+    LV.epAt = Date.now();
+    const syms = Object.keys(LV.kit.eps);
+    for (let i = 0; i < syms.length; i += 40) {
+      try {
+        const r = await getWorker(`/quote?symbols=${encodeURIComponent(syms.slice(i, i + 40).join(","))}`);
+        if (r && r.quotes) Object.assign(LIVE.q, r.quotes);
+      } catch { /* se reintenta en el siguiente barrido */ }
+    }
+    applyLive();
   }
 
   // ---------- tablas ordenables: clic (o Intro) en el nombre de una columna ----------
@@ -1415,13 +1641,31 @@
     if (!txt || /^[—-]$/.test(txt)) return null;
     return txt.toLowerCase();
   }
+  const SORTS = {};
+  const tableKey = (table) => {
+    const sec = table.closest("section");
+    return sec ? `${sec.id}:${[...sec.querySelectorAll("table.sortable")].indexOf(table)}` : null;
+  };
   function sortTable(th) {
     const table = th.closest("table"), col = [...th.parentNode.children].indexOf(th);
-    const bodies = [...table.tBodies];
-    const rows = bodies.flatMap((tb) => [...tb.rows].filter((r) => !r.classList.contains("grp") && !r.classList.contains("detail")));
+    const rows = [...table.tBodies].flatMap((tb) => [...tb.rows].filter((r) => !r.classList.contains("grp") && !r.classList.contains("detail")));
     const sample = rows.map((r) => cellValue(r, col)).find((v) => v !== null);
     const cur = th.getAttribute("aria-sort");
     const dir = cur === "descending" ? 1 : cur === "ascending" ? -1 : (typeof sample === "number" && !th.hasAttribute("data-asc") ? -1 : 1);
+    sortBy(table, col, dir);
+    const key = tableKey(table);
+    if (key) SORTS[key] = { col, dir };
+  }
+  // Vuelve a aplicar el orden elegido tras repintar una sección.
+  function reapplySorts(sec) {
+    sec.querySelectorAll("table.sortable").forEach((table) => {
+      const st = SORTS[tableKey(table)];
+      if (st) sortBy(table, st.col, st.dir);
+    });
+  }
+  function sortBy(table, col, dir) {
+    const bodies = [...table.tBodies];
+    const th = table.tHead && table.tHead.rows[0] && table.tHead.rows[0].cells[col];
     const cmp = (a, b) => {
       if (a === b) return 0;
       if (a === null) return 1;
@@ -1496,6 +1740,7 @@
       syncFromUrl();
       document.querySelectorAll("[data-home]").forEach((a) => a.addEventListener("click", goHome));
       if (workerUrl()) {
+        await loadLiveKit();
         liveTick();
         document.addEventListener("visibilitychange", () => { if (!document.hidden) liveTick(); });
       }

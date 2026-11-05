@@ -111,7 +111,8 @@ def screen(liquid: list[dict], prices: dict, settings: dict, mcaps: dict, is_us)
         if st in lists:
             lists[st].append(sym)
     counts = {"n": hc["sano"] + hc["dañado"] + hc["mixto"], "good": hc["sano"], "bad": hc["dañado"], "mixed": hc["mixto"],
-              "good_syms": lists["sano"][:40], "bad_syms": lists["dañado"][:40], "mixed_syms": lists["mixto"][:40]}
+              "good_syms": lists["sano"][:40], "bad_syms": lists["dañado"][:40], "mixed_syms": lists["mixto"][:40],
+              "all_syms": top}
     ctx = {}
     for etf in CONTEXT_ETFS:
         if etf in prices:
@@ -189,3 +190,77 @@ KEEP = ("date", "close", "high_today", "low_today", "adr", "setup", "leader", "w
 
 def _slim(a: dict) -> dict:
     return {k: a.get(k) for k in KEEP if k in a}
+
+
+# ---------------------------------------------------------------- kit para el directo (docs/data/live.json)
+def _sig(x, d: int = 6):
+    """Número con d cifras significativas (None si no es finito)."""
+    if x is None or not np.isfinite(x):
+        return None
+    return float(f"{float(x):.{d}g}")
+
+
+def _tail(arr, s: int, k: int = 5) -> list:
+    return [_sig(arr[i]) if i >= 0 else None for i in range(s - k + 1, s + 1)]
+
+
+def bar_kit(P: dict, s: int, n: int = 120, rnd: bool = True) -> dict:
+    """Últimas n velas y colas de las EMA para recalcular el análisis en el navegador con la vela de hoy."""
+    a = max(0, s - n + 1)
+    f = _sig if rnd else (lambda x: float(x) if np.isfinite(x) else None)
+    return {"t": P["dates"][a:s + 1], **{k: [f(x) for x in P[k][a:s + 1]] for k in ("o", "h", "l", "c")},
+            "v": [int(x) for x in P["v"][a:s + 1]],
+            **{f"e{k}": (_tail(P[f"e{k}"], s) if rnd else [f(x) for x in P[f"e{k}"][s - 4:s + 1]]) for k in (9, 21, 50, 150)},
+            "hi252": f(P["hi252"][s])}
+
+
+def health_kit(P: dict, s: int, q: dict) -> dict:
+    """Lo necesario para el estado sano/dañado con la vela de hoy: colas de EMA 9/21, ADR y huecos de 4 sesiones."""
+    gd = any(i >= 21 and not np.isnan(P["adr"][i - 1]) and P["gap"][i] <= -P["adr"][i - 1]
+             for i in range(s - q["gap_days"] + 2, s + 1))
+    return {"c": _sig(P["c"][s]), "adr": _sig(P["adr"][s]), "gd": bool(gd), "status": luk.health(P, s, q),
+            **{f"e{k}": _tail(P[f"e{k}"], s) for k in (9, 21, 50, 150)}}
+
+
+def live_kit(st: dict, prices: dict, fin: dict, session: str, view_by: dict | None = None) -> dict:
+    """Datos para recalcular en el navegador, con la vela de hoy: setups, termómetro, ETF y EP."""
+    q = st["cfg"]
+    leaders, health, eps = {}, {}, {}
+    fin_by = {x["sym"]: x for x in fin["setups"] + fin["l3"]}
+    for sym in st["leaders"]:
+        P = st["prepared"].get(sym)
+        if P is None:
+            continue
+        u = st["uni"][sym]
+        r = u["row"]
+        v = (view_by or {}).get(sym) or {}
+        leaders[sym] = {**bar_kit(P, P["n"] - 1), "rs": st["rs"].get(sym), "group": r.get("group"),
+                        "group_name": v.get("group_name") or (fin_by.get(sym) or {}).get("group_name"),
+                        "name": v.get("name") or r["info"].get("name") or sym, "mcap": u["mcap"], "uflags": u["flags"],
+                        "next_earnings": v.get("next_earnings"),
+                        "earn_known": bool(v.get("next_earnings")) or v.get("next_earnings_est") is not None}
+    for sym in st["regime"]["counts"].get("all_syms", []):
+        P = st["prepared"].get(sym)
+        if P is not None:
+            health[sym] = health_kit(P, P["n"] - 1, q)
+    ctx = {}
+    for etf in CONTEXT_ETFS:
+        if etf in prices:
+            P = luk.prepare(prices[etf], q)
+            if P:
+                ctx[etf] = health_kit(P, P["n"] - 1, q)
+    for sym, u in st["uni"].items():
+        if sym in leaders:
+            continue
+        df = prices[sym]
+        if len(df) < 60:
+            continue
+        v = df["Volume"].fillna(0).to_numpy(float)
+        h, l = df["High"].to_numpy(float), df["Low"].to_numpy(float)
+        eps[sym] = [_sig(df["Close"].iloc[-1]), _sig(float(np.mean(v[-50:]))), _sig(float(np.mean(h[-20:] / l[-20:]) - 1)),
+                    u["row"]["info"].get("name") or sym]
+    years = {int(session[:4]), int(session[:4]) + 1}
+    from . import calendar_us
+    holidays = sorted(d.isoformat() for y in years for d in calendar_us.holidays(y))
+    return {"session": session, "cfg": {k: q[k] for k in luk.DEFAULTS if isinstance(q[k], (int, float, bool))},
+            "holidays": holidays, "leaders": leaders, "health": health, "ctx": ctx, "eps": eps}

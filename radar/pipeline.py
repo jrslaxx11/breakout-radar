@@ -379,6 +379,8 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
         a = lst["analyses"].get(c["sym"])
         if a and (a["setup"] or a["ep_today"]):
             c["luk"] = a
+        if c["sym"] in lst["leaders"]:
+            c["luk_leader"] = True          # sus resultados se consultan para recalcular en directo
 
     # ---------- escáner Qullamaggie: todo el universo líquido, solo rupturas ----------
     order = {bo.CONFIRMED: 0, bo.EARLY: 1, bo.RETEST: 2, bo.PRE: 3}
@@ -403,7 +405,7 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
             return False
         q = c.get("qm") or {}
         return (q.get("verdict") not in (None, "No cumple") and c["state"] in order) or \
-            (bool(c.get("htf")) and c["state"] in htf_order) or in_focus(c) or bool(c.get("luk"))
+            (bool(c.get("htf")) and c["state"] in htf_order) or in_focus(c) or bool(c.get("luk")) or bool(c.get("luk_leader"))
     extra = [c["sym"] for c in search_view if scanned(c) and c["sym"] not in candidates]
     extra_det = (details_fn or fundamentals.details)(extra) if extra else {}
     for c in search_view:
@@ -478,6 +480,12 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
 
     # ---------- Luk: ranking con resultados, niveles y control de calidad ----------
     lfin = luk_run.finalize(lst, {c["sym"]: c for c in search_view}, today, hot)
+    live_kit = luk_run.live_kit(lst, prices, lfin, session, {c["sym"]: c for c in search_view})
+    # Valores de Qullamaggie que se recalculan en directo: cumplen sus reglas obligatorias (en cualquier
+    # estado salvo descartada), tienen high tight flag o están en el foco de sectores calientes.
+    qm_watch = sorted({c["sym"] for c in search_view if c.get("liquid") and not c.get("excluded") and (
+        ((c.get("qm") or {}).get("verdict") not in (None, "No cumple") and c["state"] != bo.DISCARDED)
+        or (c.get("htf") and c["state"] in htf_order))} | {x["sym"] for x in focus})
     lstats = luk_run.stats(lst, liquid, prices, us, heat_cfg["scan_pct"],
                            {"min_mdv": flt["min_mdv_usd"], "min_price": flt["min_price_usd"]})
 
@@ -517,7 +525,7 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
                   "by_state": by_state, "others": others, "outside": outside[:15],
                   "pending": pending_list, "eliminated": eliminated, "qm_setups": qm_setups,
                   "htf_setups": htf_setups, "hot_groups": groups[:20], "focus": focus, "luk": lfin["setups"],
-                  "luk_l3": lfin["l3"], "luk_ep": lfin["ep"]},
+                  "luk_l3": lfin["l3"], "luk_ep": lfin["ep"], "qm_watch": qm_watch},
         "qm_market": qm_market,
         "qm_const": qm.constants(),
         "stars_const": stars.constants(),
@@ -557,6 +565,9 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
                                                             separators=(",", ":")))
         (DOCS_DATA / "latest.json").write_text(json.dumps(_clean(out), ensure_ascii=False, allow_nan=False,
                                                           default=_json_default))
+        # Kit para recalcular Luk en directo en el navegador (velas de los líderes, termómetro, ETF y EP).
+        (DOCS_DATA / "live.json").write_text(json.dumps(_clean(live_kit), ensure_ascii=False, allow_nan=False,
+                                                        separators=(",", ":"), default=_json_default))
         snap = {"session": session,
                 "regime": {"label": reg["label"], "score": reg["score"],
                            "p50_spx": (reg["breadth"].get("SPX", {}).get("now") or {}).get("p50")},

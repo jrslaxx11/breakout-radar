@@ -57,7 +57,7 @@ Qullamaggie):
   y el plan gratuito permite 100.000 consultas al día. Si cambia `cloudflare/worker.js`, hay que volver
   a pegarlo en Cloudflare (*Edit code → Deploy*).
 
-## Precios en vivo
+## Precios en vivo y recálculo en directo
 
 Con el Worker configurado, mientras la web está abierta la watchlist y la ficha abierta se actualizan
 cada minuto (cada 5 si no hay ningún mercado abierto) con el último precio de Yahoo Finance: casi en
@@ -71,7 +71,19 @@ por la mañana), cada fila pasa al último precio: fecha, precio y cambio del d�
 medias, los plazos y el máximo recalculados con ese precio frente a los valores del último cierre. El filtro de mercado de Qullamaggie añade el semáforo orientativo con
 el Nasdaq 100 en vivo frente a sus SMA10 y SMA20 del último cierre. Los índices se consultan cada
 minuto; las acciones, mientras alguna cotiza o cada 15 minutos, para no pedir cientos de valores al
-Worker cuando solo están abiertas Europa o Asia. Los valores calculados al momento no tienen temática,
+Worker cuando solo están abiertas Europa o Asia.
+
+Con la sesión de EE. UU. abierta (o con el cierre de hoy aún sin procesar), la web añade a cada valor una vela
+de hoy con el último precio y recalcula cada minuto, con las mismas reglas que el motor diario, todo lo de
+Luk (modo sugerido, termómetro de 100 líderes, SPY/QQQ/IWM, L1, L1b, L3 y EP) y de Qullamaggie (setups, high
+tight flags y foco de sectores calientes, con el semáforo del Nasdaq 100 en vivo). Luk se recalcula con
+`docs/luk-engine.js` sobre `docs/data/live.json` (120 velas por líder y las colas de sus EMA), con prueba de
+paridad frente a Python (`tests/test_luk_parity.py`); Qullamaggie, con `docs/engine.js` sobre las velas de
+cada ficha. El volumen del día se proyecta al cierre para compararlo con medias de días completos (el AVWAP
+usa el volumen real) y los EP fuera de los líderes se buscan cada 15 minutos en todo el universo de Luk.
+Cada sección indica si está "En vivo" o con "Datos del cierre", y se congela mientras tengas una ficha
+abierta en ella para no cerrártela. El ranking de sectores calientes, las temáticas y la watchlist siguen
+siendo del cierre (con el precio "Ahora" en vivo). Los valores calculados al momento no tienen temática,
   catalizador ni fechas de resultados (su peso se redistribuye, como en el motor diario).
 
 ## Método
