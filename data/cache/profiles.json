@@ -3617,6 +3617,14 @@
 "name": "Ansell Limited",
 "sector": "Healthcare"
 },
+"ANRO": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "ANZ.AX": {
 "country": "Australia",
 "industry": "Banks - Diversified",
@@ -4625,6 +4633,14 @@
 "country": "",
 "industry": "",
 "last": "2026-11-03",
+"name": "",
+"sector": "",
+"tries": 1
+},
+"BCSF": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
 "name": "",
 "sector": "",
 "tries": 1
@@ -5707,6 +5723,14 @@
 "sector": "",
 "tries": 1
 },
+"CCXI": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "CDA.AX": {
 "country": "Australia",
 "industry": "Scientific & Technical Instruments",
@@ -5814,6 +5838,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"CG": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "CG.TO": {
 "country": "Canada",
@@ -5940,6 +5972,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"CHRW": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "CHT": {
 "country": "",
@@ -6296,6 +6336,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"COIN": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "COKE": {
 "country": "",
@@ -6656,6 +6704,14 @@
 "industry": "Software - Application",
 "name": "Constellation Software Inc.",
 "sector": "Technology"
+},
+"CSV": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "CSW": {
 "country": "United States",
@@ -7265,11 +7321,27 @@
 "sector": "",
 "tries": 1
 },
+"DMC": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "DMP.AX": {
 "country": "Australia",
 "industry": "Restaurants",
 "name": "Domino's Pizza Enterprises Limited",
 "sector": "Consumer Cyclical"
+},
+"DMRA": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "DNA": {
 "country": "",
@@ -8177,6 +8249,14 @@
 "name": "Essity AB (publ)",
 "sector": "Consumer Defensive"
 },
+"ESTA": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "ESTC": {
 "country": "Netherlands",
 "industry": "Software - Application",
@@ -8913,6 +8993,14 @@
 "name": "",
 "sector": ""
 },
+"FSLR": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "FSLY": {
 "country": "United States",
 "industry": "Software - Application",
@@ -9597,6 +9685,14 @@
 "name": "",
 "sector": ""
 },
+"GRPN": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "GS": {
 "country": "United States",
 "industry": "Capital Markets",
@@ -9994,6 +10090,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"HL": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "HLF": {
 "country": "",
@@ -11339,6 +11443,14 @@
 "name": "KONE Oyj",
 "sector": "Industrials"
 },
+"KNF": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "KNIN.SW": {
 "country": "Switzerland",
 "industry": "Integrated Freight & Logistics",
@@ -11577,6 +11689,14 @@
 "name": "",
 "sector": ""
 },
+"LBTYA": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "LCII": {
 "country": "",
 "industry": "",
@@ -11795,6 +11915,14 @@
 "country": "",
 "industry": "",
 "last": "2026-11-04",
+"name": "",
+"sector": "",
+"tries": 1
+},
+"LMND": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
 "name": "",
 "sector": "",
 "tries": 1
@@ -12023,6 +12151,14 @@
 "name": "",
 "sector": ""
 },
+"LVS": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "LW": {
 "country": "",
 "industry": "",
@@ -12148,6 +12284,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"MAMA": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "MAN": {
 "country": "",
@@ -14279,6 +14423,14 @@
 "name": "",
 "sector": ""
 },
+"OUST": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "OUT": {
 "country": "",
 "industry": "",
@@ -14478,6 +14630,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"PCAR": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "PCOR": {
 "country": "United States",
@@ -15980,6 +16140,14 @@
 "industry": "Oil & Gas Refining & Marketing",
 "name": "Rubis",
 "sector": "Energy"
+},
+"RUN": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "RUS.TO": {
 "country": "Canada",
@@ -19057,11 +19225,27 @@
 "name": "",
 "sector": ""
 },
+"VITL": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "VK.PA": {
 "country": "",
 "industry": "",
 "name": "",
 "sector": ""
+},
+"VKTX": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "VLO": {
 "country": "",
@@ -19773,6 +19957,14 @@
 "name": "",
 "sector": ""
 },
+"WU": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "WWD": {
 "country": "",
 "industry": "",
@@ -19900,6 +20092,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"YELP": {
+"country": "",
+"industry": "",
+"last": "2026-11-05",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "YETI": {
 "country": "",
