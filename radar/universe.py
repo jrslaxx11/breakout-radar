@@ -295,16 +295,23 @@ def build_universe(cfg: Config) -> dict[str, dict]:
         if sym and sym not in uni:
             uni[sym] = {"source": "DISC", "name": q.get("name", ""), "gics_sector": "", "gics_sub": "",
                         "hint": "", "unbiased": False, "region": q.get("region")}
-            if "." not in sym:  # descubrimiento en EE. UU.: marca de ADR del directorio de Nasdaq
-                flag = nasdaq_adr().get(sym)
-                if flag is not None:
-                    uni[sym]["adr"] = flag
     for sym in cfg.mine:
         if sym in uni:
             uni[sym]["mine"] = True
         else:
             uni[sym] = {"source": "MINE", "name": "", "gics_sector": "", "gics_sub": "", "hint": "",
                         "unbiased": False, "mine": True}
+    # Valores de EE. UU. que entraron por otra vía (listas de temáticas, descubrimiento, propios): marca de ADR
+    # de la lista líquida de EE. UU. o, si no está, del directorio de Nasdaq.
+    us_flag = {q["symbol"]: q.get("adr") for q in us_rows}
+    for sym, info in uni.items():
+        if "adr" in info or "." in sym or sym.startswith("^"):
+            continue
+        flag = us_flag.get(sym)
+        if flag is None:
+            flag = nasdaq_adr().get(sym)
+        if flag is not None:
+            info["adr"] = flag
     dups = cfg.duplicates()
     for sym, primary in dups.items():
         if sym in uni:

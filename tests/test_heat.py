@@ -84,18 +84,22 @@ def test_profiles_retry_empty(tmp_path, monkeypatch):
 
 
 def test_build_universe_marks_adr_for_us_discovery(monkeypatch):
-    """Los valores de EE. UU. que entran por el descubrimiento toman la marca de ADR del directorio de Nasdaq."""
+    """Los valores de EE. UU. que entran por otra vía (descubrimiento, temáticas) toman la marca de ADR de la lista
+    líquida de EE. UU. o del directorio de Nasdaq."""
     import pandas as pd
     import radar.universe as u
     from radar.config import Config
     monkeypatch.setattr(u, "sp_constituents", lambda: pd.DataFrame(columns=["symbol", "index", "name", "sector", "sub"]))
-    monkeypatch.setattr(u, "us_liquid", lambda cfg: [{"symbol": "AAA", "name": "A", "adr": False}])
+    monkeypatch.setattr(u, "us_liquid", lambda cfg: [{"symbol": "AAA", "name": "A", "adr": False},
+                                                     {"symbol": "TTT", "name": "T", "adr": False}])
     monkeypatch.setattr(u, "discovery", lambda cfg: [{"symbol": "BBB", "name": "B ADR"}, {"symbol": "CCC", "name": "C"},
                                                      {"symbol": "DDD.L", "name": "D"}])
     calls = []
     monkeypatch.setattr(u, "us_listed", lambda: calls.append(1) or [{"symbol": "BBB", "adr": True}, {"symbol": "CCC", "adr": False}])
     cfg = Config.load()
+    cfg.themes.setdefault("themes", {})["ZZZ_TEST"] = {"tickers": ["TTT"]}  # entra antes como temática (INTL)
     uni = u.build_universe(cfg)
+    assert uni["TTT"]["source"] == "INTL" and uni["TTT"]["adr"] is False
     assert uni["BBB"]["adr"] is True and uni["CCC"]["adr"] is False
     assert "adr" not in uni["DDD.L"]
     assert len(calls) == 1  # una sola descarga del directorio
