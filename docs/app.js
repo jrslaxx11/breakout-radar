@@ -1428,7 +1428,12 @@
     if (!D) return "";
     const g = LV.st[liveGroup(id)];
     if (g && g.on && LV.paused[id]) return `<p class="live-badge on" data-badge>En vivo · actualización en pausa mientras hay una ficha abierta</p>`;
-    if (g && g.on) return `<p class="live-badge on" data-badge><span class="live-dot on"></span>${g.closedDay ? `Con el cierre de hoy · ${hhmm(g.time)} (el radar lo procesa esta noche)` : `En vivo · ${hhmm(g.time)} · con la vela de hoy, aún abierta`}</p>`;
+    if (g && g.on) {
+      // Con la sesión abierta, si el último precio de Yahoo lleva más de 5 minutos sin moverse se avisa (su feed a veces se congela).
+      const age = Date.now() / 1000 - g.time;
+      const stale = !g.closedDay && age > 300 ? ` · <span class="neg">Yahoo no da precios nuevos desde hace ${Math.round(age / 60)} min</span>` : "";
+      return `<p class="live-badge on" data-badge><span class="live-dot on"></span>${g.closedDay ? `Con el cierre de hoy · ${hhmm(g.time)} (el radar lo procesa esta noche)` : `En vivo · ${hhmm(g.time)} · con la vela de hoy, aún abierta${stale}`}</p>`;
+    }
     return `<p class="live-badge" data-badge>Datos del cierre del ${dateEs(liveSession())}</p>`;
   }
 
