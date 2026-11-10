@@ -587,6 +587,14 @@
 "name": "Hana Financial Group Inc.",
 "sector": "Financial Services"
 },
+"089860.KS": {
+"country": "",
+"industry": "",
+"last": "2026-11-10",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "090430.KS": {
 "country": "South Korea",
 "industry": "Household & Personal Products",
@@ -3512,8 +3520,10 @@
 "AIG": {
 "country": "",
 "industry": "",
+"last": "2026-11-10",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "AII": {
 "country": "United States",
@@ -4682,10 +4692,10 @@
 "ATMU": {
 "country": "",
 "industry": "",
-"last": "2026-11-02",
+"last": "2026-11-10",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "ATO": {
 "country": "",
@@ -5310,8 +5320,10 @@
 "BCO": {
 "country": "",
 "industry": "",
+"last": "2026-11-10",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "BCPC": {
 "country": "",
@@ -5442,10 +5454,10 @@
 "BETR": {
 "country": "",
 "industry": "",
-"last": "2026-11-02",
+"last": "2026-11-10",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "BF-B": {
 "country": "United States",
@@ -6156,8 +6168,10 @@
 "BUD": {
 "country": "",
 "industry": "",
+"last": "2026-11-10",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "BURL": {
 "country": "United States",
@@ -6384,8 +6398,10 @@
 "CAL": {
 "country": "",
 "industry": "",
+"last": "2026-11-10",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "CALM": {
 "country": "",
@@ -6428,10 +6444,10 @@
 "CAPR": {
 "country": "",
 "industry": "",
-"last": "2026-11-02",
+"last": "2026-11-10",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "CAPT.OL": {
 "country": "Greece",
@@ -7072,8 +7088,10 @@
 "CLF": {
 "country": "",
 "industry": "",
+"last": "2026-11-10",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "CLH": {
 "country": "",
@@ -7358,8 +7376,10 @@
 "CNXN": {
 "country": "",
 "industry": "",
+"last": "2026-11-10",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "COAG": {
 "country": "",
@@ -7884,8 +7904,10 @@
 "CSX": {
 "country": "",
 "industry": "",
+"last": "2026-11-10",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "CTAS": {
 "country": "United States",
@@ -9362,8 +9384,10 @@
 "EOG": {
 "country": "",
 "industry": "",
+"last": "2026-11-10",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "EOLS": {
 "country": "",
@@ -10816,8 +10840,10 @@
 "GENI": {
 "country": "",
 "industry": "",
+"last": "2026-11-10",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "GEO": {
 "country": "United States",
@@ -11540,6 +11566,14 @@
 "industry": "Marine Shipping",
 "name": "Höegh Autoliners ASA",
 "sector": "Industrials"
+},
+"HAWK": {
+"country": "",
+"industry": "",
+"last": "2026-11-10",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "HAYW": {
 "country": "United States",
@@ -13032,10 +13066,10 @@
 "JBTM": {
 "country": "",
 "industry": "",
-"last": "2026-11-02",
+"last": "2026-11-10",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "JCI": {
 "country": "",
@@ -13056,6 +13090,14 @@
 "industry": "Capital Markets",
 "name": "Jefferies Financial Group Inc.",
 "sector": "Financial Services"
+},
+"JEN.DE": {
+"country": "",
+"industry": "",
+"last": "2026-11-10",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "JFR": {
 "country": "",
@@ -13652,8 +13694,10 @@
 "LAMR": {
 "country": "",
 "industry": "",
+"last": "2026-11-10",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "LAND": {
 "country": "United States",
@@ -15300,8 +15344,10 @@
 "MTCH": {
 "country": "",
 "industry": "",
+"last": "2026-11-10",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "MTD": {
 "country": "Switzerland",
@@ -15780,10 +15826,10 @@
 "NEXI.MI": {
 "country": "",
 "industry": "",
-"last": "2026-11-02",
+"last": "2026-11-10",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "NEXT": {
 "country": "",
@@ -17026,8 +17072,10 @@
 "PAC": {
 "country": "",
 "industry": "",
+"last": "2026-11-10",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "PACS": {
 "country": "United States",
@@ -17636,8 +17684,10 @@
 "PLUS": {
 "country": "",
 "industry": "",
+"last": "2026-11-10",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "PLXS": {
 "country": "United States",
@@ -18068,10 +18118,10 @@
 "PTON": {
 "country": "",
 "industry": "",
-"last": "2026-11-02",
+"last": "2026-11-10",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "PTRN": {
 "country": "United States",
@@ -18970,8 +19020,10 @@
 "RS": {
 "country": "",
 "industry": "",
+"last": "2026-11-10",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "RSG": {
 "country": "United States",
@@ -21239,6 +21291,14 @@
 "name": "TG Therapeutics, Inc.",
 "sector": "Healthcare"
 },
+"TGYM.MI": {
+"country": "",
+"industry": "",
+"last": "2026-11-10",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "TH": {
 "country": "",
 "industry": "",
@@ -22758,8 +22818,10 @@
 "VRSN": {
 "country": "",
 "industry": "",
+"last": "2026-11-10",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "VRT": {
 "country": "United States",
