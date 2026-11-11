@@ -1521,6 +1521,14 @@
 "name": "Gudeng Precision Industrial Co., Ltd.",
 "sector": "Technology"
 },
+"3696.HK": {
+"country": "",
+"industry": "",
+"last": "2026-11-11",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "3711.TW": {
 "country": "",
 "industry": "",
@@ -2118,8 +2126,10 @@
 "6696.TWO": {
 "country": "",
 "industry": "",
+"last": "2026-11-11",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "6715.TW": {
 "country": "Taiwan",
@@ -2696,6 +2706,14 @@
 "industry": "Banks - Regional",
 "name": "Yamaguchi Financial Group, Inc.",
 "sector": "Financial Services"
+},
+"8522.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-11",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "8524.T": {
 "country": "Japan",
@@ -3694,10 +3712,10 @@
 "ALGT": {
 "country": "",
 "industry": "",
-"last": "2026-11-03",
+"last": "2026-11-11",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "ALH": {
 "country": "",
@@ -3942,8 +3960,10 @@
 "AMD": {
 "country": "",
 "industry": "",
+"last": "2026-11-11",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "AMD.TO": {
 "country": "United States",
@@ -7068,10 +7088,10 @@
 "CLBT": {
 "country": "",
 "industry": "",
-"last": "2026-11-02",
+"last": "2026-11-11",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "CLDT": {
 "country": "United States",
@@ -7198,10 +7218,10 @@
 "CMCO": {
 "country": "",
 "industry": "",
-"last": "2026-11-03",
+"last": "2026-11-11",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "CMCSA": {
 "country": "United States",
@@ -10038,8 +10058,10 @@
 "FET": {
 "country": "",
 "industry": "",
+"last": "2026-11-11",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "FFBC": {
 "country": "",
@@ -11046,10 +11068,10 @@
 "GLIBK": {
 "country": "",
 "industry": "",
-"last": "2026-11-03",
+"last": "2026-11-11",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "GLNG": {
 "country": "",
@@ -11260,10 +11282,10 @@
 "GPK": {
 "country": "",
 "industry": "",
-"last": "2026-11-03",
+"last": "2026-11-11",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "GPN": {
 "country": "United States",
@@ -12370,8 +12392,10 @@
 "ICFI": {
 "country": "",
 "industry": "",
+"last": "2026-11-11",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "ICHR": {
 "country": "United States",
@@ -12580,10 +12604,10 @@
 "IMVT": {
 "country": "",
 "industry": "",
-"last": "2026-11-02",
+"last": "2026-11-11",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "IMXI": {
 "country": "United States",
@@ -12820,6 +12844,14 @@
 "industry": "Oil & Gas E&P",
 "name": "International Petroleum Corporation",
 "sector": "Energy"
+},
+"IPCO.TO": {
+"country": "",
+"industry": "",
+"last": "2026-11-11",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "IPGP": {
 "country": "United States",
@@ -14168,8 +14200,10 @@
 "LQDA": {
 "country": "",
 "industry": "",
+"last": "2026-11-11",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "LQDT": {
 "country": "United States",
@@ -16360,10 +16394,10 @@
 "NVRI": {
 "country": "",
 "industry": "",
-"last": "2026-11-03",
+"last": "2026-11-11",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "NVS": {
 "country": "Switzerland",
@@ -16700,8 +16734,10 @@
 "OMAB": {
 "country": "",
 "industry": "",
+"last": "2026-11-11",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "OMC": {
 "country": "United States",
@@ -17000,8 +17036,10 @@
 "OUT": {
 "country": "",
 "industry": "",
+"last": "2026-11-11",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "OUT1V.HE": {
 "country": "",
@@ -17336,8 +17374,10 @@
 "PDS": {
 "country": "",
 "industry": "",
+"last": "2026-11-11",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "PEB": {
 "country": "United States",
@@ -17724,10 +17764,10 @@
 "PMZ-UN.TO": {
 "country": "",
 "industry": "",
-"last": "2026-11-03",
+"last": "2026-11-11",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "PNC": {
 "country": "",
@@ -17864,10 +17904,10 @@
 "PPLI": {
 "country": "",
 "industry": "",
-"last": "2026-11-03",
+"last": "2026-11-11",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "PPTA": {
 "country": "United States",
@@ -20824,10 +20864,10 @@
 "SWBI": {
 "country": "",
 "industry": "",
-"last": "2026-11-03",
+"last": "2026-11-11",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "SWED-A.ST": {
 "country": "Sweden",
@@ -21620,6 +21660,14 @@
 "industry": "Biotechnology",
 "name": "First Tracks Biotherapeutics, Inc.",
 "sector": "Healthcare"
+},
+"TRE.MC": {
+"country": "",
+"industry": "",
+"last": "2026-11-11",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "TREE": {
 "country": "",
@@ -22922,10 +22970,10 @@
 "VU.PA": {
 "country": "",
 "industry": "",
-"last": "2026-11-03",
+"last": "2026-11-11",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "VVV": {
 "country": "United States",
@@ -23710,16 +23758,24 @@
 "YOU": {
 "country": "",
 "industry": "",
-"last": "2026-11-03",
+"last": "2026-11-11",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "YPF": {
 "country": "",
 "industry": "",
 "name": "",
 "sector": ""
+},
+"YPSN.SW": {
+"country": "",
+"industry": "",
+"last": "2026-11-11",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "YSS": {
 "country": "United States",
