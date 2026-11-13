@@ -212,8 +212,10 @@
 "009420.KS": {
 "country": "",
 "industry": "",
+"last": "2026-11-13",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "009830.KS": {
 "country": "South Korea",
@@ -661,6 +663,14 @@
 "name": "ROBOTIS Co., Ltd.",
 "sector": "Technology"
 },
+"1088.HK": {
+"country": "",
+"industry": "",
+"last": "2026-11-13",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "1113.HK": {
 "country": "Hong Kong",
 "industry": "Real Estate - Development",
@@ -798,6 +808,14 @@
 "industry": "Real Estate Services",
 "name": "Hanjin Kal",
 "sector": "Real Estate"
+},
+"181710.KS": {
+"country": "",
+"industry": "",
+"last": "2026-11-13",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "192820.KS": {
 "country": "South Korea",
@@ -1485,11 +1503,27 @@
 "name": "DAEDUCK ELECTRONICS Co., Ltd.",
 "sector": "Technology"
 },
+"3533.TW": {
+"country": "",
+"industry": "",
+"last": "2026-11-13",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "3563.T": {
 "country": "Japan",
 "industry": "Restaurants",
 "name": "Food & Life Companies Ltd.",
 "sector": "Consumer Cyclical"
+},
+"3563.TW": {
+"country": "",
+"industry": "",
+"last": "2026-11-13",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "357780.KQ": {
 "country": "South Korea",
@@ -1684,6 +1718,14 @@
 "industry": "Drug Manufacturers - Specialty & Generic",
 "name": "Eisai Co., Ltd.",
 "sector": "Healthcare"
+},
+"4565.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-13",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "4568.T": {
 "country": "Japan",
@@ -1901,6 +1943,14 @@
 "name": "OSG Corporation",
 "sector": "Industrials"
 },
+"6139.TW": {
+"country": "",
+"industry": "",
+"last": "2026-11-13",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "6146.T": {
 "country": "",
 "industry": "",
@@ -2075,6 +2125,14 @@
 "name": "",
 "sector": ""
 },
+"6525.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-13",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "6526.T": {
 "country": "",
 "industry": "",
@@ -2220,6 +2278,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"6871.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-13",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "6890.T": {
 "country": "Japan",
@@ -2544,6 +2610,14 @@
 "industry": "Conglomerates",
 "name": "Mitsubishi Corporation",
 "sector": "Industrials"
+},
+"8154.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-13",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "8299.TWO": {
 "country": "Taiwan",
@@ -2916,6 +2990,14 @@
 "industry": "Consumer Electronics",
 "name": "Apple Inc.",
 "sector": "Technology"
+},
+"AAPL.TO": {
+"country": "",
+"industry": "",
+"last": "2026-11-13",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "AAT": {
 "country": "",
@@ -4145,6 +4227,14 @@
 "name": "AnaptysBio, Inc.",
 "sector": "Healthcare"
 },
+"ANANDRATHI.NS": {
+"country": "",
+"industry": "",
+"last": "2026-11-13",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "ANDE": {
 "country": "United States",
 "industry": "Food Distribution",
@@ -4200,10 +4290,10 @@
 "ANRO": {
 "country": "",
 "industry": "",
-"last": "2026-11-05",
+"last": "2026-11-13",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "ANZ.AX": {
 "country": "Australia",
@@ -5451,6 +5541,14 @@
 "name": "Franklin Templeton Inc.",
 "sector": "Financial Services"
 },
+"BEN.AX": {
+"country": "",
+"industry": "",
+"last": "2026-11-13",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "BEPC": {
 "country": "",
 "industry": "",
@@ -6028,10 +6126,10 @@
 "BRBR": {
 "country": "",
 "industry": "",
-"last": "2026-11-03",
+"last": "2026-11-13",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "BRC": {
 "country": "",
@@ -7952,6 +8050,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"CTC-A.TO": {
+"country": "",
+"industry": "",
+"last": "2026-11-13",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "CTKB": {
 "country": "United States",
@@ -10992,8 +11098,10 @@
 "GHC": {
 "country": "",
 "industry": "",
+"last": "2026-11-13",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "GHM": {
 "country": "United States",
@@ -11174,6 +11282,14 @@
 "industry": "Medical Devices",
 "name": "Globus Medical, Inc.",
 "sector": "Healthcare"
+},
+"GMG.AX": {
+"country": "",
+"industry": "",
+"last": "2026-11-13",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "GMIN.TO": {
 "country": "",
@@ -13430,6 +13546,14 @@
 "industry": "REIT - Retail",
 "name": "Kimco Realty Corporation",
 "sector": "Real Estate"
+},
+"KINV-B.ST": {
+"country": "",
+"industry": "",
+"last": "2026-11-13",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "KIRLOSENG.NS": {
 "country": "India",
@@ -16028,8 +16152,10 @@
 "NMAX": {
 "country": "",
 "industry": "",
+"last": "2026-11-13",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "NMCO": {
 "country": "",
@@ -19283,6 +19409,14 @@
 "name": "Safety Insurance Group, Inc.",
 "sector": "Financial Services"
 },
+"SAGA-B.ST": {
+"country": "",
+"industry": "",
+"last": "2026-11-13",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "SAH": {
 "country": "United States",
 "industry": "Auto & Truck Dealerships",
@@ -19714,6 +19848,14 @@
 "industry": "Software - Application",
 "name": "The Sage Group plc",
 "sector": "Technology"
+},
+"SGH.AX": {
+"country": "",
+"industry": "",
+"last": "2026-11-13",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "SGHC": {
 "country": "",
@@ -21517,6 +21659,14 @@
 "sector": "",
 "tries": 1
 },
+"TLX.AX": {
+"country": "",
+"industry": "",
+"last": "2026-11-13",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "TLX.DE": {
 "country": "Germany",
 "industry": "Insurance - Diversified",
@@ -21574,8 +21724,10 @@
 "TNDM": {
 "country": "",
 "industry": "",
+"last": "2026-11-13",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "TNE.AX": {
 "country": "Australia",
@@ -21592,8 +21744,10 @@
 "TNGX": {
 "country": "",
 "industry": "",
+"last": "2026-11-13",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "TNK": {
 "country": "Bermuda",
