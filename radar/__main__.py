@@ -14,6 +14,8 @@ def main(argv: list[str] | None = None) -> int:
     sub = ap.add_subparsers(dest="cmd", required=True)
     r = sub.add_parser("run", help="ejecuta el cálculo diario y escribe docs/data/latest.json")
     r.add_argument("--force", action="store_true", help="recalcula aunque la sesión ya esté procesada")
+    d = sub.add_parser("dump", help="descarga universo y precios y los guarda para auditar (no publica nada)")
+    d.add_argument("out", help="carpeta de salida")
     args = ap.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
     logging.getLogger("yfinance").setLevel(logging.CRITICAL)
@@ -27,6 +29,10 @@ def main(argv: list[str] | None = None) -> int:
             show(message, category, filename, lineno, file, line)
 
     warnings.showwarning = quiet
+    if args.cmd == "dump":
+        out = run(dump_to=args.out, write=False)
+        print(f"{out['dumped']} series guardadas en {args.out}")
+        return 0
     if args.cmd == "run":
         out = run(force=args.force)
         if out.get("skipped"):

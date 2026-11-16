@@ -51,7 +51,7 @@ def _stock_catalyst(sym: str, react: dict | None, has_earn_data: bool, overrides
 def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict | None = None,
         details_fn=None, profiles_fn=None, industries_fn=None, mcaps_fn=None, today: date | None = None,
         write: bool = True,
-        force: bool = False) -> dict:
+        force: bool = False, dump_to=None) -> dict:
     cfg = cfg or Config.load()
     S = cfg.settings
     w, bcfg, flt = S["windows"], S["breakout"], S["filters"]
@@ -92,6 +92,9 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
                 log.info("barras parciales descartadas: %d", len(dropped))
             stale = complete_recent(prices, mc)
             log.info("última barra por mercado: %s", last_dates(prices, mc))
+
+    if dump_to is not None:   # auditoría: guarda los precios descargados tal cual y termina
+        return _dump_prices(prices, universe, stale, dump_to)
 
     ref = prices.get("^GSPC")
     session = ref.index[-1].strftime("%Y-%m-%d") if ref is not None and len(ref) else today.isoformat()
@@ -578,6 +581,29 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
         history.write_snapshot(session, _clean(snap))
     out["search_view"] = search_view  # solo para quien llama (pruebas); no va en latest.json
     return out
+
+
+def _dump_prices(prices: dict, universe: dict, stale: dict, out_dir) -> dict:
+    """Guarda universo y precios (fechas + matriz OHLCV) en un archivo comprimido, para auditar los cálculos
+    fuera de GitHub con los mismos datos. No toca docs/ ni el histórico."""
+    import gzip
+    import pickle
+    from pathlib import Path
+
+    import numpy as np
+    out = Path(out_dir)
+    out.mkdir(parents=True, exist_ok=True)
+    cols = ["Open", "High", "Low", "Close", "Volume"]
+    packed = {}
+    for sym, df in prices.items():
+        if df is None or not len(df):
+            continue
+        d = df.reindex(columns=cols)
+        packed[sym] = (d.index.values.astype("datetime64[D]").astype("int32"), d.to_numpy(dtype="float64"))
+    with gzip.open(out / "prices.pkl.gz", "wb", compresslevel=6) as fh:
+        pickle.dump({"cols": cols, "prices": packed, "universe": universe, "stale": sorted(stale)}, fh, protocol=4)
+    log.info("auditoría: %d series guardadas en %s", len(packed), out / "prices.pkl.gz")
+    return {"dumped": len(packed)}
 
 
 def _truncate_to(prices: dict, session: str) -> int:
