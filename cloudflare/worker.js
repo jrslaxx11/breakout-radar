@@ -8,6 +8,8 @@
  *   GET /chart?symbol=AAPL         → velas diarias de 2 años + metadatos
  *   GET /search?q=apple            → sugerencias de tickers
  *   GET /quote?symbols=AAPL,MSFT   → último precio de hasta 40 valores (precios en vivo de la web)
+ *   GET /pre?symbols=AAPL,MSFT     → pre-mercado de EE. UU. de hasta 40 valores: último precio, máximo y mínimo
+ *   GET /prevol?symbols=AAPL,MSFT  → volumen del pre-mercado de hasta 40 valores (Nasdaq; Yahoo no lo publica)
  *
  * Despliegue: dash.cloudflare.com → Workers & Pages → Create → Worker → pega este archivo → Deploy.
  */
@@ -22,6 +24,12 @@ const CACHE_SECONDS = 900; // 15 minutos
 const QUOTE_CACHE_SECONDS = 60; // precios en vivo: 1 minuto
 const MAX_QUOTES = 40; // el plan gratuito permite 50 peticiones internas por consulta
 const UA = "Mozilla/5.0 (compatible; breakout-radar/1.0)";
+// Nasdaq solo responde a peticiones con aspecto de navegador.
+const NASDAQ_HEADERS = {
+  "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+  "Accept": "application/json, text/plain, */*", "Accept-Language": "en-US,en;q=0.9",
+  "Origin": "https://www.nasdaq.com", "Referer": "https://www.nasdaq.com/",
+};
 
 function cors(origin) {
   const ok = ALLOWED_ORIGINS.includes(origin);
@@ -112,6 +120,69 @@ async function quotes(list) {
   return { at: Math.floor(Date.now() / 1000), quotes: out };
 }
 
+// Pre-mercado de un valor de EE. UU. con las velas de 5 minutos de Yahoo (4:00-9:30 de Nueva York).
+// Yahoo da el precio pero no el volumen del pre-mercado (ver nasdaqPre).
+async function preOne(symbol) {
+  const u = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=1d&interval=5m&includePrePost=true`;
+  const j = await yahoo(u);
+  const r = j?.chart?.result?.[0];
+  if (!r) return null;
+  const m = r.meta || {}, q = r.indicators?.quote?.[0] || {}, ts = r.timestamp || [];
+  const pre = m.currentTradingPeriod?.pre || {}, reg = m.currentTradingPeriod?.regular || {};
+  if (!pre.start || !pre.end) return null;
+  let price = null, high = null, low = null, open = null, time = null, bars = 0;
+  for (let i = 0; i < ts.length; i++) {
+    const c = q.close?.[i];
+    if (ts[i] < pre.start || ts[i] >= pre.end || c == null) continue;
+    const h = q.high?.[i] ?? c, l = q.low?.[i] ?? c;
+    if (open === null) open = q.open?.[i] ?? c;
+    high = high === null ? h : Math.max(high, h);
+    low = low === null ? l : Math.min(low, l);
+    price = c; time = ts[i]; bars++;
+  }
+  // Cierre de referencia: hasta que abre la sesión, el último precio regular de Yahoo es el cierre anterior
+  // (y su "previousClose" todavía es el de dos sesiones atrás); una vez abierta, es "previousClose".
+  const opened = m.regularMarketTime != null && reg.start != null && m.regularMarketTime >= reg.start;
+  const prevClose = opened ? (m.chartPreviousClose ?? m.previousClose ?? null) : (m.regularMarketPrice ?? null);
+  return {
+    symbol: m.symbol || symbol, price, high, low, open, time, bars, prevClose,
+    regPrice: opened ? (m.regularMarketPrice ?? null) : null,
+    preStart: pre.start, preEnd: pre.end, regStart: reg.start ?? null, regEnd: reg.end ?? null,
+  };
+}
+
+async function preQuotes(list) {
+  const out = {};
+  await Promise.all(list.map(async (s) => {
+    try { const q = await preOne(s); if (q) out[s] = q; } catch { /* ese valor queda sin pre-mercado */ }
+  }));
+  return { at: Math.floor(Date.now() / 1000), quotes: out };
+}
+
+// Volumen, máximo y mínimo del pre-mercado según Nasdaq (cubre también los valores de la NYSE).
+const numOf = (x) => { const k = String(x ?? "").replace(/,/g, "").match(/-?\d+(\.\d+)?/); return k ? Number(k[0]) : null; };
+async function nasdaqPre(symbol) {
+  const s = symbol.replace("-", ".");   // BRK-B en Yahoo es BRK.B en Nasdaq
+  const u = `https://api.nasdaq.com/api/quote/${encodeURIComponent(s)}/extended-trading?markettype=pre&assetclass=stocks`;
+  const r = await fetch(u, { headers: NASDAQ_HEADERS, signal: AbortSignal.timeout(8000) });
+  if (!r.ok) throw new Error(`Nasdaq respondió ${r.status}`);
+  const j = await r.json();
+  const row = j?.data?.infoTable?.rows?.[0];
+  if (!row) return null;
+  const volume = numOf(row.volume);
+  if (volume === null) return null;
+  return { volume, last: numOf(row.consolidated), high: numOf(row.highPrice), low: numOf(row.lowPrice) };
+}
+
+async function preVolumes(list) {
+  const out = {};
+  let failed = 0;
+  await Promise.all(list.map(async (s) => {
+    try { const q = await nasdaqPre(s); if (q) out[s] = q; } catch { failed++; }
+  }));
+  return { at: Math.floor(Date.now() / 1000), source: "Nasdaq", vol: out, failed };
+}
+
 async function search(q) {
   const u = `https://query1.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(q)}&quotesCount=8&newsCount=0&listsCount=0`;
   const j = await yahoo(u);
@@ -147,12 +218,19 @@ export default {
         }
         body = await quotes(list);
         ttl = QUOTE_CACHE_SECONDS;
+      } else if (url.pathname === "/pre" || url.pathname === "/prevol") {
+        const list = [...new Set((url.searchParams.get("symbols") || "").toUpperCase().split(",").map((x) => x.trim()).filter(Boolean))];
+        if (!list.length || list.length > MAX_QUOTES || !list.every((x) => /^[A-Z0-9.^=\-]{1,20}$/.test(x))) {
+          return json({ error: `Lista no válida (hasta ${MAX_QUOTES} tickers separados por comas)` }, 400, origin);
+        }
+        body = url.pathname === "/pre" ? await preQuotes(list) : await preVolumes(list);
+        ttl = QUOTE_CACHE_SECONDS;
       } else if (url.pathname === "/search") {
         const q = (url.searchParams.get("q") || "").trim();
         if (q.length < 1 || q.length > 40) return json({ error: "Búsqueda no válida" }, 400, origin);
         body = await search(q);
       } else {
-        return json({ ok: true, uso: "/chart?symbol=AAPL · /search?q=apple · /quote?symbols=AAPL,MSFT" }, 200, origin);
+        return json({ ok: true, uso: "/chart?symbol=AAPL · /search?q=apple · /quote?symbols=AAPL,MSFT · /pre?symbols=AAPL,MSFT · /prevol?symbols=AAPL,MSFT" }, 200, origin);
       }
       const res = json(body, 200, origin, { "Cache-Control": `public, max-age=${ttl}` });
       ctx.waitUntil(cache.put(request, res.clone()));
