@@ -1,13 +1,14 @@
-2026-11-13 23:15:25,021 INFO radar.prices: precios: 4792 de 4794 tickers
-2026-11-13 23:15:25,259 WARNING radar.prices: cotizaciones por lotes no disponibles (HTTP Error 401: ); se usan los metadatos del gráfico
-2026-11-13 23:15:35,449 INFO radar.prices: cotizaciones por gráfico: 1013 de 1013
-2026-11-13 23:15:35,635 INFO radar.pipeline: última sesión: 1013 valores sin ella en la serie diaria, 1013 cotizaciones, 962 completados
-2026-11-13 23:15:38,066 INFO radar.prices: última sesión: 51 valores atrasados, 0 completados, 51 siguen atrasados
-2026-11-13 23:15:38,089 INFO radar.pipeline: última barra por mercado: AS 2026-11-13 (57/57); AX 2026-11-13 (158/158); BR 2026-11-13 (2/2); CO 2026-11-13 (45/45); DE 2026-11-13 (67/68); HE 2026-11-13 (43/43); HK 2026-11-13 (156/156); KQ 2026-11-13 (33/33); KS 2026-11-13 (121/121); L 2026-11-13 (82/90); LS 2026-11-13 (1/1); MC 2026-11-13 (76/81); MI 2026-11-13 (89/89); NS 2026-11-13 (83/83); OL 2026-11-13 (70/70); PA 2026-11-13 (149/151); ST 2026-11-13 (148/150); SW 2026-11-13 (129/150); T 2026-11-13 (167/167); TO 2026-11-13 (114/115); TW 2026-11-13 (124/124); TWO 2026-11-13 (32/32); US 2026-11-13 (2762/2773); VI 2026-11-13 (1/1); WA 2026-11-13 (1/1)
-2026-11-13 23:15:58,480 WARNING radar.fundamentals: perfiles: Yahoo devuelve vacío (25 seguidos); se reintenta en la próxima ejecución
-2026-11-13 23:15:58,481 INFO radar.fundamentals: perfiles: 25 consultados (18 nuevos, 7 reintentos), 0 con industria
-2026-11-13 23:17:17,229 INFO radar.luk_run: Luk: universo 1000 (fuera: {'ADR(20) < 4%': 1221, 'valor negociado': 244, 'ADR extranjero': 108, 'capitalización': 17, 'SPAC': 1, 'fondo': 32}), líderes 110, setups 64, 0.7 s
-2026-11-13 23:20:13,249 INFO radar.luk_run: Luk: control de calidad en 3.9 s (media 43.5 valores/día)
-Sesión 2026-11-13 · régimen DESFAVORABLE · 3665 valores líquidos · temáticas LST, HCM, STAP, PAY, PHA, BIO · 30 candidatas
-Luk · modo sugerido LARGO · L1 61 · L1b 2 · universo 1000 · líderes 110
+2026-11-16 12:26:08,112 INFO radar.prices: precios: 4792 de 4794 tickers
+2026-11-16 12:26:08,287 WARNING radar.prices: cotizaciones por lotes no disponibles (HTTP Error 401: ); se usan los metadatos del gráfico
+2026-11-16 12:26:08,448 INFO radar.prices: cotizaciones por gráfico: 19 de 19
+2026-11-16 12:26:08,449 INFO radar.pipeline: última sesión: 19 valores sin ella en la serie diaria, 19 cotizaciones, 0 completados
+2026-11-16 12:26:08,507 INFO radar.pipeline: barras parciales descartadas: 946
+2026-11-16 12:26:09,897 INFO radar.prices: última sesión: 19 valores atrasados, 0 completados, 19 siguen atrasados
+2026-11-16 12:26:09,921 INFO radar.pipeline: última barra por mercado: AS 2026-11-13 (57/57); AX 2026-11-16 (157/158); BR 2026-11-13 (2/2); CO 2026-11-13 (45/45); DE 2026-11-13 (67/68); HE 2026-11-13 (43/43); HK 2026-11-16 (153/156); KQ 2026-11-16 (33/33); KS 2026-11-16 (121/121); L 2026-11-13 (89/90); LS 2026-11-13 (1/1); MC 2026-11-13 (81/81); MI 2026-11-13 (89/89); NS 2026-11-16 (83/83); OL 2026-11-13 (69/69); PA 2026-11-13 (146/147); ST 2026-11-13 (150/150); SW 2026-11-13 (147/149); T 2026-11-16 (167/167); TO 2026-11-13 (114/115); TW 2026-11-16 (124/124); TWO 2026-11-16 (32/32); US 2026-11-13 (2764/2773); VI 2026-11-13 (1/1); WA 2026-11-13 (1/1)
+2026-11-16 12:26:10,048 INFO radar.pipeline: sesión 2026-11-13: 890 series recortadas a esa fecha (mercados que ya cotizaron el día siguiente)
+2026-11-16 12:31:05,592 INFO radar.fundamentals: perfiles: 700 consultados (0 nuevos, 700 reintentos), 686 con industria
+2026-11-16 12:32:01,255 INFO radar.luk_run: Luk: universo 1002 (fuera: {'ADR(20) < 4%': 1218, 'valor negociado': 245, 'ADR extranjero': 108, 'capitalización': 17, 'SPAC': 1, 'fondo': 32}), líderes 110, setups 64, 0.6 s
+2026-11-16 12:34:03,450 INFO radar.luk_run: Luk: control de calidad en 4.4 s (media 43.5 valores/día)
+Sesión 2026-11-13 · régimen DESFAVORABLE · 3665 valores líquidos · temáticas LST, HCM, STAP, PHA, ITS, BIO · 30 candidatas
+Luk · modo sugerido LARGO · L1 61 · L1b 2 · universo 1002 · líderes 110
 ::notice title=Retrocesos Luk::Media de 43.5 valores al día en las últimas 120 sesiones.
