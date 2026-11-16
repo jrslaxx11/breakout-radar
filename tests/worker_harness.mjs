@@ -13,7 +13,9 @@ globalThis.fetch = async (u) => {
   if (u.includes("query1.finance.yahoo.com")) return new Response(JSON.stringify(yahooPre(opened)), { status: 200 });
   if (u.includes("api.nasdaq.com")) {
     if (!nasdaqOk) return new Response("denied", { status: 403 });
-    return new Response(JSON.stringify({ data: { infoTable: { rows: [{ consolidated: "$157.08 -5.77 (-3.54%)", volume: "10,170,575", highPrice: "$163.15 (04:00:00 AM)", lowPrice: "$156.53 (07:05:00 AM)" }] } } }), { status: 200 });
+    if (u.includes("/MAX/")) return new Response(JSON.stringify({ data: { infoTable: { rows: null }, tradeDetailTable: { rows: [{ time: "04:50:01", price: "$14.51", shareVolume: "1" }] } } }), { status: 200 });
+    return new Response(JSON.stringify({ data: { infoTable: { rows: [{ consolidated: "$1,157.08 -5.77 (-3.54%)", volume: "10,170,575", highPrice: "$1,163.15 (04:00:00 AM)", lowPrice: "$156.53 (07:05:00 AM)" }] },
+      tradeDetailTable: { rows: [{ time: "07:21:01", price: "$1,157.08", shareVolume: "10" }] } } }), { status: 200 });
   }
   throw new Error("sin red: " + u);
 };
@@ -29,7 +31,9 @@ opened = true; NOW = T0 + 5.7 * 3600;
 [st, b] = await call("/pre?symbols=NVDA");
 eq([b.quotes.NVDA.price, b.quotes.NVDA.bars, b.quotes.NVDA.prevClose, b.quotes.NVDA.regPrice], [157.06, 3, 162.85, 158.2], "tras la apertura: mismo pre-mercado y mismo cierre de referencia");
 [st, b] = await call("/prevol?symbols=NVDA,BRK-B");
-eq([b.vol.NVDA.volume, b.vol.NVDA.high, b.vol.NVDA.low, b.vol.NVDA.last, b.failed], [10170575, 163.15, 156.53, 157.08, 0], "volumen Nasdaq");
+eq([b.vol.NVDA.volume, b.vol.NVDA.high, b.vol.NVDA.low, b.vol.NVDA.last, b.vol.NVDA.change, b.vol.NVDA.time, b.failed], [10170575, 1163.15, 156.53, 1157.08, -5.77, 7 * 3600 + 21 * 60 + 1, 0], "pre-mercado Nasdaq");
+[st, b] = await call("/prevol?symbols=MAX");
+eq([b.vol.MAX.volume, b.vol.MAX.last, b.failed], [0, null, 0], "Nasdaq sin resumen: sin pre-mercado, no es un fallo");
 nasdaqOk = false;
 [st, b] = await call("/prevol?symbols=NVDA");
 eq([st, Object.keys(b.vol).length, b.failed], [200, 0, 1], "Nasdaq caído: sin volumen, sin error");

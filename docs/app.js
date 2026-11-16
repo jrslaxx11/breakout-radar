@@ -1015,7 +1015,7 @@
         <p><strong>Datos.</strong> ${esc(d.meta.price_source)}. Solo cierres confirmados; todos los mercados se cortan en la última sesión cerrada de EE. UU., aunque el cálculo se haga de día. Nada en tiempo real. Universo: ${cv.universe.toLocaleString("es-ES")} valores (S&P 500/400/600; todas las acciones cotizadas en EE. UU. con ≥ 5 M USD diarios y precio ≥ 5 USD según el directorio oficial de Nasdaq, filtro revisado cada semana; lista fija internacional y descubrimiento por mercado), ${cv.with_data.toLocaleString("es-ES")} con datos y ${cv.liquid.toLocaleString("es-ES")} líquidos (≥ 5 M USD diarios y precio ≥ 5 USD).</p>
         <p><strong>Temáticas.</strong> 0-100: fuerza relativa ${W.rs} (posición de la temática frente a las demás según la mediana de la RS compuesta de sus valores: 20% 1 mes, 40% 3 meses, 40% 6 meses, cada valor frente a su índice regional), consistencia ${W.consistency} (plazos de 1, 3 y 6 meses en los que la mediana supera a su índice), amplitud ${W.breadth} (% sobre SMA50 y SMA200, solo con valores de selección no sesgada), cerca de máximos ${W.highs} (% a menos de un 10% del máximo de 52 semanas) y volumen ${W.volume} (últimas 20 sesiones frente a las 50 anteriores, valores y ETF del sector).</p>
         <p><strong>Estados.</strong> La consolidación empieza en el máximo de las últimas 60 sesiones con al menos 5 de antigüedad (si un cierre posterior lo superó, la base ya está rota). Su borde superior es la línea más plana que parte de ese máximo y deja por debajo los máximos posteriores: plana en un canal, descendente en triángulos y flags; la descendente solo vale si la base tocó su suelo en sus dos primeros tercios (en un rebote en V manda el máximo). El nivel de ruptura es esa línea proyectada al día, o el máximo de las 3 sesiones anteriores si queda por encima. La longitud de la base son las sesiones posteriores al máximo, sin contar el día de la ruptura, y su profundidad, lo que cae el precio después de marcar el máximo. Confirmada: cierre sobre el nivel con volumen ≥ 1,5x la media de 20 sesiones y en la mitad alta del día; los días siguientes se sigue exigiendo que el día del cruce cumpliera las dos cosas. Temprana: cruza sin volumen, cerró en la mitad baja o ya está a más de un 6% del nivel. Pre-breakout: a ≤ 5% del nivel con base de al menos 10 sesiones (o flag de 5-9 y ≤ 12% de profundidad). En base: hasta un 12% bajo el nivel; un high tight flag sigue en base mientras su bandera no corrija más de un 35%. Retest: volvió al nivel tras cruzarlo. Extendida: > 10% sobre el nivel o > 3 ATR sobre la SMA20 (el motivo dice cuál de las dos). Las distancias se miden siempre sobre el nivel.</p>
-        <p><strong>Pre-mercado.</strong> De 4:00 a 9:30 de Nueva York. Rupturas: valores vigilados (setups de Qullamaggie, high tight flags, foco, watchlist y retrocesos de Luk) cuyo precio de pre-mercado ha superado su nivel: el nivel de ruptura si cerraron por debajo, el máximo de la última sesión si ya habían roto y, en los setups de Luk, su entrada. EP: valores del universo de Luk con hueco ≥ 10% sobre el cierre anterior. El precio sale de las velas de 5 minutos de Yahoo y el volumen, de Nasdaq (Yahoo no publica el del pre-mercado); el porcentaje compara ese volumen con el de una sesión completa media. Es un aviso para preparar la apertura: los estados y las listas siguen siendo los del cierre y el motivo del hueco hay que comprobarlo aparte.</p>
+        <p><strong>Pre-mercado.</strong> De 4:00 a 9:30 de Nueva York. Rupturas: valores vigilados (setups de Qullamaggie, high tight flags, foco, watchlist y retrocesos de Luk) cuyo precio de pre-mercado ha superado su nivel: el nivel de ruptura si cerraron por debajo, el máximo de la última sesión si ya habían roto y, en los setups de Luk, su entrada. EP: valores del universo de Luk con hueco ≥ 10% sobre el cierre anterior. Yahoo (velas de 5 minutos) barre el universo y Nasdaq da el último precio consolidado, el máximo y el volumen de los valores que pueden salir en las tablas: Yahoo no publica el volumen del pre-mercado y en valores poco negociados se salta operaciones. El porcentaje compara ese volumen con el de una sesión completa media; por debajo del 0,5% se marca «casi sin volumen». Es un aviso para preparar la apertura: los estados y las listas siguen siendo los del cierre y el motivo del hueco hay que comprobarlo aparte.</p>
         <p><strong>Puntuación de acciones.</strong> Fuerza relativa 25, base y estructura 25, ruptura y volumen 20, tendencia diaria y semanal 15, liquidez 10, catalizador 5. Es una clasificación, no una probabilidad. El riesgo se etiqueta aparte: volatilidad, resultados próximos, distancia a la invalidación y liquidez.</p>
         <p><strong>Qullamaggie (solo rupturas).</strong> Reglas de su artículo "3 timeless setups" y de sus directos, con umbrales objetivos. Obligatorias: estar entre el 2% que más sube a 1, 3 o 6 meses (cierre frente al mínimo del periodo, la fórmula de sus escáneres), ADR ≥ 5%, subida previa ≥ 30% en 1-3 meses y consolidación de 5 a 60 sesiones. Secundarias: mínimos crecientes (el último tercio de la base sobre su mínimo), rango que se estrecha (últimas 5 sesiones ≤ 50% del rango de la base) y precio surfeando las SMA10/SMA20 (o SMA50) ascendentes. Entrada en el máximo de la primera vela de 1, 5 o 60 minutos; stop en el mínimo del día y nunca más ancho que el ADR; venta de 1/3-1/2 a los 3-5 días, stop a la entrada y el resto al primer cierre bajo la SMA10 o SMA20. Posición habitual 10-20%, nunca más del 30%. Filtro de mercado: Nasdaq 100 frente a sus SMA10 y SMA20. Son niveles orientativos para estudiar el gráfico, no órdenes ni recomendaciones.</p>
         <p><strong>Estrellas (1-5).</strong> Qullamaggie califica sus setups con estrellas ("five star setup") y solo opera fuerte los de 4-5. Aquí se puntúan sobre 66 con los rasgos que distinguen sus operaciones, medidos con datos diarios en 704 de las 1.212 rupturas de su archivo de capturas (el resto son valores que ya no cotizan) frente a 141.000 rupturas normales de los mismos valores: gran subida previa (20), valor rápido por ADR (12), tendencia limpia con la SMA20 holgadamente sobre la SMA50 y una subida lineal (14), medias de 10 y 20 que alcanzan al precio y mínimos que se apoyan en la de 10 (12) y compresión en las últimas sesiones con volumen seco (8); resta si ya lleva 4 bases o la consolidación tiene menos de 5 sesiones. 50 puntos son 5 estrellas y cada 5 puntos menos, media estrella. En una temática líder o un sector caliente (ver Sectores calientes) suma media estrella: él da más nota al mismo gráfico si su sector está caliente. Distancias y rangos en ADR del propio valor, el último día de la base. Resultado del estudio: 5 estrellas las tiene el 23% de sus setups en tendencia y el 2,6% de las rupturas normales; y en rupturas normales, ajenas a él, las de 5 estrellas subieron más de un 50% en 20 sesiones el 10,8% de las veces frente al 0,6% de las de 1 estrella. El retroceso de la base no los distinguía, por eso ya no es obligatorio. Es una medida de calidad del gráfico, no una probabilidad de acierto.</p>
@@ -1655,7 +1655,7 @@
   function preWatch() {
     const W = {};
     const get = (x) => (W[x.sym] = W[x.sym] || { sym: x.sym, name: x.name, group_name: x.group_name, tags: [], levels: [], adr: null,
-      next_earnings: x.next_earnings || null, state: null, v20: null });
+      next_earnings: x.next_earnings || null, state: null, v20: null, close: x.close });
     const trigOf = (sym) => { const r = (LV.cand[sym] || {}).rec || BYS[sym] || {}; return r.qm ? r.qm.trigger : null; };
     const addQm = (x, tag, trig) => {
       if (!x || !isUS(x.sym) || !isNum(x.pivot) || !isNum(x.close)) return;
@@ -1690,8 +1690,38 @@
   }
 
   const preUniverse = () => [...new Set([...Object.keys((LV.kit || {}).leaders || {}), ...Object.keys((LV.kit || {}).eps || {})])].filter(isUS);
-  // Cotización de pre-mercado de la sesión en curso (descarta las de una sesión anterior con la web abierta días).
-  const preQ = (sym) => { const p = PRE.q[sym]; return p && PRE.session && p.preStart === PRE.session.preStart && isNum(p.price) ? p : null; };
+  // Cotización de Yahoo de la sesión en curso (descarta las de una sesión anterior con la web abierta días).
+  const preQ = (sym) => { const p = PRE.q[sym]; return p && PRE.session && p.preStart === PRE.session.preStart ? p : null; };
+  // Cotización efectiva de pre-mercado: la de Nasdaq si se ha pedido hace poco (último precio consolidado, máximo y
+  // volumen; en valores poco negociados las velas de Yahoo se saltan operaciones) y, si no, la de Yahoo.
+  function preEff(sym) {
+    const p = preQ(sym), n = PRE.vol[sym], S = PRE.session;
+    if (n && S && Date.now() - (PRE.volAt[sym] || 0) < 6 * 60000) {
+      if (!isNum(n.last)) return { none: true, src: "Nasdaq" };          // Nasdaq no tiene operaciones de pre-mercado hoy
+      return { price: n.last, high: isNum(n.high) ? Math.max(n.high, n.last) : n.last, low: isNum(n.low) ? Math.min(n.low, n.last) : n.last,
+        prev: isNum(n.change) ? n.last - n.change : (p ? p.prevClose : null), vol: n.volume,
+        time: isNum(n.time) ? S.preStart + n.time - 4 * 3600 : (p ? p.time : null), bars: p ? p.bars : null, src: "Nasdaq" };
+    }
+    if (!p || !isNum(p.price)) return null;
+    return { price: p.price, high: isNum(p.high) ? p.high : p.price, low: p.low, prev: p.prevClose, vol: null, time: p.time, bars: p.bars, src: "Yahoo" };
+  }
+  const preGapMin = () => ((LV.kit || {}).cfg || {}).ep_gap || 0.1;
+
+  // Valores para los que merece la pena pedir el detalle a Nasdaq: vigilados con el nivel a tiro (a ≤ 3% del cierre
+  // o con un máximo de Yahoo ya cerca) y huecos que el barrido de Yahoo deja cerca del umbral de EP.
+  function preWant() {
+    const out = [];
+    for (const w of Object.values(preWatch())) {
+      const p = preQ(w.sym);
+      if (w.levels.some((l) => (isNum(w.close) && l.level / w.close - 1 <= 0.03) || (p && isNum(p.high) && p.high >= l.level * 0.985))) out.push(w.sym);
+    }
+    const g = preGapMin();
+    for (const sym of preUniverse()) {
+      const p = preQ(sym);
+      if (p && isNum(p.price) && p.prevClose > 0 && Math.max(p.price, p.high || 0) / p.prevClose - 1 >= g * 0.7) out.push(sym);
+    }
+    return [...new Set(out)];
+  }
 
   function preCompute() {
     const K = LV.kit || {}, cfg = K.cfg || {};
@@ -1702,40 +1732,45 @@
       return k && k.v && k.v.length >= 50 ? k.v.slice(-50).reduce((a, b) => a + b, 0) / 50 : null;
     };
     const today = PRE.session ? new Date((PRE.session.preStart - 5 * 3600) * 1000).toISOString().slice(0, 10) : "";
-    const row = (sym, p, v20) => {
-      const v = PRE.vol[sym], m50 = m50Of(sym) || v20 || null;   // sin media de 50 (fuera del universo de Luk): la de 20
-      return { sym, currency: "USD", price: p.price, high: p.high, low: p.low, prev: p.prevClose, time: p.time, bars: p.bars,
-        gap: p.prevClose > 0 ? p.price / p.prevClose - 1 : null, vol: v ? v.volume : null, volx: v && m50 ? v.volume / m50 : null, m50 };
+    const now = Date.now() / 1000;
+    const row = (sym, e, v20) => {
+      const m50 = m50Of(sym) || v20 || null;   // sin media de 50 (fuera del universo de Luk): la de 20
+      return { sym, currency: "USD", price: e.price, high: e.high, low: e.low, prev: e.prev, time: e.time, bars: e.bars, src: e.src,
+        gap: e.prev > 0 ? e.price / e.prev - 1 : null, vol: e.vol, volx: isNum(e.vol) && m50 ? e.vol / m50 : null,
+        age: PRE.phase === "pre" && isNum(e.time) ? Math.max(0, Math.round((now - e.time) / 60)) : null };
+    };
+    // Avisos sobre la fiabilidad del precio: con Nasdaq, por volumen; solo con Yahoo, por número de velas.
+    const thin = (r) => {
+      if (r.src === "Nasdaq") return isNum(r.volx) && r.volx < 0.005 ? ["casi sin volumen: precio poco fiable"] : [];
+      return [...(isNum(r.bars) && r.bars <= 3 ? [`poco negociado (${r.bars} vela${r.bars === 1 ? "" : "s"} de 5 min)`] : []), "precio de Yahoo, sin volumen"];
     };
     const breaks = [], eps = [];
     for (const w of Object.values(preWatch())) {
-      const p = preQ(w.sym);
-      if (!p || !isNum(p.high)) continue;
-      const hit = w.levels.filter((l) => p.high > l.level);
+      const e = preEff(w.sym);
+      if (!e || e.none) continue;
+      const hit = w.levels.filter((l) => e.high > l.level);
       if (!hit.length) continue;
       const main = hit.reduce((a, b) => (b.level > a.level ? b : a));
-      const over = p.price / main.level - 1;
+      const r = row(w.sym, e, w.v20), over = e.price / main.level - 1;
       const flags = [];
       if (isNum(w.adr) && over > w.adr) flags.push("a más de 1 ADR del nivel: no perseguir");
-      if (p.bars <= 3) flags.push(`poco negociado (${p.bars} vela${p.bars === 1 ? "" : "s"} de 5 min)`);
       const ed = w.next_earnings ? Math.round((Date.parse(w.next_earnings + "T12:00:00Z") - Date.parse(today + "T12:00:00Z")) / 864e5) : null;
       if (isNum(ed) && ed >= 0 && ed <= earnDays()) flags.push(ed === 0 ? "resultados hoy" : `resultados en ${ed} día${ed === 1 ? "" : "s"}`);
-      breaks.push({ ...row(w.sym, p, w.v20), name: w.name, group_name: w.group_name, tags: w.tags, state: w.state, level: main.level, level_label: main.label,
-        over, above: p.price > main.level, flags });
+      breaks.push({ ...r, name: w.name, group_name: w.group_name, tags: w.tags, state: w.state, level: main.level, level_label: main.label,
+        over, above: e.price > main.level, flags: [...flags, ...thin(r)] });
     }
-    const gapMin = cfg.ep_gap || 0.1;
+    const gapMin = preGapMin();
     for (const sym of preUniverse()) {
-      const p = preQ(sym);
-      if (!p || !(p.prevClose > 0) || p.price / p.prevClose - 1 < gapMin) continue;
-      const k = (K.leaders || {})[sym], e = (K.eps || {})[sym];
-      const flags = [];
-      if (k && k.next_earnings === today) flags.push("resultados hoy");
-      else flags.push("verificar catalizador");
-      if (p.bars <= 3) flags.push(`poco negociado (${p.bars} vela${p.bars === 1 ? "" : "s"} de 5 min)`);
-      eps.push({ ...row(sym, p), name: (k && k.name) || (e && e[3]) || sym, group_name: k && k.group_name, leader: !!k, flags, need: cfg.ep_vol_mult || 3 });
+      const e = preEff(sym);
+      if (!e || e.none || !(e.prev > 0) || e.price / e.prev - 1 < gapMin) continue;
+      const k = (K.leaders || {})[sym], x = (K.eps || {})[sym];
+      const r = row(sym, e);
+      eps.push({ ...r, name: (k && k.name) || (x && x[3]) || sym, group_name: k && k.group_name, leader: !!k,
+        flags: [k && k.next_earnings === today ? "resultados hoy" : "verificar catalizador", ...thin(r)] });
     }
-    breaks.sort((a, b) => (b.above - a.above) || b.over - a.over);
-    eps.sort((a, b) => b.gap - a.gap);
+    const solid = (r) => (r.src === "Nasdaq" && !(isNum(r.volx) && r.volx < 0.005) ? 1 : 0);
+    breaks.sort((a, b) => (b.above - a.above) || (solid(b) - solid(a)) || b.over - a.over);
+    eps.sort((a, b) => (solid(b) - solid(a)) || b.gap - a.gap);
     return { breaks, eps };
   }
 
@@ -1746,9 +1781,9 @@
       Object.assign(PRE.q, r.quotes);
     }
   }
-  // Volumen de Nasdaq solo para lo que se muestra; cada valor, como mucho cada 2 minutos.
+  // Detalle de Nasdaq solo para los valores con opciones de salir en las tablas; cada uno, como mucho cada 2 minutos.
   async function preVolFetch(syms) {
-    const due = [...new Set(syms)].filter((s) => Date.now() - (PRE.volAt[s] || 0) > 120000).slice(0, 120).sort();
+    const due = [...new Set(syms)].filter((s) => Date.now() - (PRE.volAt[s] || 0) > 110000).slice(0, 160).sort();
     let got = 0, failed = 0;
     for (let i = 0; i < due.length; i += 40) {
       const part = due.slice(i, i + 40);
@@ -1780,9 +1815,9 @@
         const full = PRE.phase === "cerrado" || Date.now() - PRE.fullAt > 5 * 60000;
         await preFetch([...new Set([...Object.keys(preWatch()), ...(full ? preUniverse() : PRE.hits)])].sort());
         if (full) PRE.fullAt = Date.now();
-        const R = preCompute();
-        PRE.hits = R.eps.map((x) => x.sym);
-        await preVolFetch([...R.breaks, ...R.eps].map((x) => x.sym));
+        const want = preWant();
+        PRE.hits = want;
+        await preVolFetch(want);
       }
       PRE.error = ""; PRE.at = Date.now();
     } catch (e) {
@@ -1812,12 +1847,13 @@
     else if (PRE.phase === "fuera") badge = `<p class="live-badge" data-badge>Fuera de horario: el pre-mercado de EE. UU. va de 4:00 a 9:30 de Nueva York</p>`;
     if (S && !PRE.error && (PRE.phase === "pre" || PRE.phase === "cerrado")) {
       const R = preCompute();
-      const last = Math.max(0, ...["SPY", "QQQ", "IWM", ...R.breaks.map((x) => x.sym), ...R.eps.map((x) => x.sym)].map((s) => (preQ(s) || {}).time || 0));
+      const last = Math.max(0, ...["SPY", "QQQ", "IWM"].map((s) => (preQ(s) || {}).time || 0), ...R.breaks.map((x) => x.time || 0), ...R.eps.map((x) => x.time || 0));
       badge = PRE.phase === "pre"
         ? `<p class="live-badge on" data-badge><span class="live-dot on"></span>Pre-mercado en vivo · precios de las ${hhmm(last)} · la bolsa abre a las ${hhmm(S.preEnd)}</p>`
         : `<p class="live-badge" data-badge>Pre-mercado de hoy cerrado a las ${hhmm(S.preEnd)}: así terminó</p>`;
-      const ctx = ["SPY", "QQQ", "IWM"].map((s) => { const p = preQ(s); const g = p && p.prevClose > 0 ? p.price / p.prevClose - 1 : null; return `<span>${s} <strong class="${cls(g)}">${pct(g, 2)}</strong></span>`; }).join(" ");
-      const flagsTd = (x) => `<td class="left flags-cell">${x.flags.map((f) => `<span class="flag-tag${/perseguir|poco negociado/.test(f) ? " verify" : /resultados/.test(f) ? " earn" : /verificar/.test(f) ? " verify" : ""}">${esc(f)}</span>`).join(" ")}</td>`;
+      const ctx = ["SPY", "QQQ", "IWM"].map((s) => { const p = preQ(s); const g = p && isNum(p.price) && p.prevClose > 0 ? p.price / p.prevClose - 1 : null; return `<span>${s} <strong class="${cls(g)}">${pct(g, 2)}</strong></span>`; }).join(" ");
+      const flagsTd = (x) => `<td class="left flags-cell">${x.flags.map((f) => `<span class="flag-tag${/perseguir|poco negociado|sin volumen/.test(f) ? " verify" : /resultados/.test(f) ? " earn" : /verificar/.test(f) ? " verify" : ""}">${esc(f)}</span>`).join(" ")}</td>`;
+      const pxTd = (x) => `<td data-v="${x.price}">${price(x.price, "USD")}${isNum(x.age) && x.age >= 10 ? `<small class="dim block">hace ${x.age} min</small>` : ""}</td>`;
       const volTds = (x) => `<td data-v="${isNum(x.vol) ? x.vol : ""}">${volTxt(x.vol)}</td><td data-v="${isNum(x.volx) ? x.volx : ""}" title="Volumen del pre-mercado frente al volumen medio de una sesión completa">${isNum(x.volx) ? num(x.volx * 100, 0) + "%" : "—"}</td>`;
       body = `<p class="pre-ctx">Frente al cierre anterior: ${ctx}</p>
         <h3>Rupturas en pre-mercado <span class="dim h-note">${R.breaks.length ? `${R.breaks.filter((x) => x.above).length} por encima de su nivel ahora` : ""}</span></h3>
@@ -1826,7 +1862,7 @@
           <tbody>${R.breaks.map((x) => `<tr class="${x.above ? "" : "pre-back"}">${tickCell(x)}
             <td class="left">${x.tags.map((t) => `<span class="flag-tag">${esc(t)}</span>`).join(" ")}${x.state ? `<small class="dim block">al cierre: ${esc((STATE_LABEL[x.state] || x.state).toLowerCase())}</small>` : ""}</td>
             <td data-v="${x.level}">${price(x.level, "USD")}<small class="dim block">${esc(x.level_label)}</small></td>
-            <td data-v="${x.price}">${price(x.price, "USD")}</td>
+            ${pxTd(x)}
             <td data-v="${x.over}" class="${cls(x.over)}">${pct(x.over)}${x.above ? "" : `<small class="dim block">lo superó y ha vuelto</small>`}</td>
             <td data-v="${isNum(x.gap) ? x.gap : ""}" class="${cls(x.gap)}">${pct(x.gap)}</td>
             <td data-v="${x.high}">${price(x.high, "USD")}</td>${volTds(x)}${flagsTd(x)}</tr>`).join("")}</tbody></table></div>`
@@ -1835,11 +1871,11 @@
         ${R.eps.length ? `<div class="tbl-wrap"><table class="lt qm-table pre-table sortable">
           <thead><tr><th class="left">Valor</th><th title="Precio de pre-mercado frente al cierre anterior">Hueco</th><th>Pre-mercado</th><th>Cierre anterior</th><th>Máx. pre</th><th>Vol. pre</th><th title="Volumen del pre-mercado frente al volumen medio de una sesión completa">% media diaria</th><th class="left" title="Líder al cierre de ayer según las reglas de Luk">Líder</th><th class="left">Avisos</th></tr></thead>
           <tbody>${R.eps.map((x) => `<tr>${tickCell(x)}
-            <td data-v="${x.gap}" class="pos">${pct(x.gap)}</td><td data-v="${x.price}">${price(x.price, "USD")}</td><td data-v="${x.prev}">${price(x.prev, "USD")}</td>
+            <td data-v="${x.gap}" class="pos">${pct(x.gap)}</td>${pxTd(x)}<td data-v="${x.prev}">${price(x.prev, "USD")}</td>
             <td data-v="${x.high}">${price(x.high, "USD")}</td>${volTds(x)}
             <td class="left">${x.leader ? "sí" : `<span class="dim">aún no</span>`}</td>${flagsTd(x)}</tr>`).join("")}</tbody></table></div>`
           : `<p class="empty">Ningún valor del universo de Luk abre con hueco ≥ ${num(gapMin * 100, 0)}% en el pre-mercado.</p>`}
-        <p class="dim" style="font-size:13px;margin-top:10px">El EP se confirma en la sesión: hueco ≥ ${num(gapMin * 100, 0)}% en la apertura y volumen ≥ ${num(need, 0)} veces la media de 50 sesiones. El motivo del hueco (resultados, noticia) no se comprueba aquí. Precio: Yahoo, velas de 5 minutos. Volumen: Nasdaq${PRE.volFail ? `, <span class="neg">que ahora no responde</span>` : ""}; se pide solo para los valores de estas tablas. Se actualiza cada minuto; el universo completo, cada 5.</p>`;
+        <p class="dim" style="font-size:13px;margin-top:10px">El EP se confirma en la sesión: hueco ≥ ${num(gapMin * 100, 0)}% en la apertura y volumen ≥ ${num(need, 0)} veces la media de 50 sesiones. El motivo del hueco (resultados, noticia) no se comprueba aquí. Datos: Yahoo (velas de 5 minutos) barre el universo y Nasdaq da el último precio, el máximo y el volumen de los valores con opciones de salir aquí${PRE.volFail ? `; <span class="neg">Nasdaq no responde ahora, así que los precios son de Yahoo y no hay volumen</span>` : ""}. En valores poco negociados un precio suelto puede no ser representativo: mira el volumen. Se actualiza cada minuto; el universo completo, cada 5.</p>`;
     }
     sec.innerHTML = `<h2>Pre-mercado</h2>${badge || ""}${intro}${body}`;
     reapplySorts(sec);

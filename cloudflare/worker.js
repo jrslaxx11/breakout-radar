@@ -159,7 +159,9 @@ async function preQuotes(list) {
   return { at: Math.floor(Date.now() / 1000), quotes: out };
 }
 
-// Volumen, máximo y mínimo del pre-mercado según Nasdaq (cubre también los valores de la NYSE).
+// Pre-mercado según Nasdaq (cubre también los valores de la NYSE): último precio consolidado, variación,
+// máximo, mínimo, volumen y hora de la última operación. Es más completo que Yahoo en valores poco
+// negociados, donde las velas de Yahoo se saltan operaciones.
 const numOf = (x) => { const k = String(x ?? "").replace(/,/g, "").match(/-?\d+(\.\d+)?/); return k ? Number(k[0]) : null; };
 async function nasdaqPre(symbol) {
   const s = symbol.replace("-", ".");   // BRK-B en Yahoo es BRK.B en Nasdaq
@@ -167,11 +169,19 @@ async function nasdaqPre(symbol) {
   const r = await fetch(u, { headers: NASDAQ_HEADERS, signal: AbortSignal.timeout(8000) });
   if (!r.ok) throw new Error(`Nasdaq respondió ${r.status}`);
   const j = await r.json();
-  const row = j?.data?.infoTable?.rows?.[0];
-  if (!row) return null;
-  const volume = numOf(row.volume);
-  if (volume === null) return null;
-  return { volume, last: numOf(row.consolidated), high: numOf(row.highPrice), low: numOf(row.lowPrice) };
+  if (!j || !j.data) return null;
+  const row = j.data.infoTable?.rows?.[0];
+  const volume = row ? numOf(row.volume) : null;
+  // Sin fila de resumen o sin volumen: Nasdaq no tiene pre-mercado de ese valor hoy.
+  if (volume === null) return { volume: 0, last: null, change: null, high: null, low: null, time: null };
+  const cons = String(row.consolidated ?? "").replace(/,/g, "").match(/(-?\d+(?:\.\d+)?)\s+([+-]?\d+(?:\.\d+)?)/);
+  // Hora de la última operación (reloj de Nueva York), en segundos desde medianoche.
+  const hm = String(j.data.tradeDetailTable?.rows?.[0]?.time ?? "").match(/^(\d{1,2}):(\d{2}):(\d{2})/);
+  return {
+    volume, last: cons ? Number(cons[1]) : numOf(row.consolidated), change: cons ? Number(cons[2]) : null,
+    high: numOf(row.highPrice), low: numOf(row.lowPrice),
+    time: hm ? Number(hm[1]) * 3600 + Number(hm[2]) * 60 + Number(hm[3]) : null,
+  };
 }
 
 async function preVolumes(list) {

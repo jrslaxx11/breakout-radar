@@ -100,9 +100,14 @@ De 4:00 a 9:30 de Nueva York (10:00-15:30 en la península) la sección **Pre-me
   no se comprueba.
 
 Datos: el Worker pide a Yahoo las velas de 5 minutos con pre-mercado (`/pre`: último precio, máximo y
-mínimo) y a Nasdaq el volumen (`/prevol`), porque Yahoo no publica el volumen del pre-mercado. El volumen
-se pide solo para los valores que salen en las tablas y se compara con el de una sesión completa media.
-Los vigilados se consultan cada minuto y el universo completo cada 5. Los estados y las listas del radar
+mínimo) para barrer el universo, y a Nasdaq (`/prevol`) el último precio consolidado, el máximo, el
+volumen y la hora de la última operación de los valores con opciones de salir en las tablas (vigilados con
+el nivel a ≤ 3% y huecos cerca del umbral). Yahoo no publica el volumen del pre-mercado y en valores poco
+negociados sus velas se saltan operaciones (16-nov-2026: IDYA figuraba a +6,6% en Yahoo por una operación
+suelta y a −0,4% en Nasdaq con 1.722 acciones), así que lo que se muestra es lo de Nasdaq; si Nasdaq no
+responde, se muestra lo de Yahoo con el aviso. El volumen se compara con el de una sesión completa media y
+por debajo del 0,5% se marca «casi sin volumen». Los vigilados se consultan cada minuto y el universo
+completo cada 5. Los estados y las listas del radar
 siguen siendo los del cierre: el pre-mercado no es una vela de sesión. Tras la apertura la sección queda
 con el pre-mercado tal como terminó. Requiere la versión del Worker que incluye `/pre` y `/prevol`
 (`cloudflare/worker.js`); si no, la sección lo avisa.
