@@ -86,6 +86,27 @@ abierta en ella para no cerrártela. El ranking de sectores calientes, las temá
 siendo del cierre (con el precio "Ahora" en vivo). Los valores calculados al momento no tienen temática,
   catalizador ni fechas de resultados (su peso se redistribuye, como en el motor diario).
 
+## Pre-mercado
+
+De 4:00 a 9:30 de Nueva York (10:00-15:30 en la península) la sección **Pre-mercado** muestra:
+
+- **Rupturas en pre-mercado**: valores vigilados (setups de Qullamaggie, high tight flags, foco de
+  sectores calientes, watchlist y retrocesos de Luk) cuyo precio de pre-mercado ha superado su nivel:
+  el nivel de ruptura si cerraron por debajo, el máximo de la última sesión si ya habían roto y, en los
+  setups de Luk, su entrada. Avisa si ya está a más de 1 ADR del nivel, si apenas se ha negociado y si
+  publica resultados en pocos días. Distingue los que siguen por encima de los que lo superaron y han vuelto.
+- **EP de pre-mercado**: valores del universo de Luk con hueco ≥ 10% sobre el cierre anterior. El EP se
+  confirma en la sesión (hueco en la apertura y volumen ≥ 3 veces la media de 50); el motivo del hueco
+  no se comprueba.
+
+Datos: el Worker pide a Yahoo las velas de 5 minutos con pre-mercado (`/pre`: último precio, máximo y
+mínimo) y a Nasdaq el volumen (`/prevol`), porque Yahoo no publica el volumen del pre-mercado. El volumen
+se pide solo para los valores que salen en las tablas y se compara con el de una sesión completa media.
+Los vigilados se consultan cada minuto y el universo completo cada 5. Los estados y las listas del radar
+siguen siendo los del cierre: el pre-mercado no es una vela de sesión. Tras la apertura la sección queda
+con el pre-mercado tal como terminó. Requiere la versión del Worker que incluye `/pre` y `/prevol`
+(`cloudflare/worker.js`); si no, la sección lo avisa.
+
 ## Método
 
 **Universo.** S&P 500, S&P 400 y S&P 600 (con su clasificación GICS); todas las acciones cotizadas en
@@ -131,15 +152,19 @@ flags (como dibuja Qullamaggie). La línea descendente solo vale si la base toc�
 sus dos primeros tercios (mínimos crecientes); en un rebote en V la resistencia sigue siendo el máximo.
 El **nivel de ruptura** de cada día es esa línea proyectada a ese día o, si queda por encima, el máximo
 de las 3 sesiones anteriores (incluidos los máximos intradía que superaron la base sin cerrar fuera).
+La **longitud de la base** son las sesiones posteriores al máximo, sin contar el día de la ruptura (así
+es la misma la víspera y el día en que rompe), y su **profundidad** es lo que cae el precio después de
+marcar el máximo: del día del máximo solo cuenta lo ocurrido tras él (vela alcista, el cierre; bajista,
+el mínimo). Las distancias al nivel se miden siempre sobre el nivel, igual que en las tablas.
 
 | Estado | Regla |
 | --- | --- |
-| Confirmada | Cierre sobre el nivel de ruptura con volumen ≥ 1,5x la media de 20 sesiones y cierre en la mitad alta del día |
-| Temprana | Cruza el nivel sin volumen suficiente o sin continuidad |
+| Confirmada | Cierre sobre el nivel de ruptura con volumen ≥ 1,5x la media de 20 sesiones y cierre en la mitad alta del día; los días siguientes se exige lo mismo del día del cruce y seguir a ≤ 6% del nivel |
+| Temprana | Cruza el nivel sin volumen suficiente, cerró en la mitad baja del día o ya está a más de un 6% del nivel |
 | Pre-breakout | A ≤ 5% del nivel, base ≥ 10 sesiones y ≤ 30% de profundidad (o flag de 5-9 sesiones y ≤ 12%), sobre la SMA50 |
 | Retest | Cruzó el nivel en las últimas 5 sesiones y vuelve a menos de un 3% |
-| Extendida | > 10% sobre el nivel o > 3 ATR sobre la SMA20 |
-| En base | A ≤ 12% del nivel, o base en formación (el valor sigue marcando máximos) |
+| Extendida | > 10% sobre el nivel o > 3 ATR sobre la SMA20 (el motivo dice cuál de las dos) |
+| En base | A ≤ 12% del nivel, base en formación (el valor sigue marcando máximos) o high tight flag cuya bandera corrige ≤ 35% |
 | Descartada | Ruptura fallida (> 3% bajo el nivel tras cruzarlo), bajo una SMA50 descendente, precio anclado o liquidez insuficiente |
 
 **Setup de Qullamaggie (solo rupturas).** Reglas de su artículo
@@ -279,6 +304,10 @@ python -m http.server -d docs 8000   # y abrir http://localhost:8000
 
 ## Limitaciones
 
+- Las acciones con menos de 130 sesiones cotizadas (salidas a bolsa de los últimos 6 meses) no se
+  analizan: faltan datos para la rentabilidad a 6 meses.
+- El nivel de ruptura es a menudo el máximo de las 3 sesiones anteriores (unos dos tercios de los cruces),
+  por debajo del máximo de la base: un cruce no implica haber superado ese máximo.
 - Solo cierres diarios confirmados; nada en tiempo real.
 - Resistencias e invalidaciones son algorítmicas: valídalas en el gráfico.
 - La amplitud de mercado solo se mide en EE. UU.

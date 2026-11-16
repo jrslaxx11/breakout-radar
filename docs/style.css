@@ -438,3 +438,9 @@ details.classic[open] > summary { margin-bottom: 8px; }
 .live-badge.on { color: var(--pos); background: color-mix(in srgb, var(--pos) 12%, transparent); font-weight: 600; }
 .live-badge .live-dot { margin-right: 6px; }
 #luk-regime .live-badge { margin: 2px 0 6px; }
+
+/* Pre-mercado */
+.pre-ctx { margin: 0 0 14px; font-size: 14px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 18px; }
+.pre-ctx span { white-space: nowrap; }
+.pre-table tr.pre-back td { color: var(--muted); }
+.pre-table tr.pre-back td .flag-tag { opacity: .8; }
