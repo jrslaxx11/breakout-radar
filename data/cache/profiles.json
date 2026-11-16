@@ -472,8 +472,10 @@
 "047810.KS": {
 "country": "",
 "industry": "",
+"last": "2026-11-16",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "0522.HK": {
 "country": "",
@@ -3690,8 +3692,10 @@
 "AKE.PA": {
 "country": "",
 "industry": "",
+"last": "2026-11-16",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "AKER.OL": {
 "country": "",
@@ -3896,8 +3900,10 @@
 "ALNT": {
 "country": "",
 "industry": "",
+"last": "2026-11-16",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "ALNY": {
 "country": "",
@@ -3920,8 +3926,10 @@
 "ALQ.AX": {
 "country": "",
 "industry": "",
+"last": "2026-11-16",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "ALRM": {
 "country": "United States",
@@ -5424,10 +5432,10 @@
 "BCS": {
 "country": "",
 "industry": "",
-"last": "2026-11-03",
+"last": "2026-11-16",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "BCSF": {
 "country": "",
@@ -5848,10 +5856,10 @@
 "BLX": {
 "country": "",
 "industry": "",
-"last": "2026-11-03",
+"last": "2026-11-16",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "BLZE": {
 "country": "",
@@ -6934,8 +6942,10 @@
 "CFR.SW": {
 "country": "",
 "industry": "",
+"last": "2026-11-16",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "CG": {
 "country": "",
@@ -7124,8 +7134,10 @@
 "CIGI": {
 "country": "",
 "industry": "",
+"last": "2026-11-16",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "CIM": {
 "country": "United States",
@@ -9400,8 +9412,10 @@
 "ENGI.PA": {
 "country": "",
 "industry": "",
+"last": "2026-11-16",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "ENI.MI": {
 "country": "Italy",
@@ -9546,10 +9560,10 @@
 "EPRT": {
 "country": "",
 "industry": "",
-"last": "2026-11-02",
+"last": "2026-11-16",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "EQB.TO": {
 "country": "Canada",
@@ -9864,8 +9878,10 @@
 "EXE": {
 "country": "",
 "industry": "",
+"last": "2026-11-16",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "EXE.TO": {
 "country": "Canada",
@@ -9902,10 +9918,10 @@
 "EXP": {
 "country": "",
 "industry": "",
-"last": "2026-11-02",
+"last": "2026-11-16",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "EXPD": {
 "country": "United States",
@@ -10074,8 +10090,10 @@
 "FDJU.PA": {
 "country": "",
 "industry": "",
+"last": "2026-11-16",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "FDMT": {
 "country": "United States",
@@ -10424,10 +10442,10 @@
 "FNF": {
 "country": "",
 "industry": "",
-"last": "2026-11-03",
+"last": "2026-11-16",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "FNGD": {
 "country": "",
@@ -11408,10 +11426,10 @@
 "GRBK": {
 "country": "",
 "industry": "",
-"last": "2026-11-02",
+"last": "2026-11-16",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "GRC": {
 "country": "United States",
@@ -14364,10 +14382,10 @@
 "LULU": {
 "country": "",
 "industry": "",
-"last": "2026-11-02",
+"last": "2026-11-16",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "LUMI.ST": {
 "country": "",
@@ -15184,8 +15202,10 @@
 "MOG-A": {
 "country": "",
 "industry": "",
+"last": "2026-11-16",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "MOH": {
 "country": "United States",
@@ -15448,8 +15468,10 @@
 "MTDR": {
 "country": "",
 "industry": "",
+"last": "2026-11-16",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "MTG": {
 "country": "United States",
@@ -16384,8 +16406,10 @@
 "NUV": {
 "country": "",
 "industry": "",
+"last": "2026-11-16",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "NVAX": {
 "country": "United States",
@@ -16490,10 +16514,10 @@
 "NWG": {
 "country": "",
 "industry": "",
-"last": "2026-11-02",
+"last": "2026-11-16",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "NWG.L": {
 "country": "United Kingdom",
@@ -20082,10 +20106,10 @@
 "SLDB": {
 "country": "",
 "industry": "",
-"last": "2026-11-05",
+"last": "2026-11-16",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "SLDE": {
 "country": "United States",
@@ -20346,8 +20370,10 @@
 "SOFI": {
 "country": "",
 "industry": "",
+"last": "2026-11-16",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "SOI.PA": {
 "country": "",
@@ -21466,8 +21492,10 @@
 "TILE": {
 "country": "",
 "industry": "",
+"last": "2026-11-16",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "TIMB": {
 "country": "Brazil",
@@ -22146,10 +22174,10 @@
 "UBER": {
 "country": "",
 "industry": "",
-"last": "2026-11-02",
+"last": "2026-11-16",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "UBS": {
 "country": "Switzerland",
@@ -22820,8 +22848,10 @@
 "VNOM": {
 "country": "",
 "industry": "",
+"last": "2026-11-16",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "VNP.TO": {
 "country": "Canada",
