@@ -58,6 +58,7 @@ class Metrics:
     any_closed_above: bool
     max_close_since: float | None
     rvol_cross: float | None
+    day_pos_cross: float | None  # posición del cierre en el rango del día del cruce (0 = mínimo, 1 = máximo)
     tight: float               # rango de 10 sesiones / cierre
     lo5: float
     lo10: float
@@ -137,7 +138,8 @@ def compute(sym: str, df: pd.DataFrame, w: dict) -> Metrics | None:
     ip, H, slope, jt, line_v, P = base
     d_lvl = cross_i if cross_i is not None else e + 1
     base_end = cross_i - 1 if cross_i is not None else e
-    Lb = float(np.min(l[ip:base_end + 1]))
+    blen = base_end - ip                 # sesiones de la consolidación: tras el máximo y sin contar el día de la ruptura
+    Lb = _base_low(o, l, c, ip, base_end)
     lo_move = float(np.min(l[max(0, ip - 63):ip + 1]))
     if P > line_v + 1e-9:
         kind = "rango"
@@ -146,10 +148,12 @@ def compute(sym: str, df: pd.DataFrame, w: dict) -> Metrics | None:
     else:
         kind = "máximo"
     max_close_since = float(np.max(c[cross_i:e + 1])) if cross_i is not None else None
-    rvol_cross = None
+    rvol_cross, day_pos_cross = None, None
     if cross_i is not None:
         bv = sma(v, 20, cross_i - 1)
         rvol_cross = float(v[cross_i] / bv) if bv else None
+        rc = h[cross_i] - l[cross_i]
+        day_pos_cross = float((c[cross_i] - l[cross_i]) / rc) if rc > 0 else 0.5
 
     hi10, lo10 = float(np.max(h[e - 9:e + 1])), float(np.min(l[e - 9:e + 1]))
     lo5 = float(np.min(l[e - 4:e + 1]))
@@ -170,10 +174,11 @@ def compute(sym: str, df: pd.DataFrame, w: dict) -> Metrics | None:
         vol=float(v[e]), v20=v20, v50=v50,
         rvol=float(v[e] / v20) if v20 else None,
         vdry=float(v10 / v50) if v10 is not None and v50 else None,
-        mdv=mdv, P=float(P), piv_date=fmt(ip), blen=d_lvl - ip if cross_i is not None else e - ip,
+        mdv=mdv, P=float(P), piv_date=fmt(ip), blen=blen,
         depth=1 - Lb / H,
         cross=(e - cross_i) if cross_i is not None else None,
         any_closed_above=cross_i is not None, max_close_since=max_close_since, rvol_cross=rvol_cross,
+        day_pos_cross=day_pos_cross,
         tight=(hi10 - lo10) / c[e], lo5=lo5, lo10=lo10,
         day_pos=float((c[e] - l[e]) / rng) if rng > 0 else 0.5,
         gap=float(o[e] / c[e - 1] - 1) if not math.isnan(o[e]) else 0.0,
@@ -190,10 +195,22 @@ def compute(sym: str, df: pd.DataFrame, w: dict) -> Metrics | None:
         retrace=float((H - Lb) / (H - lo_move)) if H > lo_move else None,
         tight_ratio=_tight_ratio(h, l, ip, base_end),
         mom1=_mom(c, l, e, 22), mom3=_mom(c, l, e, 67), mom6=_mom(c, l, e, 126),
-        setup=_setup(c, h, l, v, base_end, ip, d_lvl - ip if cross_i is not None else e - ip),
-        pole=_pole(h, l, ip, base_end, d_lvl - ip if cross_i is not None else e - ip, H, Lb,
-                   w.get("pole_days", 40), fmt),
+        setup=_setup(c, h, l, v, base_end, ip, blen),
+        pole=_pole(h, l, ip, base_end, blen, H, Lb, w.get("pole_days", 40), fmt),
     )
+
+
+def _base_low(o: np.ndarray, l: np.ndarray, c: np.ndarray, ip: int, end: int) -> float:
+    """Mínimo de la consolidación: lo que cae el precio después de marcar el máximo.
+
+    Del día del máximo solo cuenta lo ocurrido tras el máximo. Con datos diarios se usa la convención
+    habitual: en una vela alcista el mínimo fue antes del máximo (cuenta el cierre); en una bajista, después
+    (cuenta el mínimo). Así un día de máximo con mucho recorrido no infla la corrección de la bandera.
+    """
+    first = c[ip] if (math.isnan(o[ip]) or c[ip] >= o[ip]) else l[ip]
+    if end > ip:
+        return float(min(first, np.min(l[ip + 1:end + 1])))
+    return float(first)
 
 
 def _pole(h: np.ndarray, l: np.ndarray, ip: int, base_end: int, blen: int, H: float, Lb: float, days: int, fmt) -> dict:

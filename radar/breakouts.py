@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from . import htf
 from .metrics import Metrics
 
 CONFIRMED, EARLY, PRE, RETEST, EXTENDED, BASE, DISCARDED = (
@@ -17,8 +18,12 @@ class Classification:
 
 
 def classify(m: Metrics, mdv_usd: float | None, price_usd: float | None, cfg: dict,
-             filters: dict) -> Classification:
-    """Asigna uno de los estados de la fase 5 con reglas explícitas (ver README)."""
+             filters: dict, hcfg: dict | None = None) -> Classification:
+    """Asigna uno de los estados de la fase 5 con reglas explícitas (ver README).
+
+    `hcfg` = sección `htf` de settings.yaml: con ella, un high tight flag sigue EN BASE mientras su bandera
+    no corrija más de lo que admite esa regla, aunque quede a más de `base_max_dist` del nivel.
+    """
     if mdv_usd is None or mdv_usd < filters["min_mdv_usd"] or (price_usd or 0) < filters["min_price_usd"]:
         return Classification(DISCARDED, "liquidez o precio insuficiente")
     # Precio anclado (típico de una OPA en efectivo): volatilidad mínima y rango estrecho.
@@ -30,8 +35,11 @@ def classify(m: Metrics, mdv_usd: float | None, price_usd: float | None, cfg: di
     P, C = m.P, m.C
     if C > P:
         ext = C / P - 1
-        if ext > cfg["extended_pct"] or (m.s20 and (C - m.s20) > cfg["extended_atr_over_sma20"] * m.atr):
+        if ext > cfg["extended_pct"]:
             return Classification(EXTENDED, f"+{ext * 100:.1f}% sobre el nivel de ruptura".replace(".", ","))
+        if m.s20 and (C - m.s20) > cfg["extended_atr_over_sma20"] * m.atr:
+            return Classification(EXTENDED, f"a {(C - m.s20) / m.atr:.1f} ATR de la SMA20 "
+                                            f"(+{ext * 100:.1f}% sobre el nivel de ruptura)".replace(".", ","))
         if m.cross == 0:
             if (m.rvol or 0) >= cfg["rvol_confirm"] and m.day_pos >= 0.5:
                 return _short_base(Classification(CONFIRMED), m, cfg)
@@ -39,12 +47,21 @@ def classify(m: Metrics, mdv_usd: float | None, price_usd: float | None, cfg: di
             return _short_base(Classification(EARLY, why), m, cfg)
         if m.max_close_since and m.max_close_since / P - 1 >= cfg["retest_band"] and ext <= cfg["retest_band"]:
             return Classification(RETEST, "vuelve al nivel de ruptura")
-        if (m.rvol_cross or 0) >= cfg["rvol_confirm"] and ext <= 0.06:
+        # Mismas exigencias que el día del cruce: volumen y cierre en la mitad alta de aquel día.
+        vol_ok = (m.rvol_cross or 0) >= cfg["rvol_confirm"]
+        pos_ok = m.day_pos_cross is None or m.day_pos_cross >= 0.5
+        if vol_ok and pos_ok and ext <= 0.06:
             return _short_base(Classification(CONFIRMED, f"ruptura hace {m.cross} ses."), m, cfg)
         rc = f"{m.rvol_cross:.1f}".replace(".", ",") if m.rvol_cross else "?"
-        return _short_base(Classification(EARLY, f"cruce hace {m.cross} ses. con {rc}x volumen"), m, cfg)
+        if not vol_ok:
+            why = f"cruce hace {m.cross} ses. con {rc}x volumen"
+        elif not pos_ok:
+            why = f"cruce hace {m.cross} ses. con {rc}x volumen, pero cerró en la mitad baja del rango"
+        else:
+            why = f"ruptura hace {m.cross} ses. con {rc}x volumen; ya +{f'{ext * 100:.1f}'.replace('.', ',')}% sobre el nivel"
+        return _short_base(Classification(EARLY, why), m, cfg)
 
-    dist = P / C - 1
+    dist = 1 - C / P     # distancia bajo el nivel, medida sobre el nivel (la misma que muestra la tabla)
     if m.any_closed_above and C < P * (1 - cfg["failed_break_pct"]):
         return Classification(DISCARDED, "ruptura fallida")
     if m.any_closed_above:
@@ -62,6 +79,8 @@ def classify(m: Metrics, mdv_usd: float | None, price_usd: float | None, cfg: di
         return Classification(PRE, f"flag corto ({m.blen} ses.)")
     if dist <= cfg["base_max_dist"] and above50:
         return Classification(BASE, f"{dist * 100:.1f}% bajo el nivel de ruptura".replace(".", ","))
+    if above50 and hcfg is not None and htf.evaluate(m, hcfg):
+        return Classification(BASE, f"{dist * 100:.1f}% bajo el nivel de ruptura, dentro de la bandera".replace(".", ","))
     return Classification(DISCARDED, "bajo SMA50" if not above50 else f"{dist * 100:.0f}% bajo el nivel de ruptura")
 
 
@@ -103,7 +122,7 @@ def score(m: Metrics, state: str, rs_pct: float, mdv_usd: float, catalyst: float
             CONFIRMED: 17 + (3 if rvol >= 2 else 0),
             EARLY: 10 + (2 if rvol >= 1.2 else 0),
             RETEST: 12 + (2 if rvol < 1 else 0),
-            PRE: 7 + (2 if vd < 0.9 else 0) + (2 if (m.P / m.C - 1) <= 0.02 else 0),
+            PRE: 7 + (2 if vd < 0.9 else 0) + (2 if (1 - m.C / m.P) <= 0.02 else 0),
             EXTENDED: 5, BASE: 3, DISCARDED: 0,
         }[state]
 

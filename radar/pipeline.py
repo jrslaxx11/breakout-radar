@@ -210,7 +210,7 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
     # ---------- acciones: clasificación y puntuación ----------
     def evaluate(r: dict, catalyst: float | None) -> dict:
         m = r["m"]
-        c = bo.classify(m, r["mdv_usd"], r["price_usd"], bcfg, flt)
+        c = bo.classify(m, r["mdv_usd"], r["price_usd"], bcfg, flt, hcfg)
         state, why = c.state, c.why
         if r["sym"] in excluded:
             state, why = bo.DISCARDED, excluded[r["sym"]].get("reason", "exclusión manual")
@@ -311,7 +311,7 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
     for r in liquid:
         if r.get("rs_pct", 0) < 0.8 or r["dup"] or r["theme"] in selected or (r["mdv_usd"] or 0) < 10e6:
             continue
-        c = bo.classify(r["m"], r["mdv_usd"], r["price_usd"], bcfg, flt)
+        c = bo.classify(r["m"], r["mdv_usd"], r["price_usd"], bcfg, flt, hcfg)
         if c.state == bo.CONFIRMED:
             outside.append({"sym": r["sym"], "theme": r["theme"], "rs_pct": r["rs_pct"],
                             "name": r["info"].get("name") or r["profile"].get("name") or "",
@@ -330,7 +330,7 @@ def run(cfg: Config | None = None, *, universe: dict | None = None, prices: dict
     analysed = {s: {"state": c["state"], "why": c["why"], "theme": c["theme"]} for s, c in candidates.items()}
     for s, r in rows.items():
         if s not in analysed and r.get("theme"):
-            st = bo.classify(r["m"], r["mdv_usd"], r["price_usd"], bcfg, flt)
+            st = bo.classify(r["m"], r["mdv_usd"], r["price_usd"], bcfg, flt, hcfg)
             analysed[s] = {"state": st.state, "why": st.why, "theme": r["theme"]}
     watch = {c["sym"]: c for c in pres}
     watch["__themes__"] = selected

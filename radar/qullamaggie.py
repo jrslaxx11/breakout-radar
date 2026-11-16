@@ -109,6 +109,9 @@ def evaluate(m: Metrics, state: str, market: dict, perf_cut: dict | None = None,
     ext = m.C / m.P - 1
     if state in ("CONFIRMADA", "TEMPRANA") and ext > adr:
         trigger, entry_note = None, "Ya está a más de 1 ADR del nivel de ruptura: no perseguir; esperar una nueva consolidación"
+    elif state in ("CONFIRMADA", "TEMPRANA") and m.high / m.P - 1 > adr:
+        trigger, entry_note = None, ("El máximo de hoy queda a más de 1 ADR del nivel de ruptura: entrar por encima sería perseguir; "
+                                     "esperar una nueva consolidación")
     elif state in ("CONFIRMADA", "TEMPRANA"):
         trigger = m.high
         entry_note = "Ruptura ya iniciada: entrar solo si supera el máximo de hoy en el rango de apertura (ORH)"

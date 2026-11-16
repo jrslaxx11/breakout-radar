@@ -172,3 +172,80 @@ def test_intraday_poke_does_not_reset_the_base():
     cl, m = classify(df)
     assert m.cross == 0 and abs(m.P - top * 1.03) < 1e-9 and m.blen >= 20
     assert cl.state == bo.CONFIRMED, cl
+
+
+# ---------- auditoría del 16-nov-2026: coherencia de la base, del cruce y de las distancias ----------
+
+def test_base_length_is_the_same_the_eve_and_the_breakout_day():
+    """La base mide las sesiones tras el máximo sin contar el día de la ruptura: no crece al romper."""
+    df = flat_base()
+    eve = compute("TEST", df.iloc[:-1], W)
+    top = eve.peak
+    df.iloc[-1] = [top, top * 1.05, top * 0.995, top * 1.04, 3e6]
+    m = compute("TEST", df, W)
+    assert eve.cross is None and m.cross == 0
+    assert m.blen == eve.blen and m.pole["flag_len"] == eve.pole["flag_len"] and m.setup["blen"] == eve.setup["blen"]
+
+
+def test_four_session_flag_does_not_become_a_base_by_breaking_out():
+    c = np.concatenate([np.full(200, 60.0), np.linspace(60, 100, 30), [98.0, 97.5, 98.0, 97.8], [104.0]])
+    v = np.full(len(c), 1e6); v[-1] = 3e6
+    df = series(c, v)
+    assert compute("TEST", df.iloc[:-1], W).blen == 4
+    m = compute("TEST", df, W)
+    assert m.cross == 0 and m.blen == 4          # antes figuraba con 5 el día de la ruptura
+
+
+def _crossed(day_close_frac: float):
+    """Base plana, cruce con 3x volumen cuyo cierre queda en `day_close_frac` del rango del día, y un día más."""
+    df = flat_base()
+    df = pd.concat([df, df.iloc[[-1]].set_axis(df.index[-1:] + pd.offsets.BDay(1))])
+    top = compute("TEST", df.iloc[:-2], W).peak
+    hi, lo = top * 1.05, top * 0.99
+    cl = lo + (hi - lo) * day_close_frac
+    df.iloc[-2] = [top, hi, lo, cl, 3e6]
+    df.iloc[-1] = [cl, cl * 1.005, cl * 0.995, cl, 1e6]
+    return classify(df)
+
+
+def test_breakout_stays_confirmed_next_day_only_if_cross_day_closed_strong():
+    cl, m = _crossed(0.8)
+    assert m.cross == 1 and m.day_pos_cross > 0.5 and cl.state == bo.CONFIRMED, cl
+    cl, m = _crossed(0.2)                          # cruzó con volumen pero cerró cerca del mínimo del día
+    assert m.cross == 1 and m.C > m.P and m.day_pos_cross < 0.5
+    assert cl.state == bo.EARLY and "mitad baja" in cl.why, cl
+
+
+def test_distance_text_matches_the_distance_shown():
+    df = flat_base()
+    top = compute("TEST", df, W).peak
+    c = top * 0.91
+    df.iloc[-1] = [c, c * 1.004, c * 0.995, c, 1e6]
+    cl, m = classify(df)
+    shown = 1 - m.C / m.P                          # la columna "distancia" de la web, en positivo
+    assert cl.state == bo.BASE and f"{shown * 100:.1f}".replace(".", ",") in cl.why, cl
+
+
+def test_extended_reason_names_the_rule_that_fired():
+    c = uptrend_with_base()
+    c[-1] = c[:-1][-60:].max() * 1.15
+    cl, _ = classify(series(c))
+    assert cl.state == bo.EXTENDED and cl.why.startswith("+1") and "ATR" not in cl.why
+    # Poco sobre el nivel pero lejos de la SMA20 en ATR (volatilidad mínima): lo dice el motivo.
+    c = uptrend_with_base(); c[-1] = c[:-1][-60:].max() * 1.05
+    cl, m = classify(series(c, spread=0.001))
+    assert cl.state == bo.EXTENDED and "ATR de la SMA20" in cl.why and "sobre el nivel" in cl.why, cl
+
+
+def test_base_low_ignores_what_happened_before_the_high_on_the_peak_day():
+    """Día del máximo con mucho recorrido (abre abajo y cierra arriba): su mínimo no es parte de la corrección."""
+    c = np.concatenate([np.full(200, 60.0), np.linspace(60, 90, 29), [100.0], [97.0, 96.0, 97.0, 96.5, 97.0, 96.0]])
+    df = series(c)
+    ip = 229
+    df.iloc[ip] = [88.0, 101.0, 86.0, 100.0, 4e6]            # vela alcista: mínimo 86 antes del máximo 101
+    m = compute("TEST", df, W)
+    assert m.peak == 101.0 and abs(m.depth - (1 - 96.0 * 0.99 / 101.0)) < 1e-9
+    df.iloc[ip] = [100.0, 101.0, 86.0, 90.0, 4e6]            # vela bajista: el mínimo sí es posterior al máximo
+    df.iloc[ip + 1:] = df.iloc[ip + 1:] * 0.92
+    m = compute("TEST", df, W)
+    assert abs(m.depth - (1 - 86.0 / 101.0)) < 1e-9
