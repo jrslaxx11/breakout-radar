@@ -120,10 +120,10 @@ async function quotes(list) {
   return { at: Math.floor(Date.now() / 1000), quotes: out };
 }
 
-// Pre-mercado de un valor de EE. UU. con las velas de 5 minutos de Yahoo (4:00-9:30 de Nueva York).
+// Pre-mercado de un valor de EE. UU. con las velas de 15 minutos de Yahoo (4:00-9:30 de Nueva York).
 // Yahoo da el precio pero no el volumen del pre-mercado (ver nasdaqPre).
 async function preOne(symbol) {
-  const u = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=1d&interval=5m&includePrePost=true`;
+  const u = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=1d&interval=15m&includePrePost=true`;
   const j = await yahoo(u);
   const r = j?.chart?.result?.[0];
   if (!r) return null;

@@ -99,7 +99,7 @@ De 4:00 a 9:30 de Nueva York (10:00-15:30 en la península) la sección **Pre-me
   confirma en la sesión (hueco en la apertura y volumen ≥ 3 veces la media de 50); el motivo del hueco
   no se comprueba.
 
-Datos: el Worker pide a Yahoo las velas de 5 minutos con pre-mercado (`/pre`: último precio, máximo y
+Datos: el Worker pide a Yahoo las velas de 15 minutos con pre-mercado (`/pre`: último precio, máximo y
 mínimo) para barrer el universo, y a Nasdaq (`/prevol`) el último precio consolidado, el máximo, el
 volumen y la hora de la última operación de los valores con opciones de salir en las tablas (vigilados con
 el nivel a ≤ 3% y huecos cerca del umbral). Yahoo no publica el volumen del pre-mercado y en valores poco
