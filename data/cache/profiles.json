@@ -4548,10 +4548,12 @@
 "sector": "Industrials"
 },
 "AS": {
-"country": "Finland",
-"industry": "Leisure",
-"name": "Amer Sports, Inc.",
-"sector": "Consumer Cyclical"
+"country": "",
+"industry": "",
+"last": "2026-11-16",
+"name": "",
+"sector": "",
+"tries": 2
 },
 "ASAN": {
 "country": "United States",
@@ -5594,10 +5596,12 @@
 "sector": "Financial Services"
 },
 "BHP": {
-"country": "Australia",
-"industry": "Other Industrial Metals & Mining",
-"name": "BHP Group Limited",
-"sector": "Basic Materials"
+"country": "",
+"industry": "",
+"last": "2026-11-16",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "BHP.AX": {
 "country": "Australia",
@@ -7102,10 +7106,12 @@
 "tries": 1
 },
 "CLH": {
-"country": "United States",
-"industry": "Waste Management",
-"name": "Clean Harbors, Inc.",
-"sector": "Industrials"
+"country": "",
+"industry": "",
+"last": "2026-11-16",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "CLM": {
 "country": "United States",
@@ -8232,10 +8238,12 @@
 "sector": "Consumer Defensive"
 },
 "DASH": {
-"country": "United States",
-"industry": "Internet Retail",
-"name": "DoorDash, Inc.",
-"sector": "Consumer Cyclical"
+"country": "",
+"industry": "",
+"last": "2026-11-16",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "DATAPATTNS.NS": {
 "country": "India",
@@ -8396,10 +8404,12 @@
 "sector": "Consumer Defensive"
 },
 "DG.PA": {
-"country": "France",
-"industry": "Engineering & Construction",
-"name": "Vinci SA",
-"sector": "Industrials"
+"country": "",
+"industry": "",
+"last": "2026-11-16",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "DGII": {
 "country": "United States",
@@ -8854,10 +8864,12 @@
 "sector": "Communication Services"
 },
 "DVA": {
-"country": "United States",
-"industry": "Medical Care Facilities",
-"name": "DaVita Inc.",
-"sector": "Healthcare"
+"country": "",
+"industry": "",
+"last": "2026-11-16",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "DVN": {
 "country": "United States",
@@ -9168,10 +9180,12 @@
 "sector": "Consumer Defensive"
 },
 "ELIS.PA": {
-"country": "France",
-"industry": "Specialty Business Services",
-"name": "Elis SA",
-"sector": "Industrials"
+"country": "",
+"industry": "",
+"last": "2026-11-16",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "ELISA.HE": {
 "country": "Finland",
@@ -9564,10 +9578,12 @@
 "sector": "Basic Materials"
 },
 "ESLT": {
-"country": "Israel",
-"industry": "Aerospace & Defense",
-"name": "Elbit Systems Ltd.",
-"sector": "Industrials"
+"country": "",
+"industry": "",
+"last": "2026-11-16",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "ESNT": {
 "country": "Bermuda",
@@ -11454,10 +11470,12 @@
 "sector": "Healthcare"
 },
 "HAPN": {
-"country": "United States",
-"industry": "Banks - Regional",
-"name": "Happen, Inc.",
-"sector": "Financial Services"
+"country": "",
+"industry": "",
+"last": "2026-11-16",
+"name": "",
+"sector": "",
+"tries": 2
 },
 "HAS": {
 "country": "United States",
@@ -13114,10 +13132,12 @@
 "sector": "Financial Services"
 },
 "KBC.BR": {
-"country": "Belgium",
-"industry": "Banks - Diversified",
-"name": "KBC Group NV",
-"sector": "Financial Services"
+"country": "",
+"industry": "",
+"last": "2026-11-16",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "KBH": {
 "country": "United States",
@@ -14654,10 +14674,12 @@
 "sector": "Industrials"
 },
 "MG.TO": {
-"country": "Canada",
-"industry": "Auto Parts",
-"name": "Magna International Inc.",
-"sector": "Consumer Cyclical"
+"country": "",
+"industry": "",
+"last": "2026-11-16",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "MGA": {
 "country": "Canada",
@@ -14702,10 +14724,12 @@
 "sector": "Energy"
 },
 "MH": {
-"country": "United States",
-"industry": "Education & Training Services",
-"name": "McGraw Hill, Inc.",
-"sector": "Consumer Defensive"
+"country": "",
+"industry": "",
+"last": "2026-11-16",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "MHD": {
 "country": "United States",
@@ -14884,10 +14908,12 @@
 "sector": "Technology"
 },
 "MNPR": {
-"country": "United States",
-"industry": "Biotechnology",
-"name": "Monopar Therapeutics Inc.",
-"sector": "Healthcare"
+"country": "",
+"industry": "",
+"last": "2026-11-16",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "MNRO": {
 "country": "United States",
@@ -15908,10 +15934,12 @@
 "sector": ""
 },
 "NOVO-B.CO": {
-"country": "Denmark",
-"industry": "Drug Manufacturers - General",
-"name": "Novo Nordisk A/S",
-"sector": "Healthcare"
+"country": "",
+"industry": "",
+"last": "2026-11-16",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "NOVT": {
 "country": "United States",
@@ -17730,10 +17758,12 @@
 "sector": "Industrials"
 },
 "PRM": {
-"country": "United States",
-"industry": "Specialty Chemicals",
-"name": "Perimeter Group Inc.",
-"sector": "Basic Materials"
+"country": "",
+"industry": "",
+"last": "2026-11-16",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "PRMB": {
 "country": "United States",
@@ -18432,10 +18462,12 @@
 "sector": "Technology"
 },
 "RH": {
-"country": "United States",
-"industry": "Specialty Retail",
-"name": "RH",
-"sector": "Consumer Cyclical"
+"country": "",
+"industry": "",
+"last": "2026-11-16",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "RHC.AX": {
 "country": "Australia",
@@ -18932,10 +18964,12 @@
 "sector": "Industrials"
 },
 "SAF.PA": {
-"country": "France",
-"industry": "Aerospace & Defense",
-"name": "Safran SA",
-"sector": "Industrials"
+"country": "",
+"industry": "",
+"last": "2026-11-16",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "SAFE": {
 "country": "United States",
@@ -19006,10 +19040,12 @@
 "sector": "Financial Services"
 },
 "SAN": {
-"country": "Spain",
-"industry": "Banks - Diversified",
-"name": "Banco Santander, S.A.",
-"sector": "Financial Services"
+"country": "",
+"industry": "",
+"last": "2026-11-16",
+"name": "",
+"sector": "",
+"tries": 2
 },
 "SAN.MC": {
 "country": "Spain",
@@ -19236,10 +19272,12 @@
 "sector": "Healthcare"
 },
 "SDRL": {
-"country": "United States",
-"industry": "Oil & Gas Drilling",
-"name": "Seadrill Limited",
-"sector": "Energy"
+"country": "",
+"industry": "",
+"last": "2026-11-16",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "SDZ.SW": {
 "country": "Switzerland",
@@ -20596,10 +20634,12 @@
 "sector": "Industrials"
 },
 "SXT": {
-"country": "United States",
-"industry": "Specialty Chemicals",
-"name": "Sensient Technologies Corporation",
-"sector": "Basic Materials"
+"country": "",
+"industry": "",
+"last": "2026-11-16",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "SY1.DE": {
 "country": "Germany",
@@ -21062,10 +21102,12 @@
 "sector": "Technology"
 },
 "TIGO": {
-"country": "Luxembourg",
-"industry": "Telecom Services",
-"name": "Millicom International Cellular S.A.",
-"sector": "Communication Services"
+"country": "",
+"industry": "",
+"last": "2026-11-16",
+"name": "",
+"sector": "",
+"tries": 2
 },
 "TIH.TO": {
 "country": "",
@@ -22544,10 +22586,12 @@
 "sector": "Technology"
 },
 "VSNT": {
-"country": "United States",
-"industry": "Entertainment",
-"name": "Versant Media Group, Inc.",
-"sector": "Communication Services"
+"country": "",
+"industry": "",
+"last": "2026-11-16",
+"name": "",
+"sector": "",
+"tries": 2
 },
 "VST": {
 "country": "United States",
@@ -22962,10 +23006,12 @@
 "sector": "Industrials"
 },
 "WMB": {
-"country": "United States",
-"industry": "Oil & Gas Midstream",
-"name": "The Williams Companies, Inc.",
-"sector": "Energy"
+"country": "",
+"industry": "",
+"last": "2026-11-16",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "WMG": {
 "country": "United States",
@@ -23180,10 +23226,12 @@
 "sector": "Financial Services"
 },
 "WWD": {
-"country": "United States",
-"industry": "Aerospace & Defense",
-"name": "Woodward, Inc.",
-"sector": "Industrials"
+"country": "",
+"industry": "",
+"last": "2026-11-16",
+"name": "",
+"sector": "",
+"tries": 2
 },
 "WWW": {
 "country": "United States",
@@ -23192,10 +23240,12 @@
 "sector": "Consumer Cyclical"
 },
 "WY": {
-"country": "United States",
-"industry": "REIT - Specialty",
-"name": "Weyerhaeuser Company",
-"sector": "Real Estate"
+"country": "",
+"industry": "",
+"last": "2026-11-16",
+"name": "",
+"sector": "",
+"tries": 2
 },
 "WYFI": {
 "country": "United States",
