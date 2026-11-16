@@ -1,12 +1,19 @@
 name: Auditoría (volcado de precios)
 
-# Solo a mano: descarga el universo y los precios como hace el radar y los deja como artefacto privado
-# de la ejecución (3 días) para revisar los cálculos. No publica ni guarda nada en el repositorio.
+# Solo a mano: descarga el universo y los precios como hace el radar y los deja en la rama temporal
+# `audit-data` (se borra al terminar la revisión) y como artefacto de la ejecución (3 días).
+# No publica la web ni toca la rama principal.
 on:
   workflow_dispatch:
+    inputs:
+      run_id:
+        description: "Reutilizar el artefacto de esta ejecución (vacío: descargar precios ahora)"
+        required: false
+        default: ""
 
 permissions:
-  contents: read
+  contents: write   # solo para la rama temporal audit-data
+  actions: read
 
 concurrency:
   group: audit
@@ -19,14 +26,32 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
+        if: inputs.run_id == ''
         with:
           python-version: "3.12"
           cache: pip
-      - run: pip install -r requirements.txt -c constraints.txt
-      - run: python -m radar dump audit_out
+      - if: inputs.run_id == ''
+        run: |
+          pip install -r requirements.txt -c constraints.txt
+          python -m radar dump audit_out
       - uses: actions/upload-artifact@v4
+        if: inputs.run_id == ''
         with:
           name: precios
           path: audit_out
           retention-days: 3
           compression-level: 0
+      - uses: actions/download-artifact@v4
+        if: inputs.run_id != ''
+        with:
+          name: precios
+          path: audit_out
+          run-id: ${{ inputs.run_id }}
+          github-token: ${{ github.token }}
+      - name: Dejar el volcado en la rama temporal audit-data
+        run: |
+          cd audit_out
+          git init -q -b audit-data
+          git add prices.pkl.gz
+          git -c user.name="radar-bot" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -q -m "volcado de precios para auditoría"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" audit-data
