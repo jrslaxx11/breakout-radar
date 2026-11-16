@@ -3793,6 +3793,12 @@
 "name": "Autoliv, Inc.",
 "sector": "Consumer Cyclical"
 },
+"ALIVUS.NS": {
+"country": "India",
+"industry": "Drug Manufacturers - Specialty & Generic",
+"name": "Alivus Life Sciences Limited",
+"sector": "Healthcare"
+},
 "ALK": {
 "country": "United States",
 "industry": "Airlines",
@@ -5578,6 +5584,12 @@
 "sector": "Consumer Cyclical"
 },
 "BHC": {
+"country": "Canada",
+"industry": "Drug Manufacturers - Specialty & Generic",
+"name": "Bausch Health Companies Inc.",
+"sector": "Healthcare"
+},
+"BHC.TO": {
 "country": "Canada",
 "industry": "Drug Manufacturers - Specialty & Generic",
 "name": "Bausch Health Companies Inc.",
@@ -10465,6 +10477,12 @@
 "name": "Forvia SE",
 "sector": "Consumer Cyclical"
 },
+"FRVO": {
+"country": "United States",
+"industry": "Utilities - Renewable",
+"name": "Fervo Energy Company",
+"sector": "Utilities"
+},
 "FSBC": {
 "country": "United States",
 "industry": "Banks - Regional",
@@ -11086,6 +11104,12 @@
 "industry": "Gold",
 "name": "G Mining Ventures Corp.",
 "sector": "Basic Materials"
+},
+"GMRS": {
+"country": "United States",
+"industry": "Medical Care Facilities",
+"name": "GMR Solutions Inc.",
+"sector": "Healthcare"
 },
 "GN.CO": {
 "country": "Denmark",
@@ -19652,6 +19676,12 @@
 "industry": "Semiconductors",
 "name": "Silicon Motion Technology Corporation",
 "sector": "Technology"
+},
+"SIQ.AX": {
+"country": "Australia",
+"industry": "Specialty Business Services",
+"name": "Smartgroup Corporation Ltd",
+"sector": "Industrials"
 },
 "SIRI": {
 "country": "United States",
