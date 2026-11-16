@@ -30,8 +30,9 @@ jobs:
     steps:
       - name: Borrar la rama temporal
         if: inputs.cleanup
-        run: git push "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" --delete audit-data || true
-        working-directory: /tmp
+        run: |
+          git init -q /tmp/x && cd /tmp/x
+          git push "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" --delete audit-data
       - uses: actions/checkout@v4
         if: ${{ !inputs.cleanup }}
       - uses: actions/setup-python@v5
