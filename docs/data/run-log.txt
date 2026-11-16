@@ -1,15 +1,14 @@
-2026-11-16 12:54:15,984 INFO radar.prices: precios: 4792 de 4794 tickers
-2026-11-16 12:54:16,449 WARNING radar.prices: cotizaciones por lotes no disponibles (HTTP Error 401: ); se usan los metadatos del gráfico
-2026-11-16 12:54:16,792 INFO radar.prices: cotizaciones por gráfico: 17 de 17
-2026-11-16 12:54:16,793 INFO radar.pipeline: última sesión: 17 valores sin ella en la serie diaria, 17 cotizaciones, 0 completados
-2026-11-16 12:54:16,896 INFO radar.pipeline: barras parciales descartadas: 949
-2026-11-16 12:54:19,304 INFO radar.prices: última sesión: 17 valores atrasados, 0 completados, 17 siguen atrasados
-2026-11-16 12:54:19,337 INFO radar.pipeline: última barra por mercado: AS 2026-11-13 (57/57); AX 2026-11-16 (157/158); BR 2026-11-13 (2/2); CO 2026-11-13 (45/45); DE 2026-11-13 (67/68); HE 2026-11-13 (43/43); HK 2026-11-16 (153/156); KQ 2026-11-16 (33/33); KS 2026-11-16 (121/121); L 2026-11-13 (89/90); LS 2026-11-13 (1/1); MC 2026-11-13 (81/81); MI 2026-11-13 (89/89); NS 2026-11-16 (83/83); OL 2026-11-13 (70/70); PA 2026-11-13 (146/147); ST 2026-11-13 (150/150); SW 2026-11-13 (150/150); T 2026-11-16 (167/167); TO 2026-11-13 (114/115); TW 2026-11-16 (124/124); TWO 2026-11-16 (32/32); US 2026-11-13 (2764/2773); VI 2026-11-13 (1/1); WA 2026-11-13 (1/1)
-2026-11-16 12:54:19,565 INFO radar.pipeline: sesión 2026-11-13: 890 series recortadas a esa fecha (mercados que ya cotizaron el día siguiente)
-2026-11-16 12:54:49,496 WARNING radar.fundamentals: perfiles: Yahoo devuelve vacío (25 seguidos); se reintenta en la próxima ejecución
-2026-11-16 12:54:49,497 INFO radar.fundamentals: perfiles: 25 consultados (0 nuevos, 25 reintentos), 0 con industria
-2026-11-16 12:56:31,307 INFO radar.luk_run: Luk: universo 1002 (fuera: {'ADR(20) < 4%': 1217, 'valor negociado': 245, 'ADR extranjero': 108, 'capitalización': 17, 'SPAC': 1, 'fondo': 32}), líderes 110, setups 64, 0.9 s
-2026-11-16 13:00:17,059 INFO radar.luk_run: Luk: control de calidad en 7.2 s (media 43.5 valores/día)
-Sesión 2026-11-13 · régimen DESFAVORABLE · 3664 valores líquidos · temáticas LST, HCM, STAP, PHA, ITS, BIO · 30 candidatas
+2026-11-16 13:09:34,466 INFO radar.prices: precios: 4792 de 4794 tickers
+2026-11-16 13:09:34,894 WARNING radar.prices: cotizaciones por lotes no disponibles (HTTP Error 401: ); se usan los metadatos del gráfico
+2026-11-16 13:09:35,209 INFO radar.prices: cotizaciones por gráfico: 19 de 19
+2026-11-16 13:09:35,211 INFO radar.pipeline: última sesión: 19 valores sin ella en la serie diaria, 19 cotizaciones, 0 completados
+2026-11-16 13:09:35,292 INFO radar.pipeline: barras parciales descartadas: 949
+2026-11-16 13:09:37,121 INFO radar.prices: última sesión: 19 valores atrasados, 0 completados, 19 siguen atrasados
+2026-11-16 13:09:37,155 INFO radar.pipeline: última barra por mercado: AS 2026-11-13 (57/57); AX 2026-11-16 (157/158); BR 2026-11-13 (2/2); CO 2026-11-13 (45/45); DE 2026-11-13 (67/68); HE 2026-11-13 (43/43); HK 2026-11-16 (153/156); KQ 2026-11-16 (33/33); KS 2026-11-16 (121/121); L 2026-11-13 (89/90); LS 2026-11-13 (1/1); MC 2026-11-13 (81/81); MI 2026-11-13 (89/89); NS 2026-11-16 (83/83); OL 2026-11-13 (69/69); PA 2026-11-13 (146/147); ST 2026-11-13 (150/150); SW 2026-11-13 (147/149); T 2026-11-16 (167/167); TO 2026-11-13 (114/115); TW 2026-11-16 (124/124); TWO 2026-11-16 (32/32); US 2026-11-13 (2764/2773); VI 2026-11-13 (1/1); WA 2026-11-13 (1/1)
+2026-11-16 13:09:37,338 INFO radar.pipeline: sesión 2026-11-13: 890 series recortadas a esa fecha (mercados que ya cotizaron el día siguiente)
+2026-11-16 13:15:26,909 INFO radar.fundamentals: perfiles: 630 consultados (0 nuevos, 630 reintentos), 629 con industria
+2026-11-16 13:16:40,574 INFO radar.luk_run: Luk: universo 1002 (fuera: {'ADR(20) < 4%': 1218, 'valor negociado': 245, 'ADR extranjero': 108, 'capitalización': 17, 'SPAC': 1, 'fondo': 32}), líderes 110, setups 64, 0.8 s
+2026-11-16 13:19:21,550 INFO radar.luk_run: Luk: control de calidad en 6.5 s (media 43.5 valores/día)
+Sesión 2026-11-13 · régimen DESFAVORABLE · 3665 valores líquidos · temáticas LST, HCM, STAP, PHA, ITS, BIO · 30 candidatas
 Luk · modo sugerido LARGO · L1 61 · L1b 2 · universo 1002 · líderes 110
 ::notice title=Retrocesos Luk::Media de 43.5 valores al día en las últimas 120 sesiones.
