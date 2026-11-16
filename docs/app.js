@@ -1825,7 +1825,7 @@
     }
     PRE.loading = false;
     renderPre();
-    if (PRE.error === "update") return;
+    // Con el Worker antiguo se reintenta igualmente: en cuanto se actualice, la sección arranca sola.
     const wait = PRE.error ? 300000 : PRE.phase === "pre" ? 60000
       : PRE.phase === "antes" ? Math.min(600000, Math.max(30000, (PRE.session.preStart - Date.now() / 1000) * 1000)) : 600000;
     PRE.timer = setTimeout(preTick, wait);
@@ -1836,8 +1836,8 @@
     if (!sec || !D) return;
     const S = PRE.session, cfg = (LV.kit || {}).cfg || {};
     const gapMin = cfg.ep_gap || 0.1, need = cfg.ep_vol_mult || 3;
-    const hours = S ? `de ${hhmm(S.preStart)} a ${hhmm(S.preEnd)}` : "de 10:00 a 15:30 (hora peninsular)";
-    const intro = `<p class="lead">Lo que pasa antes de la apertura de EE. UU. (${hours} en tu hora). <strong>Rupturas</strong>: valores vigilados cuyo precio de pre-mercado ha superado su nivel. <strong>EP</strong>: valores del universo de Luk con hueco ≥ ${num(gapMin * 100, 0)}% sobre el cierre anterior. Las listas del cierre no cambian: el pre-mercado no es una vela de sesión y una ruptura solo cuenta cuando se mantiene con la bolsa abierta.</p>`;
+    const hours = S ? `de ${hhmm(S.preStart)} a ${hhmm(S.preEnd)} en tu hora` : "de 10:00 a 15:30 en la península";
+    const intro = `<p class="lead">Lo que pasa antes de la apertura de EE. UU. (${hours}). <strong>Rupturas</strong>: valores vigilados cuyo precio de pre-mercado ha superado su nivel. <strong>EP</strong>: valores del universo de Luk con hueco ≥ ${num(gapMin * 100, 0)}% sobre el cierre anterior. Las listas del cierre no cambian: el pre-mercado no es una vela de sesión y una ruptura solo cuenta cuando se mantiene con la bolsa abierta.</p>`;
     let badge, body = "";
     if (!workerUrl()) badge = `<p class="live-badge" data-badge>Sin Worker configurado: el pre-mercado necesita el intermediario de Cloudflare</p>`;
     else if (PRE.error === "update") badge = `<p class="live-badge" data-badge>Falta actualizar el Worker de Cloudflare: pega de nuevo cloudflare/worker.js para ver el pre-mercado</p>`;
