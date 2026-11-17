@@ -809,6 +809,14 @@
 "name": "Hanjin Kal",
 "sector": "Real Estate"
 },
+"18064K.KS": {
+"country": "",
+"industry": "",
+"last": "2026-11-17",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "181710.KS": {
 "country": "",
 "industry": "",
@@ -2899,6 +2907,14 @@
 "name": "Shikoku Electric Power Company, Incorporated",
 "sector": "Utilities"
 },
+"9831.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-17",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "9861.T": {
 "country": "Japan",
 "industry": "Restaurants",
@@ -3134,6 +3150,14 @@
 "industry": "Biotechnology",
 "name": "Acadia Pharmaceuticals Inc.",
 "sector": "Healthcare"
+},
+"ACCO": {
+"country": "",
+"industry": "",
+"last": "2026-11-17",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "ACEL": {
 "country": "United States",
@@ -4439,6 +4463,14 @@
 "name": "Arcturus Therapeutics Holdings Inc.",
 "sector": "Healthcare"
 },
+"ARDT": {
+"country": "",
+"industry": "",
+"last": "2026-11-17",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "ARE": {
 "country": "United States",
 "industry": "REIT - Office",
@@ -4656,6 +4688,14 @@
 "industry": "Steel",
 "name": "Algoma Steel Group Inc.",
 "sector": "Basic Materials"
+},
+"ASTRAMICRO.NS": {
+"country": "",
+"industry": "",
+"last": "2026-11-17",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "ASTS": {
 "country": "United States",
@@ -6065,6 +6105,14 @@
 "name": "Brady Corporation",
 "sector": "Industrials"
 },
+"BRCB": {
+"country": "",
+"industry": "",
+"last": "2026-11-17",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "BRE.MI": {
 "country": "Italy",
 "industry": "Auto Parts",
@@ -6384,6 +6432,14 @@
 "industry": "Banks - Regional",
 "name": "CaixaBank, S.A.",
 "sector": "Financial Services"
+},
+"CAC": {
+"country": "",
+"industry": "",
+"last": "2026-11-17",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "CACC": {
 "country": "United States",
@@ -6708,6 +6764,14 @@
 "industry": "Packaging & Containers",
 "name": "CCL Industries Inc.",
 "sector": "Consumer Cyclical"
+},
+"CCNE": {
+"country": "",
+"industry": "",
+"last": "2026-11-17",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "CCS": {
 "country": "United States",
@@ -7701,6 +7765,14 @@
 "name": "Circle Internet Group",
 "sector": "Financial Services"
 },
+"CRCT": {
+"country": "",
+"industry": "",
+"last": "2026-11-17",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "CRDO": {
 "country": "Cayman Islands",
 "industry": "Semiconductors",
@@ -7794,6 +7866,14 @@
 "industry": "Computer Hardware",
 "name": "Corsair Gaming, Inc.",
 "sector": "Technology"
+},
+"CRTO": {
+"country": "",
+"industry": "",
+"last": "2026-11-17",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "CRUS": {
 "country": "United States",
@@ -7939,6 +8019,14 @@
 "country": "",
 "industry": "",
 "last": "2026-11-13",
+"name": "",
+"sector": "",
+"tries": 1
+},
+"CTEV": {
+"country": "",
+"industry": "",
+"last": "2026-11-17",
 "name": "",
 "sector": "",
 "tries": 1
@@ -8324,6 +8412,14 @@
 "industry": "Banks - Regional",
 "name": "Dime Commercial Bancshares, Inc.",
 "sector": "Financial Services"
+},
+"DCTH": {
+"country": "",
+"industry": "",
+"last": "2026-11-17",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "DD": {
 "country": "United States",
@@ -10351,6 +10447,14 @@
 "name": "Fortum Oyj",
 "sector": "Utilities"
 },
+"FOSL": {
+"country": "",
+"industry": "",
+"last": "2026-11-17",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "FOUR": {
 "country": "United States",
 "industry": "Software - Infrastructure",
@@ -11385,6 +11489,14 @@
 "name": "GitLab Inc.",
 "sector": "Technology"
 },
+"GTN": {
+"country": "",
+"industry": "",
+"last": "2026-11-17",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "GTT.PA": {
 "country": "France",
 "industry": "Oil & Gas Equipment & Services",
@@ -12248,6 +12360,14 @@
 "industry": "Utilities - Diversified",
 "name": "Iberdrola, S.A.",
 "sector": "Utilities"
+},
+"IBEX": {
+"country": "",
+"industry": "",
+"last": "2026-11-17",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "IBKR": {
 "country": "United States",
@@ -13500,6 +13620,14 @@
 "industry": "",
 "name": "",
 "sector": ""
+},
+"KRSA": {
+"country": "",
+"industry": "",
+"last": "2026-11-17",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "KRT": {
 "country": "United States",
@@ -15022,6 +15150,14 @@
 "industry": "Software - Infrastructure",
 "name": "Megaport Limited",
 "sector": "Technology"
+},
+"MPB": {
+"country": "",
+"industry": "",
+"last": "2026-11-17",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "MPC": {
 "country": "United States",
@@ -17227,6 +17363,14 @@
 "name": "PepsiCo, Inc.",
 "sector": "Consumer Defensive"
 },
+"PERI": {
+"country": "",
+"industry": "",
+"last": "2026-11-17",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "PEY.TO": {
 "country": "",
 "industry": "",
@@ -18123,6 +18267,14 @@
 "name": "QuinStreet, Inc.",
 "sector": "Communication Services"
 },
+"QPOWER.NS": {
+"country": "",
+"industry": "",
+"last": "2026-11-17",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "QQ.L": {
 "country": "United Kingdom",
 "industry": "Aerospace & Defense",
@@ -18146,6 +18298,14 @@
 "industry": "Computer Hardware",
 "name": "Quantum Computing Inc.",
 "sector": "Technology"
+},
+"QUIT": {
+"country": "",
+"industry": "",
+"last": "2026-11-17",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "QURE": {
 "country": "Netherlands",
@@ -18792,6 +18952,14 @@
 "industry": "Aerospace & Defense",
 "name": "Rolls-Royce Holdings plc",
 "sector": "Industrials"
+},
+"RRBI": {
+"country": "",
+"industry": "",
+"last": "2026-11-17",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "RRC": {
 "country": "United States",
@@ -19688,6 +19856,14 @@
 "industry": "Entertainment",
 "name": "Sirius XM Holdings Inc.",
 "sector": "Communication Services"
+},
+"SIS.TO": {
+"country": "",
+"industry": "",
+"last": "2026-11-17",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "SITE": {
 "country": "United States",
@@ -21213,6 +21389,14 @@
 "sector": "",
 "tries": 1
 },
+"TLS": {
+"country": "",
+"industry": "",
+"last": "2026-11-17",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "TLX.AX": {
 "country": "",
 "industry": "",
@@ -22433,6 +22617,14 @@
 "name": "Valero Energy Corporation",
 "sector": "Energy"
 },
+"VLRS": {
+"country": "",
+"industry": "",
+"last": "2026-11-17",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "VLTO": {
 "country": "United States",
 "industry": "Pollution & Treatment Controls",
@@ -22798,6 +22990,14 @@
 "industry": "Industrial Distribution",
 "name": "WESCO International, Inc.",
 "sector": "Industrials"
+},
+"WCCB": {
+"country": "",
+"industry": "",
+"last": "2026-11-17",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "WCH.DE": {
 "country": "",
