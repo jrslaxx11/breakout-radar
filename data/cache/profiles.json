@@ -592,10 +592,10 @@
 "089860.KS": {
 "country": "",
 "industry": "",
-"last": "2026-11-10",
+"last": "2026-11-18",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "090430.KS": {
 "country": "South Korea",
@@ -3811,6 +3811,14 @@
 "name": "Alignment Healthcare, Inc.",
 "sector": "Healthcare"
 },
+"ALIT": {
+"country": "",
+"industry": "",
+"last": "2026-11-18",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "ALIV-SDB.ST": {
 "country": "Sweden",
 "industry": "Auto Parts",
@@ -4790,10 +4798,10 @@
 "ATMU": {
 "country": "",
 "industry": "",
-"last": "2026-11-10",
+"last": "2026-11-18",
 "name": "",
 "sector": "",
-"tries": 2
+"tries": 3
 },
 "ATO": {
 "country": "United States",
@@ -5410,10 +5418,10 @@
 "BCO": {
 "country": "",
 "industry": "",
-"last": "2026-11-10",
+"last": "2026-11-18",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "BCPC": {
 "country": "United States",
@@ -6361,6 +6369,14 @@
 "name": "BlueLinx Holdings Inc.",
 "sector": "Industrials"
 },
+"BXDC": {
+"country": "",
+"industry": "",
+"last": "2026-11-18",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "BXMT": {
 "country": "United States",
 "industry": "REIT - Mortgage",
@@ -6500,10 +6516,10 @@
 "CAL": {
 "country": "",
 "industry": "",
-"last": "2026-11-10",
+"last": "2026-11-18",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "CALM": {
 "country": "United States",
@@ -6692,6 +6708,14 @@
 "industry": "Restaurants",
 "name": "Cracker Barrel Old Country Store, Inc.",
 "sector": "Consumer Cyclical"
+},
+"CBRS": {
+"country": "",
+"industry": "",
+"last": "2026-11-18",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "CBSH": {
 "country": "United States",
@@ -7135,6 +7159,14 @@
 "name": "Cardinal Energy Ltd.",
 "sector": "Energy"
 },
+"CJT.TO": {
+"country": "",
+"industry": "",
+"last": "2026-11-18",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "CL": {
 "country": "United States",
 "industry": "Household & Personal Products",
@@ -7176,10 +7208,10 @@
 "CLF": {
 "country": "",
 "industry": "",
-"last": "2026-11-10",
+"last": "2026-11-18",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "CLH": {
 "country": "",
@@ -7464,10 +7496,10 @@
 "CNXN": {
 "country": "",
 "industry": "",
-"last": "2026-11-10",
+"last": "2026-11-18",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "COAG": {
 "country": "",
@@ -8027,6 +8059,14 @@
 "country": "",
 "industry": "",
 "last": "2026-11-17",
+"name": "",
+"sector": "",
+"tries": 1
+},
+"CTGO": {
+"country": "",
+"industry": "",
+"last": "2026-11-18",
 "name": "",
 "sector": "",
 "tries": 1
@@ -9340,8 +9380,10 @@
 "EMBC": {
 "country": "",
 "industry": "",
+"last": "2026-11-18",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "EMBJ": {
 "country": "Brazil",
@@ -9789,6 +9831,14 @@
 "name": "Evonik Industries AG",
 "sector": "Basic Materials"
 },
+"EVMN": {
+"country": "",
+"industry": "",
+"last": "2026-11-18",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "EVN.AX": {
 "country": "Australia",
 "industry": "Gold",
@@ -9868,6 +9918,14 @@
 "industry": "Biotechnology",
 "name": "Exelixis, Inc.",
 "sector": "Healthcare"
+},
+"EXENS.PA": {
+"country": "",
+"industry": "",
+"last": "2026-11-18",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "EXK": {
 "country": "Canada",
@@ -10434,6 +10492,14 @@
 "industry": "Gold",
 "name": "Franco-Nevada Corporation",
 "sector": "Basic Materials"
+},
+"FOR": {
+"country": "",
+"industry": "",
+"last": "2026-11-18",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "FORM": {
 "country": "United States",
@@ -12313,6 +12379,14 @@
 "name": "BlackRock Corporate High Yield Fund, Inc.",
 "sector": "Financial Services"
 },
+"HZN": {
+"country": "",
+"industry": "",
+"last": "2026-11-18",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "HZO": {
 "country": "United States",
 "industry": "Specialty Retail",
@@ -12994,6 +13068,14 @@
 "industry": "Scientific & Technical Instruments",
 "name": "Itron, Inc.",
 "sector": "Technology"
+},
+"ITRN": {
+"country": "",
+"industry": "",
+"last": "2026-11-18",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "ITT": {
 "country": "United States",
@@ -13718,6 +13800,14 @@
 "industry": "Biotechnology",
 "name": "Kymera Therapeutics, Inc.",
 "sector": "Healthcare"
+},
+"KYN": {
+"country": "",
+"industry": "",
+"last": "2026-11-18",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "L": {
 "country": "United States",
@@ -16033,6 +16123,14 @@
 "name": "NNN REIT, Inc.",
 "sector": "Real Estate"
 },
+"NOBA.ST": {
+"country": "",
+"industry": "",
+"last": "2026-11-18",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "NOC": {
 "country": "United States",
 "industry": "Aerospace & Defense",
@@ -16570,6 +16668,14 @@
 "industry": "Trucking",
 "name": "Old Dominion Freight Line, Inc.",
 "sector": "Industrials"
+},
+"ODTX": {
+"country": "",
+"industry": "",
+"last": "2026-11-18",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "OET.OL": {
 "country": "Greece",
@@ -17650,10 +17756,10 @@
 "PLUS": {
 "country": "",
 "industry": "",
-"last": "2026-11-10",
+"last": "2026-11-18",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "PLXS": {
 "country": "United States",
@@ -18988,10 +19094,10 @@
 "RS": {
 "country": "",
 "industry": "",
-"last": "2026-11-10",
+"last": "2026-11-18",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "RSG": {
 "country": "United States",
@@ -19528,8 +19634,10 @@
 "SENEA": {
 "country": "",
 "industry": "",
+"last": "2026-11-18",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "SENS": {
 "country": "United States",
@@ -20344,6 +20452,14 @@
 "industry": "Software - Application",
 "name": "Sprout Social, Inc.",
 "sector": "Technology"
+},
+"SPTX": {
+"country": "",
+"industry": "",
+"last": "2026-11-18",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "SPXC": {
 "country": "United States",
@@ -21224,6 +21340,14 @@
 "industry": "Building Materials",
 "name": "Tecnoglass Holdings Inc.",
 "sector": "Basic Materials"
+},
+"TGS": {
+"country": "",
+"industry": "",
+"last": "2026-11-18",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "TGS.OL": {
 "country": "Norway",
