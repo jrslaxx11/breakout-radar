@@ -579,6 +579,14 @@
 "name": "Jeju Semiconductor Corp.",
 "sector": ""
 },
+"0823.HK": {
+"country": "",
+"industry": "",
+"last": "2026-11-20",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "084370.KQ": {
 "country": "",
 "industry": "",
@@ -763,6 +771,14 @@
 "name": "TRIAL Holdings, Inc.",
 "sector": "Consumer Defensive"
 },
+"145020.KQ": {
+"country": "",
+"industry": "",
+"last": "2026-11-20",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "1515.T": {
 "country": "Japan",
 "industry": "Copper",
@@ -881,6 +897,14 @@
 "name": "China Gold International Resources Corp. Ltd.",
 "sector": "Basic Materials"
 },
+"2121.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-20",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "2162.HK": {
 "country": "China",
 "industry": "Biotechnology",
@@ -922,6 +946,14 @@
 "industry": "Biotechnology",
 "name": "WuXi Biologics (Cayman) Inc.",
 "sector": "Healthcare"
+},
+"2269.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-20",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "229640.KS": {
 "country": "",
@@ -1060,6 +1092,14 @@
 "industry": "Semiconductor Equipment & Materials",
 "name": "Wonik IPS Co., Ltd.",
 "sector": "Technology"
+},
+"241560.KS": {
+"country": "",
+"industry": "",
+"last": "2026-11-20",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "2423.HK": {
 "country": "China",
@@ -1229,6 +1269,14 @@
 "name": "",
 "sector": ""
 },
+"2782.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-20",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "278470.KS": {
 "country": "South Korea",
 "industry": "Household & Personal Products",
@@ -1350,6 +1398,14 @@
 "industry": "Semiconductor Equipment & Materials",
 "name": "LandMark Optoelectronics Corporation",
 "sector": "Technology"
+},
+"3086.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-20",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "3097.T": {
 "country": "Japan",
@@ -1651,6 +1707,14 @@
 "name": "Ibiden Co.,Ltd.",
 "sector": "Technology"
 },
+"4088.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-20",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "4099.T": {
 "country": "Japan",
 "industry": "Specialty Chemicals",
@@ -1778,6 +1842,14 @@
 "industry": "Specialty Chemicals",
 "name": "Nippon Paint Holdings Co., Ltd.",
 "sector": "Basic Materials"
+},
+"4680.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-20",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "4684.T": {
 "country": "Japan",
@@ -2265,6 +2337,14 @@
 "name": "Montage Technology Co., Ltd.",
 "sector": "Technology"
 },
+"6810.HK": {
+"country": "",
+"industry": "",
+"last": "2026-11-20",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "6821.HK": {
 "country": "China",
 "industry": "Biotechnology",
@@ -2294,6 +2374,14 @@
 "industry": "Communication Equipment",
 "name": "Yangtze Optical Fibre And Cable Joint Stock Limited Company",
 "sector": "Technology"
+},
+"6870.TWO": {
+"country": "",
+"industry": "",
+"last": "2026-11-20",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "6871.T": {
 "country": "",
@@ -2423,6 +2511,14 @@
 "name": "Yamaha Motor Co., Ltd.",
 "sector": "Consumer Cyclical"
 },
+"7282.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-20",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "7327.T": {
 "country": "Japan",
 "industry": "Banks - Regional",
@@ -2453,6 +2549,14 @@
 "name": "Ryohin Keikaku Co., Ltd.",
 "sector": "Consumer Cyclical"
 },
+"7550.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-20",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "7552.T": {
 "country": "Japan",
 "industry": "Specialty Retail",
@@ -2470,6 +2574,14 @@
 "industry": "Other Industrial Metals & Mining",
 "name": "Lianyou Metals Co., Ltd.",
 "sector": "Basic Materials"
+},
+"7616.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-20",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "7711.TW": {
 "country": "Taiwan",
@@ -2560,6 +2672,14 @@
 "industry": "Leisure",
 "name": "TOMY Company, Ltd.",
 "sector": "Consumer Cyclical"
+},
+"7956.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-20",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "8015.T": {
 "country": "",
@@ -2823,6 +2943,14 @@
 "name": "ORIX Corporation",
 "sector": "Financial Services"
 },
+"8601.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-20",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "8630.T": {
 "country": "Japan",
 "industry": "Insurance - Property & Casualty",
@@ -2915,6 +3043,22 @@
 "name": "Shikoku Electric Power Company, Incorporated",
 "sector": "Utilities"
 },
+"9616.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-20",
+"name": "",
+"sector": "",
+"tries": 1
+},
+"9706.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-20",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "9831.T": {
 "country": "",
 "industry": "",
@@ -2946,6 +3090,14 @@
 "industry": "Tools & Accessories",
 "name": "MISUMI Group Inc.",
 "sector": "Industrials"
+},
+"9983.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-20",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "9987.HK": {
 "country": "China",
@@ -4639,6 +4791,14 @@
 "name": "ASM International NV",
 "sector": "Technology"
 },
+"ASMDEE-B.ST": {
+"country": "",
+"industry": "",
+"last": "2026-11-20",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "ASML": {
 "country": "Netherlands",
 "industry": "Semiconductor Equipment & Materials",
@@ -5724,6 +5884,14 @@
 "industry": "Medical Devices",
 "name": "Bio-Rad Laboratories, Inc.",
 "sector": "Healthcare"
+},
+"BIP-UN.TO": {
+"country": "",
+"industry": "",
+"last": "2026-11-20",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "BIPC": {
 "country": "United States",
@@ -10117,6 +10285,14 @@
 "name": "Four Corners Property Trust, Inc.",
 "sector": "Real Estate"
 },
+"FCR-UN.TO": {
+"country": "",
+"industry": "",
+"last": "2026-11-20",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "FCT.MI": {
 "country": "Italy",
 "industry": "Aerospace & Defense",
@@ -12092,6 +12268,14 @@
 "industry": "Banks - Regional",
 "name": "Home BancShares, Inc.",
 "sector": "Financial Services"
+},
+"HOME.MC": {
+"country": "",
+"industry": "",
+"last": "2026-11-20",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "HON": {
 "country": "United States",
@@ -18289,6 +18473,14 @@
 "name": "Palvella Therapeutics, Inc.",
 "sector": "Healthcare"
 },
+"PVRINOX.NS": {
+"country": "",
+"industry": "",
+"last": "2026-11-20",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "PWP": {
 "country": "United States",
 "industry": "Capital Markets",
@@ -19774,6 +19966,14 @@
 "industry": "Steel",
 "name": "Sims Limited",
 "sector": "Basic Materials"
+},
+"SGMART.NS": {
+"country": "",
+"industry": "",
+"last": "2026-11-20",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "SGML": {
 "country": "Canada",
