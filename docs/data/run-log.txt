@@ -1,13 +1,14 @@
-2026-11-20 23:21:08,300 INFO radar.prices: precios: 4743 de 4745 tickers
-2026-11-20 23:21:08,658 WARNING radar.prices: cotizaciones por lotes no disponibles (HTTP Error 401: ); se usan los metadatos del gráfico
-2026-11-20 23:21:20,228 INFO radar.prices: cotizaciones por gráfico: 1002 de 1002
-2026-11-20 23:21:20,565 INFO radar.pipeline: última sesión: 1002 valores sin ella en la serie diaria, 1002 cotizaciones, 950 completados
-2026-11-20 23:21:23,594 INFO radar.prices: última sesión: 52 valores atrasados, 0 completados, 52 siguen atrasados
-2026-11-20 23:21:23,623 INFO radar.pipeline: última barra por mercado: AS 2026-11-20 (56/56); AX 2026-11-20 (158/158); BR 2026-11-20 (2/2); CO 2026-11-20 (44/44); DE 2026-11-20 (67/68); HE 2026-11-20 (42/42); HK 2026-11-20 (156/156); KQ 2026-11-20 (31/31); KS 2026-11-20 (122/122); L 2026-11-20 (87/91); LS 2026-11-20 (1/1); MC 2026-11-20 (69/79); MI 2026-11-20 (86/87); NS 2026-11-20 (84/84); OL 2026-11-20 (69/69); PA 2026-11-20 (148/150); ST 2026-11-20 (149/150); SW 2026-11-20 (133/150); T 2026-11-20 (168/168); TO 2026-11-20 (105/107); TW 2026-11-20 (126/126); TWO 2026-11-20 (30/30); US 2026-11-20 (2725/2739); VI 2026-11-20 (1/1); WA 2026-11-20 (1/1)
-2026-11-20 23:21:47,107 WARNING radar.fundamentals: perfiles: Yahoo devuelve vacío (25 seguidos); se reintenta en la próxima ejecución
-2026-11-20 23:21:47,107 INFO radar.fundamentals: perfiles: 25 consultados (25 nuevos, 0 reintentos), 0 con industria
-2026-11-20 23:23:21,254 INFO radar.luk_run: Luk: universo 1053 (fuera: {'ADR(20) < 4%': 1149, 'valor negociado': 236, 'ADR extranjero': 105, 'capitalización': 19, 'fondo': 29}), líderes 87, setups 39, 0.9 s
-2026-11-20 23:26:10,715 INFO radar.luk_run: Luk: control de calidad en 6.0 s (media 43.4 valores/día)
-Sesión 2026-11-20 · régimen DESFAVORABLE · 3628 valores líquidos · temáticas STAP, LST, CYB, INS, HCM, BIO · 28 candidatas
-Luk · modo sugerido NEUTRO · L1 33 · L1b 6 · universo 1053 · líderes 87
-::notice title=Retrocesos Luk::Media de 43.4 valores al día en las últimas 120 sesiones.
+2026-11-23 23:25:58,885 INFO radar.prices: precios: 4742 de 4745 tickers
+2026-11-23 23:25:59,121 WARNING radar.prices: cotizaciones por lotes no disponibles (HTTP Error 401: ); se usan los metadatos del gráfico
+2026-11-23 23:26:09,974 INFO radar.prices: cotizaciones por gráfico: 1173 de 1173
+2026-11-23 23:26:10,405 INFO radar.pipeline: última sesión: 1173 valores sin ella en la serie diaria, 1173 cotizaciones, 945 completados
+2026-11-23 23:26:10,481 INFO radar.pipeline: barras parciales descartadas: 149
+2026-11-23 23:26:12,995 INFO radar.prices: última sesión: 60 valores atrasados, 0 completados, 60 siguen atrasados
+2026-11-23 23:26:13,030 INFO radar.pipeline: última barra por mercado: AS 2026-11-23 (56/56); AX 2026-11-23 (158/158); BR 2026-11-23 (2/2); CO 2026-11-23 (44/44); DE 2026-11-23 (67/68); HE 2026-11-23 (42/42); HK 2026-11-23 (156/156); KQ 2026-11-23 (31/31); KS 2026-11-23 (122/122); L 2026-11-23 (85/91); LS 2026-11-23 (1/1); MC 2026-11-23 (75/79); MI 2026-11-23 (85/87); NS 2026-11-23 (84/84); OL 2026-11-23 (69/69); PA 2026-11-23 (149/150); ST 2026-11-23 (147/150); SW 2026-11-23 (127/150); T 2026-11-20 (168/168); TO 2026-11-23 (102/107); TW 2026-11-23 (126/126); TWO 2026-11-23 (30/30); US 2026-11-23 (2724/2738); VI 2026-11-23 (1/1); WA 2026-11-23 (1/1)
+2026-11-23 23:26:35,319 WARNING radar.fundamentals: perfiles: Yahoo devuelve vacío (25 seguidos); se reintenta en la próxima ejecución
+2026-11-23 23:26:35,319 INFO radar.fundamentals: perfiles: 25 consultados (14 nuevos, 11 reintentos), 0 con industria
+2026-11-23 23:27:53,590 INFO radar.luk_run: Luk: universo 1065 (fuera: {'ADR(20) < 4%': 1142, 'valor negociado': 238, 'ADR extranjero': 105, 'capitalización': 21, 'fondo': 31}), líderes 87, setups 40, 0.9 s
+2026-11-23 23:30:21,814 INFO radar.luk_run: Luk: control de calidad en 7.3 s (media 43.3 valores/día)
+Sesión 2026-11-23 · régimen DESFAVORABLE · 3636 valores líquidos · temáticas LST, CYB, STAP, INS, HCM, BIO · 30 candidatas
+Luk · modo sugerido NEUTRO · L1 34 · L1b 0 · universo 1065 · líderes 87
+::notice title=Retrocesos Luk::Media de 43.3 valores al día en las últimas 120 sesiones.

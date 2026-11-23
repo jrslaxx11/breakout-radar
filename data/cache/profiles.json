@@ -212,10 +212,10 @@
 "009420.KS": {
 "country": "",
 "industry": "",
-"last": "2026-11-13",
+"last": "2026-11-23",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "009830.KS": {
 "country": "South Korea",
@@ -791,6 +791,14 @@
 "name": "Kinik Company",
 "sector": "Industrials"
 },
+"1590.TW": {
+"country": "",
+"industry": "",
+"last": "2026-11-23",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "1605.T": {
 "country": "Japan",
 "industry": "Oil & Gas E&P",
@@ -844,10 +852,10 @@
 "181710.KS": {
 "country": "",
 "industry": "",
-"last": "2026-11-13",
+"last": "2026-11-23",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "192820.KS": {
 "country": "South Korea",
@@ -1081,6 +1089,14 @@
 "name": "Advantech Co., Ltd.",
 "sector": "Technology"
 },
+"2404.TW": {
+"country": "",
+"industry": "",
+"last": "2026-11-23",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "2408.TW": {
 "country": "Taiwan",
 "industry": "Semiconductors",
@@ -1092,6 +1108,14 @@
 "industry": "Semiconductor Equipment & Materials",
 "name": "Wonik IPS Co., Ltd.",
 "sector": "Technology"
+},
+"2412.TW": {
+"country": "",
+"industry": "",
+"last": "2026-11-23",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "241560.KS": {
 "country": "",
@@ -1286,10 +1310,10 @@
 "2805.T": {
 "country": "",
 "industry": "",
-"last": "2026-11-12",
+"last": "2026-11-23",
 "name": "",
 "sector": "",
-"tries": 2
+"tries": 3
 },
 "2810.T": {
 "country": "Japan",
@@ -1327,6 +1351,14 @@
 "name": "L&C BIO Co.,LTD",
 "sector": "Healthcare"
 },
+"298040.KS": {
+"country": "",
+"industry": "",
+"last": "2026-11-23",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "3006.TW": {
 "country": "Taiwan",
 "industry": "Semiconductors",
@@ -1344,6 +1376,14 @@
 "industry": "Electronic Components",
 "name": "Asia Vital Components Co., Ltd.",
 "sector": "Technology"
+},
+"3023.TW": {
+"country": "",
+"industry": "",
+"last": "2026-11-23",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "3026.TW": {
 "country": "Taiwan",
@@ -2165,6 +2205,14 @@
 "name": "Nikkiso Co., Ltd.",
 "sector": "Industrials"
 },
+"6407.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-23",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "6415.TW": {
 "country": "Cayman Islands",
 "industry": "Semiconductors",
@@ -2408,6 +2456,14 @@
 "industry": "Pollution & Treatment Controls",
 "name": "Mega Union Technology Inc.",
 "sector": "Industrials"
+},
+"6951.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-23",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "6952.T": {
 "country": "Japan",
@@ -3026,10 +3082,10 @@
 "9110.T": {
 "country": "",
 "industry": "",
-"last": "2026-11-12",
+"last": "2026-11-23",
 "name": "",
 "sector": "",
-"tries": 2
+"tries": 3
 },
 "9147.T": {
 "country": "Japan",
@@ -3072,6 +3128,14 @@
 "industry": "Restaurants",
 "name": "Yoshinoya Holdings Co., Ltd.",
 "sector": "Consumer Cyclical"
+},
+"9901.HK": {
+"country": "",
+"industry": "",
+"last": "2026-11-23",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "9903.HK": {
 "country": "China",
@@ -3299,6 +3363,14 @@
 "name": "Accor SA",
 "sector": "Consumer Cyclical"
 },
+"AC.TO": {
+"country": "",
+"industry": "",
+"last": "2026-11-23",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "ACA.PA": {
 "country": "France",
 "industry": "Banks - Diversified",
@@ -3370,10 +3442,10 @@
 "ACM": {
 "country": "",
 "industry": "",
-"last": "2026-11-12",
+"last": "2026-11-23",
 "name": "",
 "sector": "",
-"tries": 2
+"tries": 3
 },
 "ACMR": {
 "country": "United States",
@@ -6278,10 +6350,10 @@
 "BRBR": {
 "country": "",
 "industry": "",
-"last": "2026-11-13",
+"last": "2026-11-23",
 "name": "",
 "sector": "",
-"tries": 2
+"tries": 3
 },
 "BRC": {
 "country": "United States",
@@ -8226,10 +8298,10 @@
 "CTC-A.TO": {
 "country": "",
 "industry": "",
-"last": "2026-11-13",
+"last": "2026-11-23",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "CTEV": {
 "country": "",
@@ -9574,6 +9646,14 @@
 "industry": "Aerospace & Defense",
 "name": "Embraer S.A.",
 "sector": "Industrials"
+},
+"EMBRAC-B.ST": {
+"country": "",
+"industry": "",
+"last": "2026-11-23",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "EME": {
 "country": "United States",
@@ -12347,6 +12427,14 @@
 "name": "HP Inc.",
 "sector": "Technology"
 },
+"HPS-A.TO": {
+"country": "",
+"industry": "",
+"last": "2026-11-23",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "HQY": {
 "country": "United States",
 "industry": "Health Information Services",
@@ -14129,6 +14217,14 @@
 "name": "LCI Industries",
 "sector": "Consumer Cyclical"
 },
+"LCLN": {
+"country": "",
+"industry": "",
+"last": "2026-11-23",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "LDO.MI": {
 "country": "Italy",
 "industry": "Aerospace & Defense",
@@ -15327,6 +15423,14 @@
 "name": "MiniMed Group, Inc.",
 "sector": "Healthcare"
 },
+"MMI": {
+"country": "",
+"industry": "",
+"last": "2026-11-23",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "MMM": {
 "country": "United States",
 "industry": "Conglomerates",
@@ -15870,8 +15974,10 @@
 "NABL": {
 "country": "",
 "industry": "",
+"last": "2026-11-23",
 "name": "",
-"sector": ""
+"sector": "",
+"tries": 1
 },
 "NAC": {
 "country": "United States",
@@ -17078,10 +17184,10 @@
 "ONT": {
 "country": "",
 "industry": "",
-"last": "2026-11-12",
+"last": "2026-11-23",
 "name": "",
 "sector": "",
-"tries": 2
+"tries": 3
 },
 "ONTO": {
 "country": "United States",
@@ -19923,6 +20029,14 @@
 "name": "Sandfire Resources Limited",
 "sector": "Basic Materials"
 },
+"SFST": {
+"country": "",
+"industry": "",
+"last": "2026-11-23",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "SFZN.SW": {
 "country": "Switzerland",
 "industry": "Drug Manufacturers - Specialty & Generic",
@@ -21776,10 +21890,10 @@
 "TMDX": {
 "country": "",
 "industry": "",
-"last": "2026-11-12",
+"last": "2026-11-23",
 "name": "",
 "sector": "",
-"tries": 2
+"tries": 3
 },
 "TME": {
 "country": "China",
@@ -21946,10 +22060,10 @@
 "TREE": {
 "country": "",
 "industry": "",
-"last": "2026-11-12",
+"last": "2026-11-23",
 "name": "",
 "sector": "",
-"tries": 2
+"tries": 3
 },
 "TREL-B.ST": {
 "country": "Sweden",
