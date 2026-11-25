@@ -844,10 +844,10 @@
 "18064K.KS": {
 "country": "",
 "industry": "",
-"last": "2026-11-17",
+"last": "2026-11-25",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "181710.KS": {
 "country": "",
@@ -4859,11 +4859,27 @@
 "name": "Ashland Inc.",
 "sector": "Basic Materials"
 },
+"ASIX": {
+"country": "",
+"industry": "",
+"last": "2026-11-25",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "ASM.AS": {
 "country": "Netherlands",
 "industry": "Semiconductor Equipment & Materials",
 "name": "ASM International NV",
 "sector": "Technology"
+},
+"ASMB": {
+"country": "",
+"industry": "",
+"last": "2026-11-25",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "ASMDEE-B.ST": {
 "country": "",
@@ -5861,6 +5877,14 @@
 "name": "Banca Generali S.p.A.",
 "sector": "Financial Services"
 },
+"BGSI": {
+"country": "",
+"industry": "",
+"last": "2026-11-25",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "BH": {
 "country": "United States",
 "industry": "Restaurants",
@@ -5958,6 +5982,14 @@
 "industry": "Medical Devices",
 "name": "Bio-Rad Laboratories, Inc.",
 "sector": "Healthcare"
+},
+"BIP": {
+"country": "",
+"industry": "",
+"last": "2026-11-25",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "BIP-UN.TO": {
 "country": "",
@@ -6449,6 +6481,22 @@
 "name": "BlueScope Steel Limited",
 "sector": "Basic Materials"
 },
+"BST": {
+"country": "",
+"industry": "",
+"last": "2026-11-25",
+"name": "",
+"sector": "",
+"tries": 1
+},
+"BSTZ": {
+"country": "",
+"industry": "",
+"last": "2026-11-25",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "BSX": {
 "country": "United States",
 "industry": "Medical Devices",
@@ -6514,6 +6562,14 @@
 "industry": "Thermal Coal",
 "name": "Peabody Energy Corporation",
 "sector": "Energy"
+},
+"BTX": {
+"country": "",
+"industry": "",
+"last": "2026-11-25",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "BUCN.SW": {
 "country": "Switzerland",
@@ -7052,6 +7108,14 @@
 "industry": "Real Estate - Development",
 "name": "Century Communities, Inc.",
 "sector": "Real Estate"
+},
+"CCSI": {
+"country": "",
+"industry": "",
+"last": "2026-11-25",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "CCXI": {
 "country": "",
@@ -8050,10 +8114,10 @@
 "CRCT": {
 "country": "",
 "industry": "",
-"last": "2026-11-17",
+"last": "2026-11-25",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "CRDO": {
 "country": "Cayman Islands",
@@ -9665,6 +9729,14 @@
 "name": "EMCOR Group, Inc.",
 "sector": "Industrials"
 },
+"EMMN.SW": {
+"country": "",
+"industry": "",
+"last": "2026-11-25",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "EMN": {
 "country": "United States",
 "industry": "Specialty Chemicals",
@@ -9971,6 +10043,14 @@
 "name": "Ero Copper Corp.",
 "sector": "Basic Materials"
 },
+"EROK": {
+"country": "",
+"industry": "",
+"last": "2026-11-25",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "ES": {
 "country": "United States",
 "industry": "Utilities - Regulated Electric",
@@ -10080,6 +10160,14 @@
 "industry": "Internet Retail",
 "name": "Etsy, Inc.",
 "sector": "Consumer Cyclical"
+},
+"ETY": {
+"country": "",
+"industry": "",
+"last": "2026-11-25",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "EVC": {
 "country": "United States",
@@ -10191,6 +10279,14 @@
 "country": "",
 "industry": "",
 "last": "2026-11-18",
+"name": "",
+"sector": "",
+"tries": 1
+},
+"EXG": {
+"country": "",
+"industry": "",
+"last": "2026-11-25",
 "name": "",
 "sector": "",
 "tries": 1
@@ -10558,6 +10654,14 @@
 "industry": "Information Technology Services",
 "name": "Fidelity National Information Services, Inc.",
 "sector": "Technology"
+},
+"FISI": {
+"country": "",
+"industry": "",
+"last": "2026-11-25",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "FISV": {
 "country": "",
@@ -12925,6 +13029,14 @@
 "name": "InterContinental Hotels Group PLC",
 "sector": "Consumer Cyclical"
 },
+"IIIV": {
+"country": "",
+"industry": "",
+"last": "2026-11-25",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "IIPR": {
 "country": "United States",
 "industry": "REIT - Industrial",
@@ -13326,6 +13438,14 @@
 "industry": "Medical Devices",
 "name": "iRhythm Holdings, Inc.",
 "sector": "Healthcare"
+},
+"IRWD": {
+"country": "",
+"industry": "",
+"last": "2026-11-25",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "ISP.MI": {
 "country": "Italy",
@@ -14006,10 +14126,10 @@
 "KRSA": {
 "country": "",
 "industry": "",
-"last": "2026-11-17",
+"last": "2026-11-25",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "KRT": {
 "country": "United States",
@@ -16244,6 +16364,14 @@
 "name": "",
 "sector": "",
 "tries": 2
+},
+"NEXN": {
+"country": "",
+"industry": "",
+"last": "2026-11-25",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "NEXT": {
 "country": "United States",
@@ -19729,6 +19857,14 @@
 "name": "SAP SE",
 "sector": "Technology"
 },
+"SAREGAMA.NS": {
+"country": "",
+"industry": "",
+"last": "2026-11-25",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "SARO": {
 "country": "United States",
 "industry": "Aerospace & Defense",
@@ -19898,6 +20034,14 @@
 "industry": "Electronics & Computer Distribution",
 "name": "ScanSource, Inc.",
 "sector": "Technology"
+},
+"SD": {
+"country": "",
+"industry": "",
+"last": "2026-11-25",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "SDE.TO": {
 "country": "Canada",
@@ -20759,6 +20903,14 @@
 "name": "Sopra Steria Group SA",
 "sector": "Technology"
 },
+"SOPH": {
+"country": "",
+"industry": "",
+"last": "2026-11-25",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "SPB": {
 "country": "United States",
 "industry": "Household & Personal Products",
@@ -21475,6 +21627,14 @@
 "name": "Transurban Group",
 "sector": "Industrials"
 },
+"TCMD": {
+"country": "",
+"industry": "",
+"last": "2026-11-25",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "TCOM": {
 "country": "Singapore",
 "industry": "Travel Services",
@@ -21890,10 +22050,10 @@
 "TLS": {
 "country": "",
 "industry": "",
-"last": "2026-11-17",
+"last": "2026-11-25",
 "name": "",
 "sector": "",
-"tries": 1
+"tries": 2
 },
 "TLX.AX": {
 "country": "",
@@ -22444,6 +22604,14 @@
 "industry": "Aerospace & Defense",
 "name": "Textron Inc.",
 "sector": "Industrials"
+},
+"TYG": {
+"country": "",
+"industry": "",
+"last": "2026-11-25",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "TYL": {
 "country": "United States",
