@@ -1,16 +1,10 @@
-2026-11-25 23:23:23,930 INFO radar.prices: precios: 5894 de 5894 tickers
-2026-11-25 23:23:25,508 INFO radar.universe: universo EE. UU.: 2658 líquidos de 5894 cotizados
-2026-11-25 23:28:44,985 INFO radar.prices: precios: 4736 de 4738 tickers
-2026-11-25 23:28:45,202 WARNING radar.prices: cotizaciones por lotes no disponibles (HTTP Error 401: ); se usan los metadatos del gráfico
-2026-11-25 23:28:51,810 INFO radar.prices: cotizaciones por gráfico: 1002 de 1002
-2026-11-25 23:28:52,231 INFO radar.pipeline: última sesión: 1002 valores sin ella en la serie diaria, 1002 cotizaciones, 939 completados
-2026-11-25 23:28:52,307 INFO radar.pipeline: barras parciales descartadas: 145
-2026-11-25 23:28:55,770 INFO radar.prices: última sesión: 64 valores atrasados, 0 completados, 64 siguen atrasados
-2026-11-25 23:28:55,804 INFO radar.pipeline: última barra por mercado: AS 2026-11-25 (56/56); AX 2026-11-25 (158/158); BR 2026-11-25 (2/2); CO 2026-11-25 (44/44); DE 2026-11-25 (67/68); HE 2026-11-25 (42/42); HK 2026-11-25 (156/156); KQ 2026-11-25 (31/31); KS 2026-11-25 (122/122); L 2026-11-25 (85/91); LS 2026-11-25 (1/1); MC 2026-11-25 (73/79); MI 2026-11-25 (84/87); NS 2026-11-25 (84/84); OL 2026-11-25 (69/69); PA 2026-11-25 (149/150); ST 2026-11-25 (147/150); SW 2026-11-25 (123/150); T 2026-11-25 (168/168); TO 2026-11-25 (102/107); TW 2026-11-25 (126/126); TWO 2026-11-25 (30/30); US 2026-11-25 (2721/2732); VI 2026-11-25 (1/1); WA 2026-11-25 (1/1)
-2026-11-25 23:29:14,690 WARNING radar.fundamentals: perfiles: Yahoo devuelve vacío (25 seguidos); se reintenta en la próxima ejecución
-2026-11-25 23:29:14,690 INFO radar.fundamentals: perfiles: 25 consultados (21 nuevos, 4 reintentos), 0 con industria
-2026-11-25 23:30:21,738 INFO radar.luk_run: Luk: universo 1132 (fuera: {'ADR(20) < 4%': 1082, 'valor negociado': 252, 'ADR extranjero': 105, 'capitalización': 20, 'fondo': 34}), líderes 125, setups 31, 1.1 s
-2026-11-25 23:33:20,745 INFO radar.luk_run: Luk: control de calidad en 7.2 s (media 42.4 valores/día)
-Sesión 2026-11-25 · régimen DESFAVORABLE · 3659 valores líquidos · temáticas STAP, LST, CYB, HCM, PHA, BIO · 30 candidatas
-Luk · modo sugerido LARGO · L1 21 · L1b 0 · universo 1132 · líderes 125
-::notice title=Retrocesos Luk::Media de 42.4 valores al día en las últimas 120 sesiones.
+2026-11-26 23:37:20,327 INFO radar.prices: precios: 4736 de 4738 tickers
+2026-11-26 23:37:20,828 WARNING radar.prices: cotizaciones por lotes no disponibles (HTTP Error 401: ); se usan los metadatos del gráfico
+2026-11-26 23:45:47,700 INFO radar.prices: cotizaciones por gráfico: 2564 de 3731
+2026-11-26 23:45:47,744 INFO radar.pipeline: última sesión: 3731 valores sin ella en la serie diaria, 2564 cotizaciones, 152 completados
+2026-11-26 23:45:47,778 INFO radar.pipeline: barras parciales descartadas: 149
+2026-11-26 23:46:34,914 INFO radar.prices: última sesión: 669 valores atrasados, 0 completados, 669 siguen atrasados
+2026-11-26 23:46:34,934 INFO radar.pipeline: última barra por mercado: AS 2026-11-26 (7/56); AX 2026-11-26 (158/158); BR 2026-11-26 (2/2); CO 2026-11-26 (7/44); DE 2026-11-26 (67/68); HE 2026-11-26 (2/42); HK 2026-11-26 (156/156); KQ 2026-11-26 (31/31); KS 2026-11-26 (122/122); L 2026-11-26 (83/91); LS 2026-11-26 (1/1); MC 2026-11-26 (6/79); MI 2026-11-26 (7/87); NS 2026-11-26 (11/84); OL 2026-11-26 (12/69); PA 2026-11-26 (26/150); ST 2026-11-26 (3/150); SW 2026-11-26 (10/150); T 2026-11-26 (168/168); TO 2026-11-26 (101/107); TW 2026-11-26 (126/126); TWO 2026-11-26 (30/30); US 2026-11-25 (2721/2732); VI 2026-11-26 (1/1); WA 2026-11-26 (1/1)
+2026-11-26 23:46:35,049 INFO radar.pipeline: sesión 2026-11-25: 1155 series recortadas a esa fecha (mercados que ya cotizaron el día siguiente)
+2026-11-26 23:46:35,050 INFO radar.pipeline: La sesión 2026-11-25 ya está procesada; nada que hacer.
+Sesión 2026-11-25 ya procesada: no hay datos nuevos que publicar.
