@@ -445,6 +445,14 @@
 "name": "EO Technics Co., Ltd.",
 "sector": "Technology"
 },
+"041510.KQ": {
+"country": "",
+"industry": "",
+"last": "2026-11-27",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "042700.KS": {
 "country": "South Korea",
 "industry": "Semiconductor Equipment & Materials",
@@ -475,11 +483,27 @@
 "name": "Korea Aerospace Industries, Ltd.",
 "sector": "Industrials"
 },
+"051900.KS": {
+"country": "",
+"industry": "",
+"last": "2026-11-27",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "0522.HK": {
 "country": "Singapore",
 "industry": "Semiconductor Equipment & Materials",
 "name": "ASMPT Limited",
 "sector": "Technology"
+},
+"053800.KQ": {
+"country": "",
+"industry": "",
+"last": "2026-11-27",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "055550.KS": {
 "country": "South Korea",
@@ -642,6 +666,14 @@
 "industry": "Oil & Gas Refining & Marketing",
 "name": "SK Innovation Co., Ltd.",
 "sector": "Energy"
+},
+"097950.KS": {
+"country": "",
+"industry": "",
+"last": "2026-11-27",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "0981.HK": {
 "country": "China",
@@ -931,6 +963,14 @@
 "name": "RFHIC Corporation",
 "sector": ""
 },
+"2212.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-27",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "2222.T": {
 "country": "Japan",
 "industry": "Confectioners",
@@ -942,6 +982,14 @@
 "industry": "Semiconductor Equipment & Materials",
 "name": "SIMMTECH Co., Ltd.",
 "sector": "Technology"
+},
+"2264.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-27",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "2268.HK": {
 "country": "China",
@@ -1179,6 +1227,14 @@
 "name": "I-Chiun Precision Industry Co., Ltd.",
 "sector": "Technology"
 },
+"2492.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-27",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "2492.TW": {
 "country": "Taiwan",
 "industry": "Electronic Components",
@@ -1328,6 +1384,14 @@
 "industry": "Semiconductor Equipment & Materials",
 "name": "KCTech Co., Ltd.",
 "sector": "Technology"
+},
+"282330.KS": {
+"country": "",
+"industry": "",
+"last": "2026-11-27",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "285A.T": {
 "country": "Japan",
@@ -1575,6 +1639,14 @@
 "name": "Teijin Limited",
 "sector": "Industrials"
 },
+"3402.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-27",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "3406.TW": {
 "country": "Taiwan",
 "industry": "Computer Hardware",
@@ -1805,6 +1877,14 @@
 "name": "FADU Inc.",
 "sector": "Technology"
 },
+"443060.KS": {
+"country": "",
+"industry": "",
+"last": "2026-11-27",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "446A.T": {
 "country": "Japan",
 "industry": "Consulting Services",
@@ -1922,6 +2002,14 @@
 "industry": "Household & Personal Products",
 "name": "Shiseido Company, Limited",
 "sector": "Consumer Defensive"
+},
+"4912.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-27",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "4958.TW": {
 "country": "Cayman Islands",
@@ -2239,6 +2327,14 @@
 "name": "",
 "sector": ""
 },
+"6457.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-27",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "6488.TWO": {
 "country": "Taiwan",
 "industry": "Semiconductors",
@@ -2419,11 +2515,27 @@
 "name": "Advantest Corporation",
 "sector": "Technology"
 },
+"6861.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-27",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "6869.HK": {
 "country": "China",
 "industry": "Communication Equipment",
 "name": "Yangtze Optical Fibre And Cable Joint Stock Limited Company",
 "sector": "Technology"
+},
+"6869.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-27",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "6870.TWO": {
 "country": "",
@@ -2813,6 +2925,14 @@
 "sector": "",
 "tries": 2
 },
+"8242.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-27",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "8299.TWO": {
 "country": "Taiwan",
 "industry": "Semiconductors",
@@ -3117,10 +3237,26 @@
 "sector": "",
 "tries": 1
 },
+"9735.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-27",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "9831.T": {
 "country": "",
 "industry": "",
 "last": "2026-11-17",
+"name": "",
+"sector": "",
+"tries": 1
+},
+"9843.T": {
+"country": "",
+"industry": "",
+"last": "2026-11-27",
 "name": "",
 "sector": "",
 "tries": 1
@@ -7203,6 +7339,14 @@
 "name": "Celsius Holdings, Inc.",
 "sector": "Consumer Defensive"
 },
+"CENT": {
+"country": "",
+"industry": "",
+"last": "2026-11-27",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "CENTA": {
 "country": "United States",
 "industry": "Packaged Foods",
@@ -7358,6 +7502,14 @@
 "industry": "Food Distribution",
 "name": "The Chefs' Warehouse, Inc.",
 "sector": "Consumer Defensive"
+},
+"CHEMM.CO": {
+"country": "",
+"industry": "",
+"last": "2026-11-27",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "CHENNPETRO.NS": {
 "country": "India",
@@ -9122,6 +9274,14 @@
 "industry": "Software - Application",
 "name": "DocuSign, Inc.",
 "sector": "Technology"
+},
+"DOFG.OL": {
+"country": "",
+"industry": "",
+"last": "2026-11-27",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "DOLE": {
 "country": "Ireland",
@@ -11868,6 +12028,14 @@
 "industry": "Software - Infrastructure",
 "name": "Gorilla Technology Group Inc.",
 "sector": "Technology"
+},
+"GRT-UN.TO": {
+"country": "",
+"industry": "",
+"last": "2026-11-27",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "GS": {
 "country": "United States",
@@ -16663,6 +16831,14 @@
 "name": "Neptune Insurance Holdings Inc.",
 "sector": "Financial Services"
 },
+"NPI.TO": {
+"country": "",
+"industry": "",
+"last": "2026-11-27",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "NPK": {
 "country": "United States",
 "industry": "Aerospace & Defense",
@@ -20941,6 +21117,14 @@
 "name": "SPIE SA",
 "sector": "Industrials"
 },
+"SPM.MI": {
+"country": "",
+"industry": "",
+"last": "2026-11-27",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "SPNT": {
 "country": "Bermuda",
 "industry": "Insurance - Reinsurance",
@@ -23933,6 +24117,14 @@
 "name": "Walmart Inc.",
 "sector": "Consumer Defensive"
 },
+"WN.TO": {
+"country": "",
+"industry": "",
+"last": "2026-11-27",
+"name": "",
+"sector": "",
+"tries": 1
+},
 "WNC": {
 "country": "United States",
 "industry": "Farm & Heavy Construction Machinery",
@@ -24154,6 +24346,14 @@
 "industry": "Resorts & Casinos",
 "name": "Wynn Resorts, Limited",
 "sector": "Consumer Cyclical"
+},
+"X.TO": {
+"country": "",
+"industry": "",
+"last": "2026-11-27",
+"name": "",
+"sector": "",
+"tries": 1
 },
 "XE": {
 "country": "United States",
